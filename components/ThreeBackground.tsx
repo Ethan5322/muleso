@@ -27,7 +27,7 @@ function Particles() {
     }));
   }, [particleCount]);
 
-  useFrame((state) => {
+  useFrame((state: any) => {
     if (!meshRef.current) return;
     meshRef.current.rotation.y += state.delta * 0.03;
     meshRef.current.rotation.x += state.delta * 0.01;
@@ -51,7 +51,7 @@ function Particles() {
 function GeometricShapes() {
   const groupRef = useRef<THREE.Group>(null);
 
-  useFrame((state) => {
+  useFrame((state: any) => {
     if (!groupRef.current) return;
     groupRef.current.rotation.z += state.delta * 0.02;
   });

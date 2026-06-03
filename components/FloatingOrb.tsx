@@ -10,7 +10,7 @@ function OrbScene() {
   const wireframeRef = useRef<THREE.Mesh>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  useFrame((state) => {
+  useFrame((state: any) => {
     if (sphereRef.current) {
       sphereRef.current.rotation.y += state.delta * (isHovered ? 0.8 : 0.4);
       sphereRef.current.rotation.x += state.delta * (isHovered ? 0.3 : 0.15);
