@@ -111,7 +111,7 @@ function TechBackground() {
         {/* Wireframe Icosahedron */}
         <mesh position={[-8, -7, -8]}>
           <icosahedronGeometry args={[2.2]} />
-          <meshBasicMaterial wireframe color={0x00c8ff} linewidth={1} />
+          <meshBasicMaterial wireframe color={0x00c8ff} />
         </mesh>
       </group>
 
