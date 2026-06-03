@@ -40,51 +40,24 @@ export default function WebsiteDesignPage() {
           </div>
         </motion.div>
 
-        {/* Pricing */}
+        {/* Custom Pricing CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mb-20"
+          className="mb-20 glass-card p-12 text-center border border-[var(--accent-blue)]"
         >
-          <h2 className="text-4xl font-bold font-sora text-center mb-12 gradient-text">Simple Pricing</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: 'STARTER', price: 'R3,500', features: ['3 pages', 'Mobile responsive', 'Basic SEO', 'Contact form', '2-week delivery'] },
-              { name: 'BUSINESS', price: 'R7,500', features: ['6 pages', 'Advanced animations', 'AI chatbot included', 'SEO full setup', '3-week delivery'], popular: true },
-              { name: 'ENTERPRISE', price: 'R15,000+', features: ['Unlimited pages', '3D animations', 'E-commerce ready', 'Monthly maintenance', 'Priority support'] },
-            ].map((tier) => (
-              <motion.div
-                key={tier.name}
-                whileHover={{ scale: 1.05 }}
-                className={`glass-card p-8 ${tier.popular ? 'border-2 border-[var(--accent-blue)] glow-blue' : 'border border-[var(--border)]'}`}
-              >
-                {tier.popular && (
-                  <div className="text-center mb-4">
-                    <span className="px-4 py-1 bg-[var(--glow-blue)] text-[var(--accent-blue)] rounded-full text-xs font-bold">
-                      MOST POPULAR
-                    </span>
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold font-sora mb-2">{tier.name}</h3>
-                <p className="text-3xl font-bold gold-text mb-6">{tier.price}</p>
-                <ul className="space-y-3 mb-8">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
-                      <span className="text-[var(--accent-green)]">✓</span> {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/contact"
-                  className="block w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold text-center rounded-lg hover:scale-105 transition-transform"
-                >
-                  Get Started
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+          <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Custom Pricing</h2>
+          <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
+            Every project is unique. Let's discuss your specific needs and create a custom package tailored to your goals.
+          </p>
+          <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-6">
+            💬 Chat with Soo (our AI assistant) for instant pricing and project details
+          </p>
+          <p className="text-sm text-[var(--text-secondary)]">
+            Scroll down and open the chatbot on the bottom right, or contact us directly for a consultation.
+          </p>
         </motion.div>
 
         {/* CTA */}

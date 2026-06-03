@@ -9,7 +9,6 @@ export default function ServicesPage() {
     {
       title: 'Website Design',
       href: '/services/website-design',
-      price: 'R3,500',
       description: 'Stunning websites that convert visitors into paying customers.',
       features: ['Responsive Design', 'SEO Optimized', 'Fast Loading', '30-Day Support', 'Source Code Included'],
       icon: '🌐',
@@ -17,7 +16,6 @@ export default function ServicesPage() {
     {
       title: 'AI Chatbots',
       href: '/services/chatbot',
-      price: 'R2,500',
       description: '24/7 AI assistants that handle customer service automatically.',
       features: ['Natural Language', 'Lead Collection', 'WhatsApp Integration', 'Analytics', 'Custom Training'],
       icon: '🤖',
@@ -25,7 +23,6 @@ export default function ServicesPage() {
     {
       title: 'Logo Design',
       href: '/services/logo-design',
-      price: 'R800',
       description: 'Professional brand identity that stands out.',
       features: ['Original Design', 'Multiple Concepts', 'All Formats', 'Brand Guidelines', 'Unlimited Revisions'],
       icon: '🎨',
@@ -33,7 +30,6 @@ export default function ServicesPage() {
     {
       title: 'PDF Guides',
       href: '/services/pdf-guides',
-      price: 'Passive Income',
       description: 'Sell expert knowledge as downloadable digital products.',
       features: ['Professional Layout', 'SEO Optimized', 'Secure Distribution', 'Analytics', 'Evergreen Income'],
       icon: '📄',
@@ -41,7 +37,6 @@ export default function ServicesPage() {
     {
       title: 'QR Code Design',
       href: '/services/qr-codes',
-      price: 'R300',
       description: 'Custom branded QR codes with built-in tracking.',
       features: ['Custom Design', 'Analytics', 'Dynamic Links', 'Multiple Formats', 'Lifetime Support'],
       icon: '📱',
@@ -49,7 +44,6 @@ export default function ServicesPage() {
     {
       title: 'Custom Email Setup',
       href: '/services/email-setup',
-      price: 'R400',
       description: 'Professional @yourdomain.com email for instant credibility.',
       features: ['Domain Setup', 'Email Configuration', 'Security', 'Backups', 'Technical Support'],
       icon: '📧',
@@ -78,10 +72,9 @@ export default function ServicesPage() {
                 className="glass-card p-8 hover:border-[var(--accent-blue)] transition-all duration-300"
               >
                 <div className="text-5xl mb-4">{service.icon}</div>
-                <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2">
+                <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">
                   {service.title}
                 </h3>
-                <p className="text-[var(--accent-gold)] text-xl font-bold mb-4">{service.price}</p>
                 <p className="text-[var(--text-secondary)] mb-6">{service.description}</p>
                 <ul className="space-y-2 mb-6">
                   {service.features.map((feature) => (
