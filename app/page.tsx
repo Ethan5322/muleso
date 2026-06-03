@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import FloatingOrb from '@/components/FloatingOrb';
+import HeroBackground from '@/components/HeroBackground';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef(null);
@@ -24,8 +24,8 @@ const StatCounter = ({ value, label }: { value: string; label: string }) => {
       transition={{ duration: 0.6 }}
       className="text-center"
     >
-      <div className="text-5xl font-bold gradient-text font-sora mb-2">{value}</div>
-      <div className="text-[var(--text-secondary)] text-sm">{label}</div>
+      <div className="text-6xl font-bold gradient-text font-sora mb-3">{value}</div>
+      <div className="text-[var(--text-secondary)] text-base font-light">{label}</div>
     </motion.div>
   );
 };
@@ -57,18 +57,18 @@ const ServiceCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-6 hover:border-[var(--accent-blue)] hover:glow-blue transition-all duration-300 hover:-translate-y-1 group"
+      className="glass-card p-8 hover:border-[var(--accent-blue)] hover:glow-blue transition-all duration-300 hover:-translate-y-2 group"
     >
-      <div className="w-12 h-12 rounded-full bg-[var(--glow-blue)] flex items-center justify-center mb-4 group-hover:bg-[var(--accent-blue)] text-xl">
+      <div className="w-14 h-14 rounded-full bg-[var(--glow-blue)] flex items-center justify-center mb-6 group-hover:bg-[var(--accent-blue)] text-2xl">
         {icon}
       </div>
-      <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] mb-2">
+      <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-3">
         {title}
       </h3>
-      <p className="text-sm text-[var(--text-secondary)] mb-4">{description}</p>
+      <p className="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">{description}</p>
       <Link
         href="/services"
-        className="text-[var(--accent-blue)] text-sm font-medium hover:gap-2 inline-flex items-center transition-all"
+        className="text-[var(--accent-blue)] text-base font-medium hover:gap-2 inline-flex items-center transition-all"
       >
         Learn more <span className="ml-1">→</span>
       </Link>
@@ -79,89 +79,67 @@ const ServiceCard = ({
 export default function Home() {
   return (
     <>
+      <HeroBackground />
+
       {/* SECTION 1 - HERO */}
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Left Column */}
-            <motion.div className="space-y-8">
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="inline-block"
-              >
-                <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-3 py-1.5 rounded-full w-fit">
-                  <span className="text-[var(--accent-blue)] font-sora text-xs font-bold">
-                    🚀 South Africa&apos;s #1 AI-Powered Digital Agency
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Headline */}
-              <div className="space-y-3">
-                {['We Build Digital', 'Experiences', 'That Win.'].map((text, i) => (
-                  <motion.h1
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
-                    className={`text-5xl md:text-6xl lg:text-7xl font-bold font-sora leading-tight ${
-                      i === 1
-                        ? 'gradient-text'
-                        : i === 2
-                          ? 'gold-text'
-                          : 'text-[var(--text-primary)]'
-                    }`}
-                  >
-                    {text}
-                  </motion.h1>
-                ))}
-              </div>
-
-              {/* Subheadline */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-lg text-[var(--text-secondary)] max-w-lg leading-relaxed"
-              >
-                Professional websites, AI chatbots, logos, and digital solutions for businesses across South Africa.
-              </motion.p>
-
-              {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.65 }}
-                className="flex flex-col sm:flex-row gap-4"
-              >
-                <Link
-                  href="/services"
-                  className="px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-center hover:shadow-[0_0_30px_var(--glow-blue)]"
-                >
-                  Explore Services
-                </Link>
-                <Link
-                  href="/portfolio"
-                  className="px-8 py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-center"
-                >
-                  View Our Work
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            {/* Right Column - Floating Orb */}
+        <div className="max-w-5xl mx-auto w-full text-center">
+          <motion.div className="space-y-6">
+            {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="hidden lg:flex items-center justify-center"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="inline-block"
             >
-              <FloatingOrb />
+              <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full w-fit mx-auto">
+                <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
+                  🚀 AI-Powered Digital Solutions
+                </span>
+              </div>
             </motion.div>
-          </div>
+
+            {/* Main Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-6xl md:text-7xl lg:text-8xl font-bold font-sora leading-tight gradient-text"
+            >
+              Digital Excellence
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed font-light"
+            >
+              Professional websites, AI chatbots, logos, and digital solutions built for businesses across South Africa.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
+            >
+              <Link
+                href="/services"
+                className="px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform hover:shadow-[0_0_30px_var(--glow-blue)]"
+              >
+                Explore Services
+              </Link>
+              <Link
+                href="/portfolio"
+                className="px-10 py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors"
+              >
+                View Our Work
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -186,12 +164,12 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-4">
+            <h2 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
               Our Services
             </h2>
-            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+            <p className="text-[var(--text-secondary)] text-lg md:text-xl max-w-3xl mx-auto font-light">
               Complete digital solutions to build and grow your business
             </p>
           </motion.div>
@@ -246,7 +224,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-6xl font-bold gradient-text text-center font-sora mb-16"
+            className="text-6xl md:text-7xl font-bold gradient-text text-center font-sora mb-20"
           >
             How We Work
           </motion.h2>
@@ -282,23 +260,23 @@ export default function Home() {
       </section>
 
       {/* SECTION 5 - FINAL CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="max-w-3xl mx-auto text-center"
+          className="max-w-4xl mx-auto text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
+          <h2 className="text-5xl md:text-7xl font-bold gradient-text font-sora mb-8">
             Let&apos;s Start Building
           </h2>
-          <p className="text-[var(--text-secondary)] text-lg mb-8">
+          <p className="text-[var(--text-secondary)] text-lg md:text-xl mb-10 font-light">
             Get in touch to discuss your project. We respond within 2 hours.
           </p>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
+            className="inline-block px-12 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
           >
             Get In Touch
           </Link>
