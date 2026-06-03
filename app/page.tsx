@@ -127,8 +127,7 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="text-lg text-[var(--text-secondary)] max-w-lg leading-relaxed"
               >
-                MuleSoo delivers world-class websites, AI chatbots, and digital tools for companies
-                that refuse to look average.
+                Professional websites, AI chatbots, logos, and digital solutions for businesses across South Africa.
               </motion.p>
 
               {/* CTA Buttons */}
@@ -190,10 +189,10 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-4">
-              What We Build For You
+              Our Services
             </h2>
             <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
-              From concept to launch — everything your business needs to dominate online
+              Complete digital solutions to build and grow your business
             </p>
           </motion.div>
 
@@ -282,25 +281,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 5 - TESTIMONIAL */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center glass-card p-8 md:p-12 border border-[var(--border)]"
-        >
-          <p className="text-3xl md:text-4xl italic text-[var(--text-primary)] mb-6">
-            &quot;MuleSoo transformed our digital presence in 2 weeks. Our bookings tripled.&quot;
-          </p>
-          <p className="text-[var(--text-secondary)] text-sm">
-            — Corporate Client, Pretoria
-          </p>
-        </motion.div>
-      </section>
-
-      {/* SECTION 6 - FINAL CTA */}
+      {/* SECTION 5 - FINAL CTA */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -310,20 +291,17 @@ export default function Home() {
           className="max-w-3xl mx-auto text-center"
         >
           <h2 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
-            Ready to Build Something the World Will Notice?
+            Let&apos;s Start Building
           </h2>
           <p className="text-[var(--text-secondary)] text-lg mb-8">
-            Book your free 30-minute strategy call. No pressure. Just clarity.
+            Get in touch to discuss your project. We respond within 2 hours.
           </p>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[#fff] text-[#000] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg glow-gold"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
           >
-            Book Free Consultation
+            Get In Touch
           </Link>
-          <p className="text-[var(--text-secondary)] text-xs mt-6">
-            🔒 No contracts. No setup fees. Cancel anytime.
-          </p>
         </motion.div>
       </section>
     </>
