@@ -1,0 +1,51 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00C8FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00A8D8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="purpleGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7B2FFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Left Circle - Brain/Mind (Purple) -->
+  <circle cx="70" cy="100" r="35" fill="url(#purpleGradient)" opacity="0.9"/>
+
+  <!-- Right Circle - Globe/World (Blue) -->
+  <circle cx="130" cy="100" r="35" fill="url(#blueGradient)" opacity="0.9"/>
+
+  <!-- Connecting Dots/Nodes - Neural Network -->
+  <circle cx="55" cy="85" r="4" fill="#00C8FF" filter="url(#glow)"/>
+  <circle cx="70" cy="70" r="4" fill="#7B2FFF" filter="url(#glow)"/>
+  <circle cx="85" cy="85" r="4" fill="#00FF88" filter="url(#glow)"/>
+
+  <circle cx="115" cy="85" r="4" fill="#00C8FF" filter="url(#glow)"/>
+  <circle cx="130" cy="70" r="4" fill="#7B2FFF" filter="url(#glow)"/>
+  <circle cx="145" cy="85" r="4" fill="#00FF88" filter="url(#glow)"/>
+
+  <!-- Connecting Lines - Energy Flow -->
+  <line x1="55" y1="85" x2="100" y2="100" stroke="#00C8FF" stroke-width="2" opacity="0.6"/>
+  <line x1="70" y1="70" x2="100" y2="100" stroke="#7B2FFF" stroke-width="2" opacity="0.6"/>
+  <line x1="85" y1="85" x2="100" y2="100" stroke="#00FF88" stroke-width="2" opacity="0.4"/>
+
+  <line x1="145" y1="85" x2="100" y2="100" stroke="#00C8FF" stroke-width="2" opacity="0.6"/>
+  <line x1="130" y1="70" x2="100" y2="100" stroke="#7B2FFF" stroke-width="2" opacity="0.6"/>
+  <line x1="115" y1="85" x2="100" y2="100" stroke="#00FF88" stroke-width="2" opacity="0.4"/>
+
+  <!-- Center Infinity Symbol (Mule representation) -->
+  <path d="M 80 100 Q 70 90 80 80 Q 90 70 100 80 Q 110 70 120 80 Q 130 90 120 100 Q 110 110 100 100 Q 90 110 80 100"
+        fill="none" stroke="#E8B84B" stroke-width="2.5" opacity="0.8"/>
+
+  <!-- Top highlight arc -->
+  <path d="M 100 65 A 40 40 0 0 1 100 65"
+        fill="none" stroke="#00C8FF" stroke-width="1.5" opacity="0.5" stroke-dasharray="5,5"/>
+</svg>

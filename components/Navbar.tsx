@@ -39,14 +39,33 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center group hover:opacity-80 transition-opacity">
-            <Image
-              src="/mulesoo-logo.png"
-              alt="MuleSoo Digital Services"
-              width={120}
-              height={40}
-              priority
-              className="h-10 w-auto"
-            />
+            <div className="w-10 h-10">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                <defs>
+                  <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{stopColor:'#00C8FF',stopOpacity:1}} />
+                    <stop offset="100%" style={{stopColor:'#00A8D8',stopOpacity:1}} />
+                  </linearGradient>
+                  <linearGradient id="purpleGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{stopColor:'#7B2FFF',stopOpacity:1}} />
+                    <stop offset="100%" style={{stopColor:'#A855F7',stopOpacity:1}} />
+                  </linearGradient>
+                </defs>
+                <circle cx="70" cy="100" r="35" fill="url(#purpleGradient)" opacity="0.9"/>
+                <circle cx="130" cy="100" r="35" fill="url(#blueGradient)" opacity="0.9"/>
+                <circle cx="55" cy="85" r="4" fill="#00C8FF"/>
+                <circle cx="70" cy="70" r="4" fill="#7B2FFF"/>
+                <circle cx="85" cy="85" r="4" fill="#00FF88"/>
+                <circle cx="115" cy="85" r="4" fill="#00C8FF"/>
+                <circle cx="130" cy="70" r="4" fill="#7B2FFF"/>
+                <circle cx="145" cy="85" r="4" fill="#00FF88"/>
+                <line x1="55" y1="85" x2="100" y2="100" stroke="#00C8FF" strokeWidth="2" opacity="0.6"/>
+                <line x1="70" y1="70" x2="100" y2="100" stroke="#7B2FFF" strokeWidth="2" opacity="0.6"/>
+                <line x1="145" y1="85" x2="100" y2="100" stroke="#00C8FF" strokeWidth="2" opacity="0.6"/>
+                <line x1="130" y1="70" x2="100" y2="100" stroke="#7B2FFF" strokeWidth="2" opacity="0.6"/>
+                <path d="M 80 100 Q 70 90 80 80 Q 90 70 100 80 Q 110 70 120 80 Q 130 90 120 100 Q 110 110 100 100 Q 90 110 80 100" fill="none" stroke="#E8B84B" strokeWidth="2.5" opacity="0.8"/>
+              </svg>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
