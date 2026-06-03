@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, MapPin, Phone, Linkedin, Twitter, Instagram, MessageCircle } from 'lucide-react';
+import { Mail, MapPin, Phone, Linkedin, X, Instagram, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -39,7 +39,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors"
               >
-                <Twitter size={18} />
+                <X size={18} />
               </a>
               <a
                 href="https://instagram.com"
