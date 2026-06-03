@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import HeroBackground from '@/components/HeroBackground';
+import { ShapeLandingHero } from '@/components/ui/shape-landing-hero';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef(null);
@@ -79,7 +79,7 @@ const ServiceCard = ({
 export default function Home() {
   return (
     <>
-      <HeroBackground />
+      <ShapeLandingHero />
 
       {/* SECTION 1 - HERO */}
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
