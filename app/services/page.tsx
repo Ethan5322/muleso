@@ -66,8 +66,8 @@ export default function ServicesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
-              Every Digital Tool Your Business Needs
+            <h1 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
+              Our Services
             </h1>
             <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
               Websites. Chatbots. Branding. Automation. We build it all — at world-class quality.

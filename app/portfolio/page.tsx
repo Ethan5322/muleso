@@ -12,8 +12,8 @@ export default function PortfolioPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
-            Work That Speaks For Itself
+          <h1 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
+            Our Portfolio
           </h1>
           <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
             From Ethiopian wedding platforms to corporate chatbots — we build the digital products that matter.
@@ -37,7 +37,10 @@ export default function PortfolioPage() {
               viewport={{ once: true }}
               className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
             >
-              <div className="w-full h-40 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] rounded-lg mb-4" />
+              <div className="w-full h-40 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] rounded-lg mb-4 flex items-center justify-center">
+                {/* Project Image: Add /public/portfolio-{project-name}.jpg */}
+                <span className="text-white/50 text-sm">Portfolio Image</span>
+              </div>
               <span className="inline-block px-3 py-1 bg-[var(--glow-blue)] text-[var(--accent-blue)] text-xs font-bold rounded-full mb-2">
                 {project.category}
               </span>

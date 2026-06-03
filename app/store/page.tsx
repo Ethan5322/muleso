@@ -48,14 +48,14 @@ export default function StorePage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
-            Expert Knowledge. Instant Download.
+          <h1 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
+            Digital Products & Guides
           </h1>
           <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            Battle-tested guides built from real projects. Buy once, use forever.
+            Expert knowledge and battle-tested guides built from real projects.
           </p>
           <p className="text-sm text-[var(--text-secondary)] mt-4">
-            🔒 Secure payments via Stripe • Instant PDF delivery
+            Contact us for pricing and availability
           </p>
         </motion.div>
 
@@ -100,11 +100,12 @@ export default function StorePage() {
                 </div>
               </div>
 
-              <p className="text-4xl font-bold gold-text mb-6">{product.price}</p>
-
-              <button className="w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#fff] text-[#000] font-bold rounded-lg hover:scale-105 transition-transform mb-2">
-                Buy Now
-              </button>
+              <Link
+                href="/contact"
+                className="block w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform mb-2 text-center"
+              >
+                Contact for Purchase
+              </Link>
               <p className="text-xs text-center text-[var(--text-secondary)]">
                 ⭐⭐⭐⭐⭐ 47 downloads
               </p>

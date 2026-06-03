@@ -31,7 +31,11 @@ export default function AboutPage() {
           viewport={{ once: true }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20 items-center"
         >
-          <div className="w-full h-96 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] rounded-2xl border-2 border-[var(--accent-gold)]" />
+          <div className="w-full h-96 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] rounded-2xl border-2 border-[var(--accent-gold)] flex items-center justify-center overflow-hidden">
+            {/* CEO Image Placeholder - Add /public/CEO.jpg */}
+            {/* Replace with: <Image src="/CEO.jpg" alt="Ethan - CEO" fill className="object-cover" /> */}
+            <span className="text-[var(--text-secondary)] text-sm">CEO Portrait</span>
+          </div>
 
           <div className="space-y-6">
             <h2 className="text-4xl font-bold font-sora text-[var(--text-primary)]">Hi, I&apos;m Ethan.</h2>
