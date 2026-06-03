@@ -1,0 +1,3 @@
+DEPLOYMENT: $(date)
+Chatbot: Auto-deployed to Vercel via GitHub
+Status: Ready for production
