@@ -3,26 +3,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <h1 className="text-6xl md:text-7xl font-bold font-sora mb-6">
-            <span className="text-[var(--text-primary)]">The Builder Behind</span>{' '}
-            <span className="gradient-text">MuleSoo</span>
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            One entrepreneur. Multiple ventures. One mission: bring world-class tech to African businesses.
-          </p>
-        </motion.div>
+        <PageHero
+          title="The Builder Behind MuleSoo"
+          subtitle="One entrepreneur. Multiple ventures. One mission: bring world-class tech to African businesses."
+        />
 
         {/* Founder Section */}
         <motion.div

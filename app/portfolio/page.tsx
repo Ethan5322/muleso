@@ -2,24 +2,16 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
 
 export default function PortfolioPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
-            Our Portfolio
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            From Ethiopian wedding platforms to corporate chatbots — we build the digital products that matter.
-          </p>
-        </motion.div>
+        <PageHero
+          title="Our Portfolio"
+          subtitle="From Ethiopian wedding platforms to corporate chatbots — we build the digital products that matter."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[

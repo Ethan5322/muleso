@@ -2,24 +2,16 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
 
 export default function ChatbotPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
-            Your Business, On Autopilot
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            AI chatbots that answer questions, book appointments, and qualify leads — 24 hours a day.
-          </p>
-        </motion.div>
+        <PageHero
+          title="Your Business, On Autopilot"
+          subtitle="AI chatbots that answer questions, book appointments, and qualify leads — 24 hours a day."
+        />
 
         {/* Features */}
         <motion.div

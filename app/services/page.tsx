@@ -1,8 +1,8 @@
 'use client';
 
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
 
 export default function ServicesPage() {
   const services = [
@@ -59,22 +59,10 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
-              Our Services
-            </h1>
-            <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-              Websites. Chatbots. Branding. Automation. We build it all — at world-class quality.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        title="Our Services"
+        subtitle="Complete digital solutions to build and grow your business"
+      />
 
       {/* Services Grid */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">

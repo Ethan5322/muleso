@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MessageCircle, MapPin } from 'lucide-react';
+import PageHero from '@/components/PageHero';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -46,19 +47,10 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
-            Let&apos;s Start Building
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            Tell us what you need. We respond within 2 hours on business days.
-          </p>
-        </motion.div>
+        <PageHero
+          title="Let's Start Building"
+          subtitle="Tell us what you need. We respond within 2 hours on business days."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Form */}

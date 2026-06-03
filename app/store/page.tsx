@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
 
 export default function StorePage() {
   const products = [
@@ -42,22 +43,10 @@ export default function StorePage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-6">
-            Digital Products & Guides
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            Expert knowledge and battle-tested guides built from real projects.
-          </p>
-          <p className="text-sm text-[var(--text-secondary)] mt-4">
-            Contact us for pricing and availability
-          </p>
-        </motion.div>
+        <PageHero
+          title="Digital Products & Guides"
+          subtitle="Expert knowledge and battle-tested guides built from real projects. Contact us for pricing and availability."
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {products.map((product, i) => (

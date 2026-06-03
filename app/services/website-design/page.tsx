@@ -2,24 +2,16 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
 
 export default function WebsiteDesignPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
-            Websites That Make Your Competition Nervous
-          </h1>
-          <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
-            Custom-built websites that load in under 2 seconds, convert visitors into customers, and rank on Google from day one.
-          </p>
-        </motion.div>
+        <PageHero
+          title="Websites That Make Your Competition Nervous"
+          subtitle="Custom-built websites that load in under 2 seconds, convert visitors into customers, and rank on Google from day one."
+        />
 
         {/* What You Get */}
         <motion.div
