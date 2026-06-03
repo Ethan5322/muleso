@@ -119,23 +119,26 @@ function generateResponse(userMessage: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
+    const { messages } = body || {};
 
-    if (!messages || messages.length === 0) {
-      return NextResponse.json({ reply: 'Please send a message!' }, { status: 400 });
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json({ reply: 'Please send a message!' });
     }
 
     const lastMessage = messages[messages.length - 1];
-    const userText = lastMessage.content || '';
+    const userText = String(lastMessage?.content || '');
+
+    if (!userText.trim()) {
+      return NextResponse.json({ reply: 'Please send a message!' });
+    }
 
     const reply = generateResponse(userText);
-
     return NextResponse.json({ reply });
-  } catch (error) {
-    console.error('Chat error:', error);
-    return NextResponse.json(
-      { reply: 'Sorry, something went wrong. Please try again!' },
-      { status: 500 }
-    );
+  } catch (error: any) {
+    console.error('Chat error:', error?.message || error);
+    return NextResponse.json({
+      reply: 'Sorry, I encountered an error. Please try again.'
+    });
   }
 }
