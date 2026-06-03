@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital@1&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #050810;
+  --bg-secondary: #0A0F1E;
+  --bg-card: #0D1528;
+  --accent-blue: #00C8FF;
+  --accent-purple: #7B2FFF;
+  --accent-gold: #E8B84B;
+  --accent-green: #00FF88;
+  --text-primary: #F0F2FA;
+  --text-secondary: #A8B2D0;
+  --border: #1A2640;
+  --glow-blue: rgba(0, 200, 255, 0.15);
+  --glow-purple: rgba(123, 47, 255, 0.15);
+  --glow-gold: rgba(232, 184, 75, 0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gold-text {
+  background: linear-gradient(135deg, var(--accent-gold), #fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(13, 21, 40, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* Glow effects */
+.glow-blue { box-shadow: 0 0 30px var(--glow-blue), 0 0 60px var(--glow-blue); }
+.glow-purple { box-shadow: 0 0 30px var(--glow-purple), 0 0 60px var(--glow-purple); }
+.glow-gold { box-shadow: 0 0 20px var(--glow-gold); }
+
+/* Selection color */
+::selection { background: var(--accent-blue); color: #000; }
