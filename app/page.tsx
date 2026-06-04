@@ -377,7 +377,89 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 6 - FINAL CTA */}
+      {/* SECTION 6 - FAQ */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
+              Frequently Asked Questions
+            </h2>
+          </motion.div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: 'How long does a project typically take?',
+                a: 'Timeline depends on scope. Websites: 2-4 weeks. Logos: 5-10 days. Chatbots: 1-3 weeks. We provide exact timelines during consultation.',
+              },
+              {
+                q: 'Do you work with businesses outside South Africa?',
+                a: 'Yes! We serve clients across Africa and internationally. Time zones aren\'t an issue - we work asynchronously and via WhatsApp.',
+              },
+              {
+                q: 'What if I\'m not happy with the final product?',
+                a: 'We include unlimited revisions in our packages. We don\'t stop until you\'re 100% satisfied.',
+              },
+              {
+                q: 'Do I own the final deliverables?',
+                a: 'Absolutely! Once you pay in full, you own everything. We only ask to use completed work in our portfolio.',
+              },
+              {
+                q: 'What payment methods do you accept?',
+                a: 'We accept bank transfer, Stripe card payments, and EFT. Flexible payment plans available for larger projects.',
+              },
+              {
+                q: 'Do you provide support after the project is complete?',
+                a: 'Yes! All services include 30-day post-launch support. After that, we\'re available for maintenance and updates.',
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                viewport={{ once: true }}
+                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+              >
+                <h3 className="font-bold text-[var(--text-primary)] mb-3 text-lg">{item.q}</h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed">{item.a}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            viewport={{ once: true }}
+            className="mt-12 p-8 glass-card border border-[var(--accent-blue)] text-center"
+          >
+            <p className="text-[var(--text-secondary)] mb-4">Still have questions?</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="mailto:mulukenendashaw68@gmail.com"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+              >
+                📧 Email Us
+              </a>
+              <a
+                href="https://wa.me/27781500968"
+                className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+              >
+                💬 WhatsApp Us
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SECTION 7 - FINAL CTA */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -387,16 +469,16 @@ export default function Home() {
           className="max-w-4xl mx-auto text-center"
         >
           <h2 className="text-5xl md:text-7xl font-bold gradient-text font-sora mb-8">
-            Let&apos;s Start Building
+            Ready to Build Something Great?
           </h2>
           <p className="text-[var(--text-secondary)] text-lg md:text-xl mb-10 font-light">
-            Get in touch to discuss your project. We respond within 2 hours.
+            Let's discuss your project. We respond within 2 hours and deliver excellence.
           </p>
           <Link
             href="/contact"
             className="inline-block px-12 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
           >
-            Get In Touch
+            Start Your Project
           </Link>
         </motion.div>
       </section>

@@ -92,8 +92,8 @@ export default function Footer() {
                 { label: 'Portfolio', href: '/portfolio' },
                 { label: 'PDF Store', href: '/store' },
                 { label: 'Contact', href: '/contact' },
-                { label: 'Privacy Policy', href: '#' },
-                { label: 'Terms', href: '#' },
+                { label: 'Privacy Policy', href: '/privacy' },
+                { label: 'Terms of Service', href: '/terms' },
               ].map(({ label, href }) => (
                 <li key={label}>
                   <Link
@@ -116,21 +116,21 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <Mail size={18} className="text-[var(--accent-blue)] mt-1 flex-shrink-0" />
                 <a
-                  href="mailto:hello@mulesoo.com"
+                  href="mailto:mulukenendashaw68@gmail.com"
                   className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors text-sm"
                 >
-                  hello@mulesoo.com
+                  mulukenendashaw68@gmail.com
                 </a>
               </div>
               <div className="flex items-start gap-3">
-                <Phone size={18} className="text-[var(--accent-blue)] mt-1 flex-shrink-0" />
+                <Phone size={18} className="text-[#25D366] mt-1 flex-shrink-0" />
                 <a
-                  href="https://wa.me/27123456789"
+                  href="https://wa.me/27781500968"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors text-sm"
+                  className="text-[var(--text-secondary)] hover:text-[#25D366] transition-colors text-sm"
                 >
-                  +27 12 345 6789
+                  +27 781 500 968 (WhatsApp)
                 </a>
               </div>
               <div className="flex items-start gap-3">
