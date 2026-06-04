@@ -225,25 +225,25 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">Email</p>
                     <a
-                      href="mailto:hello@mulesoo.com"
-                      className="text-[var(--accent-blue)] hover:underline"
+                      href="mailto:mulukenendashaw68@gmail.com"
+                      className="text-[var(--accent-blue)] hover:underline font-semibold"
                     >
-                      hello@mulesoo.com
+                      mulukenendashaw68@gmail.com
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <MessageCircle className="text-[var(--accent-blue)] mt-1 flex-shrink-0" size={20} />
+                  <MessageCircle className="text-[#25D366] mt-1 flex-shrink-0" size={20} />
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">WhatsApp</p>
                     <a
-                      href="https://wa.me/27123456789"
+                      href="https://wa.me/27781500968"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[var(--accent-blue)] hover:underline"
+                      className="text-[#25D366] hover:underline font-semibold"
                     >
-                      Chat on WhatsApp
+                      📱 0781500968
                     </a>
                   </div>
                 </div>

@@ -52,11 +52,29 @@ export default function WebsiteDesignPage() {
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
             Every project is unique. Let's discuss your specific needs and create a custom package tailored to your goals.
           </p>
-          <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-6">
-            💬 Chat with Soo (our AI assistant) for instant pricing and project details
-          </p>
+          <div className="mb-8 space-y-4">
+            <div>
+              <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-4">
+                💬 Contact Ethan Directly for Custom Pricing
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href="mailto:mulukenendashaw68@gmail.com"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                >
+                  📧 Email: mulukenendashaw68@gmail.com
+                </a>
+                <a
+                  href="https://wa.me/27781500968"
+                  className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                >
+                  💬 WhatsApp: 0781500968
+                </a>
+              </div>
+            </div>
+          </div>
           <p className="text-sm text-[var(--text-secondary)]">
-            Scroll down and open the chatbot on the bottom right, or contact us directly for a consultation.
+            We'll respond within 2 hours on business days.
           </p>
         </motion.div>
 

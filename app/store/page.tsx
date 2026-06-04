@@ -8,7 +8,6 @@ export default function StorePage() {
   const products = [
     {
       name: 'Claude Code Master Guide',
-      price: 'R299',
       pages: '52',
       difficulty: 'Beginner-Friendly',
       description: 'Build any professional website using AI in days, not weeks.',
@@ -16,7 +15,6 @@ export default function StorePage() {
     },
     {
       name: 'n8n Automation Bible',
-      price: 'R249',
       pages: '44',
       difficulty: 'Intermediate',
       description: 'Automate your entire business with zero code.',
@@ -24,7 +22,6 @@ export default function StorePage() {
     },
     {
       name: 'Chatbot Business Blueprint',
-      price: 'R199',
       pages: '38',
       difficulty: 'Beginner-Friendly',
       description: 'How to start a chatbot agency and land R5,000+ clients.',
@@ -32,7 +29,6 @@ export default function StorePage() {
     },
     {
       name: 'Netlify Deployment Guide',
-      price: 'R149',
       pages: '28',
       difficulty: 'Beginner-Friendly',
       description: 'Deploy any website professionally in under 30 minutes.',
@@ -45,7 +41,7 @@ export default function StorePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
           title="Digital Products & Guides"
-          subtitle="Expert knowledge and battle-tested guides built from real projects. Contact us for pricing and availability."
+          subtitle="Expert knowledge and battle-tested guides built from real projects. Contact us to purchase or for custom options."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
