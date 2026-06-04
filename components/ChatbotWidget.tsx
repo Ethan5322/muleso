@@ -315,10 +315,8 @@ export default function ChatbotWidget() {
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((msg) => (
-                <motion.div
+                <div
                   key={msg.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
                   className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
@@ -332,7 +330,7 @@ export default function ChatbotWidget() {
                       <div key={i}>{line}</div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               ))}
 
               {/* Service Selection */}
@@ -355,6 +353,7 @@ export default function ChatbotWidget() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15 }}
                   className="glass-card p-4 space-y-3 mt-4"
                 >
                   <h3 className="font-bold text-[var(--text-primary)]">📋 Your Booking Details:</h3>
