@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, ArrowUp } from 'lucide-react';
+import { MessageCircle, X, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -178,6 +178,8 @@ export default function ChatbotWidget() {
     localStorage.setItem('chatbotMessages', JSON.stringify(updatedMessages));
 
     try {
+      console.log('🚀 Sending message to /api/chat:', text);
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -189,7 +191,15 @@ export default function ChatbotWidget() {
         }),
       });
 
+      console.log('📡 Response status:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
+      console.log('✅ API response:', data);
+
       const botMsg: Message = {
         id: (Date.now() + 1).toString(),
         text: data.reply || 'Sorry, I encountered an error. Please try again.',
@@ -207,7 +217,16 @@ export default function ChatbotWidget() {
         }, 500);
       }
     } catch (error) {
-      console.error('Chat error:', error);
+      console.error('❌ Chat error:', error);
+      const errorMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        text: `Error: ${error instanceof Error ? error.message : 'Connection failed'}`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      const errorMessages = [...updatedMessages, errorMsg];
+      setMessages(errorMessages);
+      localStorage.setItem('chatbotMessages', JSON.stringify(errorMessages));
     } finally {
       setIsLoading(false);
     }
@@ -314,7 +333,7 @@ export default function ChatbotWidget() {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend(inputValue)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend(inputValue)}
                 placeholder={collectingInfo ? "Type your response..." : "Type your message..."}
                 className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] px-3 py-2 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-sm"
               />
