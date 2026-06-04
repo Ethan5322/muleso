@@ -85,9 +85,9 @@ export default function ServicesPage() {
                 </ul>
                 <Link
                   href={service.href}
-                  className="inline-block px-6 py-2 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+                  className="inline-block px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-110 transition-transform shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] w-full text-center"
                 >
-                  View Details
+                  📖 View Full Details →
                 </Link>
               </motion.div>
             ))}
