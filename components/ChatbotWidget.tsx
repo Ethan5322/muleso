@@ -378,21 +378,23 @@ export default function ChatbotWidget() {
 
   return (
     <>
+      {/* Chat Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 w-16 h-16 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white shadow-lg z-40 flex items-center justify-center hover:scale-110 transition-transform"
-        whileHover={{ scale: 1.1 }}
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-blue)] text-white shadow-2xl z-40 flex items-center justify-center hover:shadow-3xl transition-shadow sm:w-16 sm:h-16"
+        whileHover={{ scale: 1.12, boxShadow: '0 0 30px rgba(0, 200, 255, 0.6)' }}
+        whileTap={{ scale: 0.95 }}
         animate={{
           rotate: isOpen ? 45 : 0,
         }}
       >
-        {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
+        {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
         {!isOpen && (
           <motion.div
             className="absolute inset-0 border-2 border-[var(--accent-blue)] rounded-full"
             animate={{
-              scale: [1, 1.15],
-              opacity: [1, 0],
+              scale: [1, 1.2],
+              opacity: [0.8, 0],
             }}
             transition={{
               duration: 1.5,
@@ -405,99 +407,126 @@ export default function ChatbotWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] rounded-2xl shadow-2xl bg-[var(--bg-secondary)] border border-[var(--border)] flex flex-col z-40"
+            exit={{ opacity: 0, y: 30, scale: 0.9 }}
+            transition={{ duration: 0.25, type: 'spring', bounce: 0.3 }}
+            className="fixed bottom-20 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[480px] md:w-[500px] max-w-[500px] h-[600px] sm:h-[700px] max-h-[calc(100vh-120px)] rounded-2xl sm:rounded-3xl shadow-2xl bg-[var(--bg-secondary)] border border-[var(--border)] flex flex-col z-40 overflow-hidden"
           >
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-2xl">
-              <div className="font-bold font-sora flex items-center gap-2">
-                Soo <span className="w-2 h-2 rounded-full bg-[var(--accent-green)] animate-pulse" />
+            {/* Header - Enhanced */}
+            <div className="bg-gradient-to-r from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-blue)] text-white p-6 rounded-t-3xl flex-shrink-0">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="text-2xl">🤖</div>
+                <div>
+                  <div className="font-bold font-sora text-lg">Soo</div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent-green)] animate-pulse" />
+                    <span className="text-xs opacity-90">Online</span>
+                  </div>
+                </div>
               </div>
-              <p className="text-xs opacity-90">MuleSoo Service Booking</p>
+              <p className="text-sm opacity-95 font-medium">MuleSoo AI Assistant • Quick Response</p>
             </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
+            {/* Messages Area - Larger */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-[var(--accent-blue)] scrollbar-track-[var(--bg-card)]">
               {messages.map((msg) => (
-                <div
+                <motion.div
                   key={msg.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
                   className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${
+                    className={`max-w-sm px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                       msg.sender === 'user'
-                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white rounded-br-none'
-                        : 'bg-[var(--bg-card)] text-[var(--text-secondary)] rounded-bl-none border border-[var(--border)]'
+                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white rounded-br-sm shadow-lg'
+                        : 'bg-[var(--bg-card)] text-[var(--text-secondary)] rounded-bl-sm border border-[var(--border)] hover:border-[var(--accent-blue)] transition-colors'
                     }`}
                   >
                     {msg.text.split('\n').map((line, i) => (
-                      <div key={i}>{line}</div>
+                      <div key={i} className={msg.sender === 'user' ? 'text-white' : ''}>
+                        {line || ' '}
+                      </div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               ))}
 
               {/* Service Selection */}
               {stage === 'greeting' && messages.length > 0 && (
-                <div className="space-y-2 mt-4">
+                <div className="space-y-2 mt-2">
                   {SERVICES.map((service) => (
-                    <button
+                    <motion.button
                       key={service.id}
+                      whileHover={{ scale: 1.02, x: 4 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleServiceSelect(service.value)}
-                      className="w-full px-3 py-2 text-left text-xs bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
+                      className="w-full px-4 py-3 text-left text-sm font-medium bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:bg-[var(--glow-blue)] transition-all duration-200"
                     >
                       {service.label}
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
               )}
 
               {/* Usage Type Selection */}
               {stage === 'usage_type' && (
-                <div className="space-y-2 mt-4">
-                  <button
+                <div className="space-y-3 mt-2">
+                  <motion.button
+                    whileHover={{ scale: 1.02, x: 4 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => handleUsageTypeSelect('Personal')}
-                    className="w-full px-3 py-2 text-left text-xs bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
+                    className="w-full px-4 py-4 text-left font-medium bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:bg-[var(--glow-blue)] transition-all duration-200"
                   >
                     👤 Personal
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02, x: 4 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => handleUsageTypeSelect('Company')}
-                    className="w-full px-3 py-2 text-left text-xs bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
+                    className="w-full px-4 py-4 text-left font-medium bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:bg-[var(--glow-blue)] transition-all duration-200"
                   >
                     🏢 Company
-                  </button>
+                  </motion.button>
                 </div>
               )}
 
               {/* Summary & Download */}
               {stage === 'summary' && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.1 }}
-                  className="glass-card p-3 space-y-2 mt-2"
+                  transition={{ duration: 0.2 }}
+                  className="glass-card p-6 space-y-5 mt-3 mx-2"
                 >
-                  <h3 className="font-bold text-[var(--text-primary)]">📋 Your Booking Details:</h3>
-                  <div className="space-y-2 text-sm text-[var(--text-secondary)]">
-                    <p><strong>Name:</strong> {bookingData.fullName}</p>
-                    <p><strong>Phone & WhatsApp:</strong> {bookingData.phoneNumber}</p>
-                    <p><strong>Country:</strong> {bookingData.nationality}</p>
-                    <p><strong>Usage Type:</strong> {bookingData.usageType}</p>
-                    <p><strong>Service:</strong> {bookingData.service}</p>
+                  <h3 className="font-bold text-lg text-[var(--text-primary)]">📋 Booking Confirmation</h3>
+                  <div className="space-y-3 text-sm">
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Name</p>
+                      <p className="text-[var(--text-primary)] font-semibold">{bookingData.fullName}</p>
+                    </div>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Contact</p>
+                      <p className="text-[var(--text-primary)] font-semibold">{bookingData.phoneNumber}</p>
+                    </div>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Service</p>
+                      <p className="text-[var(--text-primary)] font-semibold">{bookingData.service}</p>
+                    </div>
                   </div>
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={generatePDF}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-gold)] to-[#E8B84B] text-white font-bold rounded-lg hover:scale-105 transition-transform text-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
                   >
-                    <Download size={16} />
+                    <Download size={18} />
                     Download PDF
-                  </button>
-                  <p className="text-xs text-[var(--text-secondary)] text-center italic">
-                    ✅ Your booking form is ready. Download it and keep a copy!
+                  </motion.button>
+                  <p className="text-xs text-[var(--text-secondary)] text-center">
+                    ✅ Download & share with Ethan
                   </p>
                 </motion.div>
               )}
@@ -507,33 +536,41 @@ export default function ChatbotWidget() {
 
             {/* Input Area */}
             {(stage === 'name' || stage === 'phone' || stage === 'nationality' || stage === 'details') && (
-              <div className="border-t border-[var(--border)] p-3 flex gap-2 flex-shrink-0">
+              <div className="border-t border-[var(--border)] p-4 flex gap-3 flex-shrink-0 bg-[var(--bg-card)]">
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleInputSubmit()}
-                  placeholder={stage === 'phone' ? 'e.g., 0781234567' : 'Type...'}
+                  placeholder={stage === 'phone' ? '0781234567' : 'Type your response...'}
                   autoFocus
-                  className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] px-3 py-2 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-sm"
+                  className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-base placeholder-[var(--text-secondary)]"
                 />
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={handleInputSubmit}
                   disabled={!inputValue.trim()}
-                  className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-2 rounded-lg hover:scale-105 transition-transform disabled:opacity-50 flex-shrink-0"
+                  className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
                 >
-                  <ArrowUp size={18} />
-                </button>
+                  <ArrowUp size={20} />
+                </motion.button>
               </div>
             )}
 
             {/* Summary Mode - No Input */}
             {stage === 'summary' && (
-              <div className="border-t border-[var(--border)] p-4 text-center">
-                <p className="text-xs text-[var(--text-secondary)] mb-3">
-                  💬 Ethan will contact you on WhatsApp at {bookingData.phoneNumber} within 2 hours!
-                </p>
-                <button
+              <div className="border-t border-[var(--border)] p-5 flex-shrink-0 bg-[var(--bg-card)]">
+                <div className="flex items-start gap-3 mb-4 bg-[var(--glow-blue)] p-3 rounded-lg">
+                  <span className="text-xl">⏰</span>
+                  <div className="text-xs">
+                    <p className="font-semibold text-[var(--accent-blue)]">Response Time</p>
+                    <p className="text-[var(--text-secondary)]">Ethan replies within 2 hours on WhatsApp</p>
+                  </div>
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     setIsOpen(false);
                     setMessages([]);
@@ -546,10 +583,10 @@ export default function ChatbotWidget() {
                       usageType: '',
                     });
                   }}
-                  className="w-full px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-all font-medium"
                 >
                   Close Chat
-                </button>
+                </motion.button>
               </div>
             )}
           </motion.div>
