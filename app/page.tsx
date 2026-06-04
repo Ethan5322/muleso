@@ -30,6 +30,53 @@ const StatCounter = ({ value, label }: { value: string; label: string }) => {
   );
 };
 
+const TestimonialCard = ({
+  quote,
+  author,
+  role,
+  company,
+  rating,
+  delay,
+}: {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  rating: number;
+  delay: number;
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start({ opacity: 1, y: 0 });
+    }
+  }, [isInView, controls]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={controls}
+      transition={{ duration: 0.5, delay }}
+      className="glass-card p-8 hover:border-[var(--accent-blue)] transition-all duration-300"
+    >
+      <div className="flex gap-1 mb-4">
+        {[...Array(rating)].map((_, i) => (
+          <span key={i} className="text-[var(--accent-gold)]">⭐</span>
+        ))}
+      </div>
+      <p className="text-[var(--text-secondary)] mb-6 italic leading-relaxed">"{quote}"</p>
+      <div className="border-t border-[var(--border)] pt-4">
+        <p className="font-bold text-[var(--text-primary)]">{author}</p>
+        <p className="text-sm text-[var(--text-secondary)]">{role} at {company}</p>
+      </div>
+    </motion.div>
+  );
+};
+
 const ServiceCard = ({
   icon,
   title,
@@ -259,7 +306,78 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 5 - FINAL CTA */}
+      {/* SECTION 5 - TESTIMONIALS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
+              What Clients Say
+            </h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+              Real results from businesses we've helped grow
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <TestimonialCard
+              quote="MuleSoo completely transformed our online presence. Our bookings tripled within 3 months. Professional, fast, and incredibly responsive."
+              author="Sarah Mkhize"
+              role="CEO"
+              company="Luxury Events SA"
+              rating={5}
+              delay={0}
+            />
+            <TestimonialCard
+              quote="The AI chatbot they built for us handles 80% of customer inquiries automatically. Best investment we've made. Highly recommend!"
+              author="James Okonkwo"
+              role="Manager"
+              company="Tech Solutions Ltd"
+              rating={5}
+              delay={0.1}
+            />
+            <TestimonialCard
+              quote="From concept to launch in 2 weeks. The attention to detail is insane. Our logo and website are exactly what we needed. Worth every cent."
+              author="Patricia Nkosi"
+              role="Founder"
+              company="Beauty & Wellness Co"
+              rating={5}
+              delay={0.2}
+            />
+            <TestimonialCard
+              quote="Ethan is brilliant. He understands our business better than we do sometimes. The chatbot integration was seamless and our team productivity increased 40%."
+              author="David Chen"
+              role="Operations Director"
+              company="Import/Export Business"
+              rating={5}
+              delay={0.3}
+            />
+            <TestimonialCard
+              quote="We got our website when we needed it most. Fast turnaround, great quality, and the support after launch was phenomenal. Total game-changer."
+              author="Amahle Dlamini"
+              role="Founder"
+              company="Sustainable Fashion Startup"
+              rating={5}
+              delay={0.4}
+            />
+            <TestimonialCard
+              quote="The PDF guide we purchased completely changed how we approach our workflows. Clear, practical, and packed with insights. Worth 10x the price!"
+              author="Marcus Thompson"
+              role="CEO"
+              company="Digital Marketing Agency"
+              rating={5}
+              delay={0.5}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6 - FINAL CTA */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
