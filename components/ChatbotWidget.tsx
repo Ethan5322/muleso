@@ -72,28 +72,37 @@ export default function ChatbotWidget() {
   const handleOpen = () => {
     setIsOpen(true);
     if (messages.length === 0) {
+      // Show greeting immediately
+      addMessage(
+        "👋 Hi! I'm Soo from MuleSoo. Let's get your project started!",
+        'bot'
+      );
+      // Set stage immediately so buttons show
       setTimeout(() => {
-        addMessage(
-          "👋 Hi! Welcome to MuleSoo.\n\nI'm Soo, your AI assistant. What service do you need?",
-          'bot'
-        );
         setStage('greeting');
-      }, 100);
+      }, 50);
     }
   };
 
   const handleServiceSelect = (service: string) => {
-    addMessage(service.split(' ').slice(1).join(' '), 'user');
+    const cleanService = service.split(' ').slice(1).join(' ');
+    addMessage(cleanService, 'user');
     setBookingData(prev => ({ ...prev, service }));
-    addMessage(`Great! You selected: ${service.split(' ').slice(1).join(' ')}\n\nIs this service for personal or company use?`, 'bot');
-    setStage('usage_type');
+
+    setTimeout(() => {
+      addMessage(`Great choice! 💪\n\nIs this for your personal project or a company?`, 'bot');
+      setStage('usage_type');
+    }, 300);
   };
 
   const handleUsageTypeSelect = (usageType: string) => {
     addMessage(usageType, 'user');
     setBookingData(prev => ({ ...prev, usageType }));
-    addMessage(`Perfect! I've noted this is for ${usageType.toLowerCase()} use.\n\nWhat's your full name?`, 'bot');
-    setStage('name');
+
+    setTimeout(() => {
+      addMessage(`Perfect! 👍\n\nNow, what's your full name?`, 'bot');
+      setStage('name');
+    }, 300);
   };
 
   const formatPhoneNumber = (phone: string): string => {
@@ -120,31 +129,40 @@ export default function ChatbotWidget() {
     switch (stage) {
       case 'name':
         setBookingData(prev => ({ ...prev, fullName: userInput }));
-        addMessage(`Nice to meet you, ${userInput}! 👋\n\nWhat's your phone number? (WhatsApp & calls)\n\nExample: 0781234567 or +27781234567`, 'bot');
-        setStage('phone');
+        addMessage(`Great! Nice to meet you, ${userInput}! 👋`, 'user');
+        setTimeout(() => {
+          addMessage(`What's your phone number?\n\n(for WhatsApp & calls)`, 'bot');
+          setStage('phone');
+        }, 300);
         break;
 
       case 'phone':
         const formattedPhone = formatPhoneNumber(userInput);
         setBookingData(prev => ({ ...prev, phoneNumber: formattedPhone }));
-        addMessage(`Perfect! ${formattedPhone} saved for both WhatsApp and calls.\n\nWhat's your nationality/country?`, 'bot');
-        setStage('nationality');
+        addMessage(formattedPhone, 'user');
+        setTimeout(() => {
+          addMessage(`Got it! ✓\n\nWhat's your country?`, 'bot');
+          setStage('nationality');
+        }, 300);
         break;
 
       case 'nationality':
         setBookingData(prev => ({ ...prev, nationality: userInput }));
-        addMessage(
-          `Perfect! One last thing - please tell me more details about what you need. What's the scope of your project?\n\n(For example: "I need a 5-page website with chatbot integration")`,
-          'bot'
-        );
-        setStage('details');
+        addMessage(userInput, 'user');
+        setTimeout(() => {
+          addMessage(`Awesome! Last question:\n\nBriefly describe your project. What do you need?`, 'bot');
+          setStage('details');
+        }, 300);
         break;
 
       case 'details':
-        addMessage('✅ Booking confirmed! Here\'s your booking form...', 'bot');
+        addMessage(userInput, 'user');
         setTimeout(() => {
-          setStage('summary');
-        }, 200);
+          addMessage('✅ Perfect! Your booking is ready!', 'bot');
+          setTimeout(() => {
+            setStage('summary');
+          }, 300);
+        }, 300);
         break;
 
       default:
@@ -455,42 +473,63 @@ export default function ChatbotWidget() {
               ))}
 
               {/* Service Selection */}
-              {stage === 'greeting' && messages.length > 0 && (
-                <div className="space-y-2 mt-2">
-                  {SERVICES.map((service) => (
+              {stage === 'greeting' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="space-y-2 mt-4 px-2"
+                >
+                  <p className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide mb-3">Pick a service:</p>
+                  {SERVICES.map((service, idx) => (
                     <motion.button
                       key={service.id}
-                      whileHover={{ scale: 1.02, x: 4 }}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.05 * idx }}
+                      whileHover={{ scale: 1.02, x: 8 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleServiceSelect(service.value)}
-                      className="w-full px-4 py-3 text-left text-sm font-medium bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:bg-[var(--glow-blue)] transition-all duration-200"
+                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                     >
                       {service.label}
                     </motion.button>
                   ))}
-                </div>
+                </motion.div>
               )}
 
               {/* Usage Type Selection */}
               {stage === 'usage_type' && (
-                <div className="space-y-3 mt-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="space-y-3 mt-4 px-2"
+                >
+                  <p className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide mb-3">Choose one:</p>
                   <motion.button
-                    whileHover={{ scale: 1.02, x: 4 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.05 }}
+                    whileHover={{ scale: 1.02, x: 8 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleUsageTypeSelect('Personal')}
-                    className="w-full px-4 py-4 text-left font-medium bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:bg-[var(--glow-blue)] transition-all duration-200"
+                    className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                   >
                     👤 Personal
                   </motion.button>
                   <motion.button
-                    whileHover={{ scale: 1.02, x: 4 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                    whileHover={{ scale: 1.02, x: 8 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => handleUsageTypeSelect('Company')}
-                    className="w-full px-4 py-4 text-left font-medium bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:bg-[var(--glow-blue)] transition-all duration-200"
+                    className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-purple)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-purple)] hover:from-[var(--glow-purple)] hover:to-[var(--glow-blue)] transition-all duration-200 cursor-pointer"
                   >
                     🏢 Company
                   </motion.button>
-                </div>
+                </motion.div>
               )}
 
               {/* Summary & Download */}
@@ -536,25 +575,40 @@ export default function ChatbotWidget() {
 
             {/* Input Area */}
             {(stage === 'name' || stage === 'phone' || stage === 'nationality' || stage === 'details') && (
-              <div className="border-t border-[var(--border)] p-4 flex gap-3 flex-shrink-0 bg-[var(--bg-card)]">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleInputSubmit()}
-                  placeholder={stage === 'phone' ? '0781234567' : 'Type your response...'}
-                  autoFocus
-                  className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-base placeholder-[var(--text-secondary)]"
-                />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleInputSubmit}
-                  disabled={!inputValue.trim()}
-                  className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
-                >
-                  <ArrowUp size={20} />
-                </motion.button>
+              <div className="border-t border-[var(--border)] p-4 flex-shrink-0 bg-[var(--bg-card)]">
+                <div className="mb-3">
+                  <label className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide block mb-2">
+                    {stage === 'name' && '👤 Your Name'}
+                    {stage === 'phone' && '📱 Phone Number'}
+                    {stage === 'nationality' && '🌍 Country'}
+                    {stage === 'details' && '💬 Project Details'}
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleInputSubmit()}
+                      placeholder={
+                        stage === 'phone' ? 'e.g., 0781234567' :
+                        stage === 'name' ? 'e.g., John Doe' :
+                        stage === 'nationality' ? 'e.g., South Africa' :
+                        'e.g., I need a 5-page website...'
+                      }
+                      autoFocus
+                      className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-base placeholder-[var(--text-secondary)] font-medium"
+                    />
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleInputSubmit}
+                      disabled={!inputValue.trim()}
+                      className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+                    >
+                      <ArrowUp size={20} />
+                    </motion.button>
+                  </div>
+                </div>
               </div>
             )}
 
