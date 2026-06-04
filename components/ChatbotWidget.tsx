@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, ArrowUp, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { useChatbot } from '@/context/ChatbotContext';
 import jsPDF from 'jspdf';
 
 interface Message {
@@ -30,7 +32,8 @@ const SERVICES = [
 ];
 
 export default function ChatbotWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const { isOpen, setIsOpen, openChatbot } = useChatbot();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [stage, setStage] = useState<'greeting' | 'service' | 'name' | 'phone' | 'nationality' | 'details' | 'summary'>('greeting');
@@ -41,6 +44,13 @@ export default function ChatbotWidget() {
     service: '',
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-open chatbot on contact page
+  useEffect(() => {
+    if (pathname === '/contact') {
+      openChatbot();
+    }
+  }, [pathname, openChatbot]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

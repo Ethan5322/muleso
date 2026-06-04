@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientWrapper from "@/components/ClientWrapper";
+import { ChatbotProvider } from "@/context/ChatbotContext";
 
 export const metadata: Metadata = {
   title: {
@@ -63,11 +64,13 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-x-hidden">
-        <ClientWrapper>
-          <Navbar />
-          <main className="min-h-screen flex flex-col pt-20">{children}</main>
-          <Footer />
-        </ClientWrapper>
+        <ChatbotProvider>
+          <ClientWrapper>
+            <Navbar />
+            <main className="min-h-screen flex flex-col pt-20">{children}</main>
+            <Footer />
+          </ClientWrapper>
+        </ChatbotProvider>
       </body>
     </html>
   );

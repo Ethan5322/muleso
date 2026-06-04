@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import PageHero from '@/components/PageHero';
+import StartBookingButton from '@/components/StartBookingButton';
 
 export default function WebsiteDesignPage() {
   return (
@@ -87,12 +88,12 @@ export default function WebsiteDesignPage() {
           className="text-center"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Launch?</h2>
-          <Link
-            href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
-          >
-            Book a Free Consultation
-          </Link>
+          <div className="max-w-md mx-auto">
+            <StartBookingButton text="🚀 Book Your Website Now" size="lg" />
+          </div>
+          <p className="text-sm text-[var(--text-secondary)] mt-4">
+            Chat with Ethan directly — get a quote in minutes!
+          </p>
         </motion.div>
       </div>
     </div>
