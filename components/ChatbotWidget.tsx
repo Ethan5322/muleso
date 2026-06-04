@@ -19,6 +19,7 @@ interface BookingData {
   phoneNumber: string;
   nationality: string;
   service: string;
+  usageType: string;
 }
 
 const SERVICES = [
@@ -36,12 +37,13 @@ export default function ChatbotWidget() {
   const { isOpen, setIsOpen, openChatbot } = useChatbot();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [stage, setStage] = useState<'greeting' | 'service' | 'name' | 'phone' | 'nationality' | 'details' | 'summary'>('greeting');
+  const [stage, setStage] = useState<'greeting' | 'service' | 'usage_type' | 'name' | 'phone' | 'nationality' | 'details' | 'summary'>('greeting');
   const [bookingData, setBookingData] = useState<BookingData>({
     fullName: '',
     phoneNumber: '',
     nationality: '',
     service: '',
+    usageType: '',
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -83,7 +85,14 @@ export default function ChatbotWidget() {
   const handleServiceSelect = (service: string) => {
     addMessage(service.split(' ').slice(1).join(' '), 'user');
     setBookingData(prev => ({ ...prev, service }));
-    addMessage(`Great! You selected: ${service.split(' ').slice(1).join(' ')}\n\nNow, let me collect your information.\n\nWhat's your full name?`, 'bot');
+    addMessage(`Great! You selected: ${service.split(' ').slice(1).join(' ')}\n\nIs this service for personal or company use?`, 'bot');
+    setStage('usage_type');
+  };
+
+  const handleUsageTypeSelect = (usageType: string) => {
+    addMessage(usageType, 'user');
+    setBookingData(prev => ({ ...prev, usageType }));
+    addMessage(`Perfect! I've noted this is for ${usageType.toLowerCase()} use.\n\nWhat's your full name?`, 'bot');
     setStage('name');
   };
 
@@ -148,122 +157,198 @@ export default function ChatbotWidget() {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    let yPos = 15;
+    const margin = 20;
+    const contentWidth = pageWidth - 2 * margin;
+    let yPos = margin;
 
-    // Add Logo
+    // Professional header with gradient-like effect using colors
+    doc.setFillColor(5, 8, 16);
+    doc.rect(0, 0, pageWidth, 40, 'F');
+
+    // Logo area
     try {
       const logoUrl = '/mulesoo-logo.png';
-      doc.addImage(logoUrl, 'PNG', pageWidth / 2 - 15, yPos, 30, 30);
-      yPos += 35;
+      doc.addImage(logoUrl, 'PNG', margin, 8, 20, 20);
     } catch (error) {
-      console.log('Logo could not be added, continuing without it');
-      yPos += 10;
+      console.log('Logo not available');
     }
 
-    // Header
-    doc.setFontSize(18);
+    // Company branding
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 200, 255);
-    doc.text('MULESOO', pageWidth / 2, yPos, { align: 'center' });
-    doc.setTextColor(123, 47, 255);
+    doc.text('MULESOO', margin + 25, 18);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(160, 178, 208);
+    doc.text('Digital Services', margin + 25, 26);
+    doc.text('Pretoria, South Africa', margin + 25, 31);
+
+    // Document title on the right
     doc.setFontSize(11);
-    doc.text('Digital Services | Pretoria, South Africa', pageWidth / 2, yPos + 7, { align: 'center' });
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(200, 200, 200);
+    doc.text('SERVICE REQUEST FORM', pageWidth - margin - 50, 18, { align: 'left' });
 
-    yPos += 18;
+    // Date on right
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(150, 150, 150);
+    const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
+    doc.text(`Date: ${currentDate}`, pageWidth - margin - 50, 26, { align: 'left' });
 
-    // Divider Line
+    yPos = 50;
+
+    // Decorative line
     doc.setDrawColor(0, 200, 255);
-    doc.line(15, yPos, pageWidth - 15, yPos);
+    doc.setLineWidth(0.8);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
     yPos += 8;
 
-    // Title
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont('', 'bold');
-    doc.text('📋 SERVICE BOOKING CONFIRMATION', pageWidth / 2, yPos, { align: 'center' });
+    // Section: CLIENT INFORMATION
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 200, 255);
+    doc.text('CLIENT INFORMATION', margin, yPos);
+    yPos += 8;
 
+    // Information box with subtle background
+    doc.setFillColor(13, 21, 40);
+    doc.rect(margin, yPos - 4, contentWidth, 45, 'F');
+    doc.setDrawColor(0, 200, 255);
+    doc.setLineWidth(0.5);
+    doc.rect(margin, yPos - 4, contentWidth, 45);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(240, 242, 250);
+    doc.text('Full Name:', margin + 4, yPos + 2);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(168, 178, 208);
+    doc.text(bookingData.fullName, margin + 35, yPos + 2);
+
+    yPos += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(240, 242, 250);
+    doc.text('Phone & WhatsApp:', margin + 4, yPos + 2);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(168, 178, 208);
+    doc.text(bookingData.phoneNumber, margin + 35, yPos + 2);
+
+    yPos += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(240, 242, 250);
+    doc.text('Country/Nationality:', margin + 4, yPos + 2);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(168, 178, 208);
+    doc.text(bookingData.nationality, margin + 35, yPos + 2);
+
+    yPos += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(240, 242, 250);
+    doc.text('Usage Type:', margin + 4, yPos + 2);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(168, 178, 208);
+    doc.text(bookingData.usageType, margin + 35, yPos + 2);
+
+    yPos += 14;
+
+    // Decorative line
+    doc.setDrawColor(0, 200, 255);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 8;
+
+    // Section: SERVICE DETAILS
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(123, 47, 255);
+    doc.text('SERVICE REQUESTED', margin, yPos);
+    yPos += 8;
+
+    // Service box
+    doc.setFillColor(13, 21, 40);
+    doc.rect(margin, yPos - 4, contentWidth, 20, 'F');
+    doc.setDrawColor(123, 47, 255);
+    doc.setLineWidth(0.5);
+    doc.rect(margin, yPos - 4, contentWidth, 20);
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 255, 136);
+    doc.text(bookingData.service, margin + 4, yPos + 5);
+
+    yPos += 24;
+
+    // Decorative line
+    doc.setDrawColor(232, 184, 75);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 10;
+
+    // Section: CONTACT DETAILS
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(232, 184, 75);
+    doc.text('HOW WE\'LL GET IN TOUCH', margin, yPos);
+    yPos += 8;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(168, 178, 208);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 200, 255);
+    doc.text('📧 Email:', margin, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(240, 242, 250);
+    doc.text('mulukenendashaw68@gmail.com', margin + 25, yPos);
+    yPos += 7;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 255, 136);
+    doc.text('📱 WhatsApp:', margin, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(240, 242, 250);
+    doc.text('0781500968', margin + 25, yPos);
     yPos += 12;
 
-    // Customer Details Section
-    doc.setFillColor(0, 200, 255, 15);
-    doc.rect(15, yPos - 3, pageWidth - 30, 1, 'F');
-    doc.setFontSize(11);
-    doc.setFont('', 'bold');
+    // Important notice box
+    doc.setFillColor(0, 200, 255);
+    doc.setFillColor(13, 21, 40);
+    doc.rect(margin, yPos, contentWidth, 22, 'F');
+    doc.setDrawColor(0, 200, 255);
+    doc.setLineWidth(0.8);
+    doc.rect(margin, yPos, contentWidth, 22);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 200, 255);
-    doc.text('👤 CUSTOMER INFORMATION', 15, yPos);
-    yPos += 7;
+    doc.text('⏰ WHAT HAPPENS NEXT', margin + 3, yPos + 4);
 
-    doc.setFont('', 'normal');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Full Name: ${bookingData.fullName}`, 15, yPos);
-    yPos += 6;
-    doc.text(`Phone & WhatsApp: ${bookingData.phoneNumber}`, 15, yPos);
-    yPos += 6;
-    doc.text(`Country/Nationality: ${bookingData.nationality}`, 15, yPos);
-    yPos += 10;
-
-    // Service Details Section
-    doc.setFillColor(123, 47, 255, 15);
-    doc.rect(15, yPos - 3, pageWidth - 30, 1, 'F');
-    doc.setFont('', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(123, 47, 255);
-    doc.text('🎯 SERVICE SELECTED', 15, yPos);
-    yPos += 7;
-
-    doc.setFont('', 'normal');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text(bookingData.service, 15, yPos);
-    yPos += 10;
-
-    // Contact Information Section
-    doc.setFillColor(232, 184, 75, 15);
-    doc.rect(15, yPos - 3, pageWidth - 30, 1, 'F');
-    doc.setFont('', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(232, 184, 75);
-    doc.text('📞 CONTACT MULESOO', 15, yPos);
-    yPos += 7;
-
-    doc.setFont('', 'normal');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 200, 255);
-    doc.text('📧 Email:', 15, yPos);
-    doc.setTextColor(0, 0, 0);
-    doc.text('mulukenendashaw68@gmail.com', 50, yPos);
-    yPos += 6;
-
-    doc.setTextColor(37, 211, 102);
-    doc.text('📱 WhatsApp:', 15, yPos);
-    doc.setTextColor(0, 0, 0);
-    doc.text('0781500968', 50, yPos);
-    yPos += 10;
-
-    // Important Message Box
-    doc.setFillColor(0, 200, 255, 5);
-    doc.rect(15, yPos, pageWidth - 30, 15, 'F');
-    doc.setFont('', 'bold');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 200, 255);
-    doc.text('⏰ NEXT STEPS', 15, yPos + 4);
-    doc.setFont('', 'normal');
     doc.setFontSize(9);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Ethan will contact you on WhatsApp within 2 hours on business days.', 15, yPos + 9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(240, 242, 250);
+    const nextStepsText = 'Ethan will contact you within 2 hours on business days via WhatsApp to discuss your project in detail.';
+    doc.text(nextStepsText, margin + 3, yPos + 10, { maxWidth: contentWidth - 6 });
 
-    yPos = pageHeight - 20;
+    // Footer
+    yPos = pageHeight - 15;
+    doc.setDrawColor(26, 38, 64);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
 
-    // Footer message
-    doc.setTextColor(128, 128, 128);
-    doc.setFont('', 'italic');
+    yPos += 4;
     doc.setFontSize(8);
-    doc.text('Booking Confirmation • Save this document for your records', pageWidth / 2, pageHeight - 8, { align: 'center' });
-    doc.text('MuleSoo Digital Services | Pretoria, South Africa', pageWidth / 2, pageHeight - 4, { align: 'center' });
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(128, 128, 128);
+    doc.text('This is your confirmation form. Please keep it safe for your records.', pageWidth / 2, yPos, { align: 'center' });
+    doc.text('© 2025 MuleSoo Digital Services • Pretoria, South Africa', pageWidth / 2, yPos + 4, { align: 'center' });
 
     // Generate filename with date
     const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
-    const filename = `MuleSoo_Booking_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;
+    const filename = `MuleSoo_ServiceRequest_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;
 
     doc.save(filename);
   };
@@ -348,6 +433,24 @@ export default function ChatbotWidget() {
                 </div>
               )}
 
+              {/* Usage Type Selection */}
+              {stage === 'usage_type' && (
+                <div className="space-y-2 mt-4">
+                  <button
+                    onClick={() => handleUsageTypeSelect('Personal')}
+                    className="w-full px-3 py-2 text-left text-xs bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
+                  >
+                    👤 Personal
+                  </button>
+                  <button
+                    onClick={() => handleUsageTypeSelect('Company')}
+                    className="w-full px-3 py-2 text-left text-xs bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
+                  >
+                    🏢 Company
+                  </button>
+                </div>
+              )}
+
               {/* Summary & Download */}
               {stage === 'summary' && (
                 <motion.div
@@ -361,6 +464,7 @@ export default function ChatbotWidget() {
                     <p><strong>Name:</strong> {bookingData.fullName}</p>
                     <p><strong>Phone & WhatsApp:</strong> {bookingData.phoneNumber}</p>
                     <p><strong>Country:</strong> {bookingData.nationality}</p>
+                    <p><strong>Usage Type:</strong> {bookingData.usageType}</p>
                     <p><strong>Service:</strong> {bookingData.service}</p>
                   </div>
                   <button
@@ -417,6 +521,7 @@ export default function ChatbotWidget() {
                       phoneNumber: '',
                       nationality: '',
                       service: '',
+                      usageType: '',
                     });
                   }}
                   className="w-full px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] transition-colors text-sm"
