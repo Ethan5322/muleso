@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, ArrowUp } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { MessageCircle, X, ArrowUp, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import jsPDF from 'jspdf';
 
 interface Message {
   id: string;
@@ -11,233 +12,198 @@ interface Message {
   timestamp: Date;
 }
 
-interface ContactForm {
-  name: string;
-  phone: string;
-  email: string;
+interface BookingData {
+  fullName: string;
+  phoneNumber: string;
+  whatsappNumber: string;
+  nationality: string;
   service: string;
 }
+
+const SERVICES = [
+  { id: '1', label: '💻 Design Website', value: 'Design Website' },
+  { id: '2', label: '🔧 Fix Website', value: 'Fix Website' },
+  { id: '3', label: '🎨 Design Widget', value: 'Design Widget' },
+  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot' },
+  { id: '5', label: '⚙️ Build AI Automation Chatbot', value: 'Build AI Automation Chatbot' },
+  { id: '6', label: '🌐 All in One Website', value: 'All in One Website' },
+  { id: '7', label: '📝 Other', value: 'Other' },
+];
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showFirstMessage, setShowFirstMessage] = useState(false);
-  const [collectingInfo, setCollectingInfo] = useState(false);
-  const [contactForm, setContactForm] = useState<ContactForm>({ name: '', phone: '', email: '', service: '' });
-  const [infoStep, setInfoStep] = useState<'name' | 'phone' | 'email' | 'service' | null>(null);
+  const [stage, setStage] = useState<'greeting' | 'service' | 'name' | 'phone' | 'whatsapp' | 'nationality' | 'details' | 'summary'>('greeting');
+  const [bookingData, setBookingData] = useState<BookingData>({
+    fullName: '',
+    phoneNumber: '',
+    whatsappNumber: '',
+    nationality: '',
+    service: '',
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('chatbotMessages');
-    if (saved) {
-      setMessages(JSON.parse(saved));
-    }
-  }, []);
-
-  useEffect(() => {
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      const timer = setTimeout(() => {
-        const firstMsg: Message = {
-          id: '0',
-          text: "👋 Hi! I'm Soo, your MuleSoo AI assistant. I can help you learn about our websites, chatbots, logos, and digital solutions. What brings you here today? 😊",
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        setMessages([firstMsg]);
-        setShowFirstMessage(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, messages.length]);
-
-  const handleCollectInfo = async (value: string) => {
-    if (!value.trim()) return;
-
-    if (!infoStep) {
-      setCollectingInfo(true);
-      setInfoStep('name');
-      const msg: Message = {
-        id: Date.now().toString(),
-        text: "Great! To help you better, could you please share your full name?",
-        sender: 'bot',
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, msg]);
-      return;
-    }
-
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      text: value,
-      sender: 'user',
-      timestamp: new Date(),
-    };
-    setMessages(prev => [...prev, userMsg]);
-    setInputValue('');
-
-    switch (infoStep) {
-      case 'name':
-        setContactForm(prev => ({ ...prev, name: value }));
-        setInfoStep('phone');
-        const phoneMsg: Message = {
-          id: (Date.now() + 1).toString(),
-          text: `Nice to meet you, ${value}! 👋 What's your phone number so Ethan can reach you on WhatsApp?`,
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, phoneMsg]);
-        break;
-      case 'phone':
-        setContactForm(prev => ({ ...prev, phone: value }));
-        setInfoStep('email');
-        const emailMsg: Message = {
-          id: (Date.now() + 1).toString(),
-          text: "Perfect! Now, what's your email address?",
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, emailMsg]);
-        break;
-      case 'email':
-        setContactForm(prev => ({ ...prev, email: value }));
-        setInfoStep('service');
-        const serviceMsg: Message = {
-          id: (Date.now() + 1).toString(),
-          text: "Great! What service are you most interested in? (Website Design, Chatbot, Logo, QR Code, Email Setup, PDF Guide, or Other)",
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, serviceMsg]);
-        break;
-      case 'service':
-        setContactForm(prev => ({ ...prev, service: value }));
-        await submitLead({ ...contactForm, service: value });
-        break;
-    }
   };
 
-  const submitLead = async (form: ContactForm) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/contact-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          service: form.service,
-        }),
-      });
-
-      if (response.ok) {
-        const successMsg: Message = {
-          id: (Date.now() + 1).toString(),
-          text: `Perfect! ✅ I've got your details:\n\nName: ${form.name}\nPhone: ${form.phone}\nEmail: ${form.email}\nService: ${form.service}\n\nEthan will contact you on WhatsApp at ${form.phone} shortly. Thanks for reaching out! 🚀`,
-          sender: 'bot',
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, successMsg]);
-        setCollectingInfo(false);
-        setInfoStep(null);
-        setContactForm({ name: '', phone: '', email: '', service: '' });
-      }
-    } catch (error) {
-      console.error('Error submitting lead:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSend = async (text: string) => {
-    if (!text.trim()) return;
-
-    if (collectingInfo && infoStep) {
-      handleCollectInfo(text);
-      return;
-    }
-
-    const userMsg: Message = {
+  const addMessage = (text: string, sender: 'user' | 'bot') => {
+    const newMessage: Message = {
       id: Date.now().toString(),
       text,
-      sender: 'user',
+      sender,
       timestamp: new Date(),
     };
+    setMessages(prev => [...prev, newMessage]);
+    setTimeout(scrollToBottom, 100);
+  };
 
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
-    setInputValue('');
-    setIsLoading(true);
-
-    localStorage.setItem('chatbotMessages', JSON.stringify(updatedMessages));
-
-    try {
-      console.log('🚀 Sending message to /api/chat:', text);
-
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: updatedMessages.map((m) => ({
-            role: m.sender === 'user' ? 'user' : 'assistant',
-            content: m.text,
-          })),
-        }),
-      });
-
-      console.log('📡 Response status:', response.status);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log('✅ API response:', data);
-
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        text: data.reply || 'Sorry, I encountered an error. Please try again.',
-        sender: 'bot',
-        timestamp: new Date(),
-      };
-
-      const finalMessages = [...updatedMessages, botMsg];
-      setMessages(finalMessages);
-      localStorage.setItem('chatbotMessages', JSON.stringify(finalMessages));
-
-      if (text.toLowerCase().includes('contact') || text.toLowerCase().includes('book') || text.toLowerCase().includes('interested')) {
-        setTimeout(() => {
-          handleCollectInfo('');
-        }, 500);
-      }
-    } catch (error) {
-      console.error('❌ Chat error:', error);
-      const errorMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        text: `Error: ${error instanceof Error ? error.message : 'Connection failed'}`,
-        sender: 'bot',
-        timestamp: new Date(),
-      };
-      const errorMessages = [...updatedMessages, errorMsg];
-      setMessages(errorMessages);
-      localStorage.setItem('chatbotMessages', JSON.stringify(errorMessages));
-    } finally {
-      setIsLoading(false);
+  const handleOpen = () => {
+    setIsOpen(true);
+    if (messages.length === 0) {
+      setTimeout(() => {
+        addMessage(
+          "👋 Hi there! Welcome to MuleSoo Digital Services.\n\nI'm Soo, your AI assistant. I'm here to help you book our services.\n\nWhat can I help you with today?",
+          'bot'
+        );
+        setStage('greeting');
+      }, 300);
     }
   };
 
-  const quickReplies = [
-    '💻 Website Design',
-    '🤖 Chatbot',
-    '💰 Pricing',
-    '📞 Get in Touch',
-  ];
+  const handleServiceSelect = (service: string) => {
+    addMessage(service.split(' ').slice(1).join(' '), 'user');
+    setBookingData(prev => ({ ...prev, service }));
+    addMessage(`Great! You selected: ${service.split(' ').slice(1).join(' ')}\n\nNow, let me collect your information.\n\nWhat's your full name?`, 'bot');
+    setStage('name');
+  };
+
+  const handleInputSubmit = () => {
+    if (!inputValue.trim()) return;
+
+    const userInput = inputValue.trim();
+    addMessage(userInput, 'user');
+    setInputValue('');
+
+    switch (stage) {
+      case 'name':
+        setBookingData(prev => ({ ...prev, fullName: userInput }));
+        addMessage(`Nice to meet you, ${userInput}! 👋\n\nWhat's your phone number (for calls)?`, 'bot');
+        setStage('phone');
+        break;
+
+      case 'phone':
+        setBookingData(prev => ({ ...prev, phoneNumber: userInput }));
+        addMessage(`Perfect! What's your WhatsApp number? (This is how Ethan will contact you)`, 'bot');
+        setStage('whatsapp');
+        break;
+
+      case 'whatsapp':
+        setBookingData(prev => ({ ...prev, whatsappNumber: userInput }));
+        addMessage(`Great! What's your nationality/country?`, 'bot');
+        setStage('nationality');
+        break;
+
+      case 'nationality':
+        setBookingData(prev => ({ ...prev, nationality: userInput }));
+        addMessage(
+          `Perfect! One last thing - please tell me more details about what you need. What's the scope of your project?\n\n(For example: "I need a 5-page website with chatbot integration")`,
+          'bot'
+        );
+        setStage('details');
+        break;
+
+      case 'details':
+        const completeData = { ...bookingData, service: bookingData.service };
+        addMessage('✅ Booking confirmed! Let me generate your booking form...', 'bot');
+        setTimeout(() => {
+          setStage('summary');
+        }, 500);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPos = 20;
+
+    // Header
+    doc.setFontSize(24);
+    doc.setTextColor(0, 200, 255);
+    doc.text('MULESOO', pageWidth / 2, yPos, { align: 'center' });
+    doc.setTextColor(123, 47, 255);
+    doc.setFontSize(12);
+    doc.text('Digital Services', pageWidth / 2, yPos + 8, { align: 'center' });
+
+    yPos += 25;
+
+    // Title
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Service Booking Confirmation', pageWidth / 2, yPos, { align: 'center' });
+
+    yPos += 15;
+
+    // Customer Details
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold');
+    doc.text('Customer Information:', 15, yPos);
+    yPos += 8;
+
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    doc.text(`Full Name: ${bookingData.fullName}`, 15, yPos);
+    yPos += 7;
+    doc.text(`Phone: ${bookingData.phoneNumber}`, 15, yPos);
+    yPos += 7;
+    doc.text(`WhatsApp: ${bookingData.whatsappNumber}`, 15, yPos);
+    yPos += 7;
+    doc.text(`Country/Nationality: ${bookingData.nationality}`, 15, yPos);
+    yPos += 12;
+
+    // Service Details
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(11);
+    doc.text('Service Selected:', 15, yPos);
+    yPos += 8;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    doc.text(bookingData.service, 15, yPos);
+    yPos += 15;
+
+    // Contact Information
+    doc.setFont(undefined, 'bold');
+    doc.setFontSize(11);
+    doc.text('Contact Information:', 15, yPos);
+    yPos += 8;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(0, 200, 255);
+    doc.text('📧 Email: mulukenendashaw68@gmail.com', 15, yPos);
+    yPos += 7;
+    doc.setTextColor(37, 211, 102);
+    doc.text('📱 WhatsApp: 0781500968', 15, yPos);
+    yPos += 12;
+
+    // Footer message
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, 'italic');
+    doc.setFontSize(9);
+    const footerText = 'Ethan will contact you within 2 hours on business days. Save this document for your records.';
+    doc.text(footerText, pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+    // Generate filename with date
+    const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+    const filename = `MuleSoo_Booking_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;
+
+    doc.save(filename);
+  };
 
   return (
     <>
@@ -273,14 +239,17 @@ export default function ChatbotWidget() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3 }}
             className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-2rem)] h-[500px] rounded-2xl shadow-2xl bg-[var(--bg-secondary)] border border-[var(--border)] flex flex-col z-40"
+            onClick={() => handleOpen()}
           >
+            {/* Header */}
             <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-2xl">
               <div className="font-bold font-sora flex items-center gap-2">
                 Soo <span className="w-2 h-2 rounded-full bg-[var(--accent-green)] animate-pulse" />
               </div>
-              <p className="text-xs opacity-90">MuleSoo AI Assistant</p>
+              <p className="text-xs opacity-90">MuleSoo Service Booking</p>
             </div>
 
+            {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((msg) => (
                 <motion.div
@@ -303,48 +272,99 @@ export default function ChatbotWidget() {
                 </motion.div>
               ))}
 
-              {isLoading && (
-                <div className="flex gap-2 items-center">
-                  <span className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-bounce" />
-                  <span className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-bounce" style={{ animationDelay: '0.2s' }} />
-                  <span className="w-2 h-2 rounded-full bg-[var(--accent-blue)] animate-bounce" style={{ animationDelay: '0.4s' }} />
+              {/* Service Selection */}
+              {stage === 'greeting' && messages.length > 0 && (
+                <div className="space-y-2 mt-4">
+                  {SERVICES.map((service) => (
+                    <button
+                      key={service.id}
+                      onClick={() => handleServiceSelect(service.value)}
+                      className="w-full px-3 py-2 text-left text-xs bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
+                    >
+                      {service.label}
+                    </button>
+                  ))}
                 </div>
+              )}
+
+              {/* Summary & Download */}
+              {stage === 'summary' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="glass-card p-4 space-y-3 mt-4"
+                >
+                  <h3 className="font-bold text-[var(--text-primary)]">📋 Your Booking Details:</h3>
+                  <div className="space-y-2 text-sm text-[var(--text-secondary)]">
+                    <p><strong>Name:</strong> {bookingData.fullName}</p>
+                    <p><strong>Phone:</strong> {bookingData.phoneNumber}</p>
+                    <p><strong>WhatsApp:</strong> {bookingData.whatsappNumber}</p>
+                    <p><strong>Country:</strong> {bookingData.nationality}</p>
+                    <p><strong>Service:</strong> {bookingData.service}</p>
+                  </div>
+                  <button
+                    onClick={generatePDF}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[var(--accent-gold)] to-[#E8B84B] text-white font-bold rounded-lg hover:scale-105 transition-transform text-sm"
+                  >
+                    <Download size={16} />
+                    Download PDF
+                  </button>
+                  <p className="text-xs text-[var(--text-secondary)] text-center italic">
+                    ✅ Your booking form is ready. Download it and keep a copy!
+                  </p>
+                </motion.div>
               )}
 
               <div ref={messagesEndRef} />
             </div>
 
-            {showFirstMessage && messages.length === 1 && (
-              <div className="px-4 py-2 flex flex-wrap gap-2">
-                {quickReplies.map((reply) => (
-                  <button
-                    key={reply}
-                    onClick={() => handleSend(reply)}
-                    className="px-3 py-1 text-xs rounded-full border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors"
-                  >
-                    {reply}
-                  </button>
-                ))}
+            {/* Input Area */}
+            {(stage === 'name' || stage === 'phone' || stage === 'whatsapp' || stage === 'nationality' || stage === 'details') && (
+              <div className="border-t border-[var(--border)] p-4 flex gap-2">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleInputSubmit()}
+                  placeholder="Type your response..."
+                  autoFocus
+                  className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] px-3 py-2 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-sm"
+                />
+                <button
+                  onClick={handleInputSubmit}
+                  disabled={!inputValue.trim()}
+                  className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-2 rounded-lg hover:scale-110 transition-transform disabled:opacity-50"
+                >
+                  <ArrowUp size={18} />
+                </button>
               </div>
             )}
 
-            <div className="border-t border-[var(--border)] p-4 flex gap-2">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend(inputValue)}
-                placeholder={collectingInfo ? "Type your response..." : "Type your message..."}
-                className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] px-3 py-2 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-sm"
-              />
-              <button
-                onClick={() => handleSend(inputValue)}
-                disabled={isLoading || !inputValue.trim()}
-                className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-2 rounded-lg hover:scale-110 transition-transform disabled:opacity-50"
-              >
-                <ArrowUp size={18} />
-              </button>
-            </div>
+            {/* Summary Mode - No Input */}
+            {stage === 'summary' && (
+              <div className="border-t border-[var(--border)] p-4 text-center">
+                <p className="text-xs text-[var(--text-secondary)] mb-3">
+                  💬 Ethan will contact you on WhatsApp at {bookingData.whatsappNumber} within 2 hours!
+                </p>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setMessages([]);
+                    setStage('greeting');
+                    setBookingData({
+                      fullName: '',
+                      phoneNumber: '',
+                      whatsappNumber: '',
+                      nationality: '',
+                      service: '',
+                    });
+                  }}
+                  className="w-full px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] transition-colors text-sm"
+                >
+                  Close Chat
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
