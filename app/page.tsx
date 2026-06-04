@@ -104,7 +104,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-6xl md:text-7xl lg:text-8xl font-bold font-sora leading-tight gradient-text"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold font-sora leading-tight gradient-text"
             >
               Digital Excellence
             </motion.h1>
@@ -114,7 +114,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed font-light"
+              className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed font-light"
             >
               Professional websites, AI chatbots, logos, and digital solutions built for businesses across South Africa.
             </motion.p>
