@@ -168,7 +168,7 @@ export default function ChatbotWidget() {
     // Title
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('', 'bold');
     doc.text('📋 SERVICE BOOKING CONFIRMATION', pageWidth / 2, yPos, { align: 'center' });
 
     yPos += 12;
@@ -177,12 +177,12 @@ export default function ChatbotWidget() {
     doc.setFillColor(0, 200, 255, 15);
     doc.rect(15, yPos - 3, pageWidth - 30, 1, 'F');
     doc.setFontSize(11);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('', 'bold');
     doc.setTextColor(0, 200, 255);
     doc.text('👤 CUSTOMER INFORMATION', 15, yPos);
     yPos += 7;
 
-    doc.setFont(undefined, 'normal');
+    doc.setFont('', 'normal');
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.text(`Full Name: ${bookingData.fullName}`, 15, yPos);
@@ -195,13 +195,13 @@ export default function ChatbotWidget() {
     // Service Details Section
     doc.setFillColor(123, 47, 255, 15);
     doc.rect(15, yPos - 3, pageWidth - 30, 1, 'F');
-    doc.setFont(undefined, 'bold');
+    doc.setFont('', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(123, 47, 255);
     doc.text('🎯 SERVICE SELECTED', 15, yPos);
     yPos += 7;
 
-    doc.setFont(undefined, 'normal');
+    doc.setFont('', 'normal');
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.text(bookingData.service, 15, yPos);
@@ -210,13 +210,13 @@ export default function ChatbotWidget() {
     // Contact Information Section
     doc.setFillColor(232, 184, 75, 15);
     doc.rect(15, yPos - 3, pageWidth - 30, 1, 'F');
-    doc.setFont(undefined, 'bold');
+    doc.setFont('', 'bold');
     doc.setFontSize(11);
     doc.setTextColor(232, 184, 75);
     doc.text('📞 CONTACT MULESOO', 15, yPos);
     yPos += 7;
 
-    doc.setFont(undefined, 'normal');
+    doc.setFont('', 'normal');
     doc.setFontSize(10);
     doc.setTextColor(0, 200, 255);
     doc.text('📧 Email:', 15, yPos);
@@ -233,11 +233,11 @@ export default function ChatbotWidget() {
     // Important Message Box
     doc.setFillColor(0, 200, 255, 5);
     doc.rect(15, yPos, pageWidth - 30, 15, 'F');
-    doc.setFont(undefined, 'bold');
+    doc.setFont('', 'bold');
     doc.setFontSize(10);
     doc.setTextColor(0, 200, 255);
     doc.text('⏰ NEXT STEPS', 15, yPos + 4);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(0, 0, 0);
     doc.text('Ethan will contact you on WhatsApp within 2 hours on business days.', 15, yPos + 9);
@@ -246,7 +246,7 @@ export default function ChatbotWidget() {
 
     // Footer message
     doc.setTextColor(128, 128, 128);
-    doc.setFont(undefined, 'italic');
+    doc.setFont('', 'italic');
     doc.setFontSize(8);
     doc.text('Booking Confirmation • Save this document for your records', pageWidth / 2, pageHeight - 8, { align: 'center' });
     doc.text('MuleSoo Digital Services | Pretoria, South Africa', pageWidth / 2, pageHeight - 4, { align: 'center' });
