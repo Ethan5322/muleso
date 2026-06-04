@@ -15,7 +15,6 @@ interface Message {
 interface BookingData {
   fullName: string;
   phoneNumber: string;
-  whatsappNumber: string;
   nationality: string;
   service: string;
 }
@@ -34,11 +33,10 @@ export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [stage, setStage] = useState<'greeting' | 'service' | 'name' | 'phone' | 'whatsapp' | 'nationality' | 'details' | 'summary'>('greeting');
+  const [stage, setStage] = useState<'greeting' | 'service' | 'name' | 'phone' | 'nationality' | 'details' | 'summary'>('greeting');
   const [bookingData, setBookingData] = useState<BookingData>({
     fullName: '',
     phoneNumber: '',
-    whatsappNumber: '',
     nationality: '',
     service: '',
   });
@@ -79,6 +77,20 @@ export default function ChatbotWidget() {
     setStage('name');
   };
 
+  const formatPhoneNumber = (phone: string): string => {
+    // Remove all non-numeric characters
+    const cleanPhone = phone.replace(/\D/g, '');
+
+    // Add +27 country code if not present
+    if (cleanPhone.startsWith('27')) {
+      return '+27' + cleanPhone.slice(2);
+    } else if (cleanPhone.startsWith('0')) {
+      return '+27' + cleanPhone.slice(1);
+    } else {
+      return '+27' + cleanPhone;
+    }
+  };
+
   const handleInputSubmit = () => {
     if (!inputValue.trim()) return;
 
@@ -89,19 +101,14 @@ export default function ChatbotWidget() {
     switch (stage) {
       case 'name':
         setBookingData(prev => ({ ...prev, fullName: userInput }));
-        addMessage(`Nice to meet you, ${userInput}! 👋\n\nWhat's your phone number (for calls)?`, 'bot');
+        addMessage(`Nice to meet you, ${userInput}! 👋\n\nWhat's your phone number? (WhatsApp & calls)\n\nExample: 0781234567 or +27781234567`, 'bot');
         setStage('phone');
         break;
 
       case 'phone':
-        setBookingData(prev => ({ ...prev, phoneNumber: userInput }));
-        addMessage(`Perfect! What's your WhatsApp number? (This is how Ethan will contact you)`, 'bot');
-        setStage('whatsapp');
-        break;
-
-      case 'whatsapp':
-        setBookingData(prev => ({ ...prev, whatsappNumber: userInput }));
-        addMessage(`Great! What's your nationality/country?`, 'bot');
+        const formattedPhone = formatPhoneNumber(userInput);
+        setBookingData(prev => ({ ...prev, phoneNumber: formattedPhone }));
+        addMessage(`Perfect! ${formattedPhone} saved for both WhatsApp and calls.\n\nWhat's your nationality/country?`, 'bot');
         setStage('nationality');
         break;
 
@@ -180,9 +187,7 @@ export default function ChatbotWidget() {
     doc.setTextColor(0, 0, 0);
     doc.text(`Full Name: ${bookingData.fullName}`, 15, yPos);
     yPos += 6;
-    doc.text(`Phone Number: ${bookingData.phoneNumber}`, 15, yPos);
-    yPos += 6;
-    doc.text(`WhatsApp: ${bookingData.whatsappNumber}`, 15, yPos);
+    doc.text(`Phone & WhatsApp: ${bookingData.phoneNumber}`, 15, yPos);
     yPos += 6;
     doc.text(`Country/Nationality: ${bookingData.nationality}`, 15, yPos);
     yPos += 10;
@@ -345,8 +350,7 @@ export default function ChatbotWidget() {
                   <h3 className="font-bold text-[var(--text-primary)]">📋 Your Booking Details:</h3>
                   <div className="space-y-2 text-sm text-[var(--text-secondary)]">
                     <p><strong>Name:</strong> {bookingData.fullName}</p>
-                    <p><strong>Phone:</strong> {bookingData.phoneNumber}</p>
-                    <p><strong>WhatsApp:</strong> {bookingData.whatsappNumber}</p>
+                    <p><strong>Phone & WhatsApp:</strong> {bookingData.phoneNumber}</p>
                     <p><strong>Country:</strong> {bookingData.nationality}</p>
                     <p><strong>Service:</strong> {bookingData.service}</p>
                   </div>
@@ -367,14 +371,14 @@ export default function ChatbotWidget() {
             </div>
 
             {/* Input Area */}
-            {(stage === 'name' || stage === 'phone' || stage === 'whatsapp' || stage === 'nationality' || stage === 'details') && (
+            {(stage === 'name' || stage === 'phone' || stage === 'nationality' || stage === 'details') && (
               <div className="border-t border-[var(--border)] p-4 flex gap-2">
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleInputSubmit()}
-                  placeholder="Type your response..."
+                  placeholder={stage === 'phone' ? 'e.g., 0781234567' : 'Type your response...'}
                   autoFocus
                   className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] px-3 py-2 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-sm"
                 />
@@ -392,7 +396,7 @@ export default function ChatbotWidget() {
             {stage === 'summary' && (
               <div className="border-t border-[var(--border)] p-4 text-center">
                 <p className="text-xs text-[var(--text-secondary)] mb-3">
-                  💬 Ethan will contact you on WhatsApp at {bookingData.whatsappNumber} within 2 hours!
+                  💬 Ethan will contact you on WhatsApp at {bookingData.phoneNumber} within 2 hours!
                 </p>
                 <button
                   onClick={() => {
@@ -402,7 +406,6 @@ export default function ChatbotWidget() {
                     setBookingData({
                       fullName: '',
                       phoneNumber: '',
-                      whatsappNumber: '',
                       nationality: '',
                       service: '',
                     });
