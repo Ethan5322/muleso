@@ -14,37 +14,37 @@ function generateResponse(userMessage: string): string {
 
   // Website Design
   if (msg.includes('website') || msg.includes('web design') || msg.includes('web')) {
-    return `I'd love to help with your website! 🌐\n\nWe offer three tiers:\n• Starter (R3,500): 3 pages, SEO basics, 2-week turnaround\n• Business (R7,500): 6+ pages, animations, AI chatbot included, MOST POPULAR\n• Enterprise (R15,000+): Unlimited pages, 3D effects, e-commerce\n\nWhat's your budget and timeline?`;
+    return `We build stunning, fast websites that convert visitors into clients! 🌐\n\nWe can create everything from simple 3-page sites to complex e-commerce platforms with 3D animations.\n\n💬 For custom pricing based on your specific needs, reach out to Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nWhat features would your website need?`;
   }
 
   // Chatbot
   if (msg.includes('chatbot') || msg.includes('bot') || msg.includes('ai assistant')) {
-    return `Great question! Our AI chatbots work 24/7 to handle your customer service. 🤖\n\n• Starter (R2,500): Basic bot with lead collection\n• Business (R4,500): WhatsApp integration + logging\n• Enterprise (R8,000+): Custom workflows & API integrations\n\nWhat kind of support would your business need?`;
+    return `Our AI chatbots work 24/7 to handle customer service, answer FAQs, and collect leads! 🤖\n\nWe can integrate with WhatsApp, your website, and Telegram.\n\n💬 For custom pricing, contact Ethan directly:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nWhat kind of support would your business need?`;
   }
 
   // Logo Design
   if (msg.includes('logo') || msg.includes('branding') || msg.includes('brand identity')) {
-    return `Perfect for standing out! 🎨\n\n• Starter (R800): 2 concepts, 2 revisions\n• Business (R1,800): 4 concepts, unlimited revisions\n• Enterprise (R3,500+): Full branding package with guidelines\n\nWould you like multiple concepts?`;
+    return `We create professional logos and brand identities that make your business unforgettable! 🎨\n\nFrom concept to final files, we deliver world-class design.\n\n💬 For pricing and packages, contact Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nDescribe your business vision!`;
   }
 
   // QR Codes
   if (msg.includes('qr')) {
-    return `Custom branded QR codes with analytics! 📱\n\n• Starter (R300): Basic branded QR\n• Business (R600): With tracking analytics\n• Enterprise (R1,200+): Multiple codes + campaign tracking\n\nWhat would you use these for?`;
+    return `Custom branded QR codes with built-in analytics! 📱\n\nPerfect for marketing campaigns, product packaging, and event tracking.\n\n💬 For pricing, reach out:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nWhat would you use these for?`;
   }
 
   // Email Setup
   if (msg.includes('email') || msg.includes('@')) {
-    return `Professional email setup builds instant credibility! 📧\n\n• Starter (R400): Setup only\n• Business (R800): Setup + 1 month management\n• Enterprise (R1,500+): Full email marketing suite\n\nHow many team members need email?`;
+    return `Professional @yourdomain.com email setup builds instant credibility! 📧\n\nWe handle everything from setup to ongoing management.\n\n💬 For custom packages, contact Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nHow many team members need email?`;
   }
 
   // PDF Guides / Store
   if (msg.includes('pdf') || msg.includes('guide') || msg.includes('course') || msg.includes('store')) {
-    return `We sell expert guides! 📚\n\n• Claude Code Master Guide (R299) - 52 pages\n• n8n Automation Bible (R249) - 44 pages\n• Chatbot Business Blueprint (R199) - 38 pages\n• Netlify Deployment Guide (R149) - 28 pages\n\nWhich one interests you?`;
+    return `We sell expert digital guides on Claude Code, automation, chatbots, and deployment! 📚\n\nYou can purchase them instantly from our store at a fixed price.\n\n💬 For pricing on custom guides or bulk orders:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968`;
   }
 
   // Pricing
   if (msg.includes('price') || msg.includes('cost') || msg.includes('how much')) {
-    return `Our pricing is transparent! 💰\n\nWebsites: R3,500 - R15,000+\nChatbots: R2,500 - R8,000+\nLogos: R800 - R3,500+\nQR Codes: R300 - R1,200+\nEmail: R400 - R1,500+\nPDF Guides: R149 - R299\n\nWhat catches your interest?`;
+    return `Great question! Pricing depends on your specific needs and project scope. 💰\n\nWe offer custom quotes for websites, chatbots, logos, email setup, and more.\n\n💬 Let's discuss your requirements:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nOr use the contact form below! 👇`;
   }
 
   // Process
