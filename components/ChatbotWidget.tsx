@@ -152,7 +152,31 @@ export default function ChatbotWidget() {
     }
   };
 
+  const submitBooking = async () => {
+    try {
+      const response = await fetch('/api/chatbot-booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: bookingData.fullName,
+          phoneNumber: bookingData.phoneNumber,
+          nationality: bookingData.nationality,
+          service: bookingData.service,
+          usageType: bookingData.usageType,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Booking submission failed');
+      }
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+    }
+  };
+
   const generatePDF = () => {
+    // Submit booking data to API
+    submitBooking();
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();

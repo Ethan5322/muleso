@@ -373,6 +373,22 @@ export default function Home() {
               rating={5}
               delay={0.5}
             />
+            <TestimonialCard
+              quote="Exceptional work. The custom email setup was seamless, and our team credibility went up immediately. Ethan knows his craft inside out."
+              author="Thandi Mfeka"
+              role="Managing Director"
+              company="Corporate Training Institute"
+              rating={5}
+              delay={0.6}
+            />
+            <TestimonialCard
+              quote="Our new website launched on time and under budget. The 3D animations are stunning. More importantly, we're getting 5x more qualified leads. Incredible ROI!"
+              author="Nicholas Patel"
+              role="Founder"
+              company="Property Development Group"
+              rating={5}
+              delay={0.7}
+            />
           </div>
         </div>
       </section>
