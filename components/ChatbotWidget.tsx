@@ -74,11 +74,11 @@ export default function ChatbotWidget() {
     if (messages.length === 0) {
       setTimeout(() => {
         addMessage(
-          "👋 Hi there! Welcome to MuleSoo Digital Services.\n\nI'm Soo, your AI assistant. I'm here to help you book our services.\n\nWhat can I help you with today?",
+          "👋 Hi! Welcome to MuleSoo.\n\nI'm Soo, your AI assistant. What service do you need?",
           'bot'
         );
         setStage('greeting');
-      }, 300);
+      }, 100);
     }
   };
 
@@ -141,11 +141,10 @@ export default function ChatbotWidget() {
         break;
 
       case 'details':
-        const completeData = { ...bookingData, service: bookingData.service };
-        addMessage('✅ Booking confirmed! Let me generate your booking form...', 'bot');
+        addMessage('✅ Booking confirmed! Here\'s your booking form...', 'bot');
         setTimeout(() => {
           setStage('summary');
-        }, 500);
+        }, 200);
         break;
 
       default:
@@ -366,13 +365,13 @@ export default function ChatbotWidget() {
         {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
         {!isOpen && (
           <motion.div
-            className="absolute inset-0 border-4 border-[var(--accent-blue)] rounded-full"
+            className="absolute inset-0 border-2 border-[var(--accent-blue)] rounded-full"
             animate={{
-              scale: [1, 1.3],
+              scale: [1, 1.15],
               opacity: [1, 0],
             }}
             transition={{
-              duration: 2,
+              duration: 1.5,
               repeat: Infinity,
             }}
           />
@@ -385,9 +384,8 @@ export default function ChatbotWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-            className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-2rem)] h-[500px] rounded-2xl shadow-2xl bg-[var(--bg-secondary)] border border-[var(--border)] flex flex-col z-40"
-            onClick={() => handleOpen()}
+            transition={{ duration: 0.2 }}
+            className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] rounded-2xl shadow-2xl bg-[var(--bg-secondary)] border border-[var(--border)] flex flex-col z-40"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-2xl">
@@ -398,7 +396,7 @@ export default function ChatbotWidget() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -454,10 +452,10 @@ export default function ChatbotWidget() {
               {/* Summary & Download */}
               {stage === 'summary' && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="glass-card p-4 space-y-3 mt-4"
+                  transition={{ duration: 0.1 }}
+                  className="glass-card p-3 space-y-2 mt-2"
                 >
                   <h3 className="font-bold text-[var(--text-primary)]">📋 Your Booking Details:</h3>
                   <div className="space-y-2 text-sm text-[var(--text-secondary)]">
@@ -485,20 +483,20 @@ export default function ChatbotWidget() {
 
             {/* Input Area */}
             {(stage === 'name' || stage === 'phone' || stage === 'nationality' || stage === 'details') && (
-              <div className="border-t border-[var(--border)] p-4 flex gap-2">
+              <div className="border-t border-[var(--border)] p-3 flex gap-2 flex-shrink-0">
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleInputSubmit()}
-                  placeholder={stage === 'phone' ? 'e.g., 0781234567' : 'Type your response...'}
+                  placeholder={stage === 'phone' ? 'e.g., 0781234567' : 'Type...'}
                   autoFocus
                   className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] px-3 py-2 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-sm"
                 />
                 <button
                   onClick={handleInputSubmit}
                   disabled={!inputValue.trim()}
-                  className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-2 rounded-lg hover:scale-110 transition-transform disabled:opacity-50"
+                  className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-2 rounded-lg hover:scale-105 transition-transform disabled:opacity-50 flex-shrink-0"
                 >
                   <ArrowUp size={18} />
                 </button>
