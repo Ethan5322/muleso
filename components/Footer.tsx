@@ -16,9 +16,9 @@ export default function Footer() {
               <Image
                 src="/mulesoo-logo.png"
                 alt="MuleSoo Logo"
-                width={60}
-                height={60}
-                className="h-14 w-auto object-contain"
+                width={80}
+                height={80}
+                className="h-16 w-auto object-contain"
               />
             </div>
             <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-6">

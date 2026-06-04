@@ -42,9 +42,9 @@ export default function Navbar() {
             <Image
               src="/mulesoo-logo.png"
               alt="MuleSoo Logo"
-              width={50}
-              height={50}
-              className="h-12 w-auto object-contain"
+              width={80}
+              height={80}
+              className="h-16 w-auto object-contain"
               priority
             />
           </Link>
