@@ -54,14 +54,18 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
     const qrDataUrl = await new Promise<string>((resolve, reject) => {
       QRCode.toDataURL(
         `https://mulesoo.com/qr-code`,
-        { width: 1200 },
+        { width: 1200, margin: 0 },
         (error, dataUrl) => {
           if (error) reject(error);
           else resolve(dataUrl);
         }
       );
     });
-    doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 15, yPos - 2, 14, 14);
+    doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 18, yPos - 3, 18, 18);
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 200, 255);
+    doc.text('Scan', pageWidth - margin - 15, yPos + 16);
   } catch (err) {
     console.error('QR Code generation failed:', err);
   }
@@ -80,7 +84,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(0, 200, 255);
   doc.text('CLIENT INFORMATION', margin, yPos);
 
-  yPos += 4;
+  yPos += 3.5;
 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
@@ -89,13 +93,13 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   const col1X = margin;
   const col2X = margin + contentWidth / 2;
 
-  // Client details
+  // Client details - Row 1
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Name:', col1X, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
-  doc.text(bookingData.fullName, col1X + 20, yPos);
+  doc.text(bookingData.fullName, col1X + 17, yPos);
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
@@ -103,16 +107,17 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
   const emailLines = doc.splitTextToSize(bookingData.email, contentWidth / 2 - 5);
-  doc.text(emailLines[0] || '', col2X + 15, yPos);
+  doc.text(emailLines[0] || '', col2X + 13, yPos);
 
-  yPos += 4;
+  yPos += 3;
 
+  // Row 2
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Phone:', col1X, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
-  doc.text(bookingData.phoneNumber, col1X + 20, yPos);
+  doc.text(bookingData.phoneNumber, col1X + 17, yPos);
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
@@ -121,23 +126,24 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(30, 30, 30);
   doc.text(bookingData.company || 'N/A', col2X + 20, yPos);
 
-  yPos += 4;
+  yPos += 3;
 
+  // Row 3
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Country:', col1X, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
-  doc.text(bookingData.nationality, col1X + 20, yPos);
+  doc.text(bookingData.nationality, col1X + 17, yPos);
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Type:', col2X, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
-  doc.text(bookingData.usageType, col2X + 20, yPos);
+  doc.text(bookingData.usageType, col2X + 13, yPos);
 
-  yPos += 8;
+  yPos += 6;
 
   // PROJECT DESCRIPTION
   doc.setFontSize(9);
@@ -167,7 +173,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(0, 200, 255);
   doc.text('SERVICE & BUDGET', margin, yPos);
 
-  yPos += 4;
+  yPos += 3.5;
 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
@@ -175,7 +181,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.text('Service:', col1X, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
-  doc.text(bookingData.service, col1X + 18, yPos);
+  doc.text(bookingData.service, col1X + 17, yPos);
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
@@ -184,7 +190,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(30, 30, 30);
   doc.text(bookingData.budget, col2X + 15, yPos);
 
-  yPos += 4;
+  yPos += 3;
 
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
@@ -200,7 +206,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(30, 30, 30);
   doc.text(bookingData.contactMethod, col2X + 18, yPos);
 
-  yPos += 8;
+  yPos += 6;
 
   // VERIFICATION CODE
   doc.setFontSize(8);

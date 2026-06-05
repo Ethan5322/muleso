@@ -38,14 +38,18 @@ export const generateCleanTermsPDF = async () => {
     const qrDataUrl = await new Promise<string>((resolve, reject) => {
       QRCode.toDataURL(
         'https://mulesoo.com/terms',
-        { width: 1200 },
+        { width: 1200, margin: 0 },
         (error, dataUrl) => {
           if (error) reject(error);
           else resolve(dataUrl);
         }
       );
     });
-    doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 15, yPos - 2, 14, 14);
+    doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 18, yPos - 3, 18, 18);
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 200, 255);
+    doc.text('Scan', pageWidth - margin - 15, yPos + 16);
   } catch (err) {
     console.error('QR Code generation failed:', err);
   }
