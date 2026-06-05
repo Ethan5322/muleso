@@ -15,6 +15,9 @@ interface BookingData {
   projectDetails: string;
   improvedProjectDetails: string;
   bookingReference: string;
+  clientID?: string;
+  clientIDType?: 'national_id' | 'passport' | '';
+  verificationCode?: string;
 }
 
 export const generateCleanBookingPDF = async (bookingData: BookingData) => {
@@ -143,7 +146,21 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(30, 30, 30);
   doc.text(bookingData.usageType, col2X + 13, yPos);
 
-  yPos += 6;
+  yPos += 3;
+
+  // Row 4 - Client ID (if provided)
+  if (bookingData.clientID) {
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(100, 100, 100);
+    const idLabel = bookingData.clientIDType === 'passport' ? 'Passport:' : 'National ID:';
+    doc.text(idLabel, col1X, yPos);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(30, 30, 30);
+    doc.text(bookingData.clientID, col1X + 25, yPos);
+    yPos += 3;
+  }
+
+  yPos += 3;
 
   // PROJECT DESCRIPTION
   doc.setFontSize(9);
@@ -219,7 +236,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
-  const verificationCode = generateVerificationCode();
+  const verificationCode = bookingData.verificationCode || generateVerificationCode();
   doc.text(verificationCode, margin, yPos);
 
   yPos += 7;

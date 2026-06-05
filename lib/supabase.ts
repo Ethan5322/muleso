@@ -37,4 +37,6 @@ export interface Booking {
   verification_code: string;
   status: 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled';
   notes?: string;
+  client_id?: string;
+  client_id_type?: 'national_id' | 'passport';
 }

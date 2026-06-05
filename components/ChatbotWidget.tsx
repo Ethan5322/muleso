@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
 import { generateCleanTermsPDF } from '@/lib/generateCleanTermsPDF';
+import { validateClientID } from '@/lib/validateClientID';
 import Confetti from 'react-confetti';
 import toast, { Toaster } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
@@ -27,6 +28,8 @@ interface BookingData {
   phoneNumber: string;
   company: string;
   nationality: string;
+  clientIDType: 'national_id' | 'passport' | '';
+  clientID: string;
   service: string;
   usageType: string;
   budget: string;
@@ -36,6 +39,7 @@ interface BookingData {
   improvedProjectDetails: string;
   termsAccepted: boolean;
   bookingReference: string;
+  verificationCode?: string;
 }
 
 const COUNTRY_CODES: { [key: string]: string } = {
@@ -89,7 +93,7 @@ const CONTACT_METHODS = [
   { id: '3', label: '📱 Phone Call', value: 'Phone Call' },
 ];
 
-type StageType = 'greeting' | 'service' | 'budget' | 'usage_type' | 'name' | 'email' | 'phone' | 'company' | 'nationality' | 'contact_method' | 'timeline' | 'details' | 'review' | 'terms' | 'summary';
+type StageType = 'greeting' | 'service' | 'budget' | 'usage_type' | 'name' | 'email' | 'phone' | 'company' | 'nationality' | 'client_id_type' | 'client_id' | 'contact_method' | 'timeline' | 'details' | 'review' | 'terms' | 'summary';
 
 // Updated stage order - better UX
 const STAGE_ORDER: StageType[] = [
@@ -101,6 +105,8 @@ const STAGE_ORDER: StageType[] = [
   'phone',
   'company',
   'nationality',
+  'client_id_type',
+  'client_id',
   'contact_method',
   'timeline',
   'details',
@@ -135,6 +141,8 @@ export default function ChatbotWidget() {
     phoneNumber: '',
     company: '',
     nationality: '',
+    clientIDType: '',
+    clientID: '',
     service: '',
     usageType: '',
     budget: '',
@@ -146,6 +154,7 @@ export default function ChatbotWidget() {
     bookingReference: '',
   });
   const [showConfetti, setShowConfetti] = useState(false);
+  const [validationError, setValidationError] = useState('');
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -248,10 +257,18 @@ export default function ChatbotWidget() {
           contactMethod: bookingData.contactMethod,
           timeline: bookingData.timeline,
           projectDetails: bookingData.improvedProjectDetails,
+          clientID: bookingData.clientID,
+          clientIDType: bookingData.clientIDType,
         }),
       });
       if (!response.ok) {
         toast.error('Failed to submit booking');
+        return;
+      }
+
+      const responseData = await response.json();
+      if (responseData.verificationCode) {
+        setBookingData(prev => ({ ...prev, verificationCode: responseData.verificationCode }));
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
@@ -279,6 +296,9 @@ export default function ChatbotWidget() {
       improvedProjectDetails: '',
       termsAccepted: false,
       bookingReference: '',
+      clientIDType: '',
+      clientID: '',
+      verificationCode: undefined,
     });
   };
 
@@ -393,13 +413,8 @@ export default function ChatbotWidget() {
         const formattedPhone = formatPhoneWithCountryCode(bookingData.phoneNumber, userInput);
         setBookingData(prev => ({ ...prev, nationality: userInput, phoneNumber: formattedPhone }));
         setTimeout(() => {
-          if (bookingData.usageType === 'Company') {
-            addMessage(`Great! Your phone is ${formattedPhone}\n\nWhat's your company/business name?`, 'bot');
-            setStage('company');
-          } else {
-            addMessage(`Great! Your phone is ${formattedPhone}\n\nHow would you prefer us to contact you?`, 'bot');
-            setStage('contact_method');
-          }
+          addMessage(`Great! Your phone is ${formattedPhone}\n\nFor security & project tracking, please provide your national ID or passport number.`, 'bot');
+          setStage('client_id_type');
         }, 300);
         break;
 
@@ -437,6 +452,29 @@ export default function ChatbotWidget() {
           addMessage('✅ Perfect! Let me review your booking.', 'bot');
           setStage('review');
         }, 800);
+        break;
+
+      case 'client_id':
+        const validation = validateClientID(bookingData.nationality, userInput, bookingData.clientIDType as 'national_id' | 'passport');
+        if (!validation.isValid) {
+          setValidationError(validation.message);
+          toast.error(`❌ ${validation.message}`);
+          return;
+        }
+        setValidationError('');
+        addMessage(userInput, 'user');
+        setInputValue('');
+        setBookingData(prev => ({ ...prev, clientID: userInput }));
+        setTimeout(() => {
+          addMessage(`Perfect! Your ${bookingData.clientIDType === 'passport' ? 'passport' : 'national ID'} has been saved.`, 'bot');
+          if (bookingData.usageType === 'Company') {
+            addMessage(`What's your company/business name?`, 'bot');
+            setStage('company');
+          } else {
+            addMessage(`How would you prefer us to contact you?`, 'bot');
+            setStage('contact_method');
+          }
+        }, 300);
         break;
 
       default:
@@ -862,7 +900,7 @@ export default function ChatbotWidget() {
             </div>
 
             {/* Input Area - Text Fields */}
-            {(stage === 'name' || stage === 'email' || stage === 'phone' || stage === 'company' || stage === 'nationality' || stage === 'timeline' || stage === 'details') && (
+            {(stage === 'name' || stage === 'email' || stage === 'phone' || stage === 'company' || stage === 'nationality' || stage === 'client_id' || stage === 'timeline' || stage === 'details') && (
               <div className="border-t border-[var(--border)] p-4 flex-shrink-0 bg-[var(--bg-card)]">
                 <div className="mb-3">
                   <label className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide block mb-2">
@@ -871,6 +909,8 @@ export default function ChatbotWidget() {
                     {stage === 'phone' && '📱 Phone Number *'}
                     {stage === 'company' && '🏢 Company Name'}
                     {stage === 'nationality' && '🌍 Country *'}
+                    {stage === 'client_id' && bookingData.clientIDType === 'national_id' && '🪪 National ID Number *'}
+                    {stage === 'client_id' && bookingData.clientIDType === 'passport' && '📕 Passport Number *'}
                     {stage === 'timeline' && '⏰ Timeline (Weeks) *'}
                     {stage === 'details' && '💬 Project Description *'}
                   </label>
@@ -891,9 +931,13 @@ export default function ChatbotWidget() {
                                 ? 'e.g., Acme Corp'
                                 : stage === 'nationality'
                                   ? 'e.g., South Africa'
-                                  : stage === 'timeline'
-                                    ? 'e.g., 2 weeks'
-                                    : 'Describe your project...'
+                                  : stage === 'client_id'
+                                    ? bookingData.clientIDType === 'national_id'
+                                      ? 'e.g., 9001015001088'
+                                      : 'e.g., A12345678'
+                                    : stage === 'timeline'
+                                      ? 'e.g., 2 weeks'
+                                      : 'Describe your project...'
                       }
                       autoFocus
                       maxLength={stage === 'details' ? 500 : undefined}
@@ -912,6 +956,52 @@ export default function ChatbotWidget() {
                   {stage === 'details' && (
                     <p className="text-xs text-[var(--text-secondary)] mt-1">{inputValue.length}/500 characters</p>
                   )}
+                  {stage === 'client_id' && validationError && (
+                    <p className="text-xs text-red-400 mt-1">⚠️ {validationError}</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Client ID Type Selection */}
+            {stage === 'client_id_type' && (
+              <div className="border-t border-[var(--border)] p-5 flex-shrink-0 bg-[var(--bg-card)] space-y-3">
+                <p className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide">
+                  Which document would you like to provide?
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setBookingData({ ...bookingData, clientIDType: 'national_id' });
+                      setStage('client_id');
+                      setInputValue('');
+                    }}
+                    className={`px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                      bookingData.clientIDType === 'national_id'
+                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white border border-[var(--accent-blue)]'
+                        : 'bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
+                    }`}
+                  >
+                    🪪 National ID
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setBookingData({ ...bookingData, clientIDType: 'passport' });
+                      setStage('client_id');
+                      setInputValue('');
+                    }}
+                    className={`px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                      bookingData.clientIDType === 'passport'
+                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white border border-[var(--accent-blue)]'
+                        : 'bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
+                    }`}
+                  >
+                    📕 Passport
+                  </motion.button>
                 </div>
               </div>
             )}
