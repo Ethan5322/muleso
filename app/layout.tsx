@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -10,7 +10,7 @@ import { AdminProvider } from "@/context/AdminContext";
 export const metadata: Metadata = {
   title: {
     template: "%s | MuleSoo Digital Services",
-    default: "MuleSoo | World-Class Websites & AI Solutions — Pretoria, South Africa",
+    default: "MuleSoo | World-Class Websites & AI Solutions â€” Pretoria, South Africa",
   },
   description:
     "MuleSoo builds professional websites, AI chatbots, logos, QR codes, and digital solutions for businesses across South Africa. Based in Pretoria. Fast delivery. Premium quality. Free consultation.",
@@ -114,7 +114,7 @@ export default function RootLayout({
                 postalCode: "0001",
                 addressCountry: "ZA",
               },
-              telephone: "+27781500968",
+              telephone: "+27759440377",
               email: "mulukenendashaw68@gmail.com",
               areaServed: {
                 "@type": "Country",
@@ -153,7 +153,7 @@ export default function RootLayout({
               contactPoint: {
                 "@type": "ContactPoint",
                 contactType: "Customer Service",
-                telephone: "+27781500968",
+                telephone: "+27759440377",
                 email: "mulukenendashaw68@gmail.com",
               },
             }),
@@ -239,3 +239,4 @@ export default function RootLayout({
     </html>
   );
 }
+

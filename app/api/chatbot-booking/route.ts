@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sendBookingConfirmation, sendAdminNotification } from '@/lib/sendWhatsAppMessage';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -81,9 +82,26 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
+    // Send WhatsApp confirmation to customer
+    try {
+      await sendBookingConfirmation(phoneNumber, fullName, service, verificationCode);
+      console.log('✅ WhatsApp confirmation sent to customer');
+    } catch (error) {
+      console.error('⚠️ Failed to send WhatsApp confirmation:', error);
+      // Don't fail the entire request if WhatsApp fails
+    }
+
+    // Send admin notification
+    try {
+      await sendAdminNotification(fullName, service, verificationCode, budget || 'Not specified');
+      console.log('✅ Admin notification sent');
+    } catch (error) {
+      console.error('⚠️ Failed to send admin notification:', error);
+    }
+
     return NextResponse.json(
       {
-        message: 'Booking received! Ethan will contact you within 2 hours.',
+        message: 'Booking received! Check your WhatsApp for confirmation. Ethan will contact you within 2 hours.',
         verificationCode: verificationCode,
         booking: {
           fullName,
@@ -91,7 +109,8 @@ export async function POST(req: NextRequest) {
           phoneNumber,
           service,
           timeline,
-        }
+        },
+        whatsappSent: true,
       },
       { status: 200 }
     );

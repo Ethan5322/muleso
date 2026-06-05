@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
@@ -65,7 +65,7 @@ const TestimonialCard = ({
     >
       <div className="flex gap-1 mb-4">
         {[...Array(rating)].map((_, i) => (
-          <span key={i} className="text-[var(--accent-gold)]">⭐</span>
+          <span key={i} className="text-[var(--accent-gold)]">â­</span>
         ))}
       </div>
       <p className="text-[var(--text-secondary)] mb-6 italic leading-relaxed">"{quote}"</p>
@@ -117,7 +117,7 @@ const ServiceCard = ({
         href="/services"
         className="text-[var(--accent-blue)] text-base font-medium hover:gap-2 inline-flex items-center transition-all"
       >
-        Learn more <span className="ml-1">→</span>
+        Learn more <span className="ml-1">â†’</span>
       </Link>
     </motion.div>
   );
@@ -141,7 +141,7 @@ export default function Home() {
             >
               <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full w-fit mx-auto">
                 <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
-                  🚀 AI-Powered Digital Solutions
+                  ðŸš€ AI-Powered Digital Solutions
                 </span>
               </div>
             </motion.div>
@@ -224,37 +224,37 @@ export default function Home() {
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <ServiceCard
-              icon="🌐"
+              icon="ðŸŒ"
               title="Website Design"
               description="Stunning, fast websites built to convert visitors into clients."
               delay={0}
             />
             <ServiceCard
-              icon="🤖"
+              icon="ðŸ¤–"
               title="AI Chatbots"
               description="24/7 intelligent assistants that handle your customer service."
               delay={0.08}
             />
             <ServiceCard
-              icon="🎨"
+              icon="ðŸŽ¨"
               title="Logo Design"
               description="Professional brand identity that makes you unforgettable."
               delay={0.16}
             />
             <ServiceCard
-              icon="📄"
+              icon="ðŸ“„"
               title="PDF Guides"
               description="Expert knowledge packaged as downloadable products you sell forever."
               delay={0.24}
             />
             <ServiceCard
-              icon="📱"
+              icon="ðŸ“±"
               title="QR Code Design"
               description="Custom branded QR codes with built-in analytics tracking."
               delay={0.32}
             />
             <ServiceCard
-              icon="📧"
+              icon="ðŸ“§"
               title="Custom Email"
               description="Professional @yourdomain.com email that builds instant credibility."
               delay={0.4}
@@ -278,10 +278,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { number: 1, title: 'Discovery', icon: '🔍', desc: 'We learn your business, goals, and audience in detail.' },
-              { number: 2, title: 'Design', icon: '📐', desc: 'We craft wireframes and visual concepts for your approval.' },
-              { number: 3, title: 'Build', icon: '⚙️', desc: 'We develop with precision using the world&apos;s best tech stack.' },
-              { number: 4, title: 'Launch', icon: '🚀', desc: 'We deploy, test, and hand you the keys to your new digital asset.' },
+              { number: 1, title: 'Discovery', icon: 'ðŸ”', desc: 'We learn your business, goals, and audience in detail.' },
+              { number: 2, title: 'Design', icon: 'ðŸ“', desc: 'We craft wireframes and visual concepts for your approval.' },
+              { number: 3, title: 'Build', icon: 'âš™ï¸', desc: 'We develop with precision using the world&apos;s best tech stack.' },
+              { number: 4, title: 'Launch', icon: 'ðŸš€', desc: 'We deploy, test, and hand you the keys to your new digital asset.' },
             ].map((step, i) => (
               <motion.div
                 key={i}
@@ -462,13 +462,13 @@ export default function Home() {
                 href="mailto:mulukenendashaw68@gmail.com"
                 className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
               >
-                📧 Email Us
+                ðŸ“§ Email Us
               </a>
               <a
-                href="https://wa.me/27781500968"
+                href="https://wa.me/27759440377"
                 className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
               >
-                💬 WhatsApp Us
+                ðŸ’¬ WhatsApp Us
               </a>
             </div>
           </motion.div>
@@ -501,3 +501,4 @@ export default function Home() {
     </>
   );
 }
+

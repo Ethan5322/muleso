@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,14 +12,14 @@ export async function POST(req: NextRequest) {
     }
 
     const leadMessage = `
-📞 NEW LEAD FROM CHATBOT:
+ðŸ“ž NEW LEAD FROM CHATBOT:
 Name: ${name}
 Phone: ${phone}
 Email: ${email}
 Service: ${service}
 Time: ${new Date().toLocaleString()}
 
-👉 Ready to follow up!
+ðŸ‘‰ Ready to follow up!
     `.trim();
 
     // Send to WhatsApp via Twilio (if configured)
@@ -27,7 +27,7 @@ Time: ${new Date().toLocaleString()}
       try {
         const formData = new FormData();
         formData.append('From', `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`);
-        formData.append('To', `whatsapp:+27781500968`);
+        formData.append('To', `whatsapp:+27759440377`);
         formData.append('Body', leadMessage);
 
         await fetch(
@@ -60,7 +60,7 @@ Time: ${new Date().toLocaleString()}
           body: JSON.stringify({
             from: 'chatbot@mulesoo.com',
             to: 'hello@mulesoo.com',
-            subject: `🤖 New Chatbot Lead: ${name}`,
+            subject: `ðŸ¤– New Chatbot Lead: ${name}`,
             html: `
 <h2>New Lead from Chatbot</h2>
 <p><strong>Name:</strong> ${name}</p>
@@ -69,7 +69,7 @@ Time: ${new Date().toLocaleString()}
 <p><strong>Service Interested:</strong> ${service}</p>
 <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
 <hr>
-<p>👉 Contact them on WhatsApp at +${phone.replace(/\D/g, '')}</p>
+<p>ðŸ‘‰ Contact them on WhatsApp at +${phone.replace(/\D/g, '')}</p>
             `,
           }),
         });
@@ -87,3 +87,4 @@ Time: ${new Date().toLocaleString()}
     );
   }
 }
+

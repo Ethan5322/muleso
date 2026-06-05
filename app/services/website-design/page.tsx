@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -98,20 +98,20 @@ export default function WebsiteDesignPage() {
           <div className="mb-8 space-y-4">
             <div>
               <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-4">
-                💬 Contact Ethan Directly for Custom Pricing
+                ðŸ’¬ Contact Ethan Directly for Custom Pricing
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="mailto:mulukenendashaw68@gmail.com"
                   className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
                 >
-                  📧 Email: mulukenendashaw68@gmail.com
+                  ðŸ“§ Email: mulukenendashaw68@gmail.com
                 </a>
                 <a
-                  href="https://wa.me/27781500968"
+                  href="https://wa.me/27759440377"
                   className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
                 >
-                  💬 WhatsApp: 0781500968
+                  ðŸ’¬ WhatsApp: 0781500968
                 </a>
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function WebsiteDesignPage() {
             />
             <FAQItem
               question="Do you work with clients outside South Africa?"
-              answer="Yes! We work with clients across Africa and internationally. Time zones don't matter — we're always responsive on WhatsApp and email."
+              answer="Yes! We work with clients across Africa and internationally. Time zones don't matter â€” we're always responsive on WhatsApp and email."
               delay={0.3}
             />
             <FAQItem
@@ -169,13 +169,14 @@ export default function WebsiteDesignPage() {
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Launch?</h2>
           <div className="max-w-md mx-auto">
-            <StartBookingButton text="🚀 Book Your Website Now" size="lg" />
+            <StartBookingButton text="ðŸš€ Book Your Website Now" size="lg" />
           </div>
           <p className="text-sm text-[var(--text-secondary)] mt-4">
-            Chat with Ethan directly — get a quote in minutes!
+            Chat with Ethan directly â€” get a quote in minutes!
           </p>
         </motion.div>
       </div>
     </div>
   );
 }
+

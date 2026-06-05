@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -39,7 +39,7 @@ export default function LogoDesignPage() {
                 viewport={{ once: true }}
                 className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
               >
-                <h3 className="font-bold text-[var(--text-primary)] mb-2 text-lg">✓ {item.title}</h3>
+                <h3 className="font-bold text-[var(--text-primary)] mb-2 text-lg">âœ“ {item.title}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
               </motion.div>
             ))}
@@ -59,11 +59,11 @@ export default function LogoDesignPage() {
             <p>Your logo is the first impression. It appears on your website, business cards, social media, and packaging. A professional logo builds trust instantly.</p>
             <p>We design logos that:</p>
             <ul className="space-y-2 ml-6">
-              <li>✓ Reflect your brand values and personality</li>
-              <li>✓ Stand out from competitors</li>
-              <li>✓ Work in black & white AND color</li>
-              <li>✓ Scale from business card to billboard</li>
-              <li>✓ Last 10+ years without looking dated</li>
+              <li>âœ“ Reflect your brand values and personality</li>
+              <li>âœ“ Stand out from competitors</li>
+              <li>âœ“ Work in black & white AND color</li>
+              <li>âœ“ Scale from business card to billboard</li>
+              <li>âœ“ Last 10+ years without looking dated</li>
             </ul>
           </div>
         </motion.div>
@@ -119,13 +119,13 @@ export default function LogoDesignPage() {
               href="mailto:mulukenendashaw68@gmail.com"
               className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              📧 Email: mulukenendashaw68@gmail.com
+              ðŸ“§ Email: mulukenendashaw68@gmail.com
             </a>
             <a
-              href="https://wa.me/27781500968"
+              href="https://wa.me/27759440377"
               className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              💬 WhatsApp: 0781500968
+              ðŸ’¬ WhatsApp: 0781500968
             </a>
           </div>
         </motion.div>
@@ -174,3 +174,4 @@ export default function LogoDesignPage() {
     </div>
   );
 }
+

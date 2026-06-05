@@ -50,10 +50,10 @@ export default function Footer() {
                 <Camera size={18} />
               </a>
               <a
-                href="https://wa.me/27123456789"
+                href="https://wa.me/27759440377"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors"
+                className="text-[var(--text-secondary)] hover:text-[#25D366] transition-colors"
               >
                 <MessageCircle size={18} />
               </a>
@@ -125,12 +125,12 @@ export default function Footer() {
               <div className="flex items-start gap-3">
                 <Phone size={18} className="text-[#25D366] mt-1 flex-shrink-0" />
                 <a
-                  href="https://wa.me/27781500968"
+                  href="https://wa.me/27759440377"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--text-secondary)] hover:text-[#25D366] transition-colors text-sm"
                 >
-                  +27 781 500 968 (WhatsApp)
+                  +27 759 440 377 (WhatsApp)
                 </a>
               </div>
               <div className="flex items-start gap-3">

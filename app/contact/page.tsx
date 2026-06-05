@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -66,7 +66,7 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-card p-8 text-center border border-[var(--accent-green)]"
               >
-                <div className="text-6xl mb-4">✅</div>
+                <div className="text-6xl mb-4">âœ…</div>
                 <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-4">
                   Thank you, {formData.name}!
                 </h2>
@@ -156,8 +156,8 @@ export default function ContactPage() {
                     >
                       <option value="">Select budget</option>
                       <option value="under-2k">Under R2,000</option>
-                      <option value="2k-5k">R2,000 – R5,000</option>
-                      <option value="5k-10k">R5,000 – R10,000</option>
+                      <option value="2k-5k">R2,000 â€“ R5,000</option>
+                      <option value="5k-10k">R5,000 â€“ R10,000</option>
                       <option value="10k-plus">R10,000+</option>
                       <option value="unsure">Not sure yet</option>
                     </select>
@@ -204,7 +204,7 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   className="w-full py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send My Enquiry →'}
+                  {isSubmitting ? 'Sending...' : 'Send My Enquiry â†’'}
                 </button>
               </form>
             )}
@@ -238,12 +238,12 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">WhatsApp</p>
                     <a
-                      href="https://wa.me/27781500968"
+                      href="https://wa.me/27759440377"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[#25D366] hover:underline font-semibold"
                     >
-                      📱 0781500968
+                      ðŸ“± 0781500968
                     </a>
                   </div>
                 </div>
@@ -259,16 +259,16 @@ export default function ContactPage() {
 
               <div className="border-t border-[var(--border)] pt-6">
                 <p className="text-[var(--accent-green)] text-sm font-bold mb-4">
-                  ⚡ Reply within 2 hours
+                  âš¡ Reply within 2 hours
                 </p>
                 <p className="text-xs text-[var(--text-secondary)]">
-                  Mon–Fri 8am–6pm SAST | Sat 9am–1pm
+                  Monâ€“Fri 8amâ€“6pm SAST | Sat 9amâ€“1pm
                 </p>
               </div>
 
               <div className="bg-[var(--glow-blue)] p-4 rounded-lg">
                 <p className="text-xs text-[var(--text-secondary)]">
-                  💡 <strong>Pro tip:</strong> The more details you share about your project, the faster we can give
+                  ðŸ’¡ <strong>Pro tip:</strong> The more details you share about your project, the faster we can give
                   you an accurate quote.
                 </p>
               </div>
@@ -279,3 +279,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

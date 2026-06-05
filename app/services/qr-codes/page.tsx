@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -39,7 +39,7 @@ export default function QRCodesPage() {
                 viewport={{ once: true }}
                 className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
               >
-                <h3 className="font-bold text-[var(--text-primary)] mb-2">✓ {item.title}</h3>
+                <h3 className="font-bold text-[var(--text-primary)] mb-2">âœ“ {item.title}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
               </motion.div>
             ))}
@@ -57,12 +57,12 @@ export default function QRCodesPage() {
           <h2 className="text-3xl font-bold font-sora mb-8 gradient-text">Perfect For</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { icon: '🏪', use: 'Retail', desc: 'Product packaging, shelf displays, in-store promotions' },
-              { icon: '🎫', use: 'Events', desc: 'Tickets, registration, entry verification' },
-              { icon: '📱', use: 'Marketing', desc: 'Social media campaigns, email marketing, ads' },
-              { icon: '🏢', use: 'Business', desc: 'Business cards, brochures, invoices' },
-              { icon: '📍', use: 'Location', desc: 'Store locations, directions, WiFi access' },
-              { icon: '🎁', use: 'Promotions', desc: 'Discount codes, referral programs, loyalty' },
+              { icon: 'ðŸª', use: 'Retail', desc: 'Product packaging, shelf displays, in-store promotions' },
+              { icon: 'ðŸŽ«', use: 'Events', desc: 'Tickets, registration, entry verification' },
+              { icon: 'ðŸ“±', use: 'Marketing', desc: 'Social media campaigns, email marketing, ads' },
+              { icon: 'ðŸ¢', use: 'Business', desc: 'Business cards, brochures, invoices' },
+              { icon: 'ðŸ“', use: 'Location', desc: 'Store locations, directions, WiFi access' },
+              { icon: 'ðŸŽ', use: 'Promotions', desc: 'Discount codes, referral programs, loyalty' },
             ].map((item, i) => (
               <div key={i} className="flex gap-4">
                 <div className="text-3xl">{item.icon}</div>
@@ -119,13 +119,13 @@ export default function QRCodesPage() {
               href="mailto:mulukenendashaw68@gmail.com"
               className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              📧 Email: mulukenendashaw68@gmail.com
+              ðŸ“§ Email: mulukenendashaw68@gmail.com
             </a>
             <a
-              href="https://wa.me/27781500968"
+              href="https://wa.me/27759440377"
               className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              💬 WhatsApp: 0781500968
+              ðŸ’¬ WhatsApp: 0781500968
             </a>
           </div>
         </motion.div>
@@ -133,3 +133,4 @@ export default function QRCodesPage() {
     </div>
   );
 }
+
