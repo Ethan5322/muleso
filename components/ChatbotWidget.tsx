@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
+import { generateCleanTermsPDF } from '@/lib/generateCleanTermsPDF';
 import Confetti from 'react-confetti';
 import toast, { Toaster } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
@@ -66,19 +67,19 @@ const COUNTRY_CODES: { [key: string]: string } = {
 
 const SERVICES = [
   { id: '1', label: '💻 Design Website', value: 'Design Website', price: 'R3,500' },
-  { id: '2', label: '🔧 Fix Website', value: 'Fix Website', price: 'R1,500' },
-  { id: '3', label: '🎨 Design Widget', value: 'Design Widget', price: 'R2,000' },
-  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: 'R2,500' },
-  { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: 'R3,500' },
+  { id: '2', label: '🔧 Fix Website', value: 'Fix Website', price: 'R3,500' },
+  { id: '3', label: '🎨 Design Widget', value: 'Design Widget', price: 'R3,500' },
+  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: 'R3,500' },
+  { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: 'R5,000' },
   { id: '6', label: '🌐 All in One Website', value: 'All in One Website', price: 'R7,500' },
   { id: '7', label: '📝 Other', value: 'Other', price: 'Custom' },
 ];
 
 const BUDGET_RANGES = [
-  { id: '1', label: 'Under R2,000', value: 'Under R2,000' },
-  { id: '2', label: 'R2,000 - R5,000', value: 'R2,000 - R5,000' },
-  { id: '3', label: 'R5,000 - R10,000', value: 'R5,000 - R10,000' },
-  { id: '4', label: 'R10,000+', value: 'R10,000+' },
+  { id: '1', label: 'R3,500 - R5,000', value: 'R3,500 - R5,000' },
+  { id: '2', label: 'R5,000 - R10,000', value: 'R5,000 - R10,000' },
+  { id: '3', label: 'R10,000 - R20,000', value: 'R10,000 - R20,000' },
+  { id: '4', label: 'R20,000+', value: 'R20,000+' },
   { id: '5', label: 'Not sure yet', value: 'Not sure yet' },
 ];
 
@@ -813,19 +814,34 @@ export default function ChatbotWidget() {
                     </div>
                   </div>
 
-                  {/* Download PDF Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={generatePDF}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
-                  >
-                    <Download size={18} />
-                    Download Your PDF
-                  </motion.button>
+                  {/* Download Buttons */}
+                  <div className="space-y-2">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={generatePDF}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                    >
+                      <Download size={18} />
+                      Download Booking PDF
+                    </motion.button>
+
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        generateCleanTermsPDF();
+                        toast.success('📄 Terms & Conditions PDF downloaded!');
+                      }}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                    >
+                      <Download size={18} />
+                      Download Terms & Conditions
+                    </motion.button>
+                  </div>
 
                   <p className="text-xs text-[var(--text-secondary)] text-center">
-                    📄 Professional booking PDF with verification code
+                    📄 Professional documents with verification code
                   </p>
                   </motion.div>
 
