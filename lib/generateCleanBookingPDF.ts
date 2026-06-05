@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import QRCode from 'qrcode';
 
 interface BookingData {
   fullName: string;
@@ -16,7 +17,7 @@ interface BookingData {
   bookingReference: string;
 }
 
-export const generateCleanBookingPDF = (bookingData: BookingData) => {
+export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -48,6 +49,16 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   doc.setTextColor(232, 184, 75);
   doc.text('Booking: ' + bookingData.bookingReference, pageWidth - margin, yPos, { align: 'right' });
 
+  // Add QR Code
+  try {
+    const qrDataUrl = await QRCode.toDataURL(
+      `https://mulesoo.com/booking/${bookingData.bookingReference}`
+    );
+    doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 15, yPos - 2, 14, 14);
+  } catch (err) {
+    console.error('QR Code generation failed:', err);
+  }
+
   yPos += 12;
 
   doc.setDrawColor(0, 200, 255);
@@ -71,7 +82,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   const col1X = margin;
   const col2X = margin + contentWidth / 2;
 
-  // Row 1
+  // Client details
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Name:', col1X, yPos);
@@ -121,7 +132,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 8;
 
-  // PROJECT DETAILS
+  // PROJECT DESCRIPTION
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(123, 47, 255);
@@ -200,13 +211,37 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 7;
 
-  // NOTICE SECTION
+  // PAYMENT TERMS
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(232, 184, 75);
+  doc.text('PAYMENT TERMS:', margin, yPos);
+
+  yPos += 3;
+
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(30, 30, 30);
+
+  const termsText = [
+    '• 50% deposit required to start work',
+    '• Remaining 50% due before delivery',
+  ];
+
+  termsText.forEach((line) => {
+    doc.text(line, margin + 2, yPos);
+    yPos += 2.5;
+  });
+
+  yPos += 2;
+
+  // NEXT STEPS
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
   doc.text('NEXT STEPS:', margin, yPos);
 
-  yPos += 3.5;
+  yPos += 3;
 
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
@@ -215,13 +250,13 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   const noticeText = [
     '1. Download and read our Terms & Conditions PDF',
     '2. Print this document and sign below',
-    '3. Send signed document via WhatsApp to: +27 78 1500968',
+    '3. Send signed document via WhatsApp: +27 78 1500968',
     '4. Ethan will contact you within 2 hours to confirm',
   ];
 
   noticeText.forEach((line) => {
     doc.text(line, margin + 2, yPos);
-    yPos += 2.8;
+    yPos += 2.5;
   });
 
   yPos += 3;
@@ -262,7 +297,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   doc.setFontSize(6);
   doc.setTextColor(120, 120, 120);
-  doc.text('MuleSoo Digital Services | Pretoria, South Africa', pageWidth / 2, footerY + 5, {
+  doc.text('MuleSoo Digital Services | Pretoria, South Africa | www.mulesoo.com', pageWidth / 2, footerY + 5, {
     align: 'center',
   });
 

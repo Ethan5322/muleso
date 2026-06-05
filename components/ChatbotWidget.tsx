@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, Download, CheckCircle, AlertCircle } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, Download, CheckCircle, AlertCircle, Clock, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
+import Confetti from 'react-confetti';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Message {
   id: string;
@@ -83,7 +85,39 @@ const CONTACT_METHODS = [
   { id: '3', label: '📱 Phone Call', value: 'Phone Call' },
 ];
 
-type StageType = 'greeting' | 'service' | 'usage_type' | 'budget' | 'name' | 'email' | 'phone' | 'company' | 'nationality' | 'contact_method' | 'timeline' | 'details' | 'terms' | 'summary';
+type StageType = 'greeting' | 'service' | 'budget' | 'usage_type' | 'name' | 'email' | 'phone' | 'company' | 'nationality' | 'contact_method' | 'timeline' | 'details' | 'review' | 'terms' | 'summary';
+
+// Updated stage order - better UX
+const STAGE_ORDER: StageType[] = [
+  'service',
+  'budget',
+  'usage_type',
+  'name',
+  'email',
+  'phone',
+  'company',
+  'nationality',
+  'contact_method',
+  'timeline',
+  'details',
+  'review',
+  'terms',
+  'summary',
+];
+
+// Validation functions
+const validateEmail = (email: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+const validatePhone = (phone: string): boolean => {
+  const cleanPhone = phone.replace(/\D/g, '');
+  return cleanPhone.length >= 7;
+};
+
+const validateName = (name: string): boolean => {
+  return name.trim().length >= 2;
+};
 
 export default function ChatbotWidget() {
   const pathname = usePathname();
@@ -108,29 +142,32 @@ export default function ChatbotWidget() {
     bookingReference: '',
   });
   const [isImproving, setIsImproving] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // All stages in order for progress tracking
-  const allStages: StageType[] = [
-    'service',
-    'usage_type',
-    'budget',
-    'name',
-    'email',
-    'phone',
-    'company',
-    'nationality',
-    'contact_method',
-    'timeline',
-    'details',
-    'terms',
-    'summary',
-  ];
+  const currentStageIndex = STAGE_ORDER.indexOf(stage);
+  const progressPercent = stage === 'greeting' ? 0 : ((currentStageIndex + 1) / STAGE_ORDER.length) * 100;
 
-  const currentStageIndex = allStages.indexOf(stage);
-  const progressPercent = stage === 'greeting' ? 0 : ((currentStageIndex + 1) / allStages.length) * 100;
+  // Get service price
+  const getServicePrice = (serviceName: string) => {
+    const service = SERVICES.find(s => s.value === serviceName);
+    return service?.price || 'Custom';
+  };
+
+  // Get step visual dots
+  const getStepDots = () => {
+    const totalSteps = STAGE_ORDER.length;
+    const filledSteps = currentStageIndex + 1;
+    let dots = '';
+    for (let i = 0; i < totalSteps; i++) {
+      dots += i < filledSteps ? '●' : '○';
+    }
+    return dots;
+  };
 
   useEffect(() => {
+    setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
     if (pathname === '/contact') {
       openChatbot();
     }
@@ -214,10 +251,11 @@ export default function ChatbotWidget() {
         }),
       });
       if (!response.ok) {
-        console.error('Booking submission failed');
+        toast.error('Failed to submit booking');
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
+      toast.error('Error submitting booking');
     }
   };
 
@@ -235,6 +273,7 @@ export default function ChatbotWidget() {
     setIsOpen(false);
     setMessages([]);
     setStage('greeting');
+    setShowConfetti(false);
     setBookingData({
       fullName: '',
       email: '',
@@ -253,27 +292,28 @@ export default function ChatbotWidget() {
     });
   };
 
+  const saveAndResume = () => {
+    const dataToSave = {
+      stage,
+      bookingData,
+      messages,
+      timestamp: new Date().toISOString(),
+    };
+    localStorage.setItem('mulesoo_booking_draft', JSON.stringify(dataToSave));
+    toast.success('📌 Booking saved! You can resume anytime.');
+  };
+
   const handleServiceSelect = (service: string) => {
-    const serviceObj = SERVICES.find(s => s.value === service);
     const cleanService = service.split(' ').slice(1).join(' ');
     addMessage(cleanService, 'user');
+    const price = getServicePrice(service);
     setBookingData(prev => ({ ...prev, service }));
 
     setTimeout(() => {
       addMessage(
-        `Great choice! 💪 Starting from ${serviceObj?.price}\n\nIs this for your personal project or a company?`,
+        `Great choice! 💪 Starting from ${price}\n\nWhat's your budget range?`,
         'bot'
       );
-      setStage('usage_type');
-    }, 300);
-  };
-
-  const handleUsageTypeSelect = (usageType: string) => {
-    addMessage(usageType, 'user');
-    setBookingData(prev => ({ ...prev, usageType }));
-
-    setTimeout(() => {
-      addMessage(`Perfect! 👍\n\nWhat's your budget range?`, 'bot');
       setStage('budget');
     }, 300);
   };
@@ -283,7 +323,17 @@ export default function ChatbotWidget() {
     setBookingData(prev => ({ ...prev, budget }));
 
     setTimeout(() => {
-      addMessage(`Good to know! 💰\n\nWhat's your full name?`, 'bot');
+      addMessage(`Perfect! 💰\n\nIs this for your personal project or a company?`, 'bot');
+      setStage('usage_type');
+    }, 300);
+  };
+
+  const handleUsageTypeSelect = (usageType: string) => {
+    addMessage(usageType, 'user');
+    setBookingData(prev => ({ ...prev, usageType }));
+
+    setTimeout(() => {
+      addMessage(`Excellent! 👍\n\nWhat's your full name?`, 'bot');
       setStage('name');
     }, 300);
   };
@@ -303,27 +353,43 @@ export default function ChatbotWidget() {
     if (!inputValue.trim()) return;
 
     const userInput = inputValue.trim();
-    addMessage(userInput, 'user');
-    setInputValue('');
 
     switch (stage) {
       case 'name':
+        if (!validateName(userInput)) {
+          toast.error('❌ Please enter a valid name (at least 2 characters)');
+          return;
+        }
+        addMessage(userInput, 'user');
+        setInputValue('');
         setBookingData(prev => ({ ...prev, fullName: userInput }));
         setTimeout(() => {
-          addMessage(`Nice to meet you, ${userInput}! 👋\n\nWhat's your email address?\n\n(for PDF & booking confirmation)`, 'bot');
+          addMessage(`Nice to meet you, ${userInput}! 👋\n\nWhat's your email address?`, 'bot');
           setStage('email');
         }, 300);
         break;
 
       case 'email':
+        if (!validateEmail(userInput)) {
+          toast.error('❌ Please enter a valid email (e.g., john@example.com)');
+          return;
+        }
+        addMessage(userInput, 'user');
+        setInputValue('');
         setBookingData(prev => ({ ...prev, email: userInput }));
         setTimeout(() => {
-          addMessage(`Got it! What's your phone number?\n\n(for WhatsApp & calls)`, 'bot');
+          addMessage(`Got it! What's your phone number?`, 'bot');
           setStage('phone');
         }, 300);
         break;
 
       case 'phone':
+        if (!validatePhone(userInput)) {
+          toast.error('❌ Please enter a valid phone number (at least 7 digits)');
+          return;
+        }
+        addMessage(userInput, 'user');
+        setInputValue('');
         setBookingData(prev => ({ ...prev, phoneNumber: userInput }));
         setTimeout(() => {
           addMessage(`Perfect! What's your country/location?`, 'bot');
@@ -332,23 +398,34 @@ export default function ChatbotWidget() {
         break;
 
       case 'nationality':
+        addMessage(userInput, 'user');
+        setInputValue('');
         const formattedPhone = formatPhoneWithCountryCode(bookingData.phoneNumber, userInput);
         setBookingData(prev => ({ ...prev, nationality: userInput, phoneNumber: formattedPhone }));
         setTimeout(() => {
-          addMessage(`Great! Your phone is now: ${formattedPhone}\n\nWhat's your company or business name?`, 'bot');
-          setStage('company');
+          if (bookingData.usageType === 'Company') {
+            addMessage(`Great! Your phone is ${formattedPhone}\n\nWhat's your company/business name?`, 'bot');
+            setStage('company');
+          } else {
+            addMessage(`Great! Your phone is ${formattedPhone}\n\nHow would you prefer us to contact you?`, 'bot');
+            setStage('contact_method');
+          }
         }, 300);
         break;
 
       case 'company':
+        addMessage(userInput, 'user');
+        setInputValue('');
         setBookingData(prev => ({ ...prev, company: userInput }));
         setTimeout(() => {
-          addMessage(`Awesome! How would you prefer us to contact you?`, 'bot');
+          addMessage(`Awesome! 🏢\n\nHow would you prefer us to contact you?`, 'bot');
           setStage('contact_method');
         }, 300);
         break;
 
       case 'timeline':
+        addMessage(userInput, 'user');
+        setInputValue('');
         setBookingData(prev => ({ ...prev, timeline: userInput }));
         setTimeout(() => {
           addMessage(`Excellent! 🎯\n\nBriefly describe your project. What do you need?`, 'bot');
@@ -358,6 +435,8 @@ export default function ChatbotWidget() {
 
       case 'details':
         setBookingData(prev => ({ ...prev, projectDetails: userInput }));
+        addMessage(userInput, 'user');
+        setInputValue('');
         addMessage('⏳ Processing your project brief...', 'bot', true);
 
         const improved = await improveProjectDetails(userInput, bookingData.service);
@@ -365,14 +444,22 @@ export default function ChatbotWidget() {
 
         setTimeout(() => {
           setMessages(prev => prev.filter(msg => msg.text !== '⏳ Processing your project brief...'));
-          addMessage('✅ Perfect! Please review and accept our terms & conditions.', 'bot');
-          setStage('terms');
+          addMessage('✅ Perfect! Let me review your booking.', 'bot');
+          setStage('review');
         }, 800);
         break;
 
       default:
         break;
     }
+  };
+
+  const handleReviewSubmit = () => {
+    addMessage('✅ Everything looks good!', 'user');
+    setTimeout(() => {
+      addMessage('Please review and accept our terms & conditions.', 'bot');
+      setStage('terms');
+    }, 300);
   };
 
   const handleTermsAccept = () => {
@@ -382,18 +469,22 @@ export default function ChatbotWidget() {
 
     setTimeout(() => {
       submitBooking();
+      setShowConfetti(true);
       addMessage('🎉 Your booking is confirmed! Review details below.', 'bot');
       setStage('summary');
     }, 300);
   };
 
   const generatePDF = () => {
-    submitBooking();
     generateCleanBookingPDF(bookingData);
+    toast.success('📄 PDF downloading...');
   };
 
   return (
     <>
+      <Toaster position="bottom-right" />
+      {showConfetti && <Confetti width={windowDimensions.width} height={windowDimensions.height} />}
+
       {/* Chat Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
@@ -431,17 +522,19 @@ export default function ChatbotWidget() {
           >
             {/* Progress Bar */}
             {stage !== 'greeting' && (
-              <div className="h-1 bg-[var(--bg-card)] overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)]"
-                  initial={{ width: '0%' }}
-                  animate={{ width: `${progressPercent}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
+              <>
+                <div className="h-1 bg-[var(--bg-card)] overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)]"
+                    initial={{ width: '0%' }}
+                    animate={{ width: `${progressPercent}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              </>
             )}
 
-            {/* Header - Clean with Logo */}
+            {/* Header */}
             <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-3xl flex-shrink-0 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="text-2xl font-bold font-sora">
@@ -454,11 +547,21 @@ export default function ChatbotWidget() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent-green)] animate-pulse" />
                   <span className="text-xs opacity-90">Online</span>
                 </div>
-                <p className="text-xs opacity-95 font-medium">
-                  {stage === 'summary' ? '✅ Confirmed' : 'Step ' + (currentStageIndex + 1) + ' of ' + allStages.length}
-                </p>
+                {stage !== 'greeting' && (
+                  <div className="text-xs opacity-95 font-mono">
+                    {getStepDots()}
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* Estimated Time */}
+            {stage !== 'greeting' && stage !== 'summary' && (
+              <div className="bg-[var(--glow-blue)] border-b border-[var(--accent-blue)] px-4 py-2 flex items-center gap-2">
+                <Clock size={14} className="text-[var(--accent-blue)]" />
+                <span className="text-xs text-[var(--accent-blue)] font-semibold">~5 min to complete</span>
+              </div>
+            )}
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-5 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-[var(--accent-blue)] scrollbar-track-[var(--bg-card)]">
@@ -481,13 +584,11 @@ export default function ChatbotWidget() {
                       className={`max-w-sm px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                         msg.sender === 'user'
                           ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white rounded-br-sm shadow-lg'
-                          : 'bg-[var(--bg-card)] text-[var(--text-secondary)] rounded-bl-sm border border-[var(--border)] hover:border-[var(--accent-blue)] transition-colors'
+                          : 'bg-[var(--bg-card)] text-[var(--text-secondary)] rounded-bl-sm border border-[var(--border)]'
                       }`}
                     >
                       {msg.text.split('\n').map((line, i) => (
-                        <div key={i} className={msg.sender === 'user' ? 'text-white' : ''}>
-                          {line || ' '}
-                        </div>
+                        <div key={i}>{line || ' '}</div>
                       ))}
                     </div>
                   )}
@@ -517,33 +618,10 @@ export default function ChatbotWidget() {
                       }}
                       className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                     >
-                      {service.label} <span className="text-xs text-[var(--text-secondary)]">{service.price}</span>
-                    </motion.button>
-                  ))}
-                </motion.div>
-              )}
-
-              {/* Usage Type Selection */}
-              {stage === 'usage_type' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  className="space-y-3 mt-4 px-2"
-                >
-                  <p className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide mb-3">Choose one:</p>
-                  {['Personal', 'Company'].map((type, idx) => (
-                    <motion.button
-                      key={type}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.05 * idx }}
-                      whileHover={{ scale: 1.02, x: 8 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => handleUsageTypeSelect(type)}
-                      className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
-                    >
-                      {type === 'Personal' ? '👤 Personal' : '🏢 Company'}
+                      <div className="flex justify-between items-center">
+                        <span>{service.label}</span>
+                        <span className="text-xs text-[var(--text-secondary)] bg-[var(--bg-primary)] px-2 py-1 rounded">{service.price}</span>
+                      </div>
                     </motion.button>
                   ))}
                 </motion.div>
@@ -575,6 +653,32 @@ export default function ChatbotWidget() {
                 </motion.div>
               )}
 
+              {/* Usage Type Selection */}
+              {stage === 'usage_type' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="space-y-3 mt-4 px-2"
+                >
+                  <p className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide mb-3">Choose one:</p>
+                  {['Personal', 'Company'].map((type, idx) => (
+                    <motion.button
+                      key={type}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.05 * idx }}
+                      whileHover={{ scale: 1.02, x: 8 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleUsageTypeSelect(type)}
+                      className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
+                    >
+                      {type === 'Personal' ? '👤 Personal' : '🏢 Company'}
+                    </motion.button>
+                  ))}
+                </motion.div>
+              )}
+
               {/* Contact Method Selection */}
               {stage === 'contact_method' && (
                 <motion.div
@@ -601,6 +705,41 @@ export default function ChatbotWidget() {
                 </motion.div>
               )}
 
+              {/* Review Stage */}
+              {stage === 'review' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="glass-card p-6 space-y-4 mt-3 mx-2"
+                >
+                  <h3 className="font-bold text-lg text-[var(--text-primary)]">📋 Review Your Booking</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg border border-[var(--border)]">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Service</p>
+                      <p className="text-[var(--text-primary)] font-semibold">{bookingData.service}</p>
+                    </div>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg border border-[var(--border)]">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Budget & Timeline</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs">💰 {bookingData.budget} | ⏱️ {bookingData.timeline}</p>
+                    </div>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg border border-[var(--border)]">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Contact</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs">{bookingData.email}</p>
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleReviewSubmit}
+                    className="w-full px-4 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                  >
+                    ✓ Looks Good, Continue
+                  </motion.button>
+                </motion.div>
+              )}
+
               {/* Terms & Conditions */}
               {stage === 'terms' && (
                 <motion.div
@@ -618,20 +757,18 @@ export default function ChatbotWidget() {
                     <p>✓ Project timeline is estimate, subject to feedback</p>
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleTermsAccept}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-green)] to-[#00FF88] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
-                    >
-                      <CheckCircle size={18} />
-                      I Agree
-                    </motion.button>
-                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleTermsAccept}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-green)] to-[#00FF88] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                  >
+                    <CheckCircle size={18} />
+                    I Agree & Confirm Booking
+                  </motion.button>
 
                   <p className="text-xs text-[var(--text-secondary)] text-center">
-                    By accepting, you confirm you have read and agree to our terms
+                    By accepting, you confirm you agree to our terms
                   </p>
                 </motion.div>
               )}
@@ -653,12 +790,8 @@ export default function ChatbotWidget() {
                   {/* Confirmation Message */}
                   <div className="bg-[var(--glow-blue)] border border-[var(--accent-blue)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
                     <p className="font-semibold">✅ Booking Confirmed!</p>
-                    <p className="text-xs text-[var(--text-secondary)] mt-1">
-                      📧 PDF sent to {bookingData.email}
-                    </p>
-                    <p className="text-xs text-[var(--accent-green)] mt-1">
-                      ⏰ Ethan will contact you within 2 hours
-                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
+                    <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ethan will contact you within 2 hours</p>
                   </div>
 
                   {/* Client Details Summary */}
@@ -672,24 +805,14 @@ export default function ChatbotWidget() {
 
                     <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
                       <p className="text-xs text-[var(--text-secondary)] mb-1">Contact Info</p>
-                      <p className="text-[var(--text-primary)] font-semibold text-xs">
-                        📧 {bookingData.email}
-                      </p>
-                      <p className="text-[var(--text-primary)] font-semibold text-xs">
-                        📱 {bookingData.phoneNumber}
-                      </p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs">📧 {bookingData.email}</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs">📱 {bookingData.phoneNumber}</p>
                     </div>
 
                     <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
-                      <p className="text-xs text-[var(--text-secondary)] mb-1">Service</p>
-                      <p className="text-[var(--text-primary)] font-semibold">{bookingData.service}</p>
-                    </div>
-
-                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
-                      <p className="text-xs text-[var(--text-secondary)] mb-1">Budget & Timeline</p>
-                      <p className="text-[var(--text-primary)] font-semibold text-xs">
-                        💰 {bookingData.budget} | ⏱️ {bookingData.timeline}
-                      </p>
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Service & Budget</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs">{bookingData.service}</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs">💰 {bookingData.budget}</p>
                     </div>
 
                     <div className="bg-[var(--bg-primary)] p-3 rounded-lg border border-[var(--accent-gold)]">
@@ -712,7 +835,7 @@ export default function ChatbotWidget() {
                   </motion.button>
 
                   <p className="text-xs text-[var(--text-secondary)] text-center">
-                    📄 One-page professional PDF with all details included
+                    📄 Professional booking PDF with verification code
                   </p>
                 </motion.div>
               )}
@@ -725,13 +848,13 @@ export default function ChatbotWidget() {
               <div className="border-t border-[var(--border)] p-4 flex-shrink-0 bg-[var(--bg-card)]">
                 <div className="mb-3">
                   <label className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide block mb-2">
-                    {stage === 'name' && '👤 Your Full Name'}
-                    {stage === 'email' && '📧 Email Address'}
-                    {stage === 'phone' && '📱 Phone Number'}
-                    {stage === 'company' && '🏢 Company Name (Optional)'}
-                    {stage === 'nationality' && '🌍 Country'}
-                    {stage === 'timeline' && '⏰ Timeline (Weeks)'}
-                    {stage === 'details' && '💬 Project Description'}
+                    {stage === 'name' && '👤 Your Full Name *'}
+                    {stage === 'email' && '📧 Email Address *'}
+                    {stage === 'phone' && '📱 Phone Number *'}
+                    {stage === 'company' && '🏢 Company Name'}
+                    {stage === 'nationality' && '🌍 Country *'}
+                    {stage === 'timeline' && '⏰ Timeline (Weeks) *'}
+                    {stage === 'details' && '💬 Project Description *'}
                   </label>
                   <div className="flex gap-3">
                     <input
@@ -747,14 +870,15 @@ export default function ChatbotWidget() {
                             : stage === 'name'
                               ? 'e.g., John Doe'
                               : stage === 'company'
-                                ? 'e.g., Acme Corp (optional)'
+                                ? 'e.g., Acme Corp'
                                 : stage === 'nationality'
                                   ? 'e.g., South Africa'
                                   : stage === 'timeline'
                                     ? 'e.g., 2 weeks'
-                                    : 'Describe what you need...'
+                                    : 'Describe your project...'
                       }
                       autoFocus
+                      maxLength={stage === 'details' ? 500 : undefined}
                       className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-base placeholder-[var(--text-secondary)] font-medium"
                     />
                     <motion.button
@@ -767,13 +891,25 @@ export default function ChatbotWidget() {
                       <ArrowUp size={20} />
                     </motion.button>
                   </div>
+                  {stage === 'details' && (
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">{inputValue.length}/500 characters</p>
+                  )}
                 </div>
               </div>
             )}
 
             {/* Summary Mode Footer */}
             {stage === 'summary' && (
-              <div className="border-t border-[var(--border)] p-5 flex-shrink-0 bg-[var(--bg-card)]">
+              <div className="border-t border-[var(--border)] p-5 flex-shrink-0 bg-[var(--bg-card)] space-y-2">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={saveAndResume}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-gold)] hover:text-[var(--accent-gold)] transition-all font-medium text-sm"
+                >
+                  <Save size={16} />
+                  Save & Resume Later
+                </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
