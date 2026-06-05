@@ -1,7 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest, NextResponse } from 'next/server';
 
-const client = new Anthropic();
+const hasApiKey = !!process.env.ANTHROPIC_API_KEY;
+const client = hasApiKey ? new Anthropic() : null;
 
 export async function POST(req: NextRequest) {
   let projectDetails = '';
@@ -16,6 +17,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({
         improved: 'No project details provided.',
       });
+    }
+
+    // If no API key, return original details
+    if (!hasApiKey || !client) {
+      return NextResponse.json({ improved: projectDetails });
     }
 
     const response = await client.messages.create({
