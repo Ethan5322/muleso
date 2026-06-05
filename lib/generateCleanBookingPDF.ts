@@ -49,11 +49,18 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   doc.setTextColor(232, 184, 75);
   doc.text('Booking: ' + bookingData.bookingReference, pageWidth - margin, yPos, { align: 'right' });
 
-  // Add QR Code
+  // Add QR Code with callback pattern
   try {
-    const qrDataUrl = await QRCode.toDataURL(
-      `https://mulesoo.com/booking/${bookingData.bookingReference}`
-    );
+    const qrDataUrl = await new Promise<string>((resolve, reject) => {
+      QRCode.toDataURL(
+        `https://mulesoo.com/qr-code`,
+        { width: 1200 },
+        (error, dataUrl) => {
+          if (error) reject(error);
+          else resolve(dataUrl);
+        }
+      );
+    });
     doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 15, yPos - 2, 14, 14);
   } catch (err) {
     console.error('QR Code generation failed:', err);

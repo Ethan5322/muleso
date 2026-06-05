@@ -1,104 +1,252 @@
-export default function TermsOfService() {
+'use client';
+
+import { motion } from 'framer-motion';
+import { Download, FileText } from 'lucide-react';
+import { generateCleanTermsPDF } from '@/lib/generateCleanTermsPDF';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+
+export default function TermsPage() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleDownloadTerms = async () => {
+    try {
+      setIsLoading(true);
+      await generateCleanTermsPDF();
+      toast.success('📄 Terms & Conditions PDF downloaded!');
+    } catch (error) {
+      console.error('Failed to download terms:', error);
+      toast.error('Failed to download Terms & Conditions');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--bg-primary)] py-20 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-5xl font-bold font-sora gradient-text mb-4">Terms of Service</h1>
-        <p className="text-[var(--text-secondary)] mb-12">Last updated: June 2026</p>
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 space-y-4"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold font-sora text-[var(--text-primary)]">
+            Terms & <span className="gradient-text">Conditions</span>
+          </h1>
+          <p className="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
+            Clear, transparent agreements to protect both you and us
+          </p>
+        </motion.div>
 
-        <div className="space-y-8 text-[var(--text-secondary)]">
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">1. Agreement to Terms</h2>
-            <p>
-              By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">2. Use License</h2>
-            <p>Permission is granted to temporarily download one copy of the materials (information or software) on MuleSoo's website for personal, non-commercial transitory viewing only.</p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">3. Disclaimer</h2>
-            <p>
-              The materials on MuleSoo's website are provided on an 'as is' basis. MuleSoo makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">4. Limitations</h2>
-            <p>
-              In no event shall MuleSoo or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on MuleSoo's website.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">5. Accuracy of Materials</h2>
-            <p>
-              The materials appearing on MuleSoo's website could include technical, typographical, or photographic errors. MuleSoo does not warrant that any of the materials on its website are accurate, complete, or current.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">6. Links</h2>
-            <p>
-              MuleSoo has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by MuleSoo of the site. Use of any such linked website is at the user's own risk.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">7. Modifications</h2>
-            <p>
-              MuleSoo may revise these terms of service for its website at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">8. Governing Law</h2>
-            <p>
-              These terms and conditions are governed by and construed in accordance with the laws of the Republic of South Africa, and you irrevocably submit to the exclusive jurisdiction of the courts in Pretoria.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">9. Service Terms</h2>
-            <div className="space-y-3">
-              <div>
-                <h3 className="font-bold text-[var(--text-primary)]">Payment Terms</h3>
-                <p>Payment is due upon service agreement. We accept bank transfer, card payments via Stripe, and EFT.</p>
+        {/* Download Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="glass-card p-8 md:p-12 rounded-2xl border border-[var(--border)] mb-16"
+        >
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            {/* Left: File Icon & Description */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-lg bg-[var(--glow-gold)] flex items-center justify-center">
+                  <FileText size={32} className="text-[var(--bg-primary)]" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)]">
+                    Official Terms & Conditions
+                  </h2>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    Download as PDF
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-[var(--text-primary)]">Delivery Timelines</h3>
-                <p>Timelines are estimates based on scope. We aim to deliver within agreed timeframes but cannot guarantee exact dates due to unforeseen circumstances.</p>
-              </div>
-              <div>
-                <h3 className="font-bold text-[var(--text-primary)]">Revisions</h3>
-                <p>Included revisions are specified per service package. Additional revisions beyond the scope may incur additional fees.</p>
-              </div>
-              <div>
-                <h3 className="font-bold text-[var(--text-primary)]">Intellectual Property</h3>
-                <p>Upon full payment, you own the deliverables. We retain the right to use completed work in our portfolio.</p>
+
+              <div className="space-y-3">
+                <p className="text-[var(--text-secondary)] leading-relaxed">
+                  Our Terms & Conditions protect both you and MuleSoo by clearly outlining:
+                </p>
+                <ul className="space-y-2">
+                  {[
+                    '💰 Payment & Deposit Requirements',
+                    '📦 Deliverables & Ownership',
+                    '⏰ Timeline & Delivery Schedule',
+                    '🔧 Support & Revision Policy',
+                    '⚖️ Liability & Legal Protection',
+                  ].map((item, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 text-[var(--text-secondary)]"
+                    >
+                      <span className="text-lg">{item.split(' ')[0]}</span>
+                      <span>{item.slice(item.indexOf(' ') + 1)}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-          </section>
 
-          <section>
-            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">10. Contact Information</h2>
-            <p>
-              For questions about these Terms of Service, please contact us at:<br/>
-              📧 Email: mulukenendashaw68@gmail.com<br/>
-              💬 WhatsApp: 0781500968<br/>
-              📍 Pretoria, South Africa
-            </p>
-          </section>
+            {/* Right: Download Button & Info */}
+            <div className="space-y-6">
+              <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-6 space-y-4">
+                <div>
+                  <p className="text-sm text-[var(--text-secondary)] uppercase font-semibold mb-2">
+                    Document Format
+                  </p>
+                  <p className="text-lg font-bold text-[var(--accent-gold)]">
+                    PDF (Print-Ready)
+                  </p>
+                </div>
 
-          <section className="border-t border-[var(--border)] pt-8">
-            <p className="text-sm text-[var(--text-secondary)]">
-              These Terms of Service constitute the entire agreement between you and MuleSoo regarding the use of the website.
-            </p>
-          </section>
+                <div>
+                  <p className="text-sm text-[var(--text-secondary)] uppercase font-semibold mb-2">
+                    File Size
+                  </p>
+                  <p className="text-lg font-bold text-[var(--text-primary)]">
+                    ~200 KB
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-sm text-[var(--text-secondary)] uppercase font-semibold mb-2">
+                    Includes
+                  </p>
+                  <p className="text-sm text-[var(--text-primary)]">
+                    ✓ QR code linking to this page<br/>
+                    ✓ Signature fields<br/>
+                    ✓ Company contact info
+                  </p>
+                </div>
+              </div>
+
+              {/* Download Button */}
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleDownloadTerms}
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[var(--accent-blue)] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+              >
+                <Download size={20} />
+                {isLoading ? 'Generating...' : 'Download Terms PDF'}
+              </motion.button>
+
+              <p className="text-center text-xs text-[var(--text-secondary)]">
+                Professional document ready to print and sign
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Terms Summary */}
+        <div className="space-y-8">
+          {[
+            {
+              icon: '💰',
+              title: '1. Payment & Deposit',
+              content: [
+                '50% deposit required to start work',
+                'Remaining 50% due before final delivery',
+                'No refunds once work has begun',
+              ],
+            },
+            {
+              icon: '📦',
+              title: '2. Deliverables',
+              content: [
+                'Source code & files provided after full payment',
+                'Ownership transfers upon completion',
+                'We retain portfolio usage rights',
+              ],
+            },
+            {
+              icon: '⏰',
+              title: '3. Timeline & Delivery',
+              content: [
+                'Project timelines are estimates',
+                'Client delays do not extend our deadlines',
+                'Final delivery upon full payment',
+              ],
+            },
+            {
+              icon: '🔧',
+              title: '4. Support & Revisions',
+              content: [
+                '30 days of FREE support for bug fixes',
+                'Up to 3 revision rounds included',
+                'Additional support available at R250/hour',
+              ],
+            },
+            {
+              icon: '⚖️',
+              title: '5. Liability',
+              content: [
+                'Our liability limited to amount paid',
+                'Not responsible for client negligence',
+                'All disputes governed by South African law',
+              ],
+            },
+          ].map((section, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              viewport={{ once: true }}
+              className="glass-card p-8 rounded-2xl border border-[var(--border)]"
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-4xl flex-shrink-0">{section.icon}</div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-4">
+                    {section.title}
+                  </h3>
+                  <ul className="space-y-2">
+                    {section.content.map((item, itemIdx) => (
+                      <li
+                        key={itemIdx}
+                        className="flex items-start gap-3 text-[var(--text-secondary)]"
+                      >
+                        <span className="text-[var(--accent-green)] font-bold mt-1">✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Contact Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
+        >
+          <div className="glass-card p-8 rounded-2xl border border-[var(--border)]">
+            <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">
+              Questions About Our Terms?
+            </h2>
+            <p className="text-[var(--text-secondary)] mb-6 max-w-2xl mx-auto">
+              We're happy to discuss any concerns. Reach out to us at{' '}
+              <span className="text-[var(--accent-blue)] font-semibold">
+                hello@mulesoo.com
+              </span>
+            </p>
+            <a
+              href="mailto:hello@mulesoo.com"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent-blue)] text-white font-bold rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Send us a Message
+            </a>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
+import QRCode from 'qrcode';
 
-export const generateCleanTermsPDF = () => {
+export const generateCleanTermsPDF = async () => {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -31,6 +32,23 @@ export const generateCleanTermsPDF = () => {
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
   doc.text('TERMS & CONDITIONS', pageWidth - margin, yPos + 2, { align: 'right' });
+
+  // Add QR Code to Terms with callback pattern
+  try {
+    const qrDataUrl = await new Promise<string>((resolve, reject) => {
+      QRCode.toDataURL(
+        'https://mulesoo.com/terms',
+        { width: 1200 },
+        (error, dataUrl) => {
+          if (error) reject(error);
+          else resolve(dataUrl);
+        }
+      );
+    });
+    doc.addImage(qrDataUrl, 'PNG', pageWidth - margin - 15, yPos - 2, 14, 14);
+  } catch (err) {
+    console.error('QR Code generation failed:', err);
+  }
 
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
