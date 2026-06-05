@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, Download, CheckCircle, AlertCircle, Clock, Save } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, Download, CheckCircle, Clock, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
 import Confetti from 'react-confetti';
 import toast, { Toaster } from 'react-hot-toast';
+import dynamic from 'next/dynamic';
+
+const ProfessionalQRCode = dynamic(() => import('./ProfessionalQRCode'), { ssr: false });
 
 interface Message {
   id: string;
@@ -141,7 +144,6 @@ export default function ChatbotWidget() {
     termsAccepted: false,
     bookingReference: '',
   });
-  const [isImproving, setIsImproving] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -214,7 +216,6 @@ export default function ChatbotWidget() {
   };
 
   const improveProjectDetails = async (details: string, service: string) => {
-    setIsImproving(true);
     try {
       const response = await fetch('/api/improve-project-details', {
         method: 'POST',
@@ -226,8 +227,6 @@ export default function ChatbotWidget() {
     } catch (error) {
       console.error('Error improving project details:', error);
       return details;
-    } finally {
-      setIsImproving(false);
     }
   };
 
@@ -256,16 +255,6 @@ export default function ChatbotWidget() {
     } catch (error) {
       console.error('Error submitting booking:', error);
       toast.error('Error submitting booking');
-    }
-  };
-
-  const handleOpen = () => {
-    setIsOpen(true);
-    if (messages.length === 0) {
-      addMessage("👋 Hi! I'm Soo from MuleSoo. Let's get your project started!", 'bot');
-      setTimeout(() => {
-        setStage('greeting');
-      }, 50);
     }
   };
 
@@ -779,20 +768,21 @@ export default function ChatbotWidget() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="glass-card p-6 space-y-5 mt-3 mx-2"
+                  className="space-y-5 mt-3"
                 >
                   {/* Booking Reference */}
-                  <div className="bg-gradient-to-r from-[var(--accent-gold)] to-[#FFC107] p-4 rounded-lg text-black font-bold text-center">
-                    <p className="text-xs opacity-90 mb-1">BOOKING REFERENCE</p>
-                    <p className="text-lg font-sora letter-spacing-wide">{bookingData.bookingReference}</p>
-                  </div>
+                  <motion.div className="glass-card p-6 space-y-5 mx-2">
+                    <div className="bg-gradient-to-r from-[var(--accent-gold)] to-[#FFC107] p-4 rounded-lg text-black font-bold text-center">
+                      <p className="text-xs opacity-90 mb-1">BOOKING REFERENCE</p>
+                      <p className="text-lg font-sora letter-spacing-wide">{bookingData.bookingReference}</p>
+                    </div>
 
-                  {/* Confirmation Message */}
-                  <div className="bg-[var(--glow-blue)] border border-[var(--accent-blue)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
-                    <p className="font-semibold">✅ Booking Confirmed!</p>
-                    <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
-                    <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ethan will contact you within 2 hours</p>
-                  </div>
+                    {/* Confirmation Message */}
+                    <div className="bg-[var(--glow-blue)] border border-[var(--accent-blue)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
+                      <p className="font-semibold">✅ Booking Confirmed!</p>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
+                      <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ethan will contact you within 2 hours</p>
+                    </div>
 
                   {/* Client Details Summary */}
                   <div className="space-y-3 text-sm">
@@ -837,6 +827,18 @@ export default function ChatbotWidget() {
                   <p className="text-xs text-[var(--text-secondary)] text-center">
                     📄 Professional booking PDF with verification code
                   </p>
+                  </motion.div>
+
+                  {/* Professional QR Code Section */}
+                  <div className="px-2 pb-6">
+                    <ProfessionalQRCode
+                      url="https://mulesoo.com"
+                      title="🎯 Scan to Visit MuleSoo"
+                      description="Frame this QR code in your office or business space"
+                      bookingReference={bookingData.bookingReference}
+                      size={300}
+                    />
+                  </div>
                 </motion.div>
               )}
 
