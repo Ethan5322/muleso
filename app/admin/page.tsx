@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import toast from 'react-hot-toast';
 
 type TabType = 'overview' | 'bookings' | 'clients' | 'revenue' | 'analytics';
+type BookingStatus = 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled';
 
 export default function AdminDashboard() {
   const router = useRouter();
