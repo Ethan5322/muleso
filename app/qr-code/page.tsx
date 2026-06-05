@@ -27,7 +27,7 @@ export default function QRCodePage() {
         </motion.div>
 
         {/* Main Content - Phone Mockup + QR Code */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24" data-qr-section>
           {/* Left: Phone Mockup */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
