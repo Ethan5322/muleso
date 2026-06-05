@@ -2,42 +2,47 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { fullName, phoneNumber, nationality, service, usageType } = await req.json();
+    const {
+      fullName,
+      phoneNumber,
+      nationality,
+      service,
+      usageType,
+      timeline,
+    } = await req.json();
 
     // Validate required fields
-    if (!fullName || !phoneNumber || !service || !usageType || !nationality) {
+    if (!fullName || !phoneNumber || !nationality || !service || !usageType || !timeline) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Log booking (in production: save to Supabase)
-    const bookingData = {
+    // In a production app, you would:
+    // 1. Save to Supabase
+    // 2. Send email via Resend API
+    // 3. Log to analytics
+
+    console.log('Chatbot booking submission:', {
       fullName,
       phoneNumber,
       nationality,
       service,
       usageType,
+      timeline,
       timestamp: new Date().toISOString(),
-      source: 'chatbot',
-    };
-
-    console.log('Chatbot booking submission:', bookingData);
-
-    // Send email notification (implement with Resend API or email service)
-    // await sendNotificationEmail(bookingData);
-
-    // In production, you would:
-    // 1. Save to Supabase database
-    // 2. Send email to hello@mulesoo.com
-    // 3. Send auto-reply to client
-    // 4. Create CRM entry
+    });
 
     return NextResponse.json(
       {
-        message: 'Booking received. Ethan will contact you shortly.',
-        data: bookingData,
+        message: 'Booking received! Ethan will contact you within 2 hours.',
+        booking: {
+          fullName,
+          phoneNumber,
+          service,
+          timeline,
+        }
       },
       { status: 200 }
     );

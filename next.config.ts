@@ -11,10 +11,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Enable SWR static generation with ISR
-  experimental: {
-    isrMemoryCacheSize: 50 * 1024 * 1024, // 50MB
-  },
   // Optimize headers for SEO and performance
   async headers() {
     return [

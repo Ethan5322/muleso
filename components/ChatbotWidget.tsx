@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, Download } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, Download, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import jsPDF from 'jspdf';
+import { generateTermsAndConditionsPDF } from '@/lib/generateTermsAndConditionsPDF';
 
 interface Message {
   id: string;
@@ -20,7 +21,36 @@ interface BookingData {
   nationality: string;
   service: string;
   usageType: string;
+  timeline: string;
+  termsAccepted: boolean;
 }
+
+const COUNTRY_CODES: { [key: string]: string } = {
+  'south africa': '+27',
+  'united states': '+1',
+  'usa': '+1',
+  'america': '+1',
+  'ethiopia': '+251',
+  'uk': '+44',
+  'united kingdom': '+44',
+  'nigeria': '+234',
+  'kenya': '+254',
+  'ghana': '+233',
+  'egypt': '+20',
+  'morocco': '+212',
+  'uganda': '+256',
+  'tanzania': '+255',
+  'zimbabwe': '+263',
+  'botswana': '+267',
+  'namibia': '+264',
+  'lesotho': '+266',
+  'canada': '+1',
+  'australia': '+61',
+  'india': '+91',
+  'germany': '+49',
+  'france': '+33',
+  'spain': '+34',
+};
 
 const SERVICES = [
   { id: '1', label: '💻 Design Website', value: 'Design Website' },
@@ -37,14 +67,17 @@ export default function ChatbotWidget() {
   const { isOpen, setIsOpen, openChatbot } = useChatbot();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [stage, setStage] = useState<'greeting' | 'service' | 'usage_type' | 'name' | 'phone' | 'nationality' | 'details' | 'summary'>('greeting');
+  const [stage, setStage] = useState<'greeting' | 'service' | 'usage_type' | 'name' | 'phone' | 'nationality' | 'timeline' | 'details' | 'summary'>('greeting');
   const [bookingData, setBookingData] = useState<BookingData>({
     fullName: '',
     phoneNumber: '',
     nationality: '',
     service: '',
     usageType: '',
+    timeline: '',
+    termsAccepted: false,
   });
+  const [showTCModal, setShowTCModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-open chatbot on contact page
@@ -69,15 +102,31 @@ export default function ChatbotWidget() {
     setTimeout(scrollToBottom, 100);
   };
 
+  const getCountryCode = (country: string): string => {
+    const normalized = country.toLowerCase().trim();
+    return COUNTRY_CODES[normalized] || '+27'; // Default to South Africa
+  };
+
+  const formatPhoneWithCountryCode = (phone: string, country: string): string => {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const countryCode = getCountryCode(country);
+
+    // Remove leading 0 if it exists for proper formatting
+    let numberPart = cleanPhone;
+    if (numberPart.startsWith('0')) {
+      numberPart = numberPart.slice(1);
+    }
+
+    return `${countryCode}${numberPart}`;
+  };
+
   const handleOpen = () => {
     setIsOpen(true);
     if (messages.length === 0) {
-      // Show greeting immediately
       addMessage(
         "👋 Hi! I'm Soo from MuleSoo. Let's get your project started!",
         'bot'
       );
-      // Set stage immediately so buttons show
       setTimeout(() => {
         setStage('greeting');
       }, 50);
@@ -105,19 +154,6 @@ export default function ChatbotWidget() {
     }, 300);
   };
 
-  const formatPhoneNumber = (phone: string): string => {
-    // Remove all non-numeric characters
-    const cleanPhone = phone.replace(/\D/g, '');
-
-    // Add +27 country code if not present
-    if (cleanPhone.startsWith('27')) {
-      return '+27' + cleanPhone.slice(2);
-    } else if (cleanPhone.startsWith('0')) {
-      return '+27' + cleanPhone.slice(1);
-    } else {
-      return '+27' + cleanPhone;
-    }
-  };
 
   const handleInputSubmit = () => {
     if (!inputValue.trim()) return;
@@ -129,28 +165,35 @@ export default function ChatbotWidget() {
     switch (stage) {
       case 'name':
         setBookingData(prev => ({ ...prev, fullName: userInput }));
-        addMessage(`Great! Nice to meet you, ${userInput}! 👋`, 'user');
         setTimeout(() => {
-          addMessage(`What's your phone number?\n\n(for WhatsApp & calls)`, 'bot');
+          addMessage(`Great! Nice to meet you, ${userInput}! 👋\n\nWhat's your phone number?\n\n(for WhatsApp & calls)`, 'bot');
           setStage('phone');
         }, 300);
         break;
 
       case 'phone':
-        const formattedPhone = formatPhoneNumber(userInput);
-        setBookingData(prev => ({ ...prev, phoneNumber: formattedPhone }));
-        addMessage(formattedPhone, 'user');
+        setBookingData(prev => ({ ...prev, phoneNumber: userInput }));
         setTimeout(() => {
-          addMessage(`Got it! ✓\n\nWhat's your country?`, 'bot');
+          addMessage(`Got it! What's your country/location?`, 'bot');
           setStage('nationality');
         }, 300);
         break;
 
       case 'nationality':
-        setBookingData(prev => ({ ...prev, nationality: userInput }));
+        const formattedPhone = formatPhoneWithCountryCode(bookingData.phoneNumber, userInput);
+        setBookingData(prev => ({ ...prev, nationality: userInput, phoneNumber: formattedPhone }));
         addMessage(userInput, 'user');
         setTimeout(() => {
-          addMessage(`Awesome! Last question:\n\nBriefly describe your project. What do you need?`, 'bot');
+          addMessage(`Perfect! Your phone is now: ${formattedPhone}\n\nIn how many weeks do you need this project ready?`, 'bot');
+          setStage('timeline');
+        }, 300);
+        break;
+
+      case 'timeline':
+        setBookingData(prev => ({ ...prev, timeline: userInput }));
+        addMessage(userInput, 'user');
+        setTimeout(() => {
+          addMessage(`Excellent! Last question:\n\nBriefly describe your project. What do you need?`, 'bot');
           setStage('details');
         }, 300);
         break;
@@ -201,6 +244,14 @@ export default function ChatbotWidget() {
     const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
     let yPos = 15;
+    const colors = {
+      darkBg: [5, 8, 16],
+      accentBlue: [0, 200, 255],
+      accentPurple: [123, 47, 255],
+      accentGold: [232, 184, 75],
+      textPrimary: [240, 242, 250],
+      textSecondary: [168, 178, 208],
+    };
 
     // ===== HEADER =====
     doc.setFillColor(5, 8, 16);
@@ -216,8 +267,9 @@ export default function ChatbotWidget() {
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(160, 178, 208);
-    doc.text('Digital Services | Pretoria, South Africa', margin, 26);
-    doc.text('Phone: 0781500968 | Email: mulukenendashaw68@gmail.com', margin, 32);
+    doc.text('🚀 Building World-Class Digital Products for Africa', margin, 26);
+    doc.text('Digital Services | Pretoria, South Africa', margin, 31);
+    doc.text('Phone: 0781500968 | Email: mulukenendashaw68@gmail.com', margin, 36);
 
     // Document title (right side)
     doc.setFontSize(12);
@@ -295,25 +347,32 @@ export default function ChatbotWidget() {
     doc.line(margin, yPos, pageWidth - margin, yPos);
     yPos += 10;
 
-    // ===== SECTION 2: SERVICE REQUESTED =====
+    // ===== SECTION 2: SERVICE & TIMELINE =====
     doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(123, 47, 255);
-    doc.text('SERVICE REQUESTED', margin, yPos);
+    doc.text('SERVICE & PROJECT TIMELINE', margin, yPos);
     yPos += 8;
 
-    // Service box
-    const serviceBoxHeight = 20;
+    // Service & Timeline box
+    const serviceBoxHeight = 32;
     doc.setFillColor(240, 242, 250);
     doc.rect(margin, yPos, contentWidth, serviceBoxHeight, 'F');
     doc.setDrawColor(123, 47, 255);
     doc.setLineWidth(0.5);
     doc.rect(margin, yPos, contentWidth, serviceBoxHeight);
 
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(5, 8, 16);
-    doc.text(bookingData.service, margin + 5, yPos + 12);
+    doc.text('Service:', margin + 5, yPos + 8);
+    doc.setFont('helvetica', 'normal');
+    doc.text(bookingData.service, margin + 35, yPos + 8);
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Timeline:', margin + 5, yPos + 18);
+    doc.setFont('helvetica', 'normal');
+    doc.text(bookingData.timeline, margin + 35, yPos + 18);
 
     yPos += serviceBoxHeight + 10;
 
@@ -355,6 +414,51 @@ export default function ChatbotWidget() {
 
     yPos += contactBoxHeight + 10;
 
+    // ===== DIVIDER =====
+    doc.setDrawColor(0, 200, 255);
+    doc.setLineWidth(1);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 10;
+
+    // ===== SECTION 4: IMPORTANT TERMS & CONDITIONS =====
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(232, 184, 75);
+    doc.text('IMPORTANT TERMS & CONDITIONS', margin, yPos);
+    yPos += 8;
+
+    const termsBoxHeight = 55;
+    doc.setFillColor(255, 252, 240);
+    doc.rect(margin, yPos, contentWidth, termsBoxHeight, 'F');
+    doc.setDrawColor(232, 184, 75);
+    doc.setLineWidth(0.5);
+    doc.rect(margin, yPos, contentWidth, termsBoxHeight);
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(5, 8, 16);
+    let termsYPos = yPos + 6;
+
+    const termsText = [
+      '• WITHOUT DEPOSIT: Project cannot be processed. A 50% deposit is required to begin work.',
+      '• FULL PAYMENT REQUIRED: The complete project fee must be paid before final delivery.',
+      '• PARTIAL DELIVERABLES: Without full payment, downloadable PDFs and source code will NOT be provided.',
+      '• DELIVERY: Upon receipt of full payment, you will receive all project files and permanent access.',
+      '• SUPPORT: 30 days of free support included. Additional support available at hourly rates.',
+    ];
+
+    termsText.forEach((term, idx) => {
+      const split = doc.splitTextToSize(term, contentWidth - 10);
+      split.forEach((line: string) => {
+        if (termsYPos - yPos < termsBoxHeight - 2) {
+          doc.text(line, margin + 5, termsYPos);
+          termsYPos += 6;
+        }
+      });
+    });
+
+    yPos += termsBoxHeight + 10;
+
     // ===== NEXT STEPS BOX =====
     doc.setFillColor(0, 200, 255);
     doc.rect(margin, yPos, contentWidth, 20, 'F');
@@ -363,15 +467,20 @@ export default function ChatbotWidget() {
     doc.setTextColor(5, 8, 16);
     doc.text('NEXT STEPS: Ethan will contact you within 2 hours on business days.', margin + 5, yPos + 7);
 
-    yPos = pageHeight - 15;
+    yPos = pageHeight - 20;
 
     // ===== FOOTER =====
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(128, 128, 128);
     doc.line(margin, yPos - 5, pageWidth - margin, yPos - 5);
-    doc.text('MuleSoo Digital Services | Pretoria, South Africa | www.mulesoo.com', pageWidth / 2, yPos, { align: 'center' });
-    doc.text('Service Request Form - ' + currentDate, pageWidth / 2, yPos + 5, { align: 'center' });
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 200, 255);
+    doc.text('🚀 Building World-Class Digital Products for Africa', pageWidth / 2, yPos - 2, { align: 'center' });
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(128, 128, 128);
+    doc.text('MuleSoo Digital Services | Pretoria, South Africa | www.mulesoo.com', pageWidth / 2, yPos + 3, { align: 'center' });
+    doc.text('Service Request Form - ' + currentDate, pageWidth / 2, yPos + 8, { align: 'center' });
 
     // Generate filename with date
     const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
@@ -540,16 +649,31 @@ export default function ChatbotWidget() {
                       <p className="text-xs text-[var(--text-secondary)] mb-1">Service</p>
                       <p className="text-[var(--text-primary)] font-semibold">{bookingData.service}</p>
                     </div>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Timeline</p>
+                      <p className="text-[var(--text-primary)] font-semibold">{bookingData.timeline}</p>
+                    </div>
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={generatePDF}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
-                  >
-                    <Download size={18} />
-                    Download PDF
-                  </motion.button>
+                  <div className="space-y-2">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={generatePDF}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                    >
+                      <Download size={18} />
+                      Download Service Request
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={generateTermsAndConditionsPDF}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] font-semibold rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-all text-sm"
+                    >
+                      <FileText size={16} />
+                      Download T&C
+                    </motion.button>
+                  </div>
                   <p className="text-xs text-[var(--text-secondary)] text-center">
                     ✅ Download & share with Ethan
                   </p>
@@ -560,13 +684,14 @@ export default function ChatbotWidget() {
             </div>
 
             {/* Input Area */}
-            {(stage === 'name' || stage === 'phone' || stage === 'nationality' || stage === 'details') && (
+            {(stage === 'name' || stage === 'phone' || stage === 'nationality' || stage === 'timeline' || stage === 'details') && (
               <div className="border-t border-[var(--border)] p-4 flex-shrink-0 bg-[var(--bg-card)]">
                 <div className="mb-3">
                   <label className="text-xs text-[var(--text-secondary)] font-semibold uppercase tracking-wide block mb-2">
                     {stage === 'name' && '👤 Your Name'}
                     {stage === 'phone' && '📱 Phone Number'}
                     {stage === 'nationality' && '🌍 Country'}
+                    {stage === 'timeline' && '⏰ Timeline (Weeks)'}
                     {stage === 'details' && '💬 Project Details'}
                   </label>
                   <div className="flex gap-3">
@@ -579,6 +704,7 @@ export default function ChatbotWidget() {
                         stage === 'phone' ? 'e.g., 0781234567' :
                         stage === 'name' ? 'e.g., John Doe' :
                         stage === 'nationality' ? 'e.g., South Africa' :
+                        stage === 'timeline' ? 'e.g., 2 weeks' :
                         'e.g., I need a 5-page website...'
                       }
                       autoFocus
@@ -621,6 +747,8 @@ export default function ChatbotWidget() {
                       nationality: '',
                       service: '',
                       usageType: '',
+                      timeline: '',
+                      termsAccepted: false,
                     });
                   }}
                   className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-all font-medium"
