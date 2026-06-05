@@ -503,9 +503,17 @@ export default function ChatbotWidget() {
     }, 300);
   };
 
-  const generatePDF = () => {
-    generateCleanBookingPDF(bookingData);
-    toast.success('📄 PDF downloading...');
+  const generatePDF = async () => {
+    try {
+      toast.loading('📄 Generating PDF...');
+      await generateCleanBookingPDF(bookingData);
+      toast.dismiss();
+      toast.success('✅ PDF downloaded successfully!');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.dismiss();
+      toast.error('❌ Failed to generate PDF. Please try again.');
+    }
   };
 
   return (

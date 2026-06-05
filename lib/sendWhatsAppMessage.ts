@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Send WhatsApp messages via CallMeBot API
  * API Documentation: https://www.callmebot.com/blog/free-api-whatsapp-messages/
  */
@@ -12,64 +12,104 @@ interface SendWhatsAppParams {
   message: string; // Message to send
 }
 
+interface WhatsAppResult {
+  success: boolean;
+  error?: string;
+  timestamp?: string;
+}
+
 /**
- * Send WhatsApp message via CallMeBot API
+ * Send WhatsApp message via CallMeBot API with error handling
  */
-export async function sendWhatsAppMessage({ phone, message }: SendWhatsAppParams): Promise<{ success: boolean; error?: string }> {
+export async function sendWhatsAppMessage({ phone, message }: SendWhatsAppParams): Promise<WhatsAppResult> {
+  const timestamp = new Date().toISOString();
+
   try {
+    // Validate phone number
+    if (!phone || phone.length < 10) {
+      throw new Error('Invalid phone number format');
+    }
+
     // Encode message for URL
     const encodedMessage = encodeURIComponent(message);
 
     // Build API URL
     const url = `${CALLMEBOT_API_URL}?phone=${phone}&text=${encodedMessage}&apikey=${CALLMEBOT_API_KEY}`;
 
-    // Send request
+    console.log(`[${timestamp}] Sending WhatsApp to ${phone}...`);
+
+    // Send request with timeout (10 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     const response = await fetch(url, {
       method: 'GET',
+      signal: controller.signal,
     });
 
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error(`API returned status ${response.status}`);
+      throw new Error(`API error ${response.status}: ${response.statusText}`);
     }
 
-    console.log(`âœ… WhatsApp message sent to ${phone}`);
-    return { success: true };
+    console.log(`[${timestamp}] WhatsApp sent to ${phone}`);
+    return { success: true, timestamp };
   } catch (error: any) {
-    console.error('âŒ Failed to send WhatsApp message:', error.message);
-    return { success: false, error: error.message };
+    const errorMsg = error?.message || 'Unknown error';
+    console.error(`[${timestamp}] WhatsApp failed for ${phone}:`, errorMsg);
+
+    // Log full error for debugging
+    console.error('Error details:', {
+      phone,
+      messageLength: message?.length,
+      errorType: error?.name,
+      errorMessage: errorMsg,
+      timestamp,
+    });
+
+    return {
+      success: false,
+      error: errorMsg,
+      timestamp,
+    };
   }
 }
 
 /**
- * Send booking confirmation to customer
+ * Send booking confirmation to customer with fallback logging
  */
 export async function sendBookingConfirmation(
   phoneNumber: string,
   clientName: string,
   service: string,
   verificationCode: string
-): Promise<{ success: boolean; error?: string }> {
-  const message = `ðŸŽ‰ *Booking Confirmation* ðŸŽ‰
+): Promise<WhatsAppResult> {
+  const message = `Booking Confirmation
 
-Hi ${clientName}! ðŸ‘‹
+Hi ${clientName}!
 
-Your booking has been confirmed! âœ…
+Your booking has been confirmed!
 
-ðŸ“¦ *Service:* ${service}
-ðŸ” *Verification Code:* ${verificationCode}
+Service: ${service}
+Verification Code: ${verificationCode}
 
-Keep this code safe. You'll need it to verify your booking once the project is completed.
+Keep this code safe for project verification.
 
-ðŸ“ž *Need Help?*
-Contact us: +27 759 440 377
-WhatsApp: https://wa.me/27759440377
+Contact: +27 759 440 377
 
-Thank you for choosing MuleSoo! ðŸš€`;
+Thank you for choosing MuleSoo!`;
 
-  return sendWhatsAppMessage({
-    phone: phoneNumber.replace(/\D/g, ''), // Remove all non-digits
+  const result = await sendWhatsAppMessage({
+    phone: phoneNumber.replace(/\D/g, ''),
     message,
   });
+
+  if (!result.success) {
+    console.warn(`Booking confirmation WhatsApp failed, but booking was still saved. Customer: ${clientName}`);
+  }
+
+  return result;
 }
 
 /**
@@ -80,15 +120,15 @@ export async function sendAdminNotification(
   service: string,
   verificationCode: string,
   budget: string
-): Promise<{ success: boolean; error?: string }> {
-  const message = `ðŸ”” *New Booking Alert* ðŸ””
+): Promise<WhatsAppResult> {
+  const message = `New Booking Alert
 
 Client: ${clientName}
 Service: ${service}
 Budget: ${budget}
 Verification Code: ${verificationCode}
 
-Check admin panel for full details.`;
+Check admin panel for details.`;
 
   return sendWhatsAppMessage({
     phone: ADMIN_PHONE,
@@ -103,14 +143,14 @@ export async function sendVerificationRequest(
   phoneNumber: string,
   clientName: string,
   verificationCode: string
-): Promise<{ success: boolean; error?: string }> {
-  const message = `ðŸ“‹ *Project Completion Verification* ðŸ“‹
+): Promise<WhatsAppResult> {
+  const message = `Project Completion Verification
 
-Hi ${clientName}! ðŸ‘‹
+Hi ${clientName}!
 
 Your project is complete! Please verify using your code:
 
-ðŸ” *Code:* ${verificationCode}
+Code: ${verificationCode}
 
 Visit: https://mulesoo.com/verify
 
@@ -121,4 +161,3 @@ Enter your code to confirm completion.`;
     message,
   });
 }
-

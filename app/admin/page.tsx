@@ -23,6 +23,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('7days');
   const [notes, setNotes] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 20;
 
   // Stats
   const [totalBookings, setTotalBookings] = useState(0);
@@ -176,7 +178,14 @@ export default function AdminDashboard() {
     router.push('/admin/login');
   };
 
-  const getBookingsByStatus = (status: BookingStatus) => filteredBookings.filter(b => b.status === status);
+  const getBookingsByStatus = (status: BookingStatus) => {
+    const filtered = filteredBookings.filter(b => b.status === status);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filtered.slice(startIndex, endIndex);
+  };
+
+  const getTotalPages = () => Math.ceil(filteredBookings.length / ITEMS_PER_PAGE);
 
   const getServiceStats = () => {
     const services: { [key: string]: number } = {};
@@ -457,6 +466,43 @@ export default function AdminDashboard() {
                 </div>
               ))}
             </div>
+
+            {/* Pagination Controls */}
+            {getTotalPages() > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-6 pb-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-[#00BFFF]/20 text-[#00BFFF] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#00BFFF]/30"
+                >
+                  ← Previous
+                </motion.button>
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: getTotalPages() }, (_, i) => i + 1).map(page => (
+                    <motion.button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-10 h-10 rounded-lg font-bold transition-all ${
+                        currentPage === page
+                          ? 'bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] text-white'
+                          : 'bg-[#1a1a1a] border border-[#00BFFF]/30 text-[#00BFFF] hover:border-[#00BFFF]'
+                      }`}
+                    >
+                      {page}
+                    </motion.button>
+                  ))}
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => setCurrentPage(Math.min(getTotalPages(), currentPage + 1))}
+                  disabled={currentPage === getTotalPages()}
+                  className="px-4 py-2 bg-[#00BFFF]/20 text-[#00BFFF] rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#00BFFF]/30"
+                >
+                  Next →
+                </motion.button>
+              </div>
+            )}
 
             {/* Booking Details Modal */}
             {selectedBooking && (
