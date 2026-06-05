@@ -82,10 +82,19 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-    // Send WhatsApp confirmation to customer
+    // Send WhatsApp confirmation to customer with all booking details
     try {
-      await sendBookingConfirmation(phoneNumber, fullName, service, verificationCode);
-      console.log('✅ WhatsApp confirmation sent to customer');
+      await sendBookingConfirmation(phoneNumber, fullName, service, verificationCode, {
+        email: email || undefined,
+        company: company || undefined,
+        country: nationality,
+        budget: budget || undefined,
+        timeline,
+        projectDescription: projectDetails || undefined,
+        bookingReference: verificationCode,
+        contactMethod: contactMethod || undefined,
+      });
+      console.log('✅ WhatsApp confirmation sent to customer with full details');
     } catch (error) {
       console.error('⚠️ Failed to send WhatsApp confirmation:', error);
       // Don't fail the entire request if WhatsApp fails

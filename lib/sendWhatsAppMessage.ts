@@ -77,28 +77,66 @@ export async function sendWhatsAppMessage({ phone, message }: SendWhatsAppParams
 }
 
 /**
- * Send booking confirmation to customer with fallback logging
+ * Send booking confirmation to customer with FULL booking details
  */
 export async function sendBookingConfirmation(
   phoneNumber: string,
   clientName: string,
   service: string,
-  verificationCode: string
+  verificationCode: string,
+  bookingDetails?: {
+    email?: string;
+    company?: string;
+    country?: string;
+    budget?: string;
+    timeline?: string;
+    projectDescription?: string;
+    bookingReference?: string;
+    contactMethod?: string;
+  }
 ): Promise<WhatsAppResult> {
-  const message = `Booking Confirmation
+  const message = `*BOOKING CONFIRMATION*
 
 Hi ${clientName}!
 
-Your booking has been confirmed!
+Your booking has been CONFIRMED!
 
+---CLIENT INFORMATION---
+Name: ${clientName}
+Email: ${bookingDetails?.email || 'N/A'}
+Phone: ${phoneNumber}
+Company: ${bookingDetails?.company || 'N/A'}
+Country: ${bookingDetails?.country || 'N/A'}
+
+---PROJECT DETAILS---
 Service: ${service}
-Verification Code: ${verificationCode}
+Budget: ${bookingDetails?.budget || 'N/A'}
+Timeline: ${bookingDetails?.timeline || 'N/A'}
+Contact Method: ${bookingDetails?.contactMethod || 'N/A'}
 
-Keep this code safe for project verification.
+---PROJECT DESCRIPTION---
+${bookingDetails?.projectDescription || 'No description provided'}
 
-Visit: https://mulesoo.vercel.app | Contact: +27 759 440 377
+---VERIFICATION CODE---
+Code: ${verificationCode}
 
-Thank you for choosing MuleSoo!`;
+Keep this code safe - required for project verification!
+
+---BOOKING REFERENCE---
+Reference: ${bookingDetails?.bookingReference || 'N/A'}
+
+---NEXT STEPS---
+1. Review your booking details above
+2. Ethan will contact you within 2 hours
+3. Download your PDF agreement from your email
+4. We will confirm project start date
+
+---NEED HELP?---
+Email: hello@mulukenendashaw68@gmail.com
+WhatsApp: +27 759 440 377
+Website: https://mulesoo.vercel.app
+
+Thank you for choosing MULESOO! We're excited to build something amazing with you!`;
 
   const result = await sendWhatsAppMessage({
     phone: phoneNumber.replace(/\D/g, ''),

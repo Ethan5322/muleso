@@ -58,7 +58,7 @@ export default function QRDownloadPage() {
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText('https://mulesoo.com');
+    navigator.clipboard.writeText('https://mulesoo.vercel.app');
     toast.success('Link copied to clipboard');
   };
 
