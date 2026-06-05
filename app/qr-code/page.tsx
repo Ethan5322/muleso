@@ -1,14 +1,10 @@
-import { Metadata } from 'next';
+'use client';
+
 import dynamic from 'next/dynamic';
 
 const ProfessionalQRCode = dynamic(() => import('@/components/ProfessionalQRCode'), {
   ssr: false,
 });
-
-export const metadata: Metadata = {
-  title: 'Download QR Code | MuleSoo',
-  description: 'Download your professional MuleSoo QR code for printing and framing',
-};
 
 export default function QRCodePage() {
   return (
