@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
  * Returns a canvas element that can be downloaded
  */
 export const generateFramedQRCode = async (
-  url: string = 'https://mulesoo.com',
+  url: string = 'https://mulesoo.vercel.app',
   size: number = 800
 ): Promise<string> => {
   try {

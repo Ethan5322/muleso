@@ -96,7 +96,7 @@ Verification Code: ${verificationCode}
 
 Keep this code safe for project verification.
 
-Contact: +27 759 440 377
+Visit: https://mulesoo.vercel.app | Contact: +27 759 440 377
 
 Thank you for choosing MuleSoo!`;
 

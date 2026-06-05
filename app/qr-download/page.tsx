@@ -15,7 +15,7 @@ export default function QRDownloadPage() {
     const loadQR = async () => {
       try {
         setLoading(true);
-        const dataUrl = await generateFramedQRCode('https://mulesoo.com', 800);
+        const dataUrl = await generateFramedQRCode('https://mulesoo.vercel.app', 800);
         setQrImage(dataUrl);
       } catch (error) {
         console.error('Failed to load QR code:', error);
@@ -191,7 +191,7 @@ export default function QRDownloadPage() {
           >
             <Copy size={28} className="mb-2" />
             <span className="text-sm text-center">Copy Link</span>
-            <span className="text-xs opacity-90 mt-1">(www.mulesoo.com)</span>
+            <span className="text-xs opacity-90 mt-1">(mulesoo.vercel.app)</span>
           </motion.button>
         </motion.div>
 

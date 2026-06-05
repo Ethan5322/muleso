@@ -29,18 +29,18 @@ export const metadata: Metadata = {
     "affordable website design",
   ],
   alternates: {
-    canonical: 'https://mulesoo.com',
+    canonical: 'https://mulesoo.vercel.app',
   },
   openGraph: {
     title: "MuleSoo Digital Services | Professional Websites & AI Solutions",
     description: "World-class websites, AI chatbots, and digital solutions for South African businesses. Fast delivery. Premium quality.",
-    url: "https://mulesoo.com",
+    url: "https://mulesoo.vercel.app",
     siteName: "MuleSoo",
     locale: "en_ZA",
     type: "website",
     images: [
       {
-        url: "https://mulesoo.com/og-image.jpg",
+        url: "https://mulesoo.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "MuleSoo Digital Services",
@@ -101,10 +101,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "@id": "https://mulesoo.com",
+              "@id": "https://mulesoo.vercel.app",
               name: "MuleSoo Digital Services",
-              url: "https://mulesoo.com",
-              logo: "https://mulesoo.com/logo.png",
+              url: "https://mulesoo.vercel.app",
+              logo: "https://mulesoo.vercel.app/logo.png",
               description: "Professional web design, AI chatbots, logos, and digital solutions for South African businesses.",
               address: {
                 "@type": "PostalAddress",
@@ -140,8 +140,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "MuleSoo Digital Services",
-              url: "https://mulesoo.com",
-              logo: "https://mulesoo.com/logo.png",
+              url: "https://mulesoo.vercel.app",
+              logo: "https://mulesoo.vercel.app/logo.png",
               description: "Award-winning digital agency providing web design, AI chatbots, and custom digital solutions.",
               foundingDate: "2022",
               founders: [
@@ -172,19 +172,19 @@ export default function RootLayout({
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://mulesoo.com",
+                  item: "https://mulesoo.vercel.app",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "Services",
-                  item: "https://mulesoo.com/services",
+                  item: "https://mulesoo.vercel.app/services",
                 },
                 {
                   "@type": "ListItem",
                   position: 3,
                   name: "Portfolio",
-                  item: "https://mulesoo.com/portfolio",
+                  item: "https://mulesoo.vercel.app/portfolio",
                 },
               ],
             }),
@@ -198,14 +198,14 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              url: "https://mulesoo.com",
+              url: "https://mulesoo.vercel.app",
               name: "MuleSoo Digital Services",
               description: "Professional web design and digital solutions",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://mulesoo.com/search?q={search_term_string}",
+                  urlTemplate: "https://mulesoo.vercel.app/search?q={search_term_string}",
                 },
                 "query-input": "required name=search_term_string",
               },
