@@ -32,10 +32,6 @@ export default function ProfessionalQRCode({
         const qr = await generateProfessionalQR({
           url,
           size,
-          color: {
-            dark: '#00C8FF',
-            light: '#FFFFFF',
-          },
         });
         setQrImage(qr);
       } catch (error) {
