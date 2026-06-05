@@ -5,7 +5,7 @@ import { MessageCircle, X, ArrowUp, Download, CheckCircle, AlertCircle } from 'l
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
-import { generateProfessionalPDF } from '@/lib/generateProfessionalPDF';
+import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
 
 interface Message {
   id: string;
@@ -388,7 +388,8 @@ export default function ChatbotWidget() {
   };
 
   const generatePDF = () => {
-    generateProfessionalPDF(bookingData);
+    submitBooking();
+    generateCleanBookingPDF(bookingData);
   };
 
   return (
@@ -440,21 +441,23 @@ export default function ChatbotWidget() {
               </div>
             )}
 
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-blue)] text-white p-6 rounded-t-3xl flex-shrink-0">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="text-2xl">🤖</div>
-                <div>
-                  <div className="font-bold font-sora text-lg">Soo</div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent-green)] animate-pulse" />
-                    <span className="text-xs opacity-90">Online</span>
-                  </div>
+            {/* Header - Clean with Logo */}
+            <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-3xl flex-shrink-0 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl font-bold font-sora">
+                  <span className="text-[var(--accent-blue)]">MULE</span>
+                  <span>SOO</span>
                 </div>
               </div>
-              <p className="text-sm opacity-95 font-medium">
-                {stage === 'summary' ? '✅ Booking Confirmed' : 'Step ' + (currentStageIndex + 1) + ' of ' + allStages.length}
-              </p>
+              <div className="text-right">
+                <div className="flex items-center gap-2 justify-end">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent-green)] animate-pulse" />
+                  <span className="text-xs opacity-90">Online</span>
+                </div>
+                <p className="text-xs opacity-95 font-medium">
+                  {stage === 'summary' ? '✅ Confirmed' : 'Step ' + (currentStageIndex + 1) + ' of ' + allStages.length}
+                </p>
+              </div>
             </div>
 
             {/* Messages Area */}
