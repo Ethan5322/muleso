@@ -25,9 +25,30 @@ export default function AdminLogin() {
   useEffect(() => {
     const session = localStorage.getItem('admin_session');
     if (session) {
-      const sessionData = JSON.parse(session);
-      if (sessionData.timestamp && Date.now() - sessionData.timestamp < 24 * 60 * 60 * 1000) {
+      try {
+        const sessionData = JSON.parse(session);
+
+        // STRONG VALIDATION: Verify all required fields exist
+        if (!sessionData.authenticated || !sessionData.timestamp) {
+          localStorage.removeItem('admin_session');
+          return;
+        }
+
+        // Check session expiry (24 hours)
+        const sessionAge = Date.now() - sessionData.timestamp;
+        const MAX_SESSION_AGE = 24 * 60 * 60 * 1000;
+
+        if (sessionAge > MAX_SESSION_AGE) {
+          localStorage.removeItem('admin_session');
+          toast.error('🔒 Session expired. Please login again.');
+          return;
+        }
+
+        // Session is valid - redirect to admin
         router.push('/admin');
+      } catch (error) {
+        console.error('Invalid session data:', error);
+        localStorage.removeItem('admin_session');
       }
     }
 
