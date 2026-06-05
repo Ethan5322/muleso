@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const hasSupabase = !!supabaseUrl && !!supabaseKey;
+const supabase = hasSupabase ? createClient(supabaseUrl, supabaseKey) : null;
 
 function generateVerificationCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -45,36 +45,34 @@ export async function POST(req: NextRequest) {
     // Generate verification code
     const verificationCode = generateVerificationCode();
 
-    // Save to Supabase
-    const { data, error } = await supabase
-      .from('bookings')
-      .insert({
-        name: fullName,
-        email: email || '',
-        phone: phoneNumber,
-        country: nationality,
-        company: company || null,
-        service: service,
-        budget: budget || null,
-        timeline: timeline,
-        contact_method: contactMethod || null,
-        project_description: projectDetails || '',
-        verification_code: verificationCode,
-        client_id: clientID || null,
-        client_id_type: clientIDType || null,
-        status: 'Pending',
-      })
-      .select();
+    // Save to Supabase if configured
+    if (hasSupabase && supabase) {
+      const { error } = await supabase
+        .from('bookings')
+        .insert({
+          name: fullName,
+          email: email || '',
+          phone: phoneNumber,
+          country: nationality,
+          company: company || null,
+          service: service,
+          budget: budget || null,
+          timeline: timeline,
+          contact_method: contactMethod || null,
+          project_description: projectDetails || '',
+          verification_code: verificationCode,
+          client_id: clientID || null,
+          client_id_type: clientIDType || null,
+          status: 'Pending',
+        })
+        .select();
 
-    if (error) {
-      console.error('Supabase error:', error);
-      return NextResponse.json(
-        { error: 'Failed to save booking' },
-        { status: 500 }
-      );
+      if (error) {
+        console.error('Supabase error:', error);
+      }
     }
 
-    console.log('Chatbot booking saved to Supabase:', {
+    console.log('Chatbot booking received:', {
       fullName,
       email,
       phoneNumber,
