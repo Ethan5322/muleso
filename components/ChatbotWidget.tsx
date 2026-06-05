@@ -5,7 +5,7 @@ import { MessageCircle, X, ArrowUp, Download, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
-import jsPDF from 'jspdf';
+import { generateServiceRequestPDF } from '@/lib/generateServiceRequestPDF';
 import { generateTermsAndConditionsPDF } from '@/lib/generateTermsAndConditionsPDF';
 
 interface Message {
@@ -22,6 +22,7 @@ interface BookingData {
   service: string;
   usageType: string;
   timeline: string;
+  projectDetails: string;
   termsAccepted: boolean;
 }
 
@@ -75,6 +76,7 @@ export default function ChatbotWidget() {
     service: '',
     usageType: '',
     timeline: '',
+    projectDetails: '',
     termsAccepted: false,
   });
   const [showTCModal, setShowTCModal] = useState(false);
@@ -199,6 +201,7 @@ export default function ChatbotWidget() {
         break;
 
       case 'details':
+        setBookingData(prev => ({ ...prev, projectDetails: userInput }));
         addMessage(userInput, 'user');
         setTimeout(() => {
           addMessage('✅ Perfect! Your booking is ready!', 'bot');
@@ -236,257 +239,8 @@ export default function ChatbotWidget() {
   };
 
   const generatePDF = () => {
-    // Submit booking data to API
     submitBooking();
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const margin = 20;
-    const contentWidth = pageWidth - 2 * margin;
-    let yPos = 15;
-    const colors = {
-      darkBg: [5, 8, 16],
-      accentBlue: [0, 200, 255],
-      accentPurple: [123, 47, 255],
-      accentGold: [232, 184, 75],
-      textPrimary: [240, 242, 250],
-      textSecondary: [168, 178, 208],
-    };
-
-    // ===== HEADER =====
-    doc.setFillColor(5, 8, 16);
-    doc.rect(0, 0, pageWidth, 45, 'F');
-
-    // Company name
-    doc.setFontSize(24);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 200, 255);
-    doc.text('MULESOO', margin, 18);
-
-    // Company subtitle
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(160, 178, 208);
-    doc.text('🚀 Building World-Class Digital Products for Africa', margin, 26);
-    doc.text('Digital Services | Pretoria, South Africa', margin, 31);
-    doc.text('Phone: 0781500968 | Email: mulukenendashaw68@gmail.com', margin, 36);
-
-    // Document title (right side)
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(200, 200, 200);
-    doc.text('SERVICE REQUEST FORM', pageWidth - margin, 18, { align: 'right' });
-
-    // Date (right side)
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(150, 150, 150);
-    const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-    doc.text('Date: ' + currentDate, pageWidth - margin, 26, { align: 'right' });
-
-    yPos = 50;
-
-    // ===== DIVIDER =====
-    doc.setDrawColor(0, 200, 255);
-    doc.setLineWidth(1);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 10;
-
-    // ===== SECTION 1: CLIENT INFORMATION =====
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 200, 255);
-    doc.text('CLIENT INFORMATION', margin, yPos);
-    yPos += 8;
-
-    // Background box with proper height for spacing
-    const infoBoxHeight = 88;
-    doc.setFillColor(240, 242, 250);
-    doc.rect(margin, yPos, contentWidth, infoBoxHeight, 'F');
-    doc.setDrawColor(0, 200, 255);
-    doc.setLineWidth(0.5);
-    doc.rect(margin, yPos, contentWidth, infoBoxHeight);
-
-    // Information fields with proper spacing
-    doc.setFontSize(10);
-    doc.setTextColor(5, 8, 16);
-    let fieldYPos = yPos + 8;
-
-    // Full Name
-    doc.setFont('helvetica', 'bold');
-    doc.text('Full Name:', margin + 5, fieldYPos);
-    doc.setFont('helvetica', 'normal');
-    doc.text(bookingData.fullName, margin + 50, fieldYPos);
-    fieldYPos += 16;
-
-    // Phone Number
-    doc.setFont('helvetica', 'bold');
-    doc.text('WhatsApp Number:', margin + 5, fieldYPos);
-    doc.setFont('helvetica', 'normal');
-    doc.text(bookingData.phoneNumber, margin + 50, fieldYPos);
-    fieldYPos += 16;
-
-    // Country
-    doc.setFont('helvetica', 'bold');
-    doc.text('Country:', margin + 5, fieldYPos);
-    doc.setFont('helvetica', 'normal');
-    doc.text(bookingData.nationality, margin + 50, fieldYPos);
-    fieldYPos += 16;
-
-    // Usage Type
-    doc.setFont('helvetica', 'bold');
-    doc.text('Usage Type:', margin + 5, fieldYPos);
-    doc.setFont('helvetica', 'normal');
-    doc.text(bookingData.usageType, margin + 50, fieldYPos);
-
-    yPos += infoBoxHeight + 8;
-
-    // ===== DIVIDER =====
-    doc.setDrawColor(0, 200, 255);
-    doc.setLineWidth(1);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 10;
-
-    // ===== SECTION 2: SERVICE & TIMELINE =====
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(123, 47, 255);
-    doc.text('SERVICE & PROJECT TIMELINE', margin, yPos);
-    yPos += 8;
-
-    // Service & Timeline box
-    const serviceBoxHeight = 32;
-    doc.setFillColor(240, 242, 250);
-    doc.rect(margin, yPos, contentWidth, serviceBoxHeight, 'F');
-    doc.setDrawColor(123, 47, 255);
-    doc.setLineWidth(0.5);
-    doc.rect(margin, yPos, contentWidth, serviceBoxHeight);
-
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(5, 8, 16);
-    doc.text('Service:', margin + 5, yPos + 8);
-    doc.setFont('helvetica', 'normal');
-    doc.text(bookingData.service, margin + 35, yPos + 8);
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('Timeline:', margin + 5, yPos + 18);
-    doc.setFont('helvetica', 'normal');
-    doc.text(bookingData.timeline, margin + 35, yPos + 18);
-
-    yPos += serviceBoxHeight + 10;
-
-    // ===== DIVIDER =====
-    doc.setDrawColor(0, 200, 255);
-    doc.setLineWidth(1);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 10;
-
-    // ===== SECTION 3: CONTACT DETAILS =====
-    doc.setFontSize(13);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(232, 184, 75);
-    doc.text('HOW WE WILL CONTACT YOU', margin, yPos);
-    yPos += 8;
-
-    // Contact info box
-    const contactBoxHeight = 28;
-    doc.setFillColor(240, 242, 250);
-    doc.rect(margin, yPos, contentWidth, contactBoxHeight, 'F');
-    doc.setDrawColor(232, 184, 75);
-    doc.setLineWidth(0.5);
-    doc.rect(margin, yPos, contentWidth, contactBoxHeight);
-
-    doc.setFontSize(10);
-    doc.setTextColor(5, 8, 16);
-    let contactYPos = yPos + 6;
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('Email:', margin + 5, contactYPos);
-    doc.setFont('helvetica', 'normal');
-    doc.text('mulukenendashaw68@gmail.com', margin + 35, contactYPos);
-    contactYPos += 10;
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('WhatsApp:', margin + 5, contactYPos);
-    doc.setFont('helvetica', 'normal');
-    doc.text('0781500968', margin + 35, contactYPos);
-
-    yPos += contactBoxHeight + 10;
-
-    // ===== DIVIDER =====
-    doc.setDrawColor(0, 200, 255);
-    doc.setLineWidth(1);
-    doc.line(margin, yPos, pageWidth - margin, yPos);
-    yPos += 10;
-
-    // ===== SECTION 4: IMPORTANT TERMS & CONDITIONS =====
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(232, 184, 75);
-    doc.text('IMPORTANT TERMS & CONDITIONS', margin, yPos);
-    yPos += 8;
-
-    const termsBoxHeight = 55;
-    doc.setFillColor(255, 252, 240);
-    doc.rect(margin, yPos, contentWidth, termsBoxHeight, 'F');
-    doc.setDrawColor(232, 184, 75);
-    doc.setLineWidth(0.5);
-    doc.rect(margin, yPos, contentWidth, termsBoxHeight);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(5, 8, 16);
-    let termsYPos = yPos + 6;
-
-    const termsText = [
-      '• WITHOUT DEPOSIT: Project cannot be processed. A 50% deposit is required to begin work.',
-      '• FULL PAYMENT REQUIRED: The complete project fee must be paid before final delivery.',
-      '• PARTIAL DELIVERABLES: Without full payment, downloadable PDFs and source code will NOT be provided.',
-      '• DELIVERY: Upon receipt of full payment, you will receive all project files and permanent access.',
-      '• SUPPORT: 30 days of free support included. Additional support available at hourly rates.',
-    ];
-
-    termsText.forEach((term, idx) => {
-      const split = doc.splitTextToSize(term, contentWidth - 10);
-      split.forEach((line: string) => {
-        if (termsYPos - yPos < termsBoxHeight - 2) {
-          doc.text(line, margin + 5, termsYPos);
-          termsYPos += 6;
-        }
-      });
-    });
-
-    yPos += termsBoxHeight + 10;
-
-    // ===== NEXT STEPS BOX =====
-    doc.setFillColor(0, 200, 255);
-    doc.rect(margin, yPos, contentWidth, 20, 'F');
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(5, 8, 16);
-    doc.text('NEXT STEPS: Ethan will contact you within 2 hours on business days.', margin + 5, yPos + 7);
-
-    yPos = pageHeight - 20;
-
-    // ===== FOOTER =====
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(128, 128, 128);
-    doc.line(margin, yPos - 5, pageWidth - margin, yPos - 5);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 200, 255);
-    doc.text('🚀 Building World-Class Digital Products for Africa', pageWidth / 2, yPos - 2, { align: 'center' });
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(128, 128, 128);
-    doc.text('MuleSoo Digital Services | Pretoria, South Africa | www.mulesoo.com', pageWidth / 2, yPos + 3, { align: 'center' });
-    doc.text('Service Request Form - ' + currentDate, pageWidth / 2, yPos + 8, { align: 'center' });
-
-    // Generate filename with date
-    const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
-    const filename = `MuleSoo_ServiceRequest_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;
-
-    doc.save(filename);
+    generateServiceRequestPDF(bookingData);
   };
 
   return (
@@ -653,6 +407,10 @@ export default function ChatbotWidget() {
                       <p className="text-xs text-[var(--text-secondary)] mb-1">Timeline</p>
                       <p className="text-[var(--text-primary)] font-semibold">{bookingData.timeline}</p>
                     </div>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
+                      <p className="text-xs text-[var(--text-secondary)] mb-1">Project Details</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs line-clamp-2">{bookingData.projectDetails}</p>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <motion.button
@@ -748,6 +506,7 @@ export default function ChatbotWidget() {
                       service: '',
                       usageType: '',
                       timeline: '',
+                      projectDetails: '',
                       termsAccepted: false,
                     });
                   }}

@@ -4,56 +4,62 @@ export const generateTermsAndConditionsPDF = () => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 20;
+  const margin = 15;
   const contentWidth = pageWidth - 2 * margin;
   let yPos = 15;
 
+  const colors = {
+    accentBlue: [0, 200, 255],
+    accentGold: [232, 184, 75],
+    accentPurple: [123, 47, 255],
+    textDark: [30, 30, 30],
+    textGray: [80, 80, 80],
+    lightGray: [240, 242, 250],
+  };
+
   // ===== HEADER WITH LOGO AND BRANDING =====
-  doc.setFillColor(5, 8, 16);
-  doc.rect(0, 0, pageWidth, 50, 'F');
+  doc.setFillColor(...colors.lightGray);
+  doc.rect(0, 0, pageWidth, 40, 'F');
 
   // MuleSoo Logo/Brand
-  doc.setFontSize(28);
+  doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(0, 200, 255);
-  doc.text('MULESOO', margin, 20);
-
-  // Slogan
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(232, 184, 75);
-  doc.text('🚀 Building World-Class Digital Products for Africa', margin, 28);
+  doc.setTextColor(...colors.accentBlue);
+  doc.text('MULE', margin, 16);
+  doc.setTextColor(...colors.textDark);
+  doc.text('SOO', margin + 23, 16);
 
   // Document title
-  doc.setFontSize(11);
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(160, 178, 208);
-  doc.text('TERMS & CONDITIONS', pageWidth - margin, 20, { align: 'right' });
+  doc.setTextColor(...colors.accentBlue);
+  doc.text('TERMS & CONDITIONS', pageWidth - margin, 16, { align: 'right' });
 
   // Date
-  doc.setFontSize(9);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...colors.textGray);
   const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
-  doc.text('Effective: ' + currentDate, pageWidth - margin, 28, { align: 'right' });
+  doc.text('Effective: ' + currentDate, pageWidth - margin, 24, { align: 'right' });
 
-  yPos = 55;
+  yPos = 45;
 
   // ===== DIVIDER =====
-  doc.setDrawColor(0, 200, 255);
-  doc.setLineWidth(1.5);
+  doc.setDrawColor(...colors.accentBlue);
+  doc.setLineWidth(0.8);
   doc.line(margin, yPos, pageWidth - margin, yPos);
-  yPos += 12;
-
-  // ===== SECTION 1: PAYMENT & DEPOSITS =====
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(232, 184, 75);
-  doc.text('1. PAYMENT & DEPOSIT REQUIREMENTS', margin, yPos);
   yPos += 8;
 
-  doc.setFontSize(10);
+  // ===== SECTION 1: PAYMENT & DEPOSITS =====
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.accentGold);
+  doc.text('1. PAYMENT & DEPOSIT REQUIREMENTS', margin, yPos);
+  yPos += 6;
+
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(50, 50, 50);
+  doc.setTextColor(...colors.textDark);
 
   const section1Text = [
     '• A 50% deposit is REQUIRED to begin any project. Without this deposit, MuleSoo cannot allocate resources or start development.',
