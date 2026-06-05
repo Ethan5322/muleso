@@ -33,17 +33,25 @@ export default function BookingsPage() {
   const loadBookings = async () => {
     try {
       setLoading(true);
+      console.log('Loading bookings from Supabase...');
+
       const { data, error } = await supabase
         .from('bookings')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        toast.error(`Error: ${error.message}`);
+        return;
+      }
+
+      console.log('Bookings loaded:', data);
       setBookings(data || []);
       setFilteredBookings(data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading bookings:', error);
-      toast.error('Failed to load bookings');
+      toast.error(`Failed to load bookings: ${error.message}`);
     } finally {
       setLoading(false);
     }
