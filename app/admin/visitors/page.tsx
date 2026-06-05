@@ -215,7 +215,7 @@ export default function VisitorsPage() {
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value) => `${value.toFixed(1)}%`}
+                  formatter={(value: any) => `${Number(value).toFixed(1)}%`}
                   contentStyle={{
                     backgroundColor: '#1a1a1a',
                     border: '1px solid #00BFFF',
