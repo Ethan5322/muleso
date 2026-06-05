@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, Download, FileText } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, Download, FileText, Loader } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
-import { generateServiceRequestPDF } from '@/lib/generateServiceRequestPDF';
-import { generateTermsAndConditionsPDF } from '@/lib/generateTermsAndConditionsPDF';
+import { generateProfessionalPDF } from '@/lib/generateProfessionalPDF';
 
 interface Message {
   id: string;
@@ -23,6 +22,7 @@ interface BookingData {
   usageType: string;
   timeline: string;
   projectDetails: string;
+  improvedProjectDetails: string;
   termsAccepted: boolean;
 }
 
@@ -77,8 +77,10 @@ export default function ChatbotWidget() {
     usageType: '',
     timeline: '',
     projectDetails: '',
+    improvedProjectDetails: '',
     termsAccepted: false,
   });
+  const [isImproving, setIsImproving] = useState(false);
   const [showTCModal, setShowTCModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -109,6 +111,24 @@ export default function ChatbotWidget() {
     return COUNTRY_CODES[normalized] || '+27'; // Default to South Africa
   };
 
+  const improveProjectDetails = async (details: string, service: string) => {
+    setIsImproving(true);
+    try {
+      const response = await fetch('/api/improve-project-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectDetails: details, service }),
+      });
+      const data = await response.json();
+      return data.improved || details;
+    } catch (error) {
+      console.error('Error improving project details:', error);
+      return details;
+    } finally {
+      setIsImproving(false);
+    }
+  };
+
   const formatPhoneWithCountryCode = (phone: string, country: string): string => {
     const cleanPhone = phone.replace(/\D/g, '');
     const countryCode = getCountryCode(country);
@@ -133,6 +153,23 @@ export default function ChatbotWidget() {
         setStage('greeting');
       }, 50);
     }
+  };
+
+  const resetChat = () => {
+    setIsOpen(false);
+    setMessages([]);
+    setStage('greeting');
+    setBookingData({
+      fullName: '',
+      phoneNumber: '',
+      nationality: '',
+      service: '',
+      usageType: '',
+      timeline: '',
+      projectDetails: '',
+      improvedProjectDetails: '',
+      termsAccepted: false,
+    });
   };
 
   const handleServiceSelect = (service: string) => {
@@ -203,12 +240,18 @@ export default function ChatbotWidget() {
       case 'details':
         setBookingData(prev => ({ ...prev, projectDetails: userInput }));
         addMessage(userInput, 'user');
+        addMessage('⏳ Processing your project brief...', 'bot');
+
+        const improved = await improveProjectDetails(userInput, bookingData.service);
+        setBookingData(prev => ({ ...prev, improvedProjectDetails: improved }));
+
         setTimeout(() => {
+          setMessages(prev => prev.filter(msg => msg.text !== '⏳ Processing your project brief...'));
           addMessage('✅ Perfect! Your booking is ready!', 'bot');
           setTimeout(() => {
             setStage('summary');
           }, 300);
-        }, 300);
+        }, 800);
         break;
 
       default:
@@ -240,7 +283,7 @@ export default function ChatbotWidget() {
 
   const generatePDF = () => {
     submitBooking();
-    generateServiceRequestPDF(bookingData);
+    generateProfessionalPDF(bookingData);
   };
 
   return (
@@ -407,33 +450,24 @@ export default function ChatbotWidget() {
                       <p className="text-xs text-[var(--text-secondary)] mb-1">Timeline</p>
                       <p className="text-[var(--text-primary)] font-semibold">{bookingData.timeline}</p>
                     </div>
-                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg">
-                      <p className="text-xs text-[var(--text-secondary)] mb-1">Project Details</p>
-                      <p className="text-[var(--text-primary)] font-semibold text-xs line-clamp-2">{bookingData.projectDetails}</p>
+                    <div className="bg-[var(--bg-primary)] p-3 rounded-lg border border-[var(--accent-gold)]">
+                      <p className="text-xs text-[var(--accent-gold)] mb-1 font-semibold">✨ Your Project Brief</p>
+                      <p className="text-[var(--text-primary)] font-semibold text-xs leading-relaxed">
+                        {bookingData.improvedProjectDetails || bookingData.projectDetails}
+                      </p>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={generatePDF}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
-                    >
-                      <Download size={18} />
-                      Download Service Request
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={generateTermsAndConditionsPDF}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] font-semibold rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-all text-sm"
-                    >
-                      <FileText size={16} />
-                      Download T&C
-                    </motion.button>
-                  </div>
-                  <p className="text-xs text-[var(--text-secondary)] text-center">
-                    ✅ Download & share with Ethan
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={generatePDF}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                  >
+                    <Download size={18} />
+                    Download Your PDF
+                  </motion.button>
+                  <p className="text-xs text-[var(--text-secondary)] text-center mt-3">
+                    📄 One-page PDF with all details and terms included
                   </p>
                 </motion.div>
               )}
@@ -495,21 +529,7 @@ export default function ChatbotWidget() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setMessages([]);
-                    setStage('greeting');
-                    setBookingData({
-                      fullName: '',
-                      phoneNumber: '',
-                      nationality: '',
-                      service: '',
-                      usageType: '',
-                      timeline: '',
-                      projectDetails: '',
-                      termsAccepted: false,
-                    });
-                  }}
+                  onClick={resetChat}
                   className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-all font-medium"
                 >
                   Close Chat
