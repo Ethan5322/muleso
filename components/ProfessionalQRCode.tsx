@@ -90,27 +90,44 @@ export default function ProfessionalQRCode({
             className="relative"
           >
             {/* Professional Frame Effect */}
-            <div className="relative bg-white p-6 rounded-xl shadow-2xl border-4 border-[var(--accent-gold)]">
+            <div className="relative bg-white p-8 rounded-2xl shadow-2xl border-4 border-[var(--accent-gold)]">
               {/* Company Badge on Frame */}
               <div className="absolute -top-4 -left-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white px-4 py-2 rounded-lg text-xs font-bold shadow-lg">
                 MULESOO
               </div>
 
-              {/* QR Code */}
-              {isLoading ? (
-                <div className="w-64 h-64 bg-[var(--bg-card)] rounded-lg flex items-center justify-center animate-pulse">
-                  <span className="text-[var(--text-secondary)] text-sm">
-                    Generating QR...
-                  </span>
+              {/* QR Code Container */}
+              <div className="flex flex-col items-center gap-4">
+                {/* QR Code */}
+                {isLoading ? (
+                  <div className="w-72 h-72 bg-[var(--bg-card)] rounded-lg flex items-center justify-center animate-pulse">
+                    <span className="text-[var(--text-secondary)] text-sm">
+                      Generating QR...
+                    </span>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <img
+                      src={qrImage}
+                      alt="MuleSoo QR Code"
+                      className="w-72 h-72 rounded-lg"
+                      style={{ imageRendering: 'crisp-edges' }}
+                    />
+                    {/* Glow Effect */}
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--accent-blue)] to-transparent opacity-20 pointer-events-none" />
+                  </div>
+                )}
+
+                {/* Scan Me Text */}
+                <div className="text-center space-y-2 w-full">
+                  <p className="text-3xl font-bold font-sora text-[var(--accent-blue)]">
+                    📱 Scan Me
+                  </p>
+                  <p className="text-sm text-gray-600 font-medium">
+                    Point your phone camera at this QR code
+                  </p>
                 </div>
-              ) : (
-                <img
-                  src={qrImage}
-                  alt="MuleSoo QR Code"
-                  className="w-64 h-64 rounded-lg"
-                  style={{ imageRendering: 'crisp-edges' }}
-                />
-              )}
+              </div>
 
               {/* Booking Reference Badge (if provided) */}
               {bookingReference && (

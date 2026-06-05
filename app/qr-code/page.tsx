@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ProfessionalQRCode = dynamic(() => import('@/components/ProfessionalQRCode'), {
@@ -37,28 +36,36 @@ export default function QRCodePage() {
             className="flex justify-center"
           >
             {/* Phone Frame */}
-            <div className="relative w-80 h-[600px]">
+            <div className="relative w-80 h-[650px]">
               {/* Phone Body */}
               <div className="absolute inset-0 bg-black rounded-[50px] shadow-2xl border-8 border-gray-900 overflow-hidden">
                 {/* Notch */}
                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-8 bg-black rounded-b-3xl z-50" />
 
                 {/* Screen Content */}
-                <div className="absolute inset-0 pt-10 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)] flex flex-col items-center justify-center px-4">
+                <div className="absolute inset-0 pt-10 bg-white flex flex-col items-center justify-center px-4 overflow-hidden">
                   {/* Status Bar */}
-                  <div className="absolute top-2 w-full flex justify-between items-center px-6 text-white text-xs">
+                  <div className="absolute top-2 w-full flex justify-between items-center px-6 text-black text-xs font-semibold">
                     <span>9:41</span>
                     <span>●●●●●</span>
                   </div>
 
-                  {/* QR Code on Phone */}
-                  <div className="bg-white p-6 rounded-3xl shadow-2xl mb-6">
-                    <div className="w-40 h-40 bg-white flex items-center justify-center rounded-lg">
-                      <svg viewBox="0 0 200 200" className="w-full h-full" fill="none">
+                  {/* App Header */}
+                  <div className="absolute top-10 w-full text-center">
+                    <p className="text-2xl font-bold font-sora bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] bg-clip-text text-transparent">
+                      MULESOO
+                    </p>
+                    <p className="text-xs text-gray-600 font-medium">Digital Services</p>
+                  </div>
+
+                  {/* QR Code Display */}
+                  <div className="mt-16 flex flex-col items-center gap-3">
+                    {/* QR Code Background */}
+                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                      <svg viewBox="0 0 200 200" className="w-40 h-40" fill="none">
                         <rect width="200" height="200" fill="white" />
-                        {/* Simplified QR pattern */}
-                        <g fill="#00C8FF" opacity="0.8">
-                          {/* Corner patterns */}
+                        {/* QR Pattern Mockup */}
+                        <g fill="#00C8FF">
                           <rect x="10" y="10" width="50" height="50" />
                           <rect x="20" y="20" width="30" height="30" fill="white" />
                           <rect x="25" y="25" width="20" height="20" />
@@ -71,19 +78,23 @@ export default function QRCodePage() {
                           <rect x="20" y="150" width="30" height="30" fill="white" />
                           <rect x="25" y="155" width="20" height="20" />
 
-                          {/* Data pattern */}
                           {[0, 1, 0, 1, 1, 0, 1, 0].map((bit, i) =>
                             bit ? <rect key={i} x={70 + i * 10} y={70} width="8" height="8" /> : null
                           )}
                         </g>
                       </svg>
                     </div>
+
+                    {/* Scan Me Text */}
+                    <div className="text-center">
+                      <p className="text-2xl font-bold font-sora text-[#00C8FF]">📱 Scan Me</p>
+                      <p className="text-xs text-gray-500 mt-1">Point camera to scan</p>
+                    </div>
                   </div>
 
-                  {/* Phone Text */}
-                  <div className="text-center text-white">
-                    <p className="text-sm font-semibold mb-2">MULESOO</p>
-                    <p className="text-xs text-gray-400">Digital Services</p>
+                  {/* Website URL */}
+                  <div className="absolute bottom-8 text-center">
+                    <p className="text-xs font-semibold text-gray-600">mulesoo.com</p>
                   </div>
                 </div>
               </div>

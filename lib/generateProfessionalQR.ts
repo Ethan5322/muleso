@@ -18,7 +18,7 @@ export const generateProfessionalQR = (options: QROptions): Promise<string> => {
         url,
         {
           errorCorrectionLevel: 'H',
-          margin: 2,
+          margin: 1,
           width: size,
           color: {
             dark: '#00C8FF',
