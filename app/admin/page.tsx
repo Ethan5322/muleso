@@ -9,7 +9,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import toast from 'react-hot-toast';
 
 type TabType = 'overview' | 'bookings' | 'clients' | 'revenue' | 'analytics';
-type BookingStatus = 'Pending' | 'Confirmed' | 'In Progress' | 'Completed' | 'Cancelled';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -282,7 +281,7 @@ export default function AdminDashboard() {
               {(['Pending', 'Confirmed', 'Completed'] as BookingStatus[]).map(status => (
                 <div key={status} className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-4">
-                    <div className={`w-3 h-3 rounded-full ${status === 'Pending' ? 'bg-[#FFA500]' : status === 'Confirmed' ? 'bg-[#00BFFF]' : status === 'In Progress' ? 'bg-[#7B2FBE]' : 'bg-[#00FF88]'}`}></div>
+                    <div className={`w-3 h-3 rounded-full ${status === 'Pending' ? 'bg-[#FFA500]' : status === 'Confirmed' ? 'bg-[#00BFFF]' : 'bg-[#00FF88]'}`}></div>
                     <h3 className="font-bold text-white">{status}</h3>
                     <span className="text-[#00BFFF]/60 text-sm ml-auto">{getBookingsByStatus(status).length}</span>
                   </div>
