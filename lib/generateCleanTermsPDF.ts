@@ -12,12 +12,11 @@ export const generateCleanTermsPDF = () => {
   const margin = 12;
   const contentWidth = pageWidth - 2 * margin;
 
-  // Set default font
   doc.setFont('helvetica');
 
   let yPos = margin;
 
-  // ===== HEADER =====
+  // HEADER
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -28,13 +27,11 @@ export const generateCleanTermsPDF = () => {
   doc.setTextColor(100, 100, 100);
   doc.text('Digital Services', margin, yPos + 5);
 
-  // Document title on right
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
   doc.text('TERMS & CONDITIONS', pageWidth - margin, yPos + 2, { align: 'right' });
 
-  // Date
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 100, 100);
@@ -47,13 +44,13 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 14;
 
-  // ===== DIVIDER =====
+  // DIVIDER
   doc.setDrawColor(0, 200, 255);
   doc.setLineWidth(0.4);
   doc.line(margin, yPos, pageWidth - margin, yPos);
   yPos += 5;
 
-  // ===== SECTION 1: PAYMENT =====
+  // SECTION 1: PAYMENT
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -80,7 +77,7 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 2;
 
-  // ===== SECTION 2: DELIVERABLES =====
+  // SECTION 2: DELIVERABLES
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(123, 47, 255);
@@ -107,7 +104,7 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 2;
 
-  // ===== SECTION 3: TIMELINE =====
+  // SECTION 3: TIMELINE
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -134,7 +131,7 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 2;
 
-  // ===== SECTION 4: SUPPORT =====
+  // SECTION 4: SUPPORT
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(123, 47, 255);
@@ -161,7 +158,7 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 2;
 
-  // ===== SECTION 5: LIABILITY =====
+  // SECTION 5: LIABILITY
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -184,7 +181,7 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 5;
 
-  // ===== AGREEMENT =====
+  // AGREEMENT
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
@@ -207,7 +204,7 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 5;
 
-  // ===== SIGNATURE SECTION =====
+  // SIGNATURE SECTION
   doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(30, 30, 30);
@@ -215,7 +212,6 @@ export const generateCleanTermsPDF = () => {
 
   yPos += 3;
 
-  // Signature lines
   doc.setDrawColor(30, 30, 30);
   doc.setLineWidth(0.3);
 
@@ -228,7 +224,7 @@ export const generateCleanTermsPDF = () => {
   doc.line(margin + 40, yPos, pageWidth - margin, yPos);
   doc.text('Date', margin + 40, yPos + 2);
 
-  // ===== FOOTER =====
+  // FOOTER
   const footerY = pageHeight - 8;
   doc.setDrawColor(200, 200, 200);
   doc.setLineWidth(0.3);
@@ -241,7 +237,6 @@ export const generateCleanTermsPDF = () => {
     align: 'center',
   });
 
-  // Save
   const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
   const filename = `MuleSoo_Terms_and_Conditions_${date}.pdf`;
   doc.save(filename);

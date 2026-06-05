@@ -28,12 +28,11 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   const margin = 12;
   const contentWidth = pageWidth - 2 * margin;
 
-  // Set default font to avoid character issues
   doc.setFont('helvetica');
 
   let yPos = margin;
 
-  // ===== CLEAN HEADER =====
+  // HEADER
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -44,7 +43,6 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   doc.setTextColor(100, 100, 100);
   doc.text('Digital Services | Pretoria, South Africa', margin, yPos + 5);
 
-  // Booking Reference on right
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
@@ -52,14 +50,13 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 12;
 
-  // ===== DIVIDER =====
   doc.setDrawColor(0, 200, 255);
   doc.setLineWidth(0.4);
   doc.line(margin, yPos, pageWidth - margin, yPos);
 
   yPos += 5;
 
-  // ===== CLIENT INFORMATION SECTION =====
+  // CLIENT INFORMATION
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -71,7 +68,6 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
 
-  // Create clean two-column layout
   const col1X = margin;
   const col2X = margin + contentWidth / 2;
 
@@ -93,7 +89,6 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 4;
 
-  // Row 2
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Phone:', col1X, yPos);
@@ -110,7 +105,6 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 4;
 
-  // Row 3
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(100, 100, 100);
   doc.text('Country:', col1X, yPos);
@@ -127,7 +121,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 8;
 
-  // ===== PROJECT DETAILS SECTION =====
+  // PROJECT DETAILS
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(123, 47, 255);
@@ -140,7 +134,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   doc.setTextColor(30, 30, 30);
 
   const descriptionLines = doc.splitTextToSize(bookingData.improvedProjectDetails || bookingData.projectDetails, contentWidth - 1);
-  descriptionLines.forEach((line: string, idx: number) => {
+  descriptionLines.forEach((line: string) => {
     if (yPos < 110) {
       doc.text(line, margin + 1, yPos);
       yPos += 3;
@@ -149,7 +143,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 3;
 
-  // ===== SERVICE & BUDGET SECTION =====
+  // SERVICE & BUDGET
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
@@ -190,7 +184,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 8;
 
-  // ===== VERIFICATION CODE =====
+  // VERIFICATION CODE
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
@@ -206,7 +200,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 7;
 
-  // ===== NOTICE SECTION =====
+  // NOTICE SECTION
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(232, 184, 75);
@@ -232,7 +226,7 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 3;
 
-  // ===== SIGNATURE SECTION =====
+  // SIGNATURE SECTION
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(30, 30, 30);
@@ -240,7 +234,6 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
 
   yPos += 3;
 
-  // Signature line
   doc.setDrawColor(30, 30, 30);
   doc.setLineWidth(0.3);
   doc.line(margin, yPos, margin + 40, yPos);
@@ -250,13 +243,12 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
   doc.setTextColor(100, 100, 100);
   doc.text('Signature', margin, yPos + 2);
 
-  // Date line
   doc.line(margin + 50, yPos, margin + contentWidth, yPos);
   doc.text('Date', margin + 50, yPos + 2);
 
   yPos += 6;
 
-  // ===== CONTACT INFO FOOTER =====
+  // FOOTER
   const footerY = pageHeight - 12;
   doc.setDrawColor(200, 200, 200);
   doc.setLineWidth(0.3);
@@ -274,7 +266,6 @@ export const generateCleanBookingPDF = (bookingData: BookingData) => {
     align: 'center',
   });
 
-  // Generate filename
   const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
   const filename = `MuleSoo_Booking_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;
 

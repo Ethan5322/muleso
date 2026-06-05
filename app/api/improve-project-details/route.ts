@@ -4,8 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 const client = new Anthropic();
 
 export async function POST(req: NextRequest) {
+  let projectDetails = '';
+  let service = '';
+
   try {
-    const { projectDetails, service } = await req.json();
+    const data = await req.json();
+    projectDetails = data.projectDetails || '';
+    service = data.service || '';
 
     if (!projectDetails || projectDetails.trim().length === 0) {
       return NextResponse.json({
