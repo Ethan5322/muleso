@@ -974,15 +974,15 @@ export default function ChatbotWidget() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => {
+                      addMessage('🪪 National ID', 'user');
                       setBookingData({ ...bookingData, clientIDType: 'national_id' });
-                      setStage('client_id');
                       setInputValue('');
+                      setTimeout(() => {
+                        addMessage(`Perfect! Please enter your 13-digit National ID.`, 'bot');
+                        setStage('client_id');
+                      }, 300);
                     }}
-                    className={`px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
-                      bookingData.clientIDType === 'national_id'
-                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white border border-[var(--accent-blue)]'
-                        : 'bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
-                    }`}
+                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
                   >
                     🪪 National ID
                   </motion.button>
@@ -990,15 +990,15 @@ export default function ChatbotWidget() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => {
+                      addMessage('📕 Passport', 'user');
                       setBookingData({ ...bookingData, clientIDType: 'passport' });
-                      setStage('client_id');
                       setInputValue('');
+                      setTimeout(() => {
+                        addMessage(`Perfect! Please enter your Passport number.`, 'bot');
+                        setStage('client_id');
+                      }, 300);
                     }}
-                    className={`px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
-                      bookingData.clientIDType === 'passport'
-                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white border border-[var(--accent-blue)]'
-                        : 'bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
-                    }`}
+                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
                   >
                     📕 Passport
                   </motion.button>
