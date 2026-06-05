@@ -45,7 +45,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 export function useAdmin() {
   const context = useContext(AdminContext);
   if (context === undefined) {
-    throw new Error('useAdmin must be used within AdminProvider');
+    // Return default context if not within provider
+    return {
+      isAdmin: false,
+      setIsAdmin: () => {},
+      logout: () => {},
+    };
   }
   return context;
 }
