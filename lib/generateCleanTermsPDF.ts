@@ -37,7 +37,7 @@ export const generateCleanTermsPDF = async () => {
   try {
     const qrDataUrl = await new Promise<string>((resolve, reject) => {
       QRCode.toDataURL(
-        'https://muleso.vercel.app/terms',
+        'https://mulesoo.vercel.app/terms',
         { width: 1200, margin: 0 },
         (error, dataUrl) => {
           if (error) reject(error);
