@@ -146,7 +146,7 @@ export default function QRCodePage() {
                 whileTap={{ scale: 0.98 }}
               >
                 <ProfessionalQRCode
-                  url="https://mulesoo.com"
+                  url="https://muleso.vercel.app"
                   title="🎯 MuleSoo - Digital Services"
                   description="Professional QR code for printing and framing"
                   size={300}

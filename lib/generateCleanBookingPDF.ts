@@ -53,7 +53,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData) => {
   try {
     const qrDataUrl = await new Promise<string>((resolve, reject) => {
       QRCode.toDataURL(
-        `https://mulesoo.com/qr-code`,
+        `https://muleso.vercel.app`,
         { width: 1200, margin: 0 },
         (error, dataUrl) => {
           if (error) reject(error);
