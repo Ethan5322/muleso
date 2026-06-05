@@ -278,8 +278,8 @@ export default function AdminDashboard() {
             </div>
 
             {/* Kanban Board */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {(['Pending', 'Confirmed', 'In Progress', 'Completed'] as BookingStatus[]).map(status => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(['Pending', 'Confirmed', 'Completed'] as BookingStatus[]).map(status => (
                 <div key={status} className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-4">
                     <div className={`w-3 h-3 rounded-full ${status === 'Pending' ? 'bg-[#FFA500]' : status === 'Confirmed' ? 'bg-[#00BFFF]' : status === 'In Progress' ? 'bg-[#7B2FBE]' : 'bg-[#00FF88]'}`}></div>
@@ -304,8 +304,7 @@ export default function AdminDashboard() {
                               e.stopPropagation();
                               const nextStatus: { [key in BookingStatus]: BookingStatus } = {
                                 'Pending': 'Confirmed',
-                                'Confirmed': 'In Progress',
-                                'In Progress': 'Completed',
+                                'Confirmed': 'Completed',
                                 'Completed': 'Completed',
                                 'Cancelled': 'Cancelled'
                               };
@@ -476,7 +475,6 @@ export default function AdminDashboard() {
                 <BarChart data={[
                   { status: 'Pending', count: pendingBookings },
                   { status: 'Confirmed', count: bookings.filter(b => b.status === 'Confirmed').length },
-                  { status: 'In Progress', count: bookings.filter(b => b.status === 'In Progress').length },
                   { status: 'Completed', count: completedBookings }
                 ]}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#00BFFF/20" />
