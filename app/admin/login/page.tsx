@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAdmin } from '@/context/AdminContext';
 
 const ADMIN_PASSWORD = 'MuleSoo2024!';
 const MAX_ATTEMPTS = 5;
@@ -12,6 +13,7 @@ const LOCKOUT_TIME = 10 * 60 * 1000; // 10 minutes
 
 export default function AdminLogin() {
   const router = useRouter();
+  const { setIsAdmin } = useAdmin();
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -96,6 +98,7 @@ export default function AdminLogin() {
       localStorage.setItem('admin_session', JSON.stringify(session));
       localStorage.removeItem('admin_attempts');
       localStorage.removeItem('admin_lockout');
+      setIsAdmin(true);
       toast.success('✅ Login successful!');
       router.push('/admin');
     } else {
