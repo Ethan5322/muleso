@@ -119,7 +119,7 @@ export default function AdminLogin() {
     setLoading(false);
   };
 
-  const isLocked = lockedUntil && Date.now() < lockedUntil;
+  const isLocked = !!(lockedUntil && Date.now() < lockedUntil);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
