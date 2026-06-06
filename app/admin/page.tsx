@@ -1,33 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { LogOut, LayoutDashboard, ImageIcon, FileText, BookOpen, Settings } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase';
-import PortfolioManager from '@/components/admin/PortfolioManager';
-import PageManager from '@/components/admin/PageManager';
-import BookingsDashboard from '@/components/admin/BookingsDashboard';
-import AdminOverview from '@/components/admin/AdminOverview';
 
 type TabType = 'overview' | 'portfolio' | 'pages' | 'bookings' | 'settings';
 
 export default function AdminDashboard() {
-  const [authState, setAuthState] = useState<'checking' | 'authenticated'>('checking');
   const [activeTab, setActiveTab] = useState<TabType>('overview');
-
-  useEffect(() => {
-    // Middleware handles authentication, so if we're here, user is authenticated
-    setAuthState('authenticated');
-  }, []);
-
-  if (authState !== 'authenticated') {
-    return (
-      <div className="min-h-screen bg-[#0F1624] flex items-center justify-center">
-        <div className="text-[#00C8FF] text-lg">Loading admin panel...</div>
-      </div>
-    );
-  }
 
   return <AdminDashboardContent activeTab={activeTab} setActiveTab={setActiveTab} />;
 }
@@ -130,10 +111,30 @@ function AdminDashboardContent({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
             >
-              {activeTab === 'overview' && <AdminOverview />}
-              {activeTab === 'portfolio' && <PortfolioManager />}
-              {activeTab === 'pages' && <PageManager />}
-              {activeTab === 'bookings' && <BookingsDashboard />}
+              {activeTab === 'overview' && (
+                <div className="text-white">
+                  <h2 className="text-2xl font-bold mb-4">Dashboard Overview</h2>
+                  <p className="text-gray-400">Welcome to your admin panel! ✅</p>
+                </div>
+              )}
+              {activeTab === 'portfolio' && (
+                <div className="text-white">
+                  <h2 className="text-2xl font-bold mb-4">Portfolio Manager</h2>
+                  <p className="text-gray-400">Coming soon...</p>
+                </div>
+              )}
+              {activeTab === 'pages' && (
+                <div className="text-white">
+                  <h2 className="text-2xl font-bold mb-4">Pages Manager</h2>
+                  <p className="text-gray-400">Coming soon...</p>
+                </div>
+              )}
+              {activeTab === 'bookings' && (
+                <div className="text-white">
+                  <h2 className="text-2xl font-bold mb-4">Bookings Dashboard</h2>
+                  <p className="text-gray-400">Coming soon...</p>
+                </div>
+              )}
               {activeTab === 'settings' && (
                 <div className="max-w-2xl">
                   <h2 className="text-2xl font-bold text-white mb-6 font-sora">Settings</h2>
