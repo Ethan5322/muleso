@@ -34,8 +34,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
       const sessionData = JSON.parse(session);
 
-      // STRONG VALIDATION: All required fields must exist
-      if (!sessionData || !sessionData.authenticated !== true || !sessionData.timestamp) {
+      // STRONG VALIDATION: All required fields must exist and be valid
+      if (!sessionData || sessionData.authenticated !== true || !sessionData.timestamp) {
         localStorage.removeItem('admin_session');
         setMounted(true);
         return;
