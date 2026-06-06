@@ -3,12 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Lock, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { Lock, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
+import { generateTwoFactorCode, sendTwoFactorEmail, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactor';
 
 const ADMIN_PASSWORD = 'M53223344m.&.M';
-const MAX_ATTEMPTS = 3;
+const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
+const MAX_ATTEMPTS = 5;
+const MAX_2FA_ATTEMPTS = 3;
 const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
 
 export default function AdminLogin() {
@@ -18,11 +21,13 @@ export default function AdminLogin() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [twoFactorCode, setTwoFactorCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [attempts, setAttempts] = useState(0);
+  const [twoFactorAttempts, setTwoFactorAttempts] = useState(0);
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
   const [countdown, setCountdown] = useState(0);
-  const [step, setStep] = useState<'password' | 'confirm' | 'success'> ('password');
+  const [step, setStep] = useState<'password' | 'confirm' | 'twofa' | 'success'> ('password');
 
   // Disable form autocomplete and cache
   useEffect(() => {
@@ -131,7 +136,7 @@ export default function AdminLogin() {
     setLoading(false);
   };
 
-  const handleConfirmPassword = async (e: React.FormEvent) => {
+  const handleConfirmPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!confirmPassword || confirmPassword.trim() === '') {
@@ -148,22 +153,99 @@ export default function AdminLogin() {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // Both passwords match and are correct
-    const session = {
-      authenticated: true,
-      timestamp: Date.now(),
-      passwordHash: Math.random().toString(36).substring(2, 15), // Extra security
-    };
-    localStorage.setItem('admin_session', JSON.stringify(session));
-    localStorage.removeItem('admin_attempts');
-    localStorage.removeItem('admin_lockout');
-    setIsAdmin(true);
+    try {
+      // Generate 2FA code
+      const code = generateTwoFactorCode();
 
-    setStep('success');
-    toast.success('✅ Login successful! Redirecting to admin panel...');
+      // Store code in database
+      const storeResult = await storeTwoFactorCode(ADMIN_EMAIL, code);
+      if (!storeResult.success) {
+        toast.error('❌ Failed to store 2FA code');
+        setLoading(false);
+        return;
+      }
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    router.push('/admin');
+      // Send 2FA code to admin email
+      const sendResult = await sendTwoFactorEmail(ADMIN_EMAIL, code);
+
+      if (sendResult.success) {
+        toast.success('📧 2FA code sent to your email!');
+        setStep('twofa');
+        setTwoFactorCode('');
+        setTwoFactorAttempts(0);
+      } else {
+        toast.error('❌ Failed to send 2FA code. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending 2FA code:', error);
+      toast.error('❌ Error sending 2FA code');
+    }
+
+    setLoading(false);
+  };
+
+  const handleTwoFactorSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!twoFactorCode || twoFactorCode.trim() === '') {
+      toast.error('❌ Please enter the 2FA code');
+      return;
+    }
+
+    if (twoFactorCode.length !== 6) {
+      toast.error('❌ Code must be 6 digits');
+      return;
+    }
+
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    try {
+      // Verify 2FA code
+      const result = await verifyTwoFactorCode(ADMIN_EMAIL, twoFactorCode);
+
+      if (result.success) {
+        // Login successful
+        const session = {
+          authenticated: true,
+          timestamp: Date.now(),
+          passwordHash: Math.random().toString(36).substring(2, 15),
+        };
+        localStorage.setItem('admin_session', JSON.stringify(session));
+        localStorage.removeItem('admin_attempts');
+        localStorage.removeItem('admin_lockout');
+        setIsAdmin(true);
+
+        setStep('success');
+        toast.success('✅2FA verified! Logging you in...');
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        router.push('/admin');
+      } else {
+        // Code verification failed
+        const newAttempts = twoFactorAttempts + 1;
+        setTwoFactorAttempts(newAttempts);
+
+        if (newAttempts >= MAX_2FA_ATTEMPTS) {
+          toast.error('❌ Too many failed attempts. Please try again later.');
+          setStep('password');
+          setPassword('');
+          setConfirmPassword('');
+          setTwoFactorCode('');
+        } else {
+          const remaining = MAX_2FA_ATTEMPTS - newAttempts;
+          toast.error(
+            `❌ Invalid code. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`
+          );
+          setTwoFactorCode('');
+        }
+      }
+    } catch (error) {
+      console.error('Error verifying 2FA code:', error);
+      toast.error('❌ Error verifying code');
+    }
+
+    setLoading(false);
   };
 
   const isLocked = !!(lockedUntil && Date.now() < lockedUntil);
@@ -366,7 +448,84 @@ export default function AdminLogin() {
             </motion.form>
           )}
 
-          {/* Step 3: Success */}
+          {/* Step 3: Two-Factor Authentication */}
+          {step === 'twofa' && !isLocked && (
+            <motion.form
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              onSubmit={handleTwoFactorSubmit}
+              className="space-y-6"
+            >
+              <div className="bg-blue-500/20 border border-blue-500 rounded-lg p-4">
+                <div className="flex items-center gap-2">
+                  <Mail size={18} className="text-blue-300" />
+                  <p className="text-blue-300 text-sm font-semibold">
+                    ✓ Password Verified. Check your email for 2FA code.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative">
+                <label className="block text-sm font-bold text-[#00C8FF] mb-2">
+                  Step 3: Enter 6-Digit 2FA Code
+                </label>
+                <input
+                  type="text"
+                  value={twoFactorCode}
+                  onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  disabled={loading}
+                  placeholder="000000"
+                  maxLength={6}
+                  autoComplete="off"
+                  inputMode="numeric"
+                  className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
+                />
+                <p className="text-[#00C8FF]/60 text-xs mt-2">
+                  Check your email (mulukenendashaw68@gmail.com) for the code. It expires in 10 minutes.
+                </p>
+              </div>
+
+              {twoFactorAttempts > 0 && twoFactorAttempts < MAX_2FA_ATTEMPTS && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-yellow-500/20 border border-yellow-500 rounded-lg p-4"
+                >
+                  <p className="text-yellow-400 text-sm font-semibold">
+                    ⚠️ {MAX_2FA_ATTEMPTS - twoFactorAttempts} attempt{MAX_2FA_ATTEMPTS - twoFactorAttempts !== 1 ? 's' : ''} remaining
+                  </p>
+                </motion.div>
+              )}
+
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: !loading ? 1.02 : 1 }}
+                  whileTap={{ scale: !loading ? 0.98 : 1 }}
+                  type="button"
+                  onClick={() => {
+                    setStep('confirm');
+                    setTwoFactorCode('');
+                    setTwoFactorAttempts(0);
+                  }}
+                  disabled={loading}
+                  className="flex-1 bg-[#00BFFF]/20 hover:bg-[#00BFFF]/30 text-[#00BFFF] font-bold py-3 rounded-lg transition-all disabled:opacity-50"
+                >
+                  Back
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: !loading && twoFactorCode.length === 6 ? 1.02 : 1 }}
+                  whileTap={{ scale: !loading && twoFactorCode.length === 6 ? 0.98 : 1 }}
+                  type="submit"
+                  disabled={loading || twoFactorCode.length !== 6}
+                  className="flex-1 bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] text-white font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#00BFFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Verifying...' : 'Verify Code'}
+                </motion.button>
+              </div>
+            </motion.form>
+          )}
+
+          {/* Step 4: Success */}
           {step === 'success' && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
