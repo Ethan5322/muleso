@@ -17,6 +17,15 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Check if admin session exists and is VALID on mount
     try {
+      // Only check for admin on /admin routes
+      const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+
+      // If not on /admin route, don't activate admin mode
+      if (!currentPath.startsWith('/admin')) {
+        setMounted(true);
+        return;
+      }
+
       const session = localStorage.getItem('admin_session');
       if (!session) {
         setMounted(true);
@@ -26,7 +35,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       const sessionData = JSON.parse(session);
 
       // STRONG VALIDATION: All required fields must exist
-      if (!sessionData || !sessionData.authenticated || !sessionData.timestamp) {
+      if (!sessionData || !sessionData.authenticated !== true || !sessionData.timestamp) {
         localStorage.removeItem('admin_session');
         setMounted(true);
         return;
@@ -42,7 +51,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Session is valid
+      // Session is valid AND we're on /admin route
       setIsAdmin(true);
     } catch (error) {
       console.error('Session validation error:', error);

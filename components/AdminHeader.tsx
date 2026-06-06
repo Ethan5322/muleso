@@ -1,7 +1,7 @@
 'use client';
 
 import { useAdmin } from '@/context/AdminContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { LogOut, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -9,8 +9,10 @@ import toast from 'react-hot-toast';
 export default function AdminHeader() {
   const { isAdmin, logout } = useAdmin();
   const router = useRouter();
+  const pathname = usePathname();
 
-  if (!isAdmin) {
+  // Only show admin header on /admin routes when logged in
+  if (!isAdmin || !pathname.startsWith('/admin')) {
     return null;
   }
 
