@@ -89,20 +89,9 @@ export async function verifyTwoFactorCode(
 
     // TODO: Fix timezone issue with expiration check
     // For now, we skip expiration to get login working
-    console.log('Code is valid, marking as used...');
+    console.log('Code is valid! (API will mark as used)');
 
-    // Mark code as used
-    const { error: updateError } = await supabase
-      .from('two_factor_codes')
-      .update({ used: true })
-      .eq('id', codeRecord.id);
-
-    console.log('Code marked as used. ID:', codeRecord.id);
-
-    if (updateError) {
-      return { success: false, error: updateError.message };
-    }
-
+    // Don't mark as used here - let the API do it to avoid double-verification
     return { success: true };
   } catch (error) {
     console.error('Verify 2FA code error:', error);

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyTwoFactorCode } from '@/lib/twoFactor';
+import { verifyTwoFactorCode } from '@/lib/twoFactorUtils';
 
 const ADMIN_PASSWORD = 'M53223344m.&.M';
 const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
@@ -30,6 +30,25 @@ export async function POST(request: NextRequest) {
         { success: false, error: verifyResult.error || 'Invalid 2FA code' },
         { status: 401 }
       );
+    }
+
+    // Mark 2FA code as used (only after successful verification)
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    try {
+      await supabase
+        .from('two_factor_codes')
+        .update({ used: true })
+        .eq('email', ADMIN_EMAIL)
+        .eq('code', twoFactorCode)
+        .eq('used', false);
+    } catch (error) {
+      console.error('Error marking 2FA code as used:', error);
+      // Don't fail login if this fails - code is already verified
     }
 
     // Step 3: Create session
