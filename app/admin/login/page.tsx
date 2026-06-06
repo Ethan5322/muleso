@@ -7,7 +7,7 @@ import { Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
 
-const ADMIN_PASSWORD = 'MuleSoo2024!';
+const ADMIN_PASSWORD = 'M53223344m.&.M';
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_TIME = 10 * 60 * 1000; // 10 minutes
 

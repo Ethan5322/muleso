@@ -67,7 +67,7 @@ STEP 1: LOGIN
          │
          ▼
 ┌──────────────────────────────────────┐
-│ Enter Password: MuleSoo2024!          │
+│ Enter Password: M53223344m.&.M          │
 │ [Password Field]                      │
 │ [Login Button]                        │
 └────────┬─────────────────────────────┘

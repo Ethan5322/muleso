@@ -172,7 +172,7 @@ Example: `/custom/privacy-policy`
 ### LEVEL 1: LOGIN SECURITY
 **Password Protection:**
 - ✅ Admin requires password to login
-- ✅ Password: `MuleSoo2024!` (you can change this)
+- ✅ Password: `M53223344m.&.M` (you can change this)
 - ✅ No password = No access
 - ✅ Wrong password = Access denied
 - ✅ Cannot bypass with any tricks
@@ -435,7 +435,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=***
 **Password Security:**
 - Change password if shared with others
 - Don't use easy passwords in production
-- Consider stronger password like: `MuleSoo2024!@#$%`
+- Consider stronger password like: `M53223344m.&.M@#$%`
 
 **Session Management:**
 - Only you should access admin panel
