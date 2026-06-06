@@ -138,7 +138,7 @@ function AdminDashboardContent({
             className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500 text-red-400 px-6 py-3 rounded-lg font-semibold"
           >
             <LogOut size={20} />
-            Exit Admin
+            Sign Out
           </motion.button>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Save, X, Upload, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase, PortfolioItem } from '@/lib/supabase';
+import ConfirmationDialog from './ConfirmationDialog';
 
 interface PortfolioEditorProps {
   item: PortfolioItem | null;
@@ -36,6 +37,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [techInput, setTechInput] = useState('');
+  const [showConfirm, setShowConfirm] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -104,12 +106,15 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
     }));
   };
 
-  const handleSave = async () => {
+  const handleSaveClick = () => {
     if (!formData.title || !formData.description || !formData.client_name) {
       toast.error('Please fill in all required fields');
       return;
     }
+    setShowConfirm(true);
+  };
 
+  const handleConfirmSave = async () => {
     try {
       setSaving(true);
 
@@ -124,7 +129,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
           .eq('id', item.id);
 
         if (error) throw error;
-        toast.success('Portfolio item updated!');
+        toast.success('✅ Portfolio item updated!');
       } else {
         // Create new
         const { error } = await supabase.from('portfolio').insert({
@@ -135,12 +140,14 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
         });
 
         if (error) throw error;
-        toast.success('Portfolio item created!');
+        toast.success('✅ Portfolio item created!');
       }
 
+      setShowConfirm(false);
       onSave();
     } catch (error: any) {
       toast.error(`Error saving: ${error.message}`);
+      setShowConfirm(false);
     } finally {
       setSaving(false);
     }
@@ -400,7 +407,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleSave}
+            onClick={handleSaveClick}
             disabled={saving}
             className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white px-6 py-3 rounded-lg font-bold disabled:opacity-50"
           >
@@ -411,13 +418,26 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onCancel}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#00C8FF]/10 hover:bg-[#00C8FF]/20 text-[#00C8FF] px-6 py-3 rounded-lg font-bold transition-all"
+            disabled={saving}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#00C8FF]/10 hover:bg-[#00C8FF]/20 text-[#00C8FF] px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50"
           >
             <X size={20} />
             Cancel
           </motion.button>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showConfirm}
+        title={item ? 'Update Portfolio Project?' : 'Create New Project?'}
+        message={`Are you sure you want to ${item ? 'update' : 'create'} this portfolio project? All information will be saved and visible on your website.`}
+        confirmText={item ? 'Update Project' : 'Create Project'}
+        cancelText="Review Again"
+        isLoading={saving}
+        onConfirm={handleConfirmSave}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 }

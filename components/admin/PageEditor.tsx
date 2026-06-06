@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Save, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { supabase, CustomPage } from '@/lib/supabase';
+import ConfirmationDialog from './ConfirmationDialog';
 
 interface PageEditorProps {
   page: CustomPage | null;
@@ -24,6 +25,7 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
     }
   );
   const [saving, setSaving] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const generateSlug = (title: string) => {
     return title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
@@ -37,12 +39,15 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
     }));
   };
 
-  const handleSave = async () => {
+  const handleSaveClick = () => {
     if (!formData.title || !formData.slug || !formData.content) {
       toast.error('Please fill in all required fields');
       return;
     }
+    setShowConfirm(true);
+  };
 
+  const handleConfirmSave = async () => {
     try {
       setSaving(true);
 
@@ -56,7 +61,7 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
           .eq('id', page.id);
 
         if (error) throw error;
-        toast.success('Page updated!');
+        toast.success('✅ Page updated!');
       } else {
         const { error } = await supabase.from('pages').insert({
           ...formData,
@@ -66,12 +71,14 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
         });
 
         if (error) throw error;
-        toast.success('Page created!');
+        toast.success('✅ Page created!');
       }
 
+      setShowConfirm(false);
       onSave();
     } catch (error: any) {
       toast.error(`Error saving: ${error.message}`);
+      setShowConfirm(false);
     } finally {
       setSaving(false);
     }
@@ -162,7 +169,7 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleSave}
+            onClick={handleSaveClick}
             disabled={saving}
             className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white px-6 py-3 rounded-lg font-bold disabled:opacity-50"
           >
@@ -173,13 +180,26 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onCancel}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#00C8FF]/10 hover:bg-[#00C8FF]/20 text-[#00C8FF] px-6 py-3 rounded-lg font-bold transition-all"
+            disabled={saving}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#00C8FF]/10 hover:bg-[#00C8FF]/20 text-[#00C8FF] px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50"
           >
             <X size={20} />
             Cancel
           </motion.button>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showConfirm}
+        title={page ? 'Update Page?' : 'Create New Page?'}
+        message={`Are you sure you want to ${page ? 'update' : 'create'} this page? It will ${formData.published ? 'be published' : 'remain unpublished'} on your website.`}
+        confirmText={page ? 'Update Page' : 'Create Page'}
+        cancelText="Review Again"
+        isLoading={saving}
+        onConfirm={handleConfirmSave}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 }
