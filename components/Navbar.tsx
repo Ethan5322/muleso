@@ -23,6 +23,7 @@ export default function Navbar() {
     { label: 'Services', href: '/services' },
     { label: 'Portfolio', href: '/portfolio' },
     { label: 'Store', href: '/store' },
+    { label: 'QR Codes', href: '/qr-download' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
   ];
