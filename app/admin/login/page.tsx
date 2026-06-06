@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
-import { generateTwoFactorCode, sendTwoFactorEmail, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactor';
+import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactor';
 
 const ADMIN_PASSWORD = 'M53223344m.&.M';
 const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
@@ -165,10 +165,16 @@ export default function AdminLogin() {
         return;
       }
 
-      // Send 2FA code to admin email
-      const sendResult = await sendTwoFactorEmail(ADMIN_EMAIL, code);
+      // Send 2FA code to admin email via API
+      const sendResponse = await fetch('/api/admin/send-2fa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: ADMIN_EMAIL, code }),
+      });
 
-      if (sendResult.success) {
+      const sendResult = await sendResponse.json();
+
+      if (sendResponse.ok && sendResult.success) {
         toast.success('📧 2FA code sent to your email!');
         setStep('twofa');
         setTwoFactorCode('');
