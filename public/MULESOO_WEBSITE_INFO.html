@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MuleSoo Digital Services - Website Information</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Sora', Arial, sans-serif;
+      background: #050810;
+      color: #F0F2FA;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #0A0F1E;
+      border: 2px solid #00C8FF;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 0 30px rgba(0, 200, 255, 0.2);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #1E3A5F;
+      padding-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .logo span {
+      color: #00C8FF;
+    }
+
+    .tagline {
+      color: #A8B2D0;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .website-url {
+      background: linear-gradient(135deg, #00C8FF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 15px;
+      text-decoration: underline;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      color: #00C8FF;
+      font-size: 18px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-left: 4px solid #7B2FFF;
+      padding-left: 12px;
+    }
+
+    .section p {
+      color: #A8B2D0;
+      margin-bottom: 8px;
+    }
+
+    .section ul {
+      list-style: none;
+      margin-left: 20px;
+    }
+
+    .section ul li {
+      color: #A8B2D0;
+      margin-bottom: 6px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .section ul li:before {
+      content: "✓";
+      color: #00FF88;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .service-card {
+      background: #0D1528;
+      border: 1px solid #1E3A5F;
+      padding: 15px;
+      border-radius: 8px;
+      color: #A8B2D0;
+      font-size: 13px;
+    }
+
+    .service-card strong {
+      color: #00C8FF;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .qr-section {
+      text-align: center;
+      background: #0D1528;
+      border: 2px dashed #00C8FF;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+    }
+
+    .qr-section p {
+      color: #A8B2D0;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .qr-placeholder {
+      width: 150px;
+      height: 150px;
+      background: white;
+      margin: 0 auto;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .contact-info {
+      background: linear-gradient(135deg, rgba(0, 200, 255, 0.1), rgba(123, 47, 255, 0.1));
+      border: 1px solid #1E3A5F;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .contact-info h3 {
+      color: #00C8FF;
+      margin-bottom: 10px;
+    }
+
+    .contact-info p {
+      color: #A8B2D0;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #1E3A5F;
+      color: #7A8BA8;
+      font-size: 12px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #00C8FF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .feature {
+      background: #0D1528;
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 3px solid #00C8FF;
+      color: #A8B2D0;
+      font-size: 13px;
+    }
+
+    @media print {
+      body { background: white; color: black; padding: 0; }
+      .container { background: white; color: black; box-shadow: none; border-color: #ccc; }
+      .logo span { color: #0066cc; }
+      .website-url { color: #0066cc; }
+      .section h2 { color: #0066cc; border-color: #666; }
+      .section p { color: #333; }
+      .section ul li { color: #333; }
+      .section ul li:before { color: #00aa00; }
+      .service-card { background: #f9f9f9; border-color: #ddd; color: #333; }
+      .service-card strong { color: #0066cc; }
+      .feature { background: #f9f9f9; border-color: #0066cc; color: #333; }
+      .qr-section { background: #f9f9f9; border-color: #0066cc; }
+      .qr-section p { color: #333; }
+      .contact-info { background: #f5f5f5; color: #333; }
+      .contact-info h3 { color: #0066cc; }
+      .contact-info p { color: #333; }
+      .footer { color: #666; border-color: #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="logo"><span>MULE</span>SOO</div>
+      <p class="tagline">Building World-Class Digital Products for Africa's Boldest Businesses</p>
+      <div class="website-url">mulesoo.vercel.app</div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="section">
+      <h2>About MuleSoo</h2>
+      <p>MuleSoo Digital Services is a premium tech agency based in Pretoria, South Africa. We build professional websites, AI chatbots, logos, and digital solutions for corporate clients across Africa.</p>
+      <p><strong>Founded by:</strong> Ethan (CEO & Lead Developer)</p>
+      <p><strong>Location:</strong> Pretoria, South Africa</p>
+    </div>
+
+    <!-- WEBSITE URL & QR CODE -->
+    <div class="qr-section">
+      <p><strong>Scan or Visit:</strong></p>
+      <p>https://mulesoo.vercel.app</p>
+      <div class="qr-placeholder">
+        [QR CODE IMAGE]<br>
+        Generate at: qr-code-generator.com
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="section">
+      <h2>Our Services</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <strong>💻 Website Design</strong>
+          Starting from R3,500 - Fast, responsive websites
+        </div>
+        <div class="service-card">
+          <strong>🤖 AI Chatbots</strong>
+          Starting from R2,500 - 24/7 customer service
+        </div>
+        <div class="service-card">
+          <strong>🎨 Logo Design</strong>
+          Starting from R800 - Professional branding
+        </div>
+        <div class="service-card">
+          <strong>📄 PDF Guides</strong>
+          R99-R499 - Passive income products
+        </div>
+        <div class="service-card">
+          <strong>🔲 QR Codes</strong>
+          Starting from R300 - Custom branded QR codes
+        </div>
+        <div class="service-card">
+          <strong>📧 Email Setup</strong>
+          Starting from R400 - Professional domain email
+        </div>
+      </div>
+    </div>
+
+    <!-- WEBSITE PAGES -->
+    <div class="section">
+      <h2>Website Pages & Features</h2>
+      <p>When clients visit https://mulesoo.vercel.app, they can access:</p>
+      <ul>
+        <li><strong>Home Page</strong> - Hero section, services overview, stats, testimonials</li>
+        <li><strong>Services Page</strong> - Detailed info on all 6 services with pricing</li>
+        <li><strong>Portfolio Page</strong> - Showcase of past projects and client work</li>
+        <li><strong>Store Page</strong> - PDF guides available for purchase</li>
+        <li><strong>About Page</strong> - Company story and founder background</li>
+        <li><strong>Contact Page</strong> - Contact form, email, WhatsApp, location</li>
+        <li><strong>AI Chatbot Widget</strong> - 24/7 customer service (floating button)</li>
+      </ul>
+    </div>
+
+    <!-- WEBSITE FEATURES -->
+    <div class="section">
+      <h2>Technical Features</h2>
+      <div class="features-grid">
+        <div class="feature">⚡ Lightning-fast performance (under 2 seconds)</div>
+        <div class="feature">📱 Mobile responsive design</div>
+        <div class="feature">🔍 SEO optimized for Google</div>
+        <div class="feature">🤖 AI-powered chatbot</div>
+        <div class="feature">🛒 Online store & payments (Stripe)</div>
+        <div class="feature">📊 Analytics & tracking</div>
+        <div class="feature">🔐 Secure & encrypted</div>
+        <div class="feature">🌙 Professional dark theme</div>
+      </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="section">
+      <h2>Admin Panel (Private)</h2>
+      <p><strong>URL:</strong> https://mulesoo.vercel.app/admin</p>
+      <p><strong>Access:</strong> Password + 2FA required (secure login)</p>
+      <p><strong>What Admin Can Do:</strong></p>
+      <ul>
+        <li>Add and edit portfolio projects</li>
+        <li>Upload images and videos</li>
+        <li>Manage website pages and content</li>
+        <li>View customer bookings and inquiries</li>
+        <li>Change password and security settings</li>
+        <li>Export data and view audit logs</li>
+        <li>Real-time website management</li>
+      </ul>
+    </div>
+
+    <!-- CONTACT INFORMATION -->
+    <div class="contact-info">
+      <h3>📞 Contact MuleSoo</h3>
+      <p><strong>Email:</strong> hello@mulesoo.com</p>
+      <p><strong>WhatsApp:</strong> Available 24/7</p>
+      <p><strong>Location:</strong> Pretoria, South Africa</p>
+      <p><strong>Response Time:</strong> Within 2 hours on business days</p>
+    </div>
+
+    <!-- PRICING SUMMARY -->
+    <div class="section">
+      <h2>Pricing Summary</h2>
+      <ul>
+        <li><strong>Website Design:</strong> R3,500 (Starter) | R7,500 (Business) | R15,000+ (Enterprise)</li>
+        <li><strong>AI Chatbots:</strong> R2,500 | R4,500 | R8,000+</li>
+        <li><strong>Logo Design:</strong> R800 | R1,800 | R3,500+</li>
+        <li><strong>QR Code Design:</strong> R300 | R600 | R1,200+</li>
+        <li><strong>Custom Email:</strong> R400 | R800 | R1,500+</li>
+        <li><strong>PDF Guides:</strong> R99 - R499 (one-time purchase)</li>
+      </ul>
+    </div>
+
+    <!-- WHY CHOOSE MULESOO -->
+    <div class="section">
+      <h2>Why Choose MuleSoo?</h2>
+      <ul>
+        <li><strong>Quality First</strong> - Enterprise-grade development standards</li>
+        <li><strong>Fast Delivery</strong> - Most projects launch within 3 weeks</li>
+        <li><strong>AI-Powered</strong> - Using latest Claude AI technology</li>
+        <li><strong>Transparent Pricing</strong> - Clear costs, no hidden fees</li>
+        <li><strong>Secure & Scalable</strong> - Built for growth</li>
+        <li><strong>Local Expert</strong> - Understands African market</li>
+      </ul>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>© 2026 MuleSoo Digital Services | All Rights Reserved</p>
+      <p>Official Website: https://mulesoo.vercel.app</p>
+      <p>Document Generated: June 6, 2026</p>
+    </div>
+  </div>
+</body>
+</html>
