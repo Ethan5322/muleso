@@ -27,7 +27,7 @@ export default function AdminLogin() {
   const [twoFactorAttempts, setTwoFactorAttempts] = useState(0);
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
   const [countdown, setCountdown] = useState(0);
-  const [step, setStep] = useState<'password' | 'confirm' | 'twofa' | 'success'> ('password');
+  const [step, setStep] = useState<'password' | 'confirm' | 'twofa' | 'success'>('password');
 
   // Disable form autocomplete and cache
   useEffect(() => {

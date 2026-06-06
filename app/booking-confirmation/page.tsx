@@ -2,10 +2,11 @@
 
 import { useSearchParams } from 'next/navigation';
 import QRCodeFrame from '@/components/QRCodeFrame';
-import { CheckCircle, Download, Home } from 'lucide-react';
+import { CheckCircle, Home } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default function BookingConfirmationPage() {
+function BookingConfirmationContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get('id') || 'MULE-2026-001';
   const clientName = searchParams.get('name') || 'Client Name';
@@ -95,7 +96,7 @@ export default function BookingConfirmationPage() {
               onClick={handleDownloadQR}
               className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
             >
-              <Download size={20} /> Download QR Code
+              Download QR Code
             </button>
           </div>
         </div>
@@ -149,5 +150,27 @@ export default function BookingConfirmationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function BookingConfirmationFallback() {
+  return (
+    <div className="min-h-screen bg-[#050810] text-white py-20 px-4 flex items-center justify-center">
+      <div className="max-w-2xl mx-auto text-center">
+        <div className="animate-pulse">
+          <div className="h-20 w-20 bg-[#00C8FF] rounded-full mx-auto mb-6"></div>
+          <div className="h-8 bg-gray-700 rounded-lg w-64 mx-auto mb-4"></div>
+          <div className="h-4 bg-gray-800 rounded-lg w-96 mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function BookingConfirmationPage() {
+  return (
+    <Suspense fallback={<BookingConfirmationFallback />}>
+      <BookingConfirmationContent />
+    </Suspense>
   );
 }
