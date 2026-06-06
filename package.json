@@ -19,6 +19,7 @@
     "caniuse-lite": "^1.0.30001793",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
+    "html2pdf": "^0.0.11",
     "html2pdf.js": "^0.14.0",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.17.0",

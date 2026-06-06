@@ -1,17 +1,27 @@
 'use client';
 
-import { Trash2, Edit2, Plus, Image as ImageIcon, X } from 'lucide-react';
+import { Trash2, Edit2, Plus, X } from 'lucide-react';
 import { useState } from 'react';
 
+interface Project {
+  id: number;
+  name: string;
+  client: string;
+  description: string;
+  price: string;
+  image: string;
+  date: string;
+}
+
 export default function PortfolioManager() {
-  const [projects, setProjects] = useState([
+  const [projects, setProjects] = useState<Project[]>([
     { id: 1, name: 'Habesha Events Website', client: 'Events Business', description: 'Professional event planning platform', price: 'R7,500', image: '🖼️', date: '2026-05-15' },
     { id: 2, name: 'Restaurant Chatbot', client: 'Restaurant', description: 'AI-powered booking chatbot', price: 'R4,500', image: '🤖', date: '2026-05-10' },
     { id: 3, name: 'Law Firm Website', client: 'Legal Services', description: 'Professional legal services portal', price: 'R8,000', image: '⚖️', date: '2026-05-05' },
   ]);
 
   const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     client: '',
@@ -28,7 +38,7 @@ export default function PortfolioManager() {
   };
 
   // Edit Project
-  const handleEdit = (project) => {
+  const handleEdit = (project: Project) => {
     setEditingId(project.id);
     setFormData({
       name: project.name,
@@ -41,7 +51,7 @@ export default function PortfolioManager() {
   };
 
   // Delete Project
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     if (confirm('Are you sure you want to delete this portfolio item?')) {
       setProjects(projects.filter(p => p.id !== id));
       alert('✓ Portfolio item deleted successfully!');
@@ -193,7 +203,7 @@ export default function PortfolioManager() {
           </thead>
           <tbody>
             {projects.length === 0 ? (
-              <tr><td colSpan="5" className="text-center px-6 py-8 text-gray-400">No portfolio items yet. Click "Add New Project" to get started!</td></tr>
+              <tr><td colSpan={5} className="text-center px-6 py-8 text-gray-400">No portfolio items yet. Click "Add New Project" to get started!</td></tr>
             ) : (
               projects.map((project) => (
                 <tr key={project.id} className="border-t border-[#1E3A5F] hover:bg-[#1A2332] transition">
@@ -227,36 +237,6 @@ export default function PortfolioManager() {
       {/* Stats */}
       <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-lg p-6">
         <p className="text-gray-400 text-sm">Total Portfolio Items: <span className="text-white font-bold text-lg">{projects.length}</span></p>
-      </div>
-    </div>
-  );
-}
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
-        <h3 className="text-xl font-bold text-white mb-4">Add New Project</h3>
-        <form className="space-y-4">
-          <div>
-            <label className="block text-gray-400 text-sm mb-2">Project Name</label>
-            <input type="text" placeholder="Enter project name" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2 rounded-lg focus:border-[#00C8FF]" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-400 text-sm mb-2">Client Name</label>
-              <input type="text" placeholder="Client name" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2 rounded-lg focus:border-[#00C8FF]" />
-            </div>
-            <div>
-              <label className="block text-gray-400 text-sm mb-2">Date</label>
-              <input type="date" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2 rounded-lg focus:border-[#00C8FF]" />
-            </div>
-          </div>
-          <button type="submit" className="w-full bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2 px-4 rounded-lg">
-            Save Project
-          </button>
-        </form>
       </div>
     </div>
   );

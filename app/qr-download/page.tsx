@@ -1,404 +1,123 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Download, Copy, Printer, Share2 } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { generateFramedQRCode, downloadFramedQRCode, generateQRCodePDF, generateCleanQRCode, downloadCleanQRCode } from '@/lib/generateFramedQRCode';
+import QRCodeFrame from '@/components/QRCodeFrame';
+import { Copy, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
 
 export default function QRDownloadPage() {
-  const [qrImage, setQrImage] = useState<string | null>(null);
-  const [cleanQrImage, setCleanQrImage] = useState<string | null>(null);
-  const [activeVersion, setActiveVersion] = useState<'framed' | 'clean'>('framed');
-  const [loading, setLoading] = useState(true);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [copied, setCopied] = useState(false);
+  const websiteURL = 'https://mulesoo.vercel.app';
 
-  useEffect(() => {
-    const loadQR = async () => {
-      try {
-        setLoading(true);
-        const [framedUrl, cleanUrl] = await Promise.all([
-          generateFramedQRCode('https://mulesoo.vercel.app', 800),
-          generateCleanQRCode('https://mulesoo.vercel.app', 600),
-        ]);
-        setQrImage(framedUrl);
-        setCleanQrImage(cleanUrl);
-      } catch (error) {
-        console.error('Failed to load QR code:', error);
-        toast.error('Failed to load QR code');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadQR();
-  }, []);
-
-  const handleDownloadPNG = async () => {
-    try {
-      toast.loading('Generating PNG...');
-      if (activeVersion === 'framed') {
-        await downloadFramedQRCode('MuleSoo_QRCode_Branded.png');
-      } else {
-        await downloadCleanQRCode('MuleSoo_QRCode_Scannable.png');
-      }
-      toast.dismiss();
-      toast.success('✅ QR code downloaded!');
-    } catch (error) {
-      toast.dismiss();
-      toast.error('Failed to download QR code');
-    }
-  };
-
-  const handleDownloadPDF = async () => {
-    try {
-      toast.loading('Generating PDF...');
-      await generateQRCodePDF();
-      toast.dismiss();
-      toast.success('✅ PDF ready for printing!');
-    } catch (error) {
-      toast.dismiss();
-      toast.error('Failed to generate PDF');
-    }
-  };
-
-  const handlePrint = () => {
-    window.print();
-    toast.success('Print dialog opened');
-  };
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText('https://mulesoo.vercel.app');
-    toast.success('Link copied to clipboard');
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'MuleSoo Digital Services',
-          text: 'Visit MuleSoo for professional digital solutions',
-          url: 'https://mulesoo.com',
-        });
-      } catch (error) {
-        console.log('Share cancelled');
-      }
-    } else {
-      toast.error('Share not supported on this device');
-    }
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(websiteURL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-32 pb-20">
-      {/* Background effects */}
-      <div className="fixed inset-0 pointer-events-none -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00BFFF] rounded-full mix-blend-screen filter blur-3xl opacity-5" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#7B2FBE] rounded-full mix-blend-screen filter blur-3xl opacity-5" />
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#050810] text-white py-20 px-4">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl sm:text-5xl font-bold font-sora mb-4">
-            <span className="text-[var(--accent-blue)]">MuleSoo</span>
-            <span className="text-[var(--text-primary)]"> Official</span>
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold mb-4">
+            <span className="text-[#00C8FF]">MuleSoo</span> QR Code
           </h1>
-          <h2 className="text-3xl font-bold font-sora mb-4 text-[var(--accent-gold)]">
-            QR Code
-          </h2>
-          <p className="text-[var(--text-secondary)] text-lg">
-            Download, print, or share your official MuleSoo QR code
+          <p className="text-gray-400 text-lg">
+            Download elegant QR codes for your booking confirmations, PDFs, and marketing materials
           </p>
-        </motion.div>
+        </div>
 
-        {/* Version Selector */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="flex gap-4 justify-center mb-8 flex-wrap"
-        >
-          <button
-            onClick={() => setActiveVersion('framed')}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-              activeVersion === 'framed'
-                ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white'
-                : 'bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
-            }`}
-          >
-            ✨ Branded Frame
-          </button>
-          <button
-            onClick={() => setActiveVersion('clean')}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-              activeVersion === 'clean'
-                ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white'
-                : 'bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
-            }`}
-          >
-            📱 Ultra-Scannable
-          </button>
-        </motion.div>
-
-        {/* QR Code Display */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="bg-[var(--bg-secondary)] border border-[var(--border)] rounded-2xl p-8 sm:p-12 mb-12 flex flex-col items-center"
-        >
-          {loading ? (
-            <div className="text-[var(--accent-blue)] text-lg font-semibold">
-              Generating QR Codes...
-            </div>
-          ) : activeVersion === 'framed' && qrImage ? (
-            <motion.div
-              key="framed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="w-full max-w-md"
+        {/* Website URL Section */}
+        <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-xl p-8 mb-16">
+          <h2 className="text-2xl font-bold mb-4">Official Website</h2>
+          <div className="flex items-center gap-4 bg-[#1A2332] border border-[#1E3A5F] rounded-lg p-4">
+            <code className="flex-1 text-[#00C8FF]">{websiteURL}</code>
+            <button
+              onClick={copyToClipboard}
+              className="bg-[#7B2FFF] hover:bg-[#6B1FEF] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
             >
-              <img
-                src={qrImage}
-                alt="MuleSoo Branded QR Code"
-                className="w-full rounded-lg shadow-2xl bg-white p-4"
-              />
-              <p className="text-center text-[var(--text-secondary)] text-sm mt-4">
-                Professional branded version - right-click to save
-              </p>
-            </motion.div>
-          ) : activeVersion === 'clean' && cleanQrImage ? (
-            <motion.div
-              key="clean"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="w-full max-w-md"
-            >
-              <img
-                src={cleanQrImage}
-                alt="MuleSoo Ultra-Scannable QR Code"
-                className="w-full rounded-lg shadow-2xl bg-white p-4"
-              />
-              <p className="text-center text-[var(--text-secondary)] text-sm mt-4">
-                Ultra-scannable version - easiest to scan with any phone camera
-              </p>
-            </motion.div>
-          ) : (
-            <div className="text-red-400">Failed to load QR code</div>
-          )}
-        </motion.div>
-
-        {/* Download Options */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
-        >
-          {/* Download PNG */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleDownloadPNG}
-            disabled={loading}
-            className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] rounded-xl text-white font-bold hover:shadow-lg transition-all disabled:opacity-50"
-          >
-            <Download size={28} className="mb-2" />
-            <span className="text-sm text-center">Download PNG</span>
-            <span className="text-xs opacity-90 mt-1">
-              {activeVersion === 'framed' ? '(Branded)' : '(Scannable)'}
-            </span>
-          </motion.button>
-
-          {/* Download PDF */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleDownloadPDF}
-            disabled={loading}
-            className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[var(--accent-gold)] to-[#FFC107] rounded-xl text-black font-bold hover:shadow-lg transition-all disabled:opacity-50"
-          >
-            <Download size={28} className="mb-2" />
-            <span className="text-sm text-center">Download PDF</span>
-            <span className="text-xs opacity-90 mt-1">(For printing)</span>
-          </motion.button>
-
-          {/* Print */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handlePrint}
-            disabled={loading || !qrImage}
-            className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[var(--accent-green)] to-[#00FF88] rounded-xl text-black font-bold hover:shadow-lg transition-all disabled:opacity-50"
-          >
-            <Printer size={28} className="mb-2" />
-            <span className="text-sm text-center">Print</span>
-            <span className="text-xs opacity-90 mt-1">(Direct print)</span>
-          </motion.button>
-
-          {/* Copy Link */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleCopyLink}
-            className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[var(--accent-purple)] to-[#9C27B0] rounded-xl text-white font-bold hover:shadow-lg transition-all"
-          >
-            <Copy size={28} className="mb-2" />
-            <span className="text-sm text-center">Copy Link</span>
-            <span className="text-xs opacity-90 mt-1">(mulesoo.vercel.app)</span>
-          </motion.button>
-        </motion.div>
-
-        {/* Version Comparison Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-          className="bg-[var(--bg-secondary)] border border-[var(--accent-purple)] rounded-2xl p-8 mb-8"
-        >
-          <h3 className="text-xl font-bold text-[var(--accent-purple)] mb-4">
-            Which Version Should You Use?
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--accent-blue)]/30">
-              <h4 className="font-bold text-[var(--accent-blue)] mb-2">✨ Branded Frame</h4>
-              <p className="text-[var(--text-secondary)] text-sm">
-                Best for: Marketing materials, social media, branding. Professional frame with your company name.
-              </p>
-            </div>
-            <div className="p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--accent-gold)]/30">
-              <h4 className="font-bold text-[var(--accent-gold)] mb-2">📱 Ultra-Scannable</h4>
-              <p className="text-[var(--text-secondary)] text-sm">
-                Best for: Physical locations, business cards, printed materials. Minimal design, scans instantly.
-              </p>
-            </div>
+              {copied ? <CheckCircle size={18} /> : <Copy size={18} />}
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Info Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-[var(--bg-secondary)] border border-[var(--border)] rounded-2xl p-8"
-        >
-          <h3 className="text-2xl font-bold text-[var(--accent-blue)] mb-6">
-            How to Use Your QR Code
-          </h3>
+        {/* QR Code Styles */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-bold mb-8 text-[#E8B84B]">Notebook Style</h3>
+            <p className="text-gray-400 text-sm mb-8 text-center">Perfect for booking confirmations and professional PDFs</p>
+            <QRCodeFrame frameStyle="notebook" size={200} showDownload={false} />
+          </div>
 
-          <div className="space-y-6">
-            {/* For Office */}
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[var(--accent-blue)]">
-                  <span className="text-white font-bold">1</span>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">
-                  Frame it in Your Office
-                </h4>
-                <p className="text-[var(--text-secondary)]">
-                  Download the PNG or PDF version. Print it and frame it on your office wall,
-                  desk, or business location for clients to scan.
-                </p>
-              </div>
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-bold mb-8 text-[#00C8FF]">Elegant Style</h3>
+            <p className="text-gray-400 text-sm mb-8 text-center">Modern design with glowing blue border</p>
+            <QRCodeFrame frameStyle="elegant" size={200} showDownload={false} />
+          </div>
+
+          <div className="flex flex-col items-center">
+            <h3 className="text-xl font-bold mb-8 text-[#00FF88]">Minimal Style</h3>
+            <p className="text-gray-400 text-sm mb-8 text-center">Clean and simple for basic use</p>
+            <QRCodeFrame frameStyle="minimal" size={200} showDownload={false} />
+          </div>
+        </div>
+
+        {/* Full Download Section */}
+        <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-xl p-12">
+          <h2 className="text-3xl font-bold mb-8 text-center">Download Your QR Code</h2>
+          <div className="flex justify-center mb-12">
+            <QRCodeFrame frameStyle="notebook" size={300} showDownload={true} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div className="bg-[#1A2332] border border-[#1E3A5F] rounded-lg p-6">
+              <div className="text-3xl mb-3">📱</div>
+              <h4 className="font-bold mb-2">Booking Confirmations</h4>
+              <p className="text-gray-400 text-sm">Place at top center of PDF booking confirmation slips</p>
             </div>
-
-            {/* For Business Card */}
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[var(--accent-gold)]">
-                  <span className="text-black font-bold">2</span>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">
-                  Add to Business Cards
-                </h4>
-                <p className="text-[var(--text-secondary)]">
-                  Use the PNG image to add the QR code to your business card design for
-                  easy contact sharing.
-                </p>
-              </div>
+            <div className="bg-[#1A2332] border border-[#1E3A5F] rounded-lg p-6">
+              <div className="text-3xl mb-3">📄</div>
+              <h4 className="font-bold mb-2">Terms & Conditions</h4>
+              <p className="text-gray-400 text-sm">Include on T&C PDFs for easy website access</p>
             </div>
-
-            {/* For Marketing */}
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[var(--accent-green)]">
-                  <span className="text-black font-bold">3</span>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">
-                  Share on Marketing Materials
-                </h4>
-                <p className="text-[var(--text-secondary)]">
-                  Include the QR code in flyers, posters, brochures, and social media to drive
-                  traffic to your website.
-                </p>
-              </div>
-            </div>
-
-            {/* For Digital */}
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[var(--accent-purple)]">
-                  <span className="text-white font-bold">4</span>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">
-                  Share Digitally
-                </h4>
-                <p className="text-[var(--text-secondary)]">
-                  Email the PNG image, post on social media, or include in digital documents
-                  to make your contact information easily accessible.
-                </p>
-              </div>
+            <div className="bg-[#1A2332] border border-[#1E3A5F] rounded-lg p-6">
+              <div className="text-3xl mb-3">🖼️</div>
+              <h4 className="font-bold mb-2">Marketing Materials</h4>
+              <p className="text-gray-400 text-sm">Use in print ads, flyers, and business cards</p>
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="mt-8 pt-8 border-t border-[var(--border)] grid grid-cols-3 gap-4">
-            <div className="text-center">
-              <p className="text-3xl font-bold text-[var(--accent-blue)]">100%</p>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">Professional</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-[var(--accent-gold)]">HD</p>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">High Resolution</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-[var(--accent-green)]">Branded</p>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">Your Design</p>
-            </div>
+          <div className="mt-12 bg-[#1A2332] border border-[#1E3A5F] rounded-lg p-8">
+            <h3 className="font-bold text-lg mb-4">Integration Guide</h3>
+            <ol className="space-y-3 text-gray-300 list-decimal list-inside">
+              <li>Download the QR code in your preferred style</li>
+              <li>Insert into PDF templates (booking confirmations, T&C)</li>
+              <li>Place at the top center or bottom of the document</li>
+              <li>Test scanning to ensure it directs to https://mulesoo.vercel.app</li>
+              <li>Print or distribute digitally with confidence</li>
+            </ol>
           </div>
-        </motion.div>
+        </div>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-12"
-        >
-          <p className="text-[var(--text-secondary)] text-lg mb-6">
-            Ready to share your MuleSoo QR code with the world?
-          </p>
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            href="/"
-            className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-lg transition-all"
-          >
-            Back to Home
-          </motion.a>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-16">
+          <div className="text-center">
+            <div className="text-3xl font-bold mb-2 text-[#00C8FF]">✓</div>
+            <p className="text-gray-300">Professional Design</p>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold mb-2 text-[#00FF88]">✓</div>
+            <p className="text-gray-300">Easy to Scan</p>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold mb-2 text-[#E8B84B]">✓</div>
+            <p className="text-gray-300">Print Ready</p>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold mb-2 text-[#7B2FFF]">✓</div>
+            <p className="text-gray-300">Multiple Styles</p>
+          </div>
+        </div>
       </div>
     </div>
   );
