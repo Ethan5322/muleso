@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -25,11 +25,6 @@ const nextConfig: NextConfig = {
             key: 'Pragma',
             value: 'no-cache',
           },
-        ],
-      },
-      {
-        source: '/:path*',
-        headers: [
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
