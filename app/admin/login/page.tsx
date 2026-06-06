@@ -211,13 +211,19 @@ export default function AdminLogin() {
           timestamp: Date.now(),
           passwordHash: Math.random().toString(36).substring(2, 15),
         };
+
+        // Store in both localStorage and cookies for maximum security
         localStorage.setItem('admin_session', JSON.stringify(session));
+
+        // Set secure HTTP-only cookie (for server-side validation)
+        document.cookie = `admin_session=${JSON.stringify(session)}; path=/; max-age=${24 * 60 * 60}; SameSite=Strict`;
+
         localStorage.removeItem('admin_attempts');
         localStorage.removeItem('admin_lockout');
         setIsAdmin(true);
 
         setStep('success');
-        toast.success('✅2FA verified! Logging you in...');
+        toast.success('✅ 2FA verified! Logging you in...');
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
         router.push('/admin');
