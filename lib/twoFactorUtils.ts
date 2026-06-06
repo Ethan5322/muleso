@@ -20,7 +20,6 @@ export async function storeTwoFactorCode(
       .insert({
         email,
         code,
-        created_at: new Date().toISOString(),
         expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes
         used: false,
       });
