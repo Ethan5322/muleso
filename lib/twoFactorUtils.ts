@@ -25,7 +25,7 @@ export async function storeTwoFactorCode(
       });
 
     if (error) {
-      console.error('Supabase error:', error);
+      console.error('Supabase INSERT error:', JSON.stringify(error, null, 2));
       return { success: false, error: error.message };
     }
 
@@ -44,21 +44,35 @@ export async function verifyTwoFactorCode(
   code: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    // Trim whitespace from code
+    const trimmedCode = code.trim();
+
+    console.log('Verify 2FA - Email:', email, 'Code (trimmed):', trimmedCode);
+
     // Get the most recent unused code
     const { data: codes, error: fetchError } = await supabase
       .from('two_factor_codes')
       .select('*')
       .eq('email', email)
-      .eq('code', code)
+      .eq('code', trimmedCode)
       .eq('used', false)
       .order('created_at', { ascending: false })
       .limit(1);
 
+    console.log('Fetched codes:', codes);
+
     if (fetchError) {
+      console.error('Fetch error:', fetchError);
       return { success: false, error: fetchError.message };
     }
 
     if (!codes || codes.length === 0) {
+      // Debug: show all codes for this email
+      const { data: allCodes } = await supabase
+        .from('two_factor_codes')
+        .select('*')
+        .eq('email', email);
+      console.log('No matching code. All codes for email:', allCodes);
       return { success: false, error: 'Invalid code' };
     }
 
@@ -74,6 +88,8 @@ export async function verifyTwoFactorCode(
       .from('two_factor_codes')
       .update({ used: true })
       .eq('id', codeRecord.id);
+
+    console.log('Code marked as used. ID:', codeRecord.id);
 
     if (updateError) {
       return { success: false, error: updateError.message };
