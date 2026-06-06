@@ -1,8 +1,9 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle } from 'lucide-react';
 import { ShapeLandingHero } from '@/components/ui/shape-landing-hero';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
@@ -65,7 +66,7 @@ const TestimonialCard = ({
     >
       <div className="flex gap-1 mb-4">
         {[...Array(rating)].map((_, i) => (
-          <span key={i} className="text-[var(--accent-gold)]">â­</span>
+          <Star key={i} size={16} className="fill-[var(--accent-gold)] text-[var(--accent-gold)]" />
         ))}
       </div>
       <p className="text-[var(--text-secondary)] mb-6 italic leading-relaxed">"{quote}"</p>
@@ -78,12 +79,12 @@ const TestimonialCard = ({
 };
 
 const ServiceCard = ({
-  icon,
+  icon: IconComponent,
   title,
   description,
   delay,
 }: {
-  icon: string;
+  icon: any;
   title: string;
   description: string;
   delay: number;
@@ -106,8 +107,8 @@ const ServiceCard = ({
       transition={{ duration: 0.5, delay }}
       className="glass-card p-8 hover:border-[var(--accent-blue)] hover:glow-blue transition-all duration-300 hover:-translate-y-2 group"
     >
-      <div className="w-14 h-14 rounded-full bg-[var(--glow-blue)] flex items-center justify-center mb-6 group-hover:bg-[var(--accent-blue)] text-2xl">
-        {icon}
+      <div className="w-14 h-14 rounded-full bg-[var(--glow-blue)] flex items-center justify-center mb-6 group-hover:bg-[var(--accent-blue)]">
+        <IconComponent size={28} className="text-[var(--accent-blue)]" />
       </div>
       <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-3">
         {title}
@@ -117,7 +118,7 @@ const ServiceCard = ({
         href="/services"
         className="text-[var(--accent-blue)] text-base font-medium hover:gap-2 inline-flex items-center transition-all"
       >
-        Learn more <span className="ml-1">â†’</span>
+        Learn more →
       </Link>
     </motion.div>
   );
@@ -139,9 +140,10 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="inline-block"
             >
-              <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full w-fit mx-auto">
+              <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full w-fit mx-auto flex items-center gap-2">
+                <Rocket size={16} className="text-[var(--accent-blue)]" />
                 <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
-                  ðŸš€ AI-Powered Digital Solutions
+                  AI-Powered Digital Solutions
                 </span>
               </div>
             </motion.div>
@@ -224,37 +226,37 @@ export default function Home() {
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <ServiceCard
-              icon="ðŸŒ"
+              icon={Globe}
               title="Website Design"
               description="Stunning, fast websites built to convert visitors into clients."
               delay={0}
             />
             <ServiceCard
-              icon="ðŸ¤–"
+              icon={Bot}
               title="AI Chatbots"
               description="24/7 intelligent assistants that handle your customer service."
               delay={0.08}
             />
             <ServiceCard
-              icon="ðŸŽ¨"
+              icon={Palette}
               title="Logo Design"
               description="Professional brand identity that makes you unforgettable."
               delay={0.16}
             />
             <ServiceCard
-              icon="ðŸ“„"
+              icon={FileText}
               title="PDF Guides"
               description="Expert knowledge packaged as downloadable products you sell forever."
               delay={0.24}
             />
             <ServiceCard
-              icon="ðŸ“±"
+              icon={QrCode}
               title="QR Code Design"
               description="Custom branded QR codes with built-in analytics tracking."
               delay={0.32}
             />
             <ServiceCard
-              icon="ðŸ“§"
+              icon={Mail}
               title="Custom Email"
               description="Professional @yourdomain.com email that builds instant credibility."
               delay={0.4}
@@ -278,10 +280,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { number: 1, title: 'Discovery', icon: 'ðŸ”', desc: 'We learn your business, goals, and audience in detail.' },
-              { number: 2, title: 'Design', icon: 'ðŸ“', desc: 'We craft wireframes and visual concepts for your approval.' },
-              { number: 3, title: 'Build', icon: 'âš™ï¸', desc: 'We develop with precision using the world&apos;s best tech stack.' },
-              { number: 4, title: 'Launch', icon: 'ðŸš€', desc: 'We deploy, test, and hand you the keys to your new digital asset.' },
+              { number: 1, title: 'Discovery', icon: Search, desc: 'We learn your business, goals, and audience in detail.' },
+              { number: 2, title: 'Design', icon: Layers, desc: 'We craft wireframes and visual concepts for your approval.' },
+              { number: 3, title: 'Build', icon: Code2, desc: 'We develop with precision using the world\'s best tech stack.' },
+              { number: 4, title: 'Launch', icon: Rocket, desc: 'We deploy, test, and hand you the keys to your new digital asset.' },
             ].map((step, i) => (
               <motion.div
                 key={i}
@@ -292,7 +294,7 @@ export default function Home() {
                 className="relative"
               >
                 <div className="glass-card p-6 h-full">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4 text-lg">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
                     <span className="text-white font-bold font-sora">{step.number}</span>
                   </div>
                   <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-2">
@@ -460,15 +462,15 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:mulukenendashaw68@gmail.com"
-                className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
-                ðŸ“§ Email Us
+                <Mail size={18} /> Email Us
               </a>
               <a
                 href="https://wa.me/27759440377"
-                className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
-                ðŸ’¬ WhatsApp Us
+                <MessageCircle size={18} /> WhatsApp Us
               </a>
             </div>
           </motion.div>
@@ -501,4 +503,3 @@ export default function Home() {
     </>
   );
 }
-
