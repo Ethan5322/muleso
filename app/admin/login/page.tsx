@@ -205,28 +205,41 @@ export default function AdminLogin() {
       const result = await verifyTwoFactorCode(ADMIN_EMAIL, twoFactorCode);
 
       if (result.success) {
-        // Login successful
-        const session = {
-          authenticated: true,
-          timestamp: Date.now(),
-          passwordHash: Math.random().toString(36).substring(2, 15),
-        };
+        // 2FA code verified, now send login request to API
+        try {
+          const loginResponse = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              password: password,
+              twoFactorCode: twoFactorCode,
+            }),
+          });
 
-        // Store in both localStorage and cookies for maximum security
-        localStorage.setItem('admin_session', JSON.stringify(session));
+          const loginData = await loginResponse.json();
 
-        // Set secure HTTP-only cookie (for server-side validation)
-        document.cookie = `admin_session=${JSON.stringify(session)}; path=/; max-age=${24 * 60 * 60}; SameSite=Strict`;
+          if (loginData.success) {
+            // Clear old auth data
+            localStorage.removeItem('admin_attempts');
+            localStorage.removeItem('admin_lockout');
+            localStorage.removeItem('admin_session');
 
-        localStorage.removeItem('admin_attempts');
-        localStorage.removeItem('admin_lockout');
-        setIsAdmin(true);
+            setStep('success');
+            toast.success('✅ Logged in successfully!');
 
-        setStep('success');
-        toast.success('✅ 2FA verified! Logging you in...');
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        router.push('/admin');
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            router.push('/admin');
+          } else {
+            toast.error(`❌ ${loginData.error || 'Login failed'}`);
+            setStep('password');
+            setPassword('');
+            setConfirmPassword('');
+            setTwoFactorCode('');
+          }
+        } catch (error) {
+          console.error('Login API error:', error);
+          toast.error('❌ Login failed');
+        }
       } else {
         // Code verification failed
         const newAttempts = twoFactorAttempts + 1;

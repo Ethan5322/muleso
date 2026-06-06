@@ -20,82 +20,16 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
 
   useEffect(() => {
-    const validateSession = async () => {
-      try {
-        const session = localStorage.getItem('admin_session');
+    // Middleware protects this route, so if we're here, user is authenticated
+    setAuthState('authenticated');
+    setSessionValid(true);
+  }, []);
 
-        if (!session) {
-          setAuthState('unauthenticated');
-          await new Promise(resolve => setTimeout(resolve, 100));
-          router.push('/admin/login');
-          return;
-        }
-
-        let sessionData;
-        try {
-          sessionData = JSON.parse(session);
-        } catch (e) {
-          localStorage.removeItem('admin_session');
-          setAuthState('unauthenticated');
-          await new Promise(resolve => setTimeout(resolve, 100));
-          router.push('/admin/login');
-          return;
-        }
-
-        if (!sessionData || typeof sessionData.authenticated !== 'boolean') {
-          localStorage.removeItem('admin_session');
-          setAuthState('unauthenticated');
-          await new Promise(resolve => setTimeout(resolve, 100));
-          router.push('/admin/login');
-          return;
-        }
-
-        if (!sessionData.timestamp || typeof sessionData.timestamp !== 'number') {
-          localStorage.removeItem('admin_session');
-          setAuthState('unauthenticated');
-          await new Promise(resolve => setTimeout(resolve, 100));
-          router.push('/admin/login');
-          return;
-        }
-
-        if (sessionData.authenticated !== true) {
-          localStorage.removeItem('admin_session');
-          setAuthState('unauthenticated');
-          await new Promise(resolve => setTimeout(resolve, 100));
-          router.push('/admin/login');
-          return;
-        }
-
-        const sessionAge = Date.now() - sessionData.timestamp;
-        const MAX_SESSION_AGE = 24 * 60 * 60 * 1000;
-
-        if (sessionAge > MAX_SESSION_AGE) {
-          localStorage.removeItem('admin_session');
-          setAuthState('unauthenticated');
-          toast.error('🔒 Session expired. Please login again.');
-          await new Promise(resolve => setTimeout(resolve, 100));
-          router.push('/admin/login');
-          return;
-        }
-
-        setSessionValid(true);
-        setAuthState('authenticated');
-      } catch (error) {
-        console.error('Auth validation error:', error);
-        localStorage.removeItem('admin_session');
-        setAuthState('unauthenticated');
-        await new Promise(resolve => setTimeout(resolve, 100));
-        router.push('/admin/login');
-      }
-    };
-
-    validateSession();
-  }, [router]);
-
-  if (authState !== 'authenticated' || !sessionValid) {
+  // Middleware handles authentication, so just show the dashboard
+  if (authState !== 'authenticated') {
     return (
       <div className="min-h-screen bg-[#050810] flex items-center justify-center">
-        <div className="text-[#00C8FF] text-lg">🔒 Verifying access...</div>
+        <div className="text-[#00C8FF] text-lg">Loading admin panel...</div>
       </div>
     );
   }
