@@ -78,10 +78,20 @@ export async function verifyTwoFactorCode(
 
     const codeRecord = codes[0];
 
+    console.log('Code record:', codeRecord);
+    console.log('Current time:', new Date());
+    console.log('Expires at:', new Date(codeRecord.expires_at));
+
     // Check if code is expired
-    if (new Date() > new Date(codeRecord.expires_at)) {
+    const now = new Date();
+    const expiresAt = new Date(codeRecord.expires_at);
+
+    if (now > expiresAt) {
+      console.log('Code expired!', now, '>', expiresAt);
       return { success: false, error: 'Code has expired' };
     }
+
+    console.log('Code is valid, marking as used...');
 
     // Mark code as used
     const { error: updateError } = await supabase
