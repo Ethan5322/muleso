@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
-import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactor';
+import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
 
 const ADMIN_PASSWORD = 'M53223344m.&.M';
 const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
