@@ -4,10 +4,12 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Copy, Printer, Share2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { generateFramedQRCode, downloadFramedQRCode, generateQRCodePDF } from '@/lib/generateFramedQRCode';
+import { generateFramedQRCode, downloadFramedQRCode, generateQRCodePDF, generateCleanQRCode, downloadCleanQRCode } from '@/lib/generateFramedQRCode';
 
 export default function QRDownloadPage() {
   const [qrImage, setQrImage] = useState<string | null>(null);
+  const [cleanQrImage, setCleanQrImage] = useState<string | null>(null);
+  const [activeVersion, setActiveVersion] = useState<'framed' | 'clean'>('framed');
   const [loading, setLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -15,8 +17,12 @@ export default function QRDownloadPage() {
     const loadQR = async () => {
       try {
         setLoading(true);
-        const dataUrl = await generateFramedQRCode('https://mulesoo.vercel.app', 800);
-        setQrImage(dataUrl);
+        const [framedUrl, cleanUrl] = await Promise.all([
+          generateFramedQRCode('https://mulesoo.vercel.app', 800),
+          generateCleanQRCode('https://mulesoo.vercel.app', 600),
+        ]);
+        setQrImage(framedUrl);
+        setCleanQrImage(cleanUrl);
       } catch (error) {
         console.error('Failed to load QR code:', error);
         toast.error('Failed to load QR code');
@@ -31,7 +37,11 @@ export default function QRDownloadPage() {
   const handleDownloadPNG = async () => {
     try {
       toast.loading('Generating PNG...');
-      await downloadFramedQRCode('MuleSoo_QRCode.png');
+      if (activeVersion === 'framed') {
+        await downloadFramedQRCode('MuleSoo_QRCode_Branded.png');
+      } else {
+        await downloadCleanQRCode('MuleSoo_QRCode_Scannable.png');
+      }
       toast.dismiss();
       toast.success('✅ QR code downloaded!');
     } catch (error) {
@@ -105,6 +115,35 @@ export default function QRDownloadPage() {
           </p>
         </motion.div>
 
+        {/* Version Selector */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="flex gap-4 justify-center mb-8 flex-wrap"
+        >
+          <button
+            onClick={() => setActiveVersion('framed')}
+            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+              activeVersion === 'framed'
+                ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white'
+                : 'bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
+            }`}
+          >
+            ✨ Branded Frame
+          </button>
+          <button
+            onClick={() => setActiveVersion('clean')}
+            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+              activeVersion === 'clean'
+                ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white'
+                : 'bg-[var(--bg-secondary)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)]'
+            }`}
+          >
+            📱 Ultra-Scannable
+          </button>
+        </motion.div>
+
         {/* QR Code Display */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -114,21 +153,38 @@ export default function QRDownloadPage() {
         >
           {loading ? (
             <div className="text-[var(--accent-blue)] text-lg font-semibold">
-              Generating QR Code...
+              Generating QR Codes...
             </div>
-          ) : qrImage ? (
+          ) : activeVersion === 'framed' && qrImage ? (
             <motion.div
+              key="framed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="w-full max-w-md"
             >
               <img
                 src={qrImage}
-                alt="MuleSoo Official QR Code"
-                className="w-full rounded-lg shadow-2xl"
+                alt="MuleSoo Branded QR Code"
+                className="w-full rounded-lg shadow-2xl bg-white p-4"
               />
               <p className="text-center text-[var(--text-secondary)] text-sm mt-4">
-                Right-click to save or use the buttons below
+                Professional branded version - right-click to save
+              </p>
+            </motion.div>
+          ) : activeVersion === 'clean' && cleanQrImage ? (
+            <motion.div
+              key="clean"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-full max-w-md"
+            >
+              <img
+                src={cleanQrImage}
+                alt="MuleSoo Ultra-Scannable QR Code"
+                className="w-full rounded-lg shadow-2xl bg-white p-4"
+              />
+              <p className="text-center text-[var(--text-secondary)] text-sm mt-4">
+                Ultra-scannable version - easiest to scan with any phone camera
               </p>
             </motion.div>
           ) : (
@@ -153,7 +209,9 @@ export default function QRDownloadPage() {
           >
             <Download size={28} className="mb-2" />
             <span className="text-sm text-center">Download PNG</span>
-            <span className="text-xs opacity-90 mt-1">(For screens)</span>
+            <span className="text-xs opacity-90 mt-1">
+              {activeVersion === 'framed' ? '(Branded)' : '(Scannable)'}
+            </span>
           </motion.button>
 
           {/* Download PDF */}
@@ -193,6 +251,32 @@ export default function QRDownloadPage() {
             <span className="text-sm text-center">Copy Link</span>
             <span className="text-xs opacity-90 mt-1">(mulesoo.vercel.app)</span>
           </motion.button>
+        </motion.div>
+
+        {/* Version Comparison Info */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="bg-[var(--bg-secondary)] border border-[var(--accent-purple)] rounded-2xl p-8 mb-8"
+        >
+          <h3 className="text-xl font-bold text-[var(--accent-purple)] mb-4">
+            Which Version Should You Use?
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--accent-blue)]/30">
+              <h4 className="font-bold text-[var(--accent-blue)] mb-2">✨ Branded Frame</h4>
+              <p className="text-[var(--text-secondary)] text-sm">
+                Best for: Marketing materials, social media, branding. Professional frame with your company name.
+              </p>
+            </div>
+            <div className="p-4 bg-[var(--bg-card)] rounded-lg border border-[var(--accent-gold)]/30">
+              <h4 className="font-bold text-[var(--accent-gold)] mb-2">📱 Ultra-Scannable</h4>
+              <p className="text-[var(--text-secondary)] text-sm">
+                Best for: Physical locations, business cards, printed materials. Minimal design, scans instantly.
+              </p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Info Section */}

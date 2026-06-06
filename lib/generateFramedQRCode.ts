@@ -2,7 +2,7 @@ import QRCode from 'qrcode';
 import jsPDF from 'jspdf';
 
 /**
- * Generate a professional framed QR code with "SCAN ME" text
+ * Generate a professional framed QR code optimized for scanning
  * Returns a canvas element that can be downloaded
  */
 export const generateFramedQRCode = async (
@@ -10,9 +10,17 @@ export const generateFramedQRCode = async (
   size: number = 800
 ): Promise<string> => {
   try {
-    // Generate QR code data
+    // Generate QR code with high error correction and proper settings
     const qrDataUrl = await new Promise<string>((resolve, reject) => {
-      QRCode.toDataURL(url, { width: size - 100, margin: 10 }, (error, dataUrl) => {
+      QRCode.toDataURL(url, {
+        width: 500,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'H', // High error correction for better scanning
+      }, (error, dataUrl) => {
         if (error) reject(error);
         else resolve(dataUrl);
       });
@@ -23,62 +31,137 @@ export const generateFramedQRCode = async (
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Could not get canvas context');
 
-    // Set canvas size
-    canvas.width = size;
-    canvas.height = size + 200; // Extra space for "SCAN ME" text
+    const padding = 60;
+    const frameWidth = size + padding * 2;
+    const frameHeight = size + padding * 2 + 150; // Extra space for text
 
-    // Background (white)
+    // Set canvas size
+    canvas.width = frameWidth;
+    canvas.height = frameHeight;
+
+    // White background
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Outer frame (cyan border)
+    // Draw decorative frame (outer cyan border - doesn't interfere with QR)
     ctx.strokeStyle = '#00C8FF';
-    ctx.lineWidth = 8;
-    ctx.strokeRect(20, 20, size - 40, size - 40);
+    ctx.lineWidth = 6;
+    ctx.strokeRect(15, 15, frameWidth - 30, size - 30);
 
-    // Inner frame (gold border)
+    // Draw inner gold accent line
     ctx.strokeStyle = '#E8B84B';
-    ctx.lineWidth = 3;
-    ctx.strokeRect(35, 35, size - 70, size - 70);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(25, 25, frameWidth - 50, size - 50);
 
-    // Company name at top
-    ctx.fillStyle = '#00C8FF';
-    ctx.font = 'bold 32px Arial';
+    // Company branding at top (above QR code)
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 28px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('MULESOO', size / 2, 60);
+    ctx.fillText('MULESOO', frameWidth / 2, 45);
 
-    // Tagline
-    ctx.fillStyle = '#666666';
-    ctx.font = '14px Arial';
-    ctx.fillText('Digital Services | Professional Solutions', size / 2, 80);
-
-    // Add QR code image
+    // Load and draw the QR code image in the center
     const qrImage = new Image();
     qrImage.src = qrDataUrl;
 
     await new Promise<void>((resolve) => {
       qrImage.onload = () => {
-        const qrSize = size - 100;
-        ctx.drawImage(qrImage, 50, 90, qrSize, qrSize);
+        // Center the QR code horizontally, place it in upper-middle area
+        const qrDisplaySize = size - padding;
+        const qrX = (frameWidth - qrDisplaySize) / 2;
+        const qrY = padding;
+
+        // Draw white background behind QR to ensure contrast
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(qrX - 5, qrY - 5, qrDisplaySize + 10, qrDisplaySize + 10);
+
+        // Draw the QR code
+        ctx.drawImage(qrImage, qrX, qrY, qrDisplaySize, qrDisplaySize);
         resolve();
       };
     });
 
-    // "SCAN ME" text at bottom
-    ctx.fillStyle = '#E8B84B';
-    ctx.font = 'bold 48px Arial';
+    // "SCAN ME" text - prominently displayed below QR
+    ctx.fillStyle = '#00C8FF';
+    ctx.font = 'bold 56px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('SCAN ME', size / 2, size + 150);
+    ctx.fillText('↓ SCAN ME ↓', frameWidth / 2, size + padding + 80);
 
     // Website URL at very bottom
-    ctx.fillStyle = '#00C8FF';
-    ctx.font = 'bold 18px Arial';
-    ctx.fillText('mulesoo.vercel.app', size / 2, size + 185);
+    ctx.fillStyle = '#E8B84B';
+    ctx.font = 'bold 20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('mulesoo.vercel.app', frameWidth / 2, frameHeight - 15);
 
-    // Return canvas as data URL
-    return canvas.toDataURL('image/png');
+    // Return canvas as data URL with high quality
+    return canvas.toDataURL('image/png', 1.0);
   } catch (error) {
     console.error('Failed to generate framed QR code:', error);
+    throw error;
+  }
+};
+
+/**
+ * Generate ultra-clean, highly scannable QR code (minimal frame version)
+ */
+export const generateCleanQRCode = async (
+  url: string = 'https://mulesoo.vercel.app',
+  size: number = 600
+): Promise<string> => {
+  try {
+    const qrDataUrl = await new Promise<string>((resolve, reject) => {
+      QRCode.toDataURL(url, {
+        width: 450,
+        margin: 1,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'H',
+      }, (error, dataUrl) => {
+        if (error) reject(error);
+        else resolve(dataUrl);
+      });
+    });
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Could not get canvas context');
+
+    canvas.width = size;
+    canvas.height = size + 80;
+
+    // Pure white background
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Minimal frame (just two thin lines at corners for elegance)
+    ctx.strokeStyle = '#00C8FF';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(8, 8, size - 16, size - 16);
+
+    const qrImage = new Image();
+    qrImage.src = qrDataUrl;
+
+    await new Promise<void>((resolve) => {
+      qrImage.onload = () => {
+        const qrDisplaySize = size - 32;
+        const qrX = (size - qrDisplaySize) / 2;
+        const qrY = 16;
+
+        ctx.drawImage(qrImage, qrX, qrY, qrDisplaySize, qrDisplaySize);
+        resolve();
+      };
+    });
+
+    // Scan me text
+    ctx.fillStyle = '#00C8FF';
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Scan to visit', size / 2, size + 50);
+
+    return canvas.toDataURL('image/png', 1.0);
+  } catch (error) {
+    console.error('Failed to generate clean QR code:', error);
     throw error;
   }
 };
@@ -101,6 +184,27 @@ export const downloadFramedQRCode = async (filename: string = 'MuleSoo_QRCode.pn
     console.log('✅ QR code downloaded:', filename);
   } catch (error) {
     console.error('Failed to download QR code:', error);
+    throw error;
+  }
+};
+
+/**
+ * Download clean scannable version
+ */
+export const downloadCleanQRCode = async (filename: string = 'MuleSoo_QRCode_Clean.png') => {
+  try {
+    const dataUrl = await generateCleanQRCode('https://mulesoo.vercel.app', 600);
+
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    console.log('✅ Clean QR code downloaded:', filename);
+  } catch (error) {
+    console.error('Failed to download clean QR code:', error);
     throw error;
   }
 };
