@@ -40,3 +40,35 @@ export interface Booking {
   client_id?: string;
   client_id_type?: 'national_id' | 'passport';
 }
+
+export interface PortfolioItem {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  title: string;
+  description: string;
+  category: 'Website' | 'Chatbot' | 'Logo' | 'QR Code' | 'PDF' | 'Email' | 'Video' | 'Other';
+  client_name: string;
+  client_type: string;
+  image_url: string;
+  video_url?: string;
+  tech_stack: string[];
+  challenge: string;
+  solution: string;
+  result: string;
+  link?: string;
+  featured: boolean;
+  order: number;
+}
+
+export interface CustomPage {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  title: string;
+  slug: string;
+  content: string;
+  meta_description: string;
+  published: boolean;
+  order: number;
+}
