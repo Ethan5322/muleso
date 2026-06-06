@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { error } = await resend.emails.send({
-      from: 'security@mulesoo.com',
+      from: 'onboarding@resend.dev',
       to: email,
       subject: '🔐 MuleSoo Admin - Two-Factor Code',
       html: `
