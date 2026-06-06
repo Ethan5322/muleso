@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { LogOut, LayoutDashboard, ImageIcon, FileText, BookOpen, Settings } from 'lucide-react';
 import toast from 'react-hot-toast';
+import AdminOverview from '@/components/admin/AdminOverview';
+import PortfolioManager from '@/components/admin/PortfolioManager';
+import PageManager from '@/components/admin/PageManager';
+import BookingsDashboard from '@/components/admin/BookingsDashboard';
 
 type TabType = 'overview' | 'portfolio' | 'pages' | 'bookings' | 'settings';
 
@@ -111,30 +115,10 @@ function AdminDashboardContent({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
             >
-              {activeTab === 'overview' && (
-                <div className="text-white">
-                  <h2 className="text-2xl font-bold mb-4">Dashboard Overview</h2>
-                  <p className="text-gray-400">Welcome to your admin panel! ✅</p>
-                </div>
-              )}
-              {activeTab === 'portfolio' && (
-                <div className="text-white">
-                  <h2 className="text-2xl font-bold mb-4">Portfolio Manager</h2>
-                  <p className="text-gray-400">Coming soon...</p>
-                </div>
-              )}
-              {activeTab === 'pages' && (
-                <div className="text-white">
-                  <h2 className="text-2xl font-bold mb-4">Pages Manager</h2>
-                  <p className="text-gray-400">Coming soon...</p>
-                </div>
-              )}
-              {activeTab === 'bookings' && (
-                <div className="text-white">
-                  <h2 className="text-2xl font-bold mb-4">Bookings Dashboard</h2>
-                  <p className="text-gray-400">Coming soon...</p>
-                </div>
-              )}
+              {activeTab === 'overview' && <AdminOverview />}
+              {activeTab === 'portfolio' && <PortfolioManager />}
+              {activeTab === 'pages' && <PageManager />}
+              {activeTab === 'bookings' && <BookingsDashboard />}
               {activeTab === 'settings' && (
                 <div className="max-w-2xl">
                   <h2 className="text-2xl font-bold text-white mb-6 font-sora">Settings</h2>

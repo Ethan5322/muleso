@@ -1,172 +1,86 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { supabase, CustomPage } from '@/lib/supabase';
-import PageEditor from './PageEditor';
+import { Trash2, Edit2, Plus, Eye } from 'lucide-react';
+
+const pages = [
+  { id: 1, title: 'Home Page', slug: '/', status: 'Published', updated: '2026-06-01' },
+  { id: 2, title: 'Services', slug: '/services', status: 'Published', updated: '2026-05-28' },
+  { id: 3, title: 'Portfolio', slug: '/portfolio', status: 'Published', updated: '2026-05-25' },
+  { id: 4, title: 'About Us', slug: '/about', status: 'Published', updated: '2026-05-20' },
+];
 
 export default function PageManager() {
-  const [pages, setPages] = useState<CustomPage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showEditor, setShowEditor] = useState(false);
-  const [editingPage, setEditingPage] = useState<CustomPage | null>(null);
-
-  useEffect(() => {
-    loadPages();
-  }, []);
-
-  const loadPages = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('pages')
-        .select('*')
-        .order('order', { ascending: true });
-
-      if (error) throw error;
-      setPages(data || []);
-    } catch (error: any) {
-      toast.error(`Error loading pages: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeletePage = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this page?')) return;
-
-    try {
-      const { error } = await supabase.from('pages').delete().eq('id', id);
-      if (error) throw error;
-      toast.success('Page deleted');
-      loadPages();
-    } catch (error: any) {
-      toast.error(`Error deleting: ${error.message}`);
-    }
-  };
-
-  const handleTogglePublished = async (id: string, currentPublished: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('pages')
-        .update({ published: !currentPublished })
-        .eq('id', id);
-
-      if (error) throw error;
-      toast.success('Page status updated');
-      loadPages();
-    } catch (error: any) {
-      toast.error(`Error updating: ${error.message}`);
-    }
-  };
-
-  if (showEditor) {
-    return (
-      <PageEditor
-        page={editingPage}
-        onSave={() => {
-          setShowEditor(false);
-          setEditingPage(null);
-          loadPages();
-        }}
-        onCancel={() => {
-          setShowEditor(false);
-          setEditingPage(null);
-        }}
-      />
-    );
-  }
-
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">Custom Pages</h2>
-          <p className="text-[#00C8FF]/60">Create and manage custom website pages</p>
+          <h2 className="text-3xl font-bold text-white">Pages Manager</h2>
+          <p className="text-gray-400">Edit your website pages</p>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            setEditingPage(null);
-            setShowEditor(true);
-          }}
-          className="flex items-center gap-2 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white px-6 py-3 rounded-lg font-semibold"
-        >
-          <Plus size={20} />
-          New Page
-        </motion.button>
+        <button className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2 px-6 rounded-lg flex items-center gap-2">
+          <Plus size={20} /> New Page
+        </button>
       </div>
 
-      {loading ? (
-        <div className="text-[#00C8FF]">Loading pages...</div>
-      ) : pages.length === 0 ? (
-        <div className="bg-[#0A0F1E] border-2 border-dashed border-[#00C8FF]/30 rounded-xl p-12 text-center">
-          <p className="text-[#00C8FF]/60 mb-4">No custom pages yet</p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            onClick={() => {
-              setEditingPage(null);
-              setShowEditor(true);
-            }}
-            className="inline-flex items-center gap-2 bg-[#00C8FF]/20 hover:bg-[#00C8FF]/30 text-[#00C8FF] px-6 py-2 rounded-lg"
-          >
-            <Plus size={18} />
-            Create Your First Page
-          </motion.button>
-        </div>
-      ) : (
-        <div className="grid gap-4">
-          {pages.map((page, index) => (
-            <motion.div
-              key={page.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6 flex items-center justify-between hover:border-[#00C8FF]/60 transition-all"
-            >
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-white mb-1">{page.title}</h3>
-                <p className="text-[#00C8FF] text-sm">/{page.slug}</p>
-                <p className="text-[#00C8FF]/60 text-sm mt-2 line-clamp-2">{page.meta_description}</p>
-              </div>
+      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-[#1A2332]">
+            <tr>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Page Title</th>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">URL Slug</th>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Status</th>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Updated</th>
+              <th className="text-center px-6 py-4 text-gray-400 font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pages.map((page) => (
+              <tr key={page.id} className="border-t border-[#1E3A5F] hover:bg-[#1A2332] transition">
+                <td className="px-6 py-4 text-white font-semibold">{page.title}</td>
+                <td className="px-6 py-4 text-gray-400">{page.slug}</td>
+                <td className="px-6 py-4">
+                  <span className="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm">{page.status}</span>
+                </td>
+                <td className="px-6 py-4 text-gray-400">{page.updated}</td>
+                <td className="px-6 py-4 text-center">
+                  <div className="flex gap-2 justify-center">
+                    <button className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black px-3 py-1 rounded-lg flex items-center gap-1">
+                      <Eye size={16} /> View
+                    </button>
+                    <button className="bg-[#7B2FFF] hover:bg-[#6B1FEF] text-white px-3 py-1 rounded-lg flex items-center gap-1">
+                      <Edit2 size={16} /> Edit
+                    </button>
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg flex items-center gap-1">
+                      <Trash2 size={16} /> Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-              <div className="flex gap-2 ml-4">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => {
-                    setEditingPage(page);
-                    setShowEditor(true);
-                  }}
-                  className="flex items-center justify-center gap-2 bg-[#7B2FFF]/20 hover:bg-[#7B2FFF]/40 text-[#7B2FFF] px-4 py-2 rounded-lg transition-all"
-                >
-                  <Edit2 size={18} />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => handleTogglePublished(page.id, page.published)}
-                  className={`flex items-center justify-center px-4 py-2 rounded-lg transition-all ${
-                    page.published
-                      ? 'bg-[#00FF88]/20 text-[#00FF88]'
-                      : 'bg-[#00C8FF]/20 text-[#00C8FF]/60 hover:text-[#00C8FF]'
-                  }`}
-                >
-                  {page.published ? <Eye size={18} /> : <EyeOff size={18} />}
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => handleDeletePage(page.id)}
-                  className="flex items-center justify-center px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-400 rounded-lg transition-all"
-                >
-                  <Trash2 size={18} />
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
+        <h3 className="text-xl font-bold text-white mb-4">Edit Page Content</h3>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Page Title</label>
+            <input type="text" placeholder="Page title" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2 rounded-lg focus:border-[#00C8FF]" />
+          </div>
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">URL Slug</label>
+            <input type="text" placeholder="/page-name" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2 rounded-lg focus:border-[#00C8FF]" />
+          </div>
+          <div>
+            <label className="block text-gray-400 text-sm mb-2">Page Content</label>
+            <textarea rows={6} placeholder="Write your page content here..." className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2 rounded-lg focus:border-[#00C8FF]"></textarea>
+          </div>
+          <button type="submit" className="w-full bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2 px-4 rounded-lg">
+            Save Page
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

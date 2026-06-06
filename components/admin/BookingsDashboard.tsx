@@ -1,194 +1,101 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, Clock, AlertCircle, Trash2 } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { supabase, Booking } from '@/lib/supabase';
+import { Mail, Phone, CheckCircle, Clock } from 'lucide-react';
 
-type BookingStatus = 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled';
+const bookings = [
+  { id: 1, name: 'John Smith', email: 'john@example.com', phone: '+27123456789', service: 'Website Design', status: 'New', date: '2026-06-06' },
+  { id: 2, name: 'Sarah Johnson', email: 'sarah@example.com', phone: '+27987654321', service: 'AI Chatbot', status: 'Viewed', date: '2026-06-05' },
+  { id: 3, name: 'Mike Williams', email: 'mike@example.com', phone: '+27555666777', service: 'Logo Design', status: 'Contacted', date: '2026-06-04' },
+];
 
 export default function BookingsDashboard() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState<BookingStatus | 'all'>('all');
-
-  useEffect(() => {
-    loadBookings();
-  }, []);
-
-  const loadBookings = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setBookings(data || []);
-    } catch (error: any) {
-      toast.error(`Error loading bookings: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleStatusChange = async (id: string, newStatus: BookingStatus) => {
-    try {
-      const { error } = await supabase
-        .from('bookings')
-        .update({ status: newStatus })
-        .eq('id', id);
-
-      if (error) throw error;
-      toast.success(`Status updated to ${newStatus}`);
-      loadBookings();
-    } catch (error: any) {
-      toast.error(`Error: ${error.message}`);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this booking?')) return;
-
-    try {
-      const { error } = await supabase.from('bookings').delete().eq('id', id);
-      if (error) throw error;
-      toast.success('Booking deleted');
-      loadBookings();
-    } catch (error: any) {
-      toast.error(`Error: ${error.message}`);
-    }
-  };
-
-  const filteredBookings = selectedStatus === 'all'
-    ? bookings
-    : bookings.filter(b => b.status === selectedStatus);
-
-  const stats = {
-    pending: bookings.filter(b => b.status === 'Pending').length,
-    confirmed: bookings.filter(b => b.status === 'Confirmed').length,
-    completed: bookings.filter(b => b.status === 'Completed').length,
-    cancelled: bookings.filter(b => b.status === 'Cancelled').length,
-  };
-
-  const getStatusIcon = (status: BookingStatus) => {
-    switch (status) {
-      case 'Pending': return <Clock size={18} />;
-      case 'Confirmed': return <CheckCircle size={18} />;
-      case 'Completed': return <CheckCircle size={18} />;
-      case 'Cancelled': return <AlertCircle size={18} />;
-    }
-  };
-
-  const getStatusColor = (status: BookingStatus) => {
-    switch (status) {
-      case 'Pending': return 'text-yellow-400 bg-yellow-400/20';
-      case 'Confirmed': return 'text-blue-400 bg-blue-400/20';
-      case 'Completed': return 'text-green-400 bg-green-400/20';
-      case 'Cancelled': return 'text-red-400 bg-red-400/20';
-    }
-  };
-
   return (
-    <div>
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {[
-          { label: 'Pending', value: stats.pending, color: 'yellow' },
-          { label: 'Confirmed', value: stats.confirmed, color: 'blue' },
-          { label: 'Completed', value: stats.completed, color: 'green' },
-          { label: 'Cancelled', value: stats.cancelled, color: 'red' },
-        ].map(stat => (
-          <div key={stat.label} className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-4">
-            <p className={`text-2xl font-bold ${stat.color === 'yellow' ? 'text-yellow-400' : stat.color === 'blue' ? 'text-blue-400' : stat.color === 'green' ? 'text-green-400' : 'text-red-400'}`}>
-              {stat.value}
-            </p>
-            <p className="text-[#00C8FF]/60 text-sm mt-1">{stat.label}</p>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-3xl font-bold text-white">Customer Bookings</h2>
+        <p className="text-gray-400">View and manage customer inquiries</p>
+      </div>
+
+      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-[#1A2332]">
+            <tr>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Name</th>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Service</th>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Status</th>
+              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Date</th>
+              <th className="text-center px-6 py-4 text-gray-400 font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <tr key={booking.id} className="border-t border-[#1E3A5F] hover:bg-[#1A2332] transition">
+                <td className="px-6 py-4">
+                  <div>
+                    <p className="text-white font-semibold">{booking.name}</p>
+                    <div className="flex gap-3 mt-1 text-xs text-gray-400">
+                      <span className="flex items-center gap-1"><Mail size={14} /> {booking.email}</span>
+                      <span className="flex items-center gap-1"><Phone size={14} /> {booking.phone}</span>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-gray-400">{booking.service}</td>
+                <td className="px-6 py-4">
+                  <span className={`px-3 py-1 rounded-full text-sm ${
+                    booking.status === 'New' ? 'bg-blue-600/20 text-blue-400' :
+                    booking.status === 'Viewed' ? 'bg-yellow-600/20 text-yellow-400' :
+                    'bg-green-600/20 text-green-400'
+                  }`}>
+                    {booking.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-gray-400">{booking.date}</td>
+                <td className="px-6 py-4 text-center">
+                  <div className="flex gap-2 justify-center">
+                    <button className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black px-3 py-1 rounded-lg flex items-center gap-1">
+                      <CheckCircle size={16} /> Mark Contacted
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
+          <h3 className="text-lg font-bold text-white mb-4">Booking Statistics</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-400">Total Inquiries</span>
+              <span className="text-white font-bold">47</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">New Bookings</span>
+              <span className="text-blue-400 font-bold">12</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">Contacted</span>
+              <span className="text-green-400 font-bold">28</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-400">Conversion Rate</span>
+              <span className="text-yellow-400 font-bold">59.6%</span>
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Filter */}
-      <div className="flex gap-2 mb-8 overflow-x-auto">
-        {['all', 'Pending', 'Confirmed', 'Completed', 'Cancelled'].map(status => (
-          <button
-            key={status}
-            onClick={() => setSelectedStatus(status as any)}
-            className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
-              selectedStatus === status
-                ? 'bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white'
-                : 'bg-[#0A0F1E] border border-[#00C8FF]/30 text-[#00C8FF] hover:border-[#00C8FF]'
-            }`}
-          >
-            {status === 'all' ? 'All Bookings' : status}
+        <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
+          <h3 className="text-lg font-bold text-white mb-4">Quick Actions</h3>
+          <button className="w-full bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2 px-4 rounded-lg mb-2">
+            Export All Bookings (CSV)
           </button>
-        ))}
+          <button className="w-full bg-[#7B2FFF] hover:bg-[#6B1FEF] text-white font-bold py-2 px-4 rounded-lg">
+            Send Mass Email
+          </button>
+        </div>
       </div>
-
-      {/* Bookings List */}
-      {loading ? (
-        <div className="text-[#00C8FF]">Loading bookings...</div>
-      ) : filteredBookings.length === 0 ? (
-        <div className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-12 text-center">
-          <p className="text-[#00C8FF]/60">No bookings found</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {filteredBookings.map((booking, index) => (
-            <motion.div
-              key={booking.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-                <div>
-                  <p className="text-[#00C8FF]/60 text-sm">Client</p>
-                  <p className="text-white font-bold">{booking.name}</p>
-                  <p className="text-[#00C8FF] text-sm">{booking.email}</p>
-                </div>
-                <div>
-                  <p className="text-[#00C8FF]/60 text-sm">Service & Budget</p>
-                  <p className="text-white font-bold">{booking.service}</p>
-                  <p className="text-[#00C8FF] text-sm">{booking.budget}</p>
-                </div>
-                <div>
-                  <p className="text-[#00C8FF]/60 text-sm">Details</p>
-                  <p className="text-white font-bold">{booking.country}</p>
-                  <p className="text-[#00C8FF] text-sm">{booking.timeline}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-[#00C8FF]/20">
-                <div className="flex items-center gap-2">
-                  <select
-                    value={booking.status}
-                    onChange={e => handleStatusChange(booking.id, e.target.value as BookingStatus)}
-                    className={`px-3 py-1 rounded-lg text-sm font-semibold flex items-center gap-2 ${getStatusColor(booking.status)}`}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  onClick={() => handleDelete(booking.id)}
-                  className="flex items-center gap-2 px-3 py-1 bg-red-500/20 hover:bg-red-500/40 text-red-400 rounded-lg transition-all text-sm"
-                >
-                  <Trash2 size={16} />
-                  Delete
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
