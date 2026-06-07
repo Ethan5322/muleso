@@ -23,24 +23,34 @@ export default function AboutPage() {
           viewport={{ once: true }}
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20 items-center"
         >
-          <div className="w-full h-96 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] rounded-2xl border-2 border-[var(--accent-gold)] overflow-hidden relative">
-            {/* CEO Image - Upload /public/CEO.jpg to display Ethan's photo */}
-            <div className="relative w-full h-full">
-              <Image
-                src="/CEO.jpg"
-                alt="Ethan - CEO of MuleSoo"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-            {/* Fallback text when image not found */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-blue)]/50 to-[var(--accent-purple)]/50 flex items-center justify-center pointer-events-none">
-              <span className="text-[var(--text-secondary)] text-center">
-                <p className="text-sm">Add Ethan's photo</p>
-                <p className="text-xs mt-2 opacity-60">/public/CEO.jpg</p>
-              </span>
-            </div>
+          <div className="flex flex-col items-center lg:items-start">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="w-full max-w-sm"
+            >
+              <div className="relative w-full rounded-2xl overflow-hidden border-2 border-[var(--accent-gold)] glow-gold shadow-2xl mb-6"
+                style={{
+                  aspectRatio: '3/4',
+                  boxShadow: '0 0 40px rgba(232, 184, 75, 0.3), 0 0 80px rgba(232, 184, 75, 0.15)'
+                }}>
+                <Image
+                  src="/CEO.jpg"
+                  alt="Ethan - Founder and CEO of MuleSoo"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 400px"
+                />
+              </div>
+              <div className="text-center">
+                <h3 className="text-2xl font-bold font-sora text-[var(--accent-gold)] mb-1">Ethan</h3>
+                <p className="text-lg font-sora text-[var(--text-primary)] font-bold">Founder and CEO</p>
+                <p className="text-sm text-[var(--text-secondary)] mt-2">MuleSoo Digital Services</p>
+              </div>
+            </motion.div>
           </div>
 
           <div className="space-y-6">
