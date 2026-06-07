@@ -66,7 +66,7 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-card p-8 text-center border border-[var(--accent-green)]"
               >
-                <div className="text-6xl mb-4">âœ…</div>
+                <div className="text-6xl mb-4 text-[var(--accent-green)]">✓</div>
                 <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-4">
                   Thank you, {formData.name}!
                 </h2>
@@ -156,8 +156,8 @@ export default function ContactPage() {
                     >
                       <option value="">Select budget</option>
                       <option value="under-2k">Under R2,000</option>
-                      <option value="2k-5k">R2,000 â€“ R5,000</option>
-                      <option value="5k-10k">R5,000 â€“ R10,000</option>
+                      <option value=”2k-5k”>R2,000 - R5,000</option>
+                      <option value=”5k-10k”>R5,000 - R10,000</option>
                       <option value="10k-plus">R10,000+</option>
                       <option value="unsure">Not sure yet</option>
                     </select>
@@ -204,7 +204,7 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   className="w-full py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send My Enquiry â†’'}
+                  {isSubmitting ? ‘Sending...’ : ‘Send Enquiry’}
                 </button>
               </form>
             )}
@@ -268,8 +268,7 @@ export default function ContactPage() {
 
               <div className="bg-[var(--glow-blue)] p-4 rounded-lg">
                 <p className="text-xs text-[var(--text-secondary)]">
-                  ðŸ’¡ <strong>Pro tip:</strong> The more details you share about your project, the faster we can give
-                  you an accurate quote.
+                  <strong>Pro tip:</strong> The more details you share about your project, the faster we can give you an accurate quote.
                 </p>
               </div>
             </div>

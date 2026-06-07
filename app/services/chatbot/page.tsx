@@ -10,7 +10,7 @@ export default function ChatbotPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
           title="Your Business, On Autopilot"
-          subtitle="AI chatbots that answer questions, book appointments, and qualify leads â€” 24 hours a day."
+          subtitle=”AI chatbots that answer questions, book appointments, and qualify leads - 24 hours a day.”
         />
 
         {/* Features */}
