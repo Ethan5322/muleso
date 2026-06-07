@@ -66,7 +66,7 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-card p-8 text-center border border-[var(--accent-green)]"
               >
-                <div className="text-6xl mb-4">âœ…</div>
+                <div className="text-6xl mb-4 text-[var(--accent-green)]">✓</div>
                 <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-4">
                   Thank you, {formData.name}!
                 </h2>
@@ -204,7 +204,7 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   className="w-full py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send My Enquiry â†’'}
+                  {isSubmitting ? ‘Sending...’ : ‘Send Enquiry’}
                 </button>
               </form>
             )}
@@ -243,7 +243,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="text-[#25D366] hover:underline font-semibold"
                     >
-                      ðŸ“± 0781500968
+                      +27 (781) 500-968
                     </a>
                   </div>
                 </div>
@@ -259,17 +259,16 @@ export default function ContactPage() {
 
               <div className="border-t border-[var(--border)] pt-6">
                 <p className="text-[var(--accent-green)] text-sm font-bold mb-4">
-                  âš¡ Reply within 2 hours
+                  Fast Response - Within 2 Hours
                 </p>
                 <p className="text-xs text-[var(--text-secondary)]">
-                  Monâ€“Fri 8amâ€“6pm SAST | Sat 9amâ€“1pm
+                  Mon-Fri 8am-6pm SAST | Sat 9am-1pm
                 </p>
               </div>
 
               <div className="bg-[var(--glow-blue)] p-4 rounded-lg">
                 <p className="text-xs text-[var(--text-secondary)]">
-                  ðŸ’¡ <strong>Pro tip:</strong> The more details you share about your project, the faster we can give
-                  you an accurate quote.
+                  <strong>Pro tip:</strong> The more details you share about your project, the faster we can give you an accurate quote.
                 </p>
               </div>
             </div>
