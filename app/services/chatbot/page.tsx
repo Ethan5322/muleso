@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -10,10 +10,9 @@ export default function ChatbotPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
           title="Your Business, On Autopilot"
-          subtitle=”AI chatbots that answer questions, book appointments, and qualify leads - 24 hours a day.”
+          subtitle="AI chatbots that answer questions, book appointments, and qualify leads. 24 hours a day."
         />
 
-        {/* Features */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -41,7 +40,6 @@ export default function ChatbotPage() {
           </div>
         </motion.div>
 
-        {/* Use Cases */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,7 +67,6 @@ export default function ChatbotPage() {
           </div>
         </motion.div>
 
-        {/* Custom Pricing CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -103,11 +100,10 @@ export default function ChatbotPage() {
             </div>
           </div>
           <p className="text-sm text-[var(--text-secondary)]">
-            We'll discuss your specific needs and provide a custom quote within 2 hours.
+            We will discuss your specific needs and provide a custom quote within 2 hours.
           </p>
         </motion.div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -127,4 +123,3 @@ export default function ChatbotPage() {
     </div>
   );
 }
-

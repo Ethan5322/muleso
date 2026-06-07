@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -53,7 +53,6 @@ export default function ContactPage() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -71,7 +70,7 @@ export default function ContactPage() {
                   Thank you, {formData.name}!
                 </h2>
                 <p className="text-[var(--text-secondary)] mb-2">
-                  We&apos;ve received your enquiry and will reply to <strong>{formData.email}</strong> within 2 hours.
+                  We have received your enquiry and will reply to <strong>{formData.email}</strong> within 2 hours.
                 </p>
                 <p className="text-sm text-[var(--text-secondary)]">
                   In the meantime, feel free to explore our services or check out our portfolio.
@@ -156,8 +155,8 @@ export default function ContactPage() {
                     >
                       <option value="">Select budget</option>
                       <option value="under-2k">Under R2,000</option>
-                      <option value=”2k-5k”>R2,000 - R5,000</option>
-                      <option value=”5k-10k”>R5,000 - R10,000</option>
+                      <option value="2k-5k">R2,000 to R5,000</option>
+                      <option value="5k-10k">R5,000 to R10,000</option>
                       <option value="10k-plus">R10,000+</option>
                       <option value="unsure">Not sure yet</option>
                     </select>
@@ -204,13 +203,12 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   className="w-full py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
                 >
-                  {isSubmitting ? ‘Sending...’ : ‘Send Enquiry’}
+                  {isSubmitting ? 'Sending...' : 'Send Enquiry'}
                 </button>
               </form>
             )}
           </motion.div>
 
-          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -278,4 +276,3 @@ export default function ContactPage() {
     </div>
   );
 }
-
