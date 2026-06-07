@@ -80,17 +80,22 @@ export default function PortfolioPage() {
               viewport={{ once: true }}
               className="glass-card overflow-hidden hover:border-[var(--accent-blue)] hover:shadow-lg transition-all group cursor-pointer"
             >
-              {/* Project Image Container */}
-              <div className="relative w-full h-64 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] overflow-hidden">
+              {/* Project Image Container with Border Frame */}
+              <div className="relative w-full h-64 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] overflow-hidden border-b-4 border-[var(--accent-gold)]">
                 {project.image ? (
-                  <Image
-                    src={`/${project.image}`}
-                    alt={project.name}
-                    width={1200}
-                    height={675}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    priority={index < 2}
-                  />
+                  <div className="relative w-full h-full bg-black/10">
+                    <Image
+                      src={`/${project.image}`}
+                      alt={project.name}
+                      width={1200}
+                      height={675}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      priority={index < 2}
+                      quality={90}
+                    />
+                    {/* Professional frame overlay */}
+                    <div className="absolute inset-0 border-2 border-[var(--accent-gold)]/20 pointer-events-none" />
+                  </div>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--accent-blue)]/20 to-[var(--accent-purple)]/20 backdrop-blur-sm">
                     <div className="text-center">
