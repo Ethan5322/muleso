@@ -84,20 +84,20 @@ export default function ChatbotPage() {
           <div className="mb-8 space-y-4">
             <div>
               <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-2">
-                ðŸ’¬ Contact Ethan Directly for Custom Pricing
+                Contact Ethan Directly for Custom Pricing
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="mailto:mulukenendashaw68@gmail.com"
                   className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
                 >
-                  ðŸ“§ Email: mulukenendashaw68@gmail.com
+                  Email: mulukenendashaw68@gmail.com
                 </a>
                 <a
                   href="https://wa.me/27759440377"
                   className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
                 >
-                  ðŸ’¬ WhatsApp: 0781500968
+                  WhatsApp: +27 (781) 500-968
                 </a>
               </div>
             </div>

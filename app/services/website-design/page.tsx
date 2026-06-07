@@ -111,7 +111,7 @@ export default function WebsiteDesignPage() {
                   href="https://wa.me/27759440377"
                   className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
                 >
-                  ðŸ’¬ WhatsApp: 0781500968
+                  ðŸ’¬ WhatsApp: +27 (781) 500-968
                 </a>
               </div>
             </div>

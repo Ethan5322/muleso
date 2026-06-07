@@ -243,7 +243,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="text-[#25D366] hover:underline font-semibold"
                     >
-                      ðŸ“± 0781500968
+                      +27 (781) 500-968
                     </a>
                   </div>
                 </div>
@@ -259,10 +259,10 @@ export default function ContactPage() {
 
               <div className="border-t border-[var(--border)] pt-6">
                 <p className="text-[var(--accent-green)] text-sm font-bold mb-4">
-                  âš¡ Reply within 2 hours
+                  Fast Response - Within 2 Hours
                 </p>
                 <p className="text-xs text-[var(--text-secondary)]">
-                  Monâ€“Fri 8amâ€“6pm SAST | Sat 9amâ€“1pm
+                  Mon-Fri 8am-6pm SAST | Sat 9am-1pm
                 </p>
               </div>
 

@@ -125,7 +125,7 @@ export default function LogoDesignPage() {
               href="https://wa.me/27759440377"
               className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              ðŸ’¬ WhatsApp: 0781500968
+              ðŸ’¬ WhatsApp: +27 (781) 500-968
             </a>
           </div>
         </motion.div>
