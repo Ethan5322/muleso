@@ -24,19 +24,19 @@ export default function PDFGuidesPage() {
           <h2 className="text-3xl font-bold font-sora mb-6 gradient-text">Our PDF Guides Deliver Real Value</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[var(--text-secondary)]">
             <div>
-              <h3 className="font-bold text-[var(--text-primary)] mb-3">âœ“ Professionally Designed</h3>
+              <h3 className="font-bold text-[var(--text-primary)] mb-3">✓ Professionally Designed</h3>
               <p>Beautiful layouts, clear typography, premium appearance</p>
             </div>
             <div>
-              <h3 className="font-bold text-[var(--text-primary)] mb-3">âœ“ Highly Practical</h3>
+              <h3 className="font-bold text-[var(--text-primary)] mb-3">✓ Highly Practical</h3>
               <p>Step-by-step instructions, real examples, copy-paste ready</p>
             </div>
             <div>
-              <h3 className="font-bold text-[var(--text-primary)] mb-3">âœ“ Instantly Downloadable</h3>
+              <h3 className="font-bold text-[var(--text-primary)] mb-3">✓ Instantly Downloadable</h3>
               <p>Get access immediately after payment, no waiting</p>
             </div>
             <div>
-              <h3 className="font-bold text-[var(--text-primary)] mb-3">âœ“ Updated Regularly</h3>
+              <h3 className="font-bold text-[var(--text-primary)] mb-3">✓ Updated Regularly</h3>
               <p>Latest strategies, current tools, and best practices</p>
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function PDFGuidesPage() {
                   <p className="text-xs font-bold text-[var(--accent-blue)] mb-2">INCLUDES:</p>
                   <ul className="space-y-1 text-xs text-[var(--text-secondary)]">
                     {guide.includes.map((item, j) => (
-                      <li key={j}>âœ“ {item}</li>
+                      <li key={j}>✓ {item}</li>
                     ))}
                   </ul>
                 </div>
@@ -124,11 +124,11 @@ export default function PDFGuidesPage() {
             Need a custom guide for your business, course, or product? We create professional PDF guides tailored to your needs.
           </p>
           <ul className="space-y-3 text-[var(--text-secondary)] ml-6 mb-8">
-            <li>âœ“ Professional design and layout</li>
-            <li>âœ“ Practical, actionable content</li>
-            <li>âœ“ Print-ready or digital format</li>
-            <li>âœ“ Custom branding and styling</li>
-            <li>âœ“ SEO-optimized for digital</li>
+            <li>✓ Professional design and layout</li>
+            <li>✓ Practical, actionable content</li>
+            <li>✓ Print-ready or digital format</li>
+            <li>✓ Custom branding and styling</li>
+            <li>✓ SEO-optimized for digital</li>
           </ul>
           <p className="text-[var(--accent-blue)] font-semibold">Perfect for courses, lead magnets, or product sales</p>
         </motion.div>
@@ -145,7 +145,7 @@ export default function PDFGuidesPage() {
             href="/store"
             className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[#E8B84B] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
-            Browse & Purchase Guides â†’
+            Browse & Purchase Guides →
           </Link>
         </motion.div>
 
@@ -166,13 +166,13 @@ export default function PDFGuidesPage() {
               href="mailto:mulukenendashaw68@gmail.com"
               className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              ðŸ“§ Email: mulukenendashaw68@gmail.com
+              📧 Email: mulukenendashaw68@gmail.com
             </a>
             <a
               href="https://wa.me/27759440377"
               className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              ðŸ’¬ WhatsApp: +27 (781) 500-968
+              💬 WhatsApp: +27 (781) 500-968
             </a>
           </div>
         </motion.div>

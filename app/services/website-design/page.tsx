@@ -148,7 +148,7 @@ export default function WebsiteDesignPage() {
             />
             <FAQItem
               question="Do you work with clients outside South Africa?"
-              answer="Yes! We work with clients across Africa and internationally. Time zones don't matter â€” we're always responsive on WhatsApp and email."
+              answer="Yes! We work with clients across Africa and internationally. Time zones don't matter — we're always responsive on WhatsApp and email."
               delay={0.3}
             />
             <FAQItem
@@ -169,10 +169,10 @@ export default function WebsiteDesignPage() {
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Launch?</h2>
           <div className="max-w-md mx-auto">
-            <StartBookingButton text="ðŸš€ Book Your Website Now" size="lg" />
+            <StartBookingButton text="🚀 Book Your Website Now" size="lg" />
           </div>
           <p className="text-sm text-[var(--text-secondary)] mt-4">
-            Chat with Ethan directly â€” get a quote in minutes!
+            Chat with Ethan directly — get a quote in minutes!
           </p>
         </motion.div>
       </div>

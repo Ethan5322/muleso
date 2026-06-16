@@ -25,11 +25,11 @@ export default function EmailSetupPage() {
           <div className="space-y-4 text-[var(--text-secondary)]">
             <p className="text-lg">An email like <strong>hello@yourbusiness.com</strong> looks infinitely more professional than <em>yourname@gmail.com</em></p>
             <ul className="space-y-3 ml-6">
-              <li>âœ“ <strong>Builds Trust</strong> - Customers see you as established and legitimate</li>
-              <li>âœ“ <strong>Protects Your Reputation</strong> - Your brand controls your email identity</li>
-              <li>âœ“ <strong>Improves Deliverability</strong> - Business emails land in inboxes, not spam</li>
-              <li>âœ“ <strong>Team Collaboration</strong> - Multiple team members with branded emails</li>
-              <li>âœ“ <strong>Professional Branding</strong> - Every email is a brand touchpoint</li>
+              <li>✓ <strong>Builds Trust</strong> - Customers see you as established and legitimate</li>
+              <li>✓ <strong>Protects Your Reputation</strong> - Your brand controls your email identity</li>
+              <li>✓ <strong>Improves Deliverability</strong> - Business emails land in inboxes, not spam</li>
+              <li>✓ <strong>Team Collaboration</strong> - Multiple team members with branded emails</li>
+              <li>✓ <strong>Professional Branding</strong> - Every email is a brand touchpoint</li>
             </ul>
           </div>
         </motion.div>
@@ -60,7 +60,7 @@ export default function EmailSetupPage() {
                 viewport={{ once: true }}
                 className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
               >
-                <h3 className="font-bold text-[var(--text-primary)] mb-2">âœ“ {item.title}</h3>
+                <h3 className="font-bold text-[var(--text-primary)] mb-2">✓ {item.title}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
               </motion.div>
             ))}
@@ -135,13 +135,13 @@ export default function EmailSetupPage() {
               href="mailto:mulukenendashaw68@gmail.com"
               className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              ðŸ“§ Email: mulukenendashaw68@gmail.com
+              📧 Email: mulukenendashaw68@gmail.com
             </a>
             <a
               href="https://wa.me/27759440377"
               className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              ðŸ’¬ WhatsApp: +27 (781) 500-968
+              💬 WhatsApp: +27 (781) 500-968
             </a>
           </div>
         </motion.div>

@@ -147,9 +147,6 @@ export default function Footer() {
           <p className="text-[var(--text-secondary)]">
             © 2025 MuleSoo Digital Services. All rights reserved.
           </p>
-          <p className="text-[var(--text-secondary)]">
-            Built with Claude Code 🤖
-          </p>
         </div>
       </div>
     </footer>
