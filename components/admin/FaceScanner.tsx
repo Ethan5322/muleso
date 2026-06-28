@@ -125,17 +125,13 @@ export default function FaceScanner({
 
   const handleCapture = useCallback(async () => {
     if (!videoRef.current || !ready || working || busy || capturingRef.current) return;
-    if (quality !== 'good') {
-      setError(QUALITY_MESSAGE[quality]);
-      return;
-    }
     capturingRef.current = true;
     setWorking(true);
     setError(null);
     try {
       const descriptor = await getFaceDescriptor(videoRef.current);
       if (!descriptor) {
-        setError('No clear face captured. Adjust lighting and try again.');
+        setError('No face detected. Center your face in the oval, get closer, and make sure the area is well-lit — then try again.');
         return;
       }
 
@@ -220,7 +216,7 @@ export default function FaceScanner({
         whileTap={{ scale: 0.97 }}
         type="button"
         onClick={handleCapture}
-        disabled={!ready || working || busy || quality !== 'good'}
+        disabled={!ready || working || busy}
         className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold rounded-xl transition-all disabled:opacity-50"
       >
         {working || busy ? (

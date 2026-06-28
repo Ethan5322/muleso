@@ -24,8 +24,9 @@ export async function loadFaceApi(): Promise<any> {
 
 export async function getFaceDescriptor(video: HTMLVideoElement): Promise<number[] | null> {
   const fa = await loadFaceApi();
+  // Lower threshold + larger input = more forgiving detection in real lighting.
   const result = await fa
-    .detectSingleFace(video, new fa.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.5 }))
+    .detectSingleFace(video, new fa.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.3 }))
     .withFaceLandmarks()
     .withFaceDescriptor();
   if (!result) return null;
