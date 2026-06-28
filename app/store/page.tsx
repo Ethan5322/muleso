@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Loader2, ShieldCheck } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+import StoreCover from '@/components/StoreCover';
+
+type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
 
 interface Product {
   name: string;
@@ -13,6 +16,7 @@ interface Product {
   difficulty: string;
   description: string;
   features: string[];
+  accent: AccentKey;
 }
 
 const WHATSAPP = '27759440377';
@@ -28,6 +32,7 @@ export default function StorePage() {
       difficulty: 'Beginner-Friendly',
       description: 'Build any professional website using AI in days, not weeks.',
       features: ['Project setup', '7 master prompts', '3D animations', 'Deployment', 'SEO'],
+      accent: 'gold',
     },
     {
       name: 'n8n Automation Bible',
@@ -36,6 +41,7 @@ export default function StorePage() {
       difficulty: 'Intermediate',
       description: 'Automate your entire business with zero code.',
       features: ['Email automation', 'Lead capture', 'Payment workflows', 'AI integrations'],
+      accent: 'blue',
     },
     {
       name: 'Chatbot Business Blueprint',
@@ -44,6 +50,7 @@ export default function StorePage() {
       difficulty: 'Beginner-Friendly',
       description: 'How to start a chatbot agency and land R5,000+ clients.',
       features: ['Niche selection', 'Client scripts', 'Pricing', 'Claude API setup'],
+      accent: 'purple',
     },
     {
       name: 'Netlify Deployment Guide',
@@ -52,6 +59,7 @@ export default function StorePage() {
       difficulty: 'Beginner-Friendly',
       description: 'Deploy any website professionally in under 30 minutes.',
       features: ['Project setup', 'Environment vars', 'Custom domain', 'CI/CD'],
+      accent: 'green',
     },
   ];
 
@@ -109,7 +117,14 @@ export default function StorePage() {
               viewport={{ once: true }}
               className="glass-card p-8 hover:border-[var(--accent-gold)] transition-all flex flex-col"
             >
-              <div className="w-full h-48 bg-gradient-to-br from-[var(--accent-gold)] to-[var(--accent-blue)] rounded-lg mb-6" />
+              <div className="w-full h-48 rounded-lg mb-6 overflow-hidden border border-[var(--border)]">
+                <StoreCover
+                  title={product.name}
+                  pages={product.pages}
+                  difficulty={product.difficulty}
+                  accent={product.accent}
+                />
+              </div>
 
               {i === 0 && (
                 <div className="mb-4">

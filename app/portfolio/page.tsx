@@ -173,7 +173,6 @@ export default function PortfolioPage() {
                       category={project.category}
                       tagline={project.result}
                       theme={project.theme}
-                      icon={project.icon}
                     />
                   )}
                 </div>
