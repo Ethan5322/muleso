@@ -41,7 +41,7 @@ const fallbackProjects: Project[] = [
     client: 'Fitness & Wellness Brand',
     description:
       'A high-energy website for a modern gym — class schedules, membership tiers, trainer profiles, and a bold join-now flow designed to convert visitors into members.',
-    image: null,
+    image: 'yoyo-gym.jpg',
     result: 'Membership-ready site',
     tech: ['Next.js', 'Tailwind CSS', 'Framer Motion'],
     theme: 'green',
@@ -53,7 +53,7 @@ const fallbackProjects: Project[] = [
     client: 'Professional Photographer',
     description:
       'A cinematic portfolio site that lets the imagery lead — full-bleed galleries, themed collections, and a clean booking enquiry, optimised for fast, sharp image loading.',
-    image: null,
+    image: 'xboss-photography.jpg',
     result: 'Online bookings enabled',
     tech: ['Next.js', 'Image Optimization', 'Tailwind CSS'],
     theme: 'dark',
@@ -65,7 +65,7 @@ const fallbackProjects: Project[] = [
     client: 'Events & Celebrations',
     description:
       'A vibrant brand site with service packages, highlight galleries, and instant WhatsApp enquiry — paired with a custom branded QR code for on-the-ground marketing.',
-    image: null,
+    image: 'shime-events.jpg',
     result: 'Site + branded QR',
     tech: ['React', 'QR Codes', 'WhatsApp API'],
     theme: 'rose',
@@ -77,7 +77,7 @@ const fallbackProjects: Project[] = [
     client: 'Brand Identity & Outreach',
     description:
       'Brand identity work paired with a custom branded QR-code system for client outreach — a consistent visual identity across print and digital touchpoints.',
-    image: null,
+    image: 'tsedi.jpg',
     result: 'Brand kit delivered',
     tech: ['Illustrator', 'QR Codes', 'Canva Pro'],
     theme: 'gold',
