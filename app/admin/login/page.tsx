@@ -615,14 +615,23 @@ export default function AdminLogin() {
             <div className="mt-8 pt-6 border-t border-[#00BFFF]/20 text-center">
               <p className="text-[#00BFFF]/80 text-sm font-semibold mb-3">Or sign in with Face</p>
               {faceQr && (
-                <div className="inline-block bg-white p-2 rounded-xl mb-3">
-                  <Image src={faceQr} alt="Scan to open Face Login on your phone" width={140} height={140} />
+                <div className="flex flex-col items-center">
+                  <div className="inline-block bg-white p-2 rounded-xl mb-3">
+                    <Image src={faceQr} alt="Scan to open Face Login on your phone" width={140} height={140} />
+                  </div>
+                  <p className="text-[#00C8FF]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
+                  <a
+                    href={faceQr}
+                    download="mulesoo-admin-face-login-qr.png"
+                    className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-lg bg-[#00C8FF]/15 border border-[#00C8FF]/40 text-[#00C8FF] hover:bg-[#00C8FF]/25 text-sm font-semibold transition-all"
+                  >
+                    ⬇ Download QR Code
+                  </a>
                 </div>
               )}
-              <p className="text-[#00BFFF]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
               <Link
                 href="/admin/face-login"
-                className="inline-block text-[#00BFFF] hover:underline text-sm font-semibold"
+                className="inline-block text-[#00C8FF] hover:underline text-sm font-semibold"
               >
                 Use Face Login on this device →
               </Link>
