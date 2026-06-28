@@ -31,11 +31,10 @@ const fallbackProjects: Project[] = [
     client: 'Our Flagship Platform',
     description:
       'Our own corporate website — a fast, animated Next.js platform with an AI booking assistant, secure admin dashboard, live portfolio, and integrated lead capture.',
-    image: 'mulesoo-logo.png',
+    image: 'mulesoo-logo.jpeg',
     result: 'You are looking at it',
     tech: ['Next.js', 'Supabase', 'Framer Motion', 'AI'],
     theme: 'blue',
-    fit: 'contain',
   },
   {
     name: 'Habesha Celebration Events',
@@ -180,7 +179,15 @@ export default function PortfolioPage() {
                         priority={index < 2}
                         quality={90}
                       />
-                      <div className="absolute inset-0 border-2 border-[var(--accent-gold)]/20 pointer-events-none" />
+                      {/* Designed overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-[var(--bg-primary)]/10 pointer-events-none" />
+                      <div className="absolute inset-0 border-2 border-[var(--accent-gold)]/25 pointer-events-none" />
+                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 backdrop-blur-sm border border-white/20">
+                        {project.category.toUpperCase()}
+                      </span>
+                      <span className="absolute bottom-2 right-3 text-[11px] font-bold font-sora text-white/80">
+                        MULE<span className="text-[var(--accent-gold)]">●</span>SOO
+                      </span>
                     </div>
                   ) : (
                     <PortfolioCover
@@ -194,14 +201,9 @@ export default function PortfolioPage() {
 
                 {/* Project Info */}
                 <div className="p-6 space-y-4">
-                  <div>
-                    <span className="inline-block px-3 py-1 bg-[var(--glow-blue)] text-[var(--accent-blue)] text-xs font-bold rounded-full mb-2">
-                      {project.category}
-                    </span>
-                    <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight">
-                      {project.name}
-                    </h3>
-                  </div>
+                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight">
+                    {project.name}
+                  </h3>
 
                   {project.client && (
                     <p className="text-xs text-[var(--accent-gold)] font-semibold">{project.client}</p>
