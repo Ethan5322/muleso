@@ -1,12 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTwoFactorCode } from '@/lib/twoFactorUtils';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+function getAdminPassword(): string | null {
+  let p = process.env.ADMIN_PASSWORD;
+  if (!p) return null;
+  p = p.trim();
+  if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
+    p = p.slice(1, -1);
+  }
+  return p;
+}
+
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 
 export async function POST(request: NextRequest) {
   try {
     const { password, twoFactorCode } = await request.json();
+    const ADMIN_PASSWORD = getAdminPassword();
 
     // Server misconfiguration guard
     if (!ADMIN_PASSWORD) {
@@ -18,7 +28,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 1: Verify password (server-side only)
-    if (!password || password !== ADMIN_PASSWORD) {
+    const submitted = typeof password === 'string' ? password.trim() : '';
+    if (!submitted || submitted !== ADMIN_PASSWORD) {
       return NextResponse.json(
         { success: false, error: 'Invalid password' },
         { status: 401 }

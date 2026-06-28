@@ -128,6 +128,14 @@ export default function AdminLogin() {
         body: JSON.stringify({ password }),
       });
       const data = await res.json();
+
+      // Server has no password configured — don't burn an attempt, explain it.
+      if (data.configured === false) {
+        toast.error('⚙️ Admin password is not set on the server. Add ADMIN_PASSWORD in Vercel and redeploy.');
+        setLoading(false);
+        return;
+      }
+
       valid = data.valid === true;
     } catch (error) {
       console.error('Password verification error:', error);

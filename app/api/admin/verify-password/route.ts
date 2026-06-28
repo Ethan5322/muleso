@@ -1,34 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+/** Reads ADMIN_PASSWORD and cleans common mistakes (whitespace / wrapping quotes). */
+function getAdminPassword(): string | null {
+  let p = process.env.ADMIN_PASSWORD;
+  if (!p) return null;
+  p = p.trim();
+  if (
+    (p.startsWith('"') && p.endsWith('"')) ||
+    (p.startsWith("'") && p.endsWith("'"))
+  ) {
+    p = p.slice(1, -1);
+  }
+  return p;
+}
 
 /**
  * Step 1 of admin login: verify the password server-side ONLY.
- * The password is never shipped to or compared in the client bundle.
- * On success the client proceeds to the 2FA step.
+ * Returns { configured: false } when ADMIN_PASSWORD isn't set, so the client
+ * can show a helpful message instead of treating it as a wrong password.
  */
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
+    const adminPassword = getAdminPassword();
 
-    if (!ADMIN_PASSWORD) {
-      console.error('ADMIN_PASSWORD env var is not set');
+    if (!adminPassword) {
       return NextResponse.json(
-        { valid: false, error: 'Server not configured' },
-        { status: 500 }
+        { valid: false, configured: false, error: 'Admin password is not configured on the server.' },
+        { status: 503 }
       );
     }
 
-    if (!password || password !== ADMIN_PASSWORD) {
-      return NextResponse.json({ valid: false }, { status: 401 });
+    const submitted = typeof password === 'string' ? password.trim() : '';
+    if (!submitted || submitted !== adminPassword) {
+      return NextResponse.json({ valid: false, configured: true }, { status: 401 });
     }
 
     return NextResponse.json({ valid: true });
   } catch (error) {
     console.error('verify-password error:', error);
-    return NextResponse.json(
-      { valid: false, error: 'Verification failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ valid: false, error: 'Verification failed' }, { status: 500 });
   }
 }
