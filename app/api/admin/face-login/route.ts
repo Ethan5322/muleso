@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  getReferenceDescriptor,
+  getAllReferences,
   getThreshold,
-  euclideanDistance,
+  bestDistance,
   FACE_DESCRIPTOR_LENGTH,
 } from '@/lib/faceMatch';
 
@@ -19,15 +19,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid face data' }, { status: 400 });
     }
 
-    const reference = getReferenceDescriptor();
-    if (!reference) {
+    const references = await getAllReferences();
+    if (references.length === 0) {
       return NextResponse.json(
         { success: false, error: 'Face login is not set up yet. Enroll a face first.' },
         { status: 503 }
       );
     }
 
-    const distance = euclideanDistance(descriptor.map(Number), reference);
+    const distance = bestDistance(descriptor.map(Number), references);
     const threshold = getThreshold();
 
     if (distance > threshold) {

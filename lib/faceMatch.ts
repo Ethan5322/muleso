@@ -1,13 +1,23 @@
 /**
  * Server-side face matching helpers.
- * The browser computes a 128-float face descriptor (via face-api); the
- * server compares it to the enrolled reference stored in ADMIN_FACE_DESCRIPTOR.
- * Keeping the match decision server-side means a client cannot simply fake a pass.
+ * The browser computes 128-float face descriptors (via face-api); the server
+ * compares an incoming descriptor to the enrolled references and decides the
+ * match server-side, so a client cannot fake a pass.
+ *
+ * References come from two places:
+ *  - the Supabase `admin_face_descriptors` table (preferred — multiple samples)
+ *  - the ADMIN_FACE_DESCRIPTOR env var (optional single fallback)
  */
+import { supabaseAdmin } from './supabaseAdmin';
 
 export const FACE_DESCRIPTOR_LENGTH = 128;
 
-export function getReferenceDescriptor(): number[] | null {
+export function getThreshold(): number {
+  const t = parseFloat(process.env.ADMIN_FACE_THRESHOLD || '0.5');
+  return Number.isFinite(t) ? t : 0.5;
+}
+
+export function getEnvReference(): number[] | null {
   const raw = process.env.ADMIN_FACE_DESCRIPTOR;
   if (!raw) return null;
   try {
@@ -18,9 +28,27 @@ export function getReferenceDescriptor(): number[] | null {
   }
 }
 
-export function getThreshold(): number {
-  const t = parseFloat(process.env.ADMIN_FACE_THRESHOLD || '0.5');
-  return Number.isFinite(t) ? t : 0.5;
+export async function getStoredReferences(): Promise<number[][]> {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('admin_face_descriptors')
+      .select('descriptor');
+    if (error || !data) return [];
+    return data
+      .map((r: { descriptor: unknown }) =>
+        Array.isArray(r.descriptor) ? (r.descriptor as number[]).map(Number) : []
+      )
+      .filter((d) => d.length === FACE_DESCRIPTOR_LENGTH);
+  } catch {
+    return [];
+  }
+}
+
+export async function getAllReferences(): Promise<number[][]> {
+  const refs = await getStoredReferences();
+  const env = getEnvReference();
+  if (env) refs.push(env);
+  return refs;
 }
 
 export function euclideanDistance(a: number[], b: number[]): number {
@@ -31,4 +59,14 @@ export function euclideanDistance(a: number[], b: number[]): number {
     sum += d * d;
   }
   return Math.sqrt(sum);
+}
+
+/** Smallest distance between an input descriptor and any reference sample. */
+export function bestDistance(input: number[], refs: number[][]): number {
+  let best = Infinity;
+  for (const r of refs) {
+    const d = euclideanDistance(input, r);
+    if (d < best) best = d;
+  }
+  return best;
 }

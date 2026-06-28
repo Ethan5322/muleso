@@ -2,26 +2,61 @@
 
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { Copy, Check } from 'lucide-react';
+import { CheckCircle, Trash2 } from 'lucide-react';
 import FaceScanner from '@/components/admin/FaceScanner';
 
-export default function FaceEnrollPage() {
-  const [descriptor, setDescriptor] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+const STEPS = [
+  'Look straight at the camera',
+  'Turn your head slightly LEFT',
+  'Turn your head slightly RIGHT',
+  'Tilt your head slightly UP',
+];
 
-  const handleCapture = (d: number[]) => {
-    // Round to keep the env value compact
-    const rounded = d.map((n) => Number(n.toFixed(5)));
-    setDescriptor(JSON.stringify(rounded));
-    toast.success('Face captured! Copy the value below into your env.');
+export default function FaceEnrollPage() {
+  const [busy, setBusy] = useState(false);
+  const [enrolledCount, setEnrolledCount] = useState<number | null>(null);
+  const [key, setKey] = useState(0); // remount scanner to restart
+
+  const handleComplete = async (descriptors: number[][]) => {
+    setBusy(true);
+    try {
+      const res = await fetch('/api/admin/face-enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ descriptors }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setEnrolledCount(data.count);
+        toast.success(`✅ Face enrolled (${data.count} samples). You can now log in by face.`);
+      } else {
+        toast.error(data.error || 'Enrollment failed');
+        setKey((k) => k + 1);
+      }
+    } catch (error) {
+      console.error('Enroll error:', error);
+      toast.error('Could not save. Please try again.');
+      setKey((k) => k + 1);
+    } finally {
+      setBusy(false);
+    }
   };
 
-  const copy = async () => {
-    if (!descriptor) return;
-    await navigator.clipboard.writeText(descriptor);
-    setCopied(true);
-    toast.success('Copied to clipboard');
-    setTimeout(() => setCopied(false), 2000);
+  const clearEnrollment = async () => {
+    setBusy(true);
+    try {
+      const res = await fetch('/api/admin/face-enroll', { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Enrollment cleared');
+        setEnrolledCount(null);
+        setKey((k) => k + 1);
+      } else {
+        toast.error(data.error || 'Could not clear');
+      }
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -29,41 +64,48 @@ export default function FaceEnrollPage() {
       <Toaster position="top-center" />
       <h2 className="text-3xl font-bold font-sora mb-2">Enroll Your Face</h2>
       <p className="text-[#7A8BA8] mb-6">
-        Capture your reference face once. You&apos;ll paste the result into the{' '}
-        <code className="text-[#00C8FF]">ADMIN_FACE_DESCRIPTOR</code> environment variable so face login can verify you.
+        We capture a few angles so recognition stays reliable even with different lighting, makeup, or
+        glasses. Follow the on-screen prompts.
       </p>
 
-      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-2xl p-6 mb-6">
-        <FaceScanner actionLabel="Capture Reference Face" onCapture={handleCapture} />
-      </div>
-
-      {descriptor && (
-        <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-2xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-bold">Your face signature</h3>
+      {enrolledCount !== null ? (
+        <div className="bg-[#0A0E17] border border-[#00FF88]/40 rounded-2xl p-8 text-center space-y-4">
+          <CheckCircle className="text-[#00FF88] mx-auto" size={56} />
+          <h3 className="text-xl font-bold">Face Enrolled</h3>
+          <p className="text-[#7A8BA8]">
+            {enrolledCount} samples saved. You can now sign in from{' '}
+            <span className="text-[#00C8FF]">/admin/face-login</span> (or scan the QR on the login page).
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <button
               type="button"
-              onClick={copy}
-              className="flex items-center gap-2 bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[#00C8FF] px-3 py-1.5 rounded-lg text-sm font-semibold"
+              onClick={() => {
+                setEnrolledCount(null);
+                setKey((k) => k + 1);
+              }}
+              className="bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[#00C8FF] py-2 px-5 rounded-lg font-semibold"
             >
-              {copied ? <Check size={15} /> : <Copy size={15} />} {copied ? 'Copied' : 'Copy'}
+              Re-enroll
+            </button>
+            <button
+              type="button"
+              onClick={clearEnrollment}
+              disabled={busy}
+              className="flex items-center justify-center gap-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-400 py-2 px-5 rounded-lg font-semibold disabled:opacity-50"
+            >
+              <Trash2 size={16} /> Clear Enrollment
             </button>
           </div>
-          <textarea
-            readOnly
-            value={descriptor}
-            aria-label="Face descriptor"
-            className="w-full h-28 bg-[#1A2332] border border-[#1E3A5F] text-[#7A8BA8] text-xs rounded-lg p-3 font-mono resize-none"
+        </div>
+      ) : (
+        <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-2xl p-6">
+          <FaceScanner
+            key={key}
+            mode="multi"
+            steps={STEPS}
+            busy={busy}
+            onComplete={handleComplete}
           />
-          <div className="text-sm text-[#7A8BA8] space-y-2">
-            <p className="font-semibold text-white">Next steps:</p>
-            <ol className="list-decimal list-inside space-y-1">
-              <li>Copy the value above.</li>
-              <li>In Vercel → Project → Settings → Environment Variables, add <code className="text-[#00C8FF]">ADMIN_FACE_DESCRIPTOR</code> with this value.</li>
-              <li>(Optional) Add <code className="text-[#00C8FF]">ADMIN_FACE_THRESHOLD</code> = <code>0.5</code> (lower = stricter).</li>
-              <li>Redeploy. Then face login will recognize you.</li>
-            </ol>
-          </div>
         </div>
       )}
     </div>
