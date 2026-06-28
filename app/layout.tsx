@@ -4,6 +4,9 @@ import ClientWrapper from "@/components/ClientWrapper";
 import { ChatbotProvider } from "@/context/ChatbotContext";
 import { AdminProvider } from "@/context/AdminContext";
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+const SITE_URL = process.env.NEXT_PUBLIC_URL || "https://mulesoo.vercel.app";
+
 export const metadata: Metadata = {
   title: {
     template: '%s | MuleSoo Digital Services',
@@ -25,13 +28,14 @@ export const metadata: Metadata = {
     'South African web developer',
     'affordable website design',
   ],
+  metadataBase: new URL(SITE_URL),
   alternates: {
-    canonical: 'https://mulesoo.vercel.app',
+    canonical: SITE_URL,
   },
   openGraph: {
     title: "MuleSoo Digital Services | Professional Websites & AI Solutions",
     description: "World-class websites, AI chatbots, and digital solutions for South African businesses. Fast delivery. Premium quality.",
-    url: "https://mulesoo.vercel.app",
+    url: SITE_URL,
     siteName: "MuleSoo",
     locale: "en_ZA",
     type: "website",
@@ -62,7 +66,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'google-site-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   manifest: '/manifest.json',
 };
@@ -75,21 +79,22 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Google Analytics */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX');
-            `,
-          }}
-        />
+        {/* Google Analytics (only when configured) */}
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
 
         {/* Local Business Schema */}
         <script

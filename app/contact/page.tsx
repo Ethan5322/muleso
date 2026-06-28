@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MessageCircle, MapPin } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+import { getRecaptchaToken } from '@/lib/captcha';
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -14,9 +17,22 @@ export default function ContactPage() {
     budget: '',
     details: '',
     source: '',
+    website: '', // honeypot — must stay empty
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load reCAPTCHA v3 script once (only if configured)
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY) return;
+    if (document.querySelector('script[data-recaptcha]')) return;
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+    script.async = true;
+    script.setAttribute('data-recaptcha', 'true');
+    document.body.appendChild(script);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,20 +41,31 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
     try {
+      let recaptchaToken = '';
+      if (RECAPTCHA_SITE_KEY) {
+        recaptchaToken = await getRecaptchaToken('contact').catch(() => '');
+      }
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, recaptchaToken }),
       });
+
+      const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
         setSubmitted(true);
-        setFormData({ name: '', email: '', company: '', service: '', budget: '', details: '', source: '' });
+        setFormData({ name: '', email: '', company: '', service: '', budget: '', details: '', source: '', website: '' });
+      } else {
+        setError(data.error || 'Something went wrong. Please try again or WhatsApp us.');
       }
-    } catch (error) {
-      console.error('Form error:', error);
+    } catch (err) {
+      console.error('Form error:', err);
+      setError('Could not reach the server. Please check your connection or WhatsApp us.');
     } finally {
       setIsSubmitting(false);
     }
@@ -198,6 +225,24 @@ export default function ContactPage() {
                   </select>
                 </div>
 
+                {/* Honeypot (hidden from users) */}
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="hidden"
+                />
+
+                {error && (
+                  <div className="rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                    {error}
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -205,6 +250,18 @@ export default function ContactPage() {
                 >
                   {isSubmitting ? 'Sending...' : 'Send Enquiry'}
                 </button>
+
+                <p className="text-xs text-[var(--text-secondary)] text-center">
+                  Prefer to chat?{' '}
+                  <a
+                    href="https://wa.me/27759440377"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#25D366] hover:underline"
+                  >
+                    Message us on WhatsApp
+                  </a>
+                </p>
               </form>
             )}
           </motion.div>

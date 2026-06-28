@@ -1,14 +1,16 @@
 import { MetadataRoute } from 'next';
 
+const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/.next/', '/static/'],
+        disallow: ['/api/', '/admin/', '/.next/', '/static/'],
       },
     ],
-    sitemap: 'https://mulesoo.com/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
