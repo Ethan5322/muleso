@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle } from 'lucide-react';
-import { ShapeLandingHero } from '@/components/ui/shape-landing-hero';
+import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow } from 'lucide-react';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef(null);
@@ -127,8 +126,6 @@ const ServiceCard = ({
 export default function Home() {
   return (
     <>
-      <ShapeLandingHero />
-
       {/* SECTION 1 - HERO */}
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="max-w-5xl mx-auto w-full text-center">
@@ -260,6 +257,12 @@ export default function Home() {
               title="Custom Email"
               description="Professional @yourdomain.com email that builds instant credibility."
               delay={0.4}
+            />
+            <ServiceCard
+              icon={AppWindow}
+              title="Custom Apps Building"
+              description="Bespoke web & mobile applications engineered to run your business end-to-end."
+              delay={0.48}
             />
           </div>
         </div>

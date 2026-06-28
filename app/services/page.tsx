@@ -48,6 +48,13 @@ export default function ServicesPage() {
       features: ['Domain Setup', 'Email Configuration', 'Security', 'Backups', 'Technical Support'],
       icon: '📧',
     },
+    {
+      title: 'Custom Apps Building',
+      href: '/services/custom-apps',
+      description: 'We build bespoke web & mobile applications tailored to your exact business workflow.',
+      features: ['Web & Mobile Apps', 'Custom Dashboards', 'API & Database Integration', 'Scalable Architecture', 'Ongoing Maintenance'],
+      icon: '📲',
+    },
   ];
 
   return (

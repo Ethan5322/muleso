@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import ChatbotWidget from '@/components/ChatbotWidget';
+import { ShapeLandingHero } from '@/components/ui/shape-landing-hero';
 import { supabase } from '@/lib/supabase';
 
 export default function ClientWrapper({ children }: { children: React.ReactNode }) {
@@ -57,6 +58,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
 
   return (
     <>
+      <ShapeLandingHero />
       {children}
       <ChatbotWidget />
     </>

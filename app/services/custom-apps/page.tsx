@@ -1,0 +1,154 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import PageHero from '@/components/PageHero';
+
+export default function CustomAppsPage() {
+  return (
+    <div className="min-h-screen py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <PageHero
+          title="Custom Apps Building"
+          subtitle="We build bespoke web and mobile applications engineered around your exact business workflow — not off-the-shelf templates."
+        />
+
+        {/* Why Custom Apps */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-20 glass-card p-12 bg-gradient-to-r from-[var(--bg-secondary)] to-[var(--bg-card)]"
+        >
+          <h2 className="text-3xl font-bold font-sora mb-6 gradient-text">Software That Fits Your Business</h2>
+          <div className="space-y-4 text-[var(--text-secondary)]">
+            <p className="text-lg">
+              Generic software forces you to change how you work. A <strong>custom app</strong> does the opposite —
+              it&apos;s built around the way <em>your</em> business already runs.
+            </p>
+            <ul className="space-y-3 ml-6">
+              <li>✓ <strong>Built For You</strong> - Every feature maps to a real workflow in your business</li>
+              <li>✓ <strong>Scales With You</strong> - Architecture designed to grow from 10 to 10,000 users</li>
+              <li>✓ <strong>Fully Owned</strong> - You own the source code, data, and the product</li>
+              <li>✓ <strong>Connected</strong> - Integrates with the tools, payments, and APIs you already use</li>
+              <li>✓ <strong>Future-Proof</strong> - Modern stack that&apos;s easy to maintain and extend</li>
+            </ul>
+          </div>
+        </motion.div>
+
+        {/* What We Build */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <h2 className="text-4xl font-bold font-sora text-center mb-12 gradient-text">What We Build</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: '🌐', title: 'Web Applications', desc: 'Fast, secure web apps and SaaS platforms built with Next.js.' },
+              { icon: '📱', title: 'Mobile Apps', desc: 'Cross-platform iOS & Android apps from a single codebase.' },
+              { icon: '📊', title: 'Admin Dashboards', desc: 'Custom dashboards to manage bookings, sales, and operations.' },
+              { icon: '🔌', title: 'API & Integrations', desc: 'Connect payments, WhatsApp, CRMs, and third-party services.' },
+              { icon: '🗄️', title: 'Databases & Backends', desc: 'Reliable, scalable data layers with Supabase / PostgreSQL.' },
+              { icon: '🤖', title: 'AI-Powered Features', desc: 'Smart automation and AI assistants embedded into your app.' },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                viewport={{ once: true }}
+                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+              >
+                <div className="text-4xl mb-3">{item.icon}</div>
+                <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
+                <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Build Process */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <h2 className="text-4xl font-bold font-sora text-center mb-12 gradient-text">How We Build It</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { num: 1, title: 'Discovery', desc: 'We map your workflows, users, and goals in detail.' },
+              { num: 2, title: 'Design & Plan', desc: 'Wireframes, architecture, and a clear delivery roadmap.' },
+              { num: 3, title: 'Development', desc: 'We build in milestones with regular demos and feedback.' },
+              { num: 4, title: 'Launch & Support', desc: 'Deploy, train your team, and provide ongoing maintenance.' },
+            ].map((item) => (
+              <div key={item.num} className="glass-card p-6">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+                  <span className="text-white font-bold font-sora">{item.num}</span>
+                </div>
+                <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
+                <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* FAQ */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <h2 className="text-3xl font-bold font-sora text-center mb-12 gradient-text">FAQ</h2>
+          <div className="space-y-4 max-w-3xl mx-auto">
+            {[
+              { q: 'How much does a custom app cost?', a: 'Pricing is quoted per project based on scope. Book a free consultation for a tailored estimate.' },
+              { q: 'How long does it take to build?', a: 'Most apps launch a first version in 4–10 weeks, depending on complexity.' },
+              { q: 'Do I own the code?', a: 'Yes. After full payment, the complete source code and data are 100% yours.' },
+              { q: 'Can you maintain it after launch?', a: 'Absolutely. We offer ongoing maintenance and feature plans.' },
+            ].map((item, i) => (
+              <div key={i} className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all">
+                <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.q}</h3>
+                <p className="text-[var(--text-secondary)] text-sm">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="glass-card p-12 text-center border border-[var(--accent-blue)]"
+        >
+          <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Let&apos;s Build Your App</h2>
+          <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
+            Tell us what you need and we&apos;ll turn it into a professional, scalable application.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="mailto:mulukenendashaw68@gmail.com"
+              className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+            >
+              📧 Email: mulukenendashaw68@gmail.com
+            </a>
+            <a
+              href="https://wa.me/27759440377"
+              className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+            >
+              💬 WhatsApp: +27 (781) 500-968
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

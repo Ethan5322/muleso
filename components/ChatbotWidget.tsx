@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, ArrowUp, Download, CheckCircle, Clock, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
-import { generateCleanTermsPDF } from '@/lib/generateCleanTermsPDF';
 import { validateClientID } from '@/lib/validateClientID';
+import ChatWidgetBackground from '@/components/ui/ChatWidgetBackground';
 import Confetti from 'react-confetti';
 import toast, { Toaster } from 'react-hot-toast';
 import dynamic from 'next/dynamic';
@@ -76,7 +76,8 @@ const SERVICES = [
   { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: 'R3,500' },
   { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: 'R5,000' },
   { id: '6', label: '🌐 All in One Website', value: 'All in One Website', price: 'R7,500' },
-  { id: '7', label: '📝 Other', value: 'Other', price: 'Custom' },
+  { id: '7', label: '📲 Build Custom App', value: 'Custom Apps Building', price: 'Custom' },
+  { id: '8', label: '📝 Other', value: 'Other', price: 'Custom' },
 ];
 
 const BUDGET_RANGES = [
@@ -131,6 +132,7 @@ const validateName = (name: string): boolean => {
 
 export default function ChatbotWidget() {
   const pathname = usePathname();
+  const router = useRouter();
   const { isOpen, setIsOpen, openChatbot } = useChatbot();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -300,6 +302,12 @@ export default function ChatbotWidget() {
       clientID: '',
       verificationCode: undefined,
     });
+  };
+
+  const handleCompletedClose = () => {
+    // Clear the conversation, close the widget, and return to the home scene
+    resetChat();
+    router.push('/');
   };
 
   const saveAndResume = () => {
@@ -556,6 +564,11 @@ export default function ChatbotWidget() {
             transition={{ duration: 0.25, type: 'spring', bounce: 0.3 }}
             className="fixed bottom-20 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[500px] md:w-[520px] max-w-[520px] h-[650px] sm:h-[750px] max-h-[calc(100vh-120px)] rounded-2xl sm:rounded-3xl shadow-2xl bg-[var(--bg-secondary)] border border-[var(--border)] flex flex-col z-40 overflow-hidden"
           >
+            {/* Animated brand background (scoped to widget) */}
+            <ChatWidgetBackground />
+
+            {/* Content layer (above background) */}
+            <div className="relative z-10 flex flex-col h-full min-h-0">
             {/* Progress Bar */}
             {stage !== 'greeting' && (
               <>
@@ -860,7 +873,7 @@ export default function ChatbotWidget() {
                     </div>
                   </div>
 
-                  {/* Download Buttons */}
+                  {/* Download Button */}
                   <div className="space-y-2">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -869,25 +882,12 @@ export default function ChatbotWidget() {
                       className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
                     >
                       <Download size={18} />
-                      Download Booking PDF
-                    </motion.button>
-
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => {
-                        generateCleanTermsPDF();
-                        toast.success('📄 Terms & Conditions PDF downloaded!');
-                      }}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-lg transition-all text-base"
-                    >
-                      <Download size={18} />
-                      Download Terms & Conditions
+                      Download Booking Agreement PDF
                     </motion.button>
                   </div>
 
                   <p className="text-xs text-[var(--text-secondary)] text-center">
-                    📄 Professional documents with verification code
+                    📄 Includes your booking details, verification code &amp; full Terms &amp; Conditions
                   </p>
                   </motion.div>
 
@@ -1018,6 +1018,15 @@ export default function ChatbotWidget() {
             {stage === 'summary' && (
               <div className="border-t border-[var(--border)] p-5 flex-shrink-0 bg-[var(--bg-card)] space-y-2">
                 <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleCompletedClose}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-[var(--accent-green)] to-[#00FF88] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(0,255,136,0.5)] transition-all text-base"
+                >
+                  <CheckCircle size={18} />
+                  Completed &amp; Close
+                </motion.button>
+                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={saveAndResume}
@@ -1036,6 +1045,7 @@ export default function ChatbotWidget() {
                 </motion.button>
               </div>
             )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
