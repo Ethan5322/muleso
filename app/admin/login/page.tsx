@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
 import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
 import QRCode from 'qrcode';
@@ -316,6 +316,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-[#050810] flex items-center justify-center px-4">
+      <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
       {/* Animated Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-96 h-96 bg-[#00BFFF] rounded-full mix-blend-screen filter blur-3xl opacity-10" />
