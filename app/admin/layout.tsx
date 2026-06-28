@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -32,6 +32,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Make the installable PWA available only inside /admin (branded as MuleSoo).
+  // The public site no longer prompts visitors to install.
+  useEffect(() => {
+    const manifest = document.createElement('link');
+    manifest.rel = 'manifest';
+    manifest.href = '/manifest.json';
+    manifest.setAttribute('data-admin-pwa', 'true');
+    document.head.appendChild(manifest);
+
+    const apple = document.createElement('link');
+    apple.rel = 'apple-touch-icon';
+    apple.href = '/mulesoo-logo.png';
+    apple.setAttribute('data-admin-pwa', 'true');
+    document.head.appendChild(apple);
+
+    return () => {
+      document.querySelectorAll('[data-admin-pwa]').forEach((el) => el.remove());
+    };
+  }, []);
 
   // Login pages render their own full-screen UI — no admin chrome.
   if (pathname === '/admin/login' || pathname === '/admin/face-login') {
