@@ -31,7 +31,7 @@ const fallbackProjects: Project[] = [
     client: 'Our Flagship Platform',
     description:
       'Our own corporate website — a fast, animated Next.js platform with an AI booking assistant, secure admin dashboard, live portfolio, and integrated lead capture.',
-    image: 'mulesoo-logo.jpeg',
+    image: 'mulesoo-website.jpg',
     result: 'You are looking at it',
     tech: ['Next.js', 'Supabase', 'Framer Motion', 'AI'],
     theme: 'blue',
