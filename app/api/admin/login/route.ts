@@ -1,14 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTwoFactorCode } from '@/lib/twoFactorUtils';
 
-const ADMIN_PASSWORD = 'M53223344m.&.M';
-const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 
 export async function POST(request: NextRequest) {
   try {
     const { password, twoFactorCode } = await request.json();
 
-    // Step 1: Verify password
+    // Server misconfiguration guard
+    if (!ADMIN_PASSWORD) {
+      console.error('ADMIN_PASSWORD env var is not set');
+      return NextResponse.json(
+        { success: false, error: 'Server not configured' },
+        { status: 500 }
+      );
+    }
+
+    // Step 1: Verify password (server-side only)
     if (!password || password !== ADMIN_PASSWORD) {
       return NextResponse.json(
         { success: false, error: 'Invalid password' },

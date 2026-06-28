@@ -118,31 +118,18 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
     try {
       setSaving(true);
 
-      if (item?.id) {
-        // Update existing
-        const { error } = await supabase
-          .from('portfolio')
-          .update({
-            ...formData,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', item.id);
+      const res = await fetch('/api/admin/portfolio', {
+        method: item?.id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(item?.id ? { id: item.id, ...formData } : { ...formData, order: 0 }),
+      });
 
-        if (error) throw error;
-        toast.success('✅ Portfolio item updated!');
-      } else {
-        // Create new
-        const { error } = await supabase.from('portfolio').insert({
-          ...formData,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          order: 0,
-        });
-
-        if (error) throw error;
-        toast.success('✅ Portfolio item created!');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Save failed');
       }
 
+      toast.success(item?.id ? '✅ Portfolio item updated!' : '✅ Portfolio item created!');
       setShowConfirm(false);
       onSave();
     } catch (error: any) {

@@ -1,9 +1,6 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ClientWrapper from "@/components/ClientWrapper";
-import AdminHeader from "@/components/AdminHeader";
 import { ChatbotProvider } from "@/context/ChatbotContext";
 import { AdminProvider } from "@/context/AdminContext";
 
@@ -227,12 +224,7 @@ export default function RootLayout({
       <body className="bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-x-hidden">
         <AdminProvider>
           <ChatbotProvider>
-            <AdminHeader />
-            <ClientWrapper>
-              <Navbar />
-              <main className="min-h-screen flex flex-col pt-20">{children}</main>
-              <Footer />
-            </ClientWrapper>
+            <ClientWrapper>{children}</ClientWrapper>
           </ChatbotProvider>
         </AdminProvider>
       </body>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Save, X } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase, CustomPage } from '@/lib/supabase';
+import { CustomPage } from '@/lib/supabase';
 import ConfirmationDialog from './ConfirmationDialog';
 
 interface PageEditorProps {
@@ -51,29 +51,18 @@ export default function PageEditor({ page, onSave, onCancel }: PageEditorProps) 
     try {
       setSaving(true);
 
-      if (page?.id) {
-        const { error } = await supabase
-          .from('pages')
-          .update({
-            ...formData,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', page.id);
+      const res = await fetch('/api/admin/pages', {
+        method: page?.id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(page?.id ? { id: page.id, ...formData } : { ...formData, order: 0 }),
+      });
 
-        if (error) throw error;
-        toast.success('✅ Page updated!');
-      } else {
-        const { error } = await supabase.from('pages').insert({
-          ...formData,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          order: 0,
-        });
-
-        if (error) throw error;
-        toast.success('✅ Page created!');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Save failed');
       }
 
+      toast.success(page?.id ? '✅ Page updated!' : '✅ Page created!');
       setShowConfirm(false);
       onSave();
     } catch (error: any) {

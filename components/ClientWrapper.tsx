@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import ChatbotWidget from '@/components/ChatbotWidget';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { ShapeLandingHero } from '@/components/ui/shape-landing-hero';
 import { supabase } from '@/lib/supabase';
 
@@ -56,10 +58,17 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
     trackQRScan();
   }, [pathname]);
 
+  // Admin routes provide their own shell (app/admin/layout.tsx) — no public chrome.
+  if (pathname.startsWith('/admin')) {
+    return <>{children}</>;
+  }
+
   return (
     <>
       <ShapeLandingHero />
-      {children}
+      <Navbar />
+      <main className="min-h-screen flex flex-col pt-20">{children}</main>
+      <Footer />
       <ChatbotWidget />
     </>
   );

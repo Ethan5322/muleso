@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
 import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
 
-const ADMIN_PASSWORD = 'M53223344m.&.M';
 const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
 const MAX_ATTEMPTS = 5;
 const MAX_2FA_ATTEMPTS = 3;
@@ -109,9 +108,24 @@ export default function AdminLogin() {
     }
 
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    if (password === ADMIN_PASSWORD) {
+    let valid = false;
+    try {
+      const res = await fetch('/api/admin/verify-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json();
+      valid = data.valid === true;
+    } catch (error) {
+      console.error('Password verification error:', error);
+      toast.error('❌ Could not reach the server. Please try again.');
+      setLoading(false);
+      return;
+    }
+
+    if (valid) {
       toast.success('✅ Password verified. Please confirm password.');
       setStep('confirm');
       setConfirmPassword('');
@@ -225,10 +239,16 @@ export default function AdminLogin() {
           const loginData = await loginResponse.json();
 
           if (loginData.success) {
-            // Clear old auth data
+            // Clear lockout/attempt counters
             localStorage.removeItem('admin_attempts');
             localStorage.removeItem('admin_lockout');
-            localStorage.removeItem('admin_session');
+
+            // Set a client-side session marker so admin pages can render.
+            // Real protection is the HTTP-only cookie validated by middleware.
+            localStorage.setItem(
+              'admin_session',
+              JSON.stringify({ authenticated: true, timestamp: Date.now() })
+            );
 
             setStep('success');
             toast.success('✅ Logged in successfully!');

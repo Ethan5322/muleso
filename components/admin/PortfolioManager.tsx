@@ -1,243 +1,168 @@
 'use client';
 
-import { Trash2, Edit2, Plus, X } from 'lucide-react';
-import { useState } from 'react';
-
-interface Project {
-  id: number;
-  name: string;
-  client: string;
-  description: string;
-  price: string;
-  image: string;
-  date: string;
-}
+import { useEffect, useState } from 'react';
+import { Trash2, Edit2, Plus, Star } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { supabase, PortfolioItem } from '@/lib/supabase';
+import PortfolioEditor from './PortfolioEditor';
+import ConfirmationDialog from './ConfirmationDialog';
 
 export default function PortfolioManager() {
-  const [projects, setProjects] = useState<Project[]>([
-    { id: 1, name: 'Habesha Events Website', client: 'Events Business', description: 'Professional event planning platform', price: 'R7,500', image: '🖼️', date: '2026-05-15' },
-    { id: 2, name: 'Restaurant Chatbot', client: 'Restaurant', description: 'AI-powered booking chatbot', price: 'R4,500', image: '🤖', date: '2026-05-10' },
-    { id: 3, name: 'Law Firm Website', client: 'Legal Services', description: 'Professional legal services portal', price: 'R8,000', image: '⚖️', date: '2026-05-05' },
-  ]);
+  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState<PortfolioItem | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<PortfolioItem | null>(null);
 
-  const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    client: '',
-    description: '',
-    price: '',
-    image: '🖼️',
-  });
-
-  // Add New Project
-  const handleAdd = () => {
-    setEditingId(null);
-    setFormData({ name: '', client: '', description: '', price: '', image: '🖼️' });
-    setShowForm(true);
-  };
-
-  // Edit Project
-  const handleEdit = (project: Project) => {
-    setEditingId(project.id);
-    setFormData({
-      name: project.name,
-      client: project.client,
-      description: project.description,
-      price: project.price,
-      image: project.image,
-    });
-    setShowForm(true);
-  };
-
-  // Delete Project
-  const handleDelete = (id: number) => {
-    if (confirm('Are you sure you want to delete this portfolio item?')) {
-      setProjects(projects.filter(p => p.id !== id));
-      alert('✓ Portfolio item deleted successfully!');
+  const load = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('portfolio')
+        .select('*')
+        .order('order', { ascending: true });
+      if (error) throw error;
+      setItems(data || []);
+    } catch (error: any) {
+      toast.error(`Failed to load portfolio: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Save (Add or Update)
-  const handleSave = () => {
-    if (!formData.name || !formData.client || !formData.description || !formData.price) {
-      alert('❌ Please fill in all fields!');
-      return;
-    }
+  useEffect(() => {
+    load();
+  }, []);
 
-    if (editingId) {
-      // Update existing
-      setProjects(projects.map(p =>
-        p.id === editingId
-          ? { ...p, ...formData, date: new Date().toISOString().split('T')[0] }
-          : p
-      ));
-      alert('✓ Portfolio item updated successfully!');
-    } else {
-      // Add new
-      const newProject = {
-        id: Date.now(),
-        ...formData,
-        date: new Date().toISOString().split('T')[0],
-      };
-      setProjects([newProject, ...projects]);
-      alert('✓ Portfolio item added successfully!');
-    }
-
-    setShowForm(false);
-    setFormData({ name: '', client: '', description: '', price: '', image: '🖼️' });
+  const handleSaved = () => {
+    setEditing(null);
+    setCreating(false);
+    load();
   };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      const res = await fetch('/api/admin/portfolio', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: deleteTarget.id }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Delete failed');
+      }
+      toast.success('Portfolio item deleted');
+      setDeleteTarget(null);
+      load();
+    } catch (error: any) {
+      toast.error(`Delete failed: ${error.message}`);
+      setDeleteTarget(null);
+    }
+  };
+
+  // Editor view (add / edit)
+  if (creating || editing) {
+    return (
+      <PortfolioEditor
+        item={editing}
+        onSave={handleSaved}
+        onCancel={() => {
+          setEditing(null);
+          setCreating(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-white">Portfolio Projects</h2>
-          <p className="text-gray-400">Manage your project portfolio - Add, Edit, or Delete</p>
+          <h2 className="text-3xl font-bold text-white font-sora">Portfolio Projects</h2>
+          <p className="text-[#7A8BA8]">Add, edit, or delete your live portfolio</p>
         </div>
         <button
-          onClick={handleAdd}
+          onClick={() => setCreating(true)}
           className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
         >
           <Plus size={20} /> Add New Project
         </button>
       </div>
 
-      {/* Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-white">{editingId ? '✏️ Edit Portfolio Item' : '➕ Add New Portfolio Item'}</h3>
-              <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-white text-2xl">
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Image/Video Upload */}
-            <div className="mb-6 p-6 border-2 border-dashed border-[#1E3A5F] rounded-lg hover:border-[#00C8FF] transition cursor-pointer">
-              <div className="text-center">
-                <div className="text-5xl mb-2">{formData.image}</div>
-                <p className="text-white font-semibold">Click to change picture/video icon</p>
-                <p className="text-gray-400 text-sm">Select emoji or upload image</p>
-              </div>
-            </div>
-
-            {/* Form Fields */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-white font-bold mb-2">Project Name *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="Enter project name"
-                  className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-3 rounded-lg focus:border-[#00C8FF] outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white font-bold mb-2">Client Name *</label>
-                <input
-                  type="text"
-                  value={formData.client}
-                  onChange={(e) => setFormData({...formData, client: e.target.value})}
-                  placeholder="Enter client name"
-                  className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-3 rounded-lg focus:border-[#00C8FF] outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white font-bold mb-2">Project Description *</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="Describe your project in detail..."
-                  rows={4}
-                  className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-3 rounded-lg focus:border-[#00C8FF] outline-none transition resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white font-bold mb-2">Project Price *</label>
-                <input
-                  type="text"
-                  value={formData.price}
-                  onChange={(e) => setFormData({...formData, price: e.target.value})}
-                  placeholder="e.g., R7,500"
-                  className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-3 rounded-lg focus:border-[#00C8FF] outline-none transition"
-                />
-              </div>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-4 mt-8">
-              <button
-                onClick={handleSave}
-                className="flex-1 bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 rounded-lg transition transform hover:scale-105"
-              >
-                {editingId ? '💾 Update Project' : '➕ Add Project'}
-              </button>
-              <button
-                onClick={() => setShowForm(false)}
-                className="flex-1 bg-[#1A2332] hover:bg-[#253345] text-gray-400 font-bold py-3 rounded-lg border border-[#1E3A5F] transition"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Projects Table */}
       <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-[#1A2332]">
-            <tr>
-              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Image</th>
-              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Project Name</th>
-              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Client</th>
-              <th className="text-left px-6 py-4 text-gray-400 font-semibold">Price</th>
-              <th className="text-center px-6 py-4 text-gray-400 font-semibold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {projects.length === 0 ? (
-              <tr><td colSpan={5} className="text-center px-6 py-8 text-gray-400">No portfolio items yet. Click "Add New Project" to get started!</td></tr>
-            ) : (
-              projects.map((project) => (
-                <tr key={project.id} className="border-t border-[#1E3A5F] hover:bg-[#1A2332] transition">
-                  <td className="px-6 py-4 text-2xl">{project.image}</td>
-                  <td className="px-6 py-4 text-white font-semibold">{project.name}</td>
-                  <td className="px-6 py-4 text-gray-400">{project.client}</td>
-                  <td className="px-6 py-4 text-[#00C8FF] font-bold">{project.price}</td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex gap-2 justify-center">
-                      <button
-                        onClick={() => handleEdit(project)}
-                        className="bg-[#7B2FFF] hover:bg-[#6B1FEF] text-white px-3 py-1 rounded-lg flex items-center gap-1 transition"
-                      >
-                        <Edit2 size={16} /> Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(project.id)}
-                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg flex items-center gap-1 transition"
-                      >
-                        <Trash2 size={16} /> Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-[#1A2332]">
+              <tr>
+                <th className="text-left px-6 py-4 text-[#7A8BA8] font-semibold">Project</th>
+                <th className="text-left px-6 py-4 text-[#7A8BA8] font-semibold">Category</th>
+                <th className="text-left px-6 py-4 text-[#7A8BA8] font-semibold">Client</th>
+                <th className="text-center px-6 py-4 text-[#7A8BA8] font-semibold">Featured</th>
+                <th className="text-center px-6 py-4 text-[#7A8BA8] font-semibold">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan={5} className="text-center px-6 py-8 text-[#7A8BA8]">Loading…</td></tr>
+              ) : items.length === 0 ? (
+                <tr><td colSpan={5} className="text-center px-6 py-8 text-[#7A8BA8]">No portfolio items yet. Click &quot;Add New Project&quot; to get started.</td></tr>
+              ) : (
+                items.map((item) => (
+                  <tr key={item.id} className="border-t border-[#1E3A5F] hover:bg-[#1A2332] transition">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        {item.image_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={item.image_url} alt={item.title} className="w-10 h-10 rounded object-cover" />
+                        ) : (
+                          <div className="w-10 h-10 rounded bg-[#1A2332] flex items-center justify-center text-[#7A8BA8]">🖼️</div>
+                        )}
+                        <span className="text-white font-semibold">{item.title}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-[#7A8BA8]">{item.category}</td>
+                    <td className="px-6 py-4 text-[#7A8BA8]">{item.client_name}</td>
+                    <td className="px-6 py-4 text-center">
+                      {item.featured ? <Star size={16} className="inline text-[#E8B84B] fill-[#E8B84B]" /> : <span className="text-[#7A8BA8]">—</span>}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex gap-2 justify-center">
+                        <button
+                          onClick={() => setEditing(item)}
+                          className="bg-[#7B2FFF] hover:bg-[#6B1FEF] text-white px-3 py-1 rounded-lg flex items-center gap-1 transition"
+                        >
+                          <Edit2 size={16} /> Edit
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(item)}
+                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg flex items-center gap-1 transition"
+                        >
+                          <Trash2 size={16} /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Stats */}
       <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-lg p-6">
-        <p className="text-gray-400 text-sm">Total Portfolio Items: <span className="text-white font-bold text-lg">{projects.length}</span></p>
+        <p className="text-[#7A8BA8] text-sm">Total Portfolio Items: <span className="text-white font-bold text-lg">{items.length}</span></p>
       </div>
+
+      <ConfirmationDialog
+        isOpen={!!deleteTarget}
+        isDangerous
+        title="Delete portfolio item?"
+        message={`This will permanently delete "${deleteTarget?.title ?? ''}". This cannot be undone.`}
+        confirmText="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { isAdminRequest } from '@/lib/adminAuth';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+const unauthorized = () =>
+  NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('portfolio')
       .select('*')
       .order('order', { ascending: true });
-
     if (error) throw error;
-
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -21,10 +19,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isAdminRequest(req)) return unauthorized();
   try {
     const body = await req.json();
-
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('portfolio')
       .insert({
         ...body,
@@ -32,10 +30,38 @@ export async function POST(req: NextRequest) {
         updated_at: new Date().toISOString(),
       })
       .select();
-
     if (error) throw error;
-
     return NextResponse.json(data?.[0]);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  if (!isAdminRequest(req)) return unauthorized();
+  try {
+    const { id, ...fields } = await req.json();
+    if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    const { data, error } = await supabaseAdmin
+      .from('portfolio')
+      .update({ ...fields, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select();
+    if (error) throw error;
+    return NextResponse.json(data?.[0]);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  if (!isAdminRequest(req)) return unauthorized();
+  try {
+    const { id } = await req.json();
+    if (!id) return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    const { error } = await supabaseAdmin.from('portfolio').delete().eq('id', id);
+    if (error) throw error;
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
