@@ -20,10 +20,23 @@ interface Project {
   link?: string;
   theme?: ThemeKey;
   icon?: string;
+  fit?: 'cover' | 'contain';
 }
 
 // Curated fallback — shown if the portfolio table is empty or unavailable.
 const fallbackProjects: Project[] = [
+  {
+    name: 'MuleSoo Digital Services',
+    category: 'Website',
+    client: 'Our Flagship Platform',
+    description:
+      'Our own corporate website — a fast, animated Next.js platform with an AI booking assistant, secure admin dashboard, live portfolio, and integrated lead capture.',
+    image: 'mulesoo-logo.png',
+    result: 'You are looking at it',
+    tech: ['Next.js', 'Supabase', 'Framer Motion', 'AI'],
+    theme: 'blue',
+    fit: 'contain',
+  },
   {
     name: 'Habesha Celebration Events',
     category: 'Website',
@@ -155,13 +168,15 @@ export default function PortfolioPage() {
                 {/* Project Image */}
                 <div className="relative w-full h-64 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] overflow-hidden border-b-4 border-[var(--accent-gold)]">
                   {src ? (
-                    <div className="relative w-full h-full bg-black/10">
+                    <div className="relative w-full h-full bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
                       <Image
                         src={src}
                         alt={project.name}
                         width={1200}
                         height={675}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${
+                          project.fit === 'contain' ? 'object-contain p-8' : 'object-cover'
+                        }`}
                         priority={index < 2}
                         quality={90}
                       />
