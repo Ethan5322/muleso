@@ -162,33 +162,49 @@ export default function PortfolioPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card overflow-hidden hover:border-[var(--accent-blue)] hover:shadow-lg transition-all group"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] transition-all duration-300 hover:border-[var(--accent-blue)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_rgba(0,200,255,0.4)]"
               >
+                {/* Top accent line (animates in on hover) */}
+                <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-gold)]" />
+
                 {/* Project Image */}
-                <div className="relative w-full h-64 bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] overflow-hidden border-b-4 border-[var(--accent-gold)]">
+                <div className="relative w-full h-60 overflow-hidden bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
                   {src ? (
-                    <div className="relative w-full h-full bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
+                    <>
                       <Image
                         src={src}
                         alt={project.name}
                         width={1200}
                         height={675}
-                        className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${
+                        className={`w-full h-full transition-transform duration-700 group-hover:scale-110 ${
                           project.fit === 'contain' ? 'object-contain p-8' : 'object-cover'
                         }`}
                         priority={index < 2}
                         quality={90}
                       />
-                      {/* Designed overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-[var(--bg-primary)]/10 pointer-events-none" />
-                      <div className="absolute inset-0 border-2 border-[var(--accent-gold)]/25 pointer-events-none" />
-                      <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 backdrop-blur-sm border border-white/20">
+                      {/* Cinematic scrim */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/15 to-transparent pointer-events-none" />
+                      {/* Category chip */}
+                      <span className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 backdrop-blur-sm border border-white/20">
                         {project.category.toUpperCase()}
                       </span>
-                      <span className="absolute bottom-2 right-3 text-[11px] font-bold font-sora text-white/80">
+                      {/* Brand watermark */}
+                      <span className="absolute top-3 right-3 z-10 text-[11px] font-bold font-sora text-white/75">
                         MULE<span className="text-[var(--accent-gold)]">●</span>SOO
                       </span>
-                    </div>
+                      {/* Result badge — the selling point */}
+                      {project.result && (
+                        <span className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg">
+                          ✨ {project.result}
+                        </span>
+                      )}
+                      {/* Hover reveal */}
+                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--accent-blue)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span className="px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold font-sora text-sm translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                          View Project →
+                        </span>
+                      </div>
+                    </>
                   ) : (
                     <PortfolioCover
                       title={project.name}
@@ -200,8 +216,8 @@ export default function PortfolioPage() {
                 </div>
 
                 {/* Project Info */}
-                <div className="p-6 space-y-4">
-                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight">
+                <div className="p-6 space-y-3">
+                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent-blue)] transition-colors">
                     {project.name}
                   </h3>
 
@@ -213,18 +229,12 @@ export default function PortfolioPage() {
                     {project.description}
                   </p>
 
-                  {project.result && (
-                    <div className="pt-2 border-t border-[var(--border)]">
-                      <p className="text-xs text-[var(--accent-gold)] font-bold">✨ {project.result}</p>
-                    </div>
-                  )}
-
                   {project.tech.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-2">
+                    <div className="flex flex-wrap gap-2 pt-1">
                       {project.tech.map((tech: string) => (
                         <span
                           key={tech}
-                          className="text-xs px-2 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded hover:border-[var(--accent-blue)] transition-colors"
+                          className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--accent-blue)]/50 transition-colors"
                         >
                           {tech}
                         </span>
