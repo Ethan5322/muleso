@@ -115,65 +115,71 @@ export default function StorePage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: i * 0.08 }}
               viewport={{ once: true }}
-              className="glass-card p-8 hover:border-[var(--accent-gold)] transition-all flex flex-col"
+              className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-gold)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_rgba(232,184,75,0.4)]"
             >
-              <div className="w-full h-48 rounded-lg mb-6 overflow-hidden border border-[var(--border)]">
-                <StoreCover
-                  title={product.name}
-                  pages={product.pages}
-                  difficulty={product.difficulty}
-                  accent={product.accent}
-                />
-              </div>
+              {/* Top accent line */}
+              <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[var(--accent-blue)]" />
 
-              {i === 0 && (
-                <div className="mb-4">
-                  <span className="px-3 py-1 bg-[var(--glow-gold)] text-[var(--accent-gold)] text-xs font-bold rounded-full">
-                    BESTSELLER
+              {/* Cover */}
+              <div className="relative w-full h-52 overflow-hidden">
+                <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                  <StoreCover
+                    title={product.name}
+                    pages={product.pages}
+                    difficulty={product.difficulty}
+                    accent={product.accent}
+                  />
+                </div>
+                {i === 0 && (
+                  <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg">
+                    ★ BESTSELLER
                   </span>
-                </div>
-              )}
-
-              <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2">
-                {product.name}
-              </h3>
-              <p className="text-[var(--text-secondary)] mb-4">{product.description}</p>
-
-              <div className="mb-6">
-                <p className="text-xs text-[var(--text-secondary)] mb-2">
-                  <strong>{product.pages} pages</strong> • {product.difficulty}
-                </p>
-                <div className="flex gap-2 flex-wrap">
-                  {product.features.map((feature) => (
-                    <span
-                      key={feature}
-                      className="text-xs px-2 py-1 bg-[var(--bg-card)] text-[var(--text-secondary)] rounded"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                </div>
+                )}
               </div>
 
-              <div className="mt-auto">
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-3xl font-bold font-sora gold-text">R{product.price}</span>
-                  <span className="text-xs text-[var(--text-secondary)]">once-off</span>
+              {/* Body */}
+              <div className="p-8 flex flex-col flex-1">
+                <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-gold)] transition-colors">
+                  {product.name}
+                </h3>
+                <p className="text-[var(--text-secondary)] mb-4">{product.description}</p>
+
+                <div className="mb-6">
+                  <p className="text-xs text-[var(--text-secondary)] mb-2">
+                    <strong>{product.pages} pages</strong> • {product.difficulty}
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    {product.features.map((feature) => (
+                      <span
+                        key={feature}
+                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--accent-gold)]/50 transition-colors"
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleBuy(product)}
-                  disabled={loadingName === product.name}
-                  className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-60"
-                >
-                  {loadingName === product.name ? (
-                    <>
-                      <Loader2 size={18} className="animate-spin" /> Processing…
-                    </>
-                  ) : (
-                    'Buy Now'
-                  )}
-                </button>
+
+                <div className="mt-auto">
+                  <div className="flex items-baseline gap-2 mb-4">
+                    <span className="text-3xl font-bold font-sora gold-text">R{product.price}</span>
+                    <span className="text-xs text-[var(--text-secondary)]">once-off</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleBuy(product)}
+                    disabled={loadingName === product.name}
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-60"
+                  >
+                    {loadingName === product.name ? (
+                      <>
+                        <Loader2 size={18} className="animate-spin" /> Processing…
+                      </>
+                    ) : (
+                      'Buy Now'
+                    )}
+                  </button>
+                </div>
               </div>
             </motion.div>
           ))}
