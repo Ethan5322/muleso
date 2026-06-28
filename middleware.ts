@@ -7,8 +7,11 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect all /admin routes except /admin/login
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+  // Public admin routes (their own login UIs)
+  const publicAdminRoutes = ['/admin/login', '/admin/face-login'];
+
+  // Protect all /admin routes except the public login pages
+  if (pathname.startsWith('/admin') && !publicAdminRoutes.includes(pathname)) {
     // Get session from cookies (more secure than localStorage)
     const session = request.cookies.get('admin_session');
 

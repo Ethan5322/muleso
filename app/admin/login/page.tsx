@@ -7,6 +7,9 @@ import { Lock, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react'
 import toast from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
 import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
+import QRCode from 'qrcode';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
 const MAX_ATTEMPTS = 5;
@@ -27,6 +30,14 @@ export default function AdminLogin() {
   const [lockedUntil, setLockedUntil] = useState<number | null>(null);
   const [countdown, setCountdown] = useState(0);
   const [step, setStep] = useState<'password' | 'confirm' | 'twofa' | 'success'>('password');
+  const [faceQr, setFaceQr] = useState('');
+
+  // Generate a QR that opens the face-login page (scan with your phone)
+  useEffect(() => {
+    QRCode.toDataURL(`${window.location.origin}/admin/face-login`, { width: 300, margin: 1 })
+      .then(setFaceQr)
+      .catch(() => {});
+  }, []);
 
   // Disable form autocomplete and cache
   useEffect(() => {
@@ -588,6 +599,25 @@ export default function AdminLogin() {
               <h2 className="text-2xl font-bold text-white mb-2">Welcome Back!</h2>
               <p className="text-[#00BFFF]/60">Admin panel is loading...</p>
             </motion.div>
+          )}
+
+          {/* Face login */}
+          {step === 'password' && (
+            <div className="mt-8 pt-6 border-t border-[#00BFFF]/20 text-center">
+              <p className="text-[#00BFFF]/80 text-sm font-semibold mb-3">Or sign in with Face</p>
+              {faceQr && (
+                <div className="inline-block bg-white p-2 rounded-xl mb-3">
+                  <Image src={faceQr} alt="Scan to open Face Login on your phone" width={140} height={140} />
+                </div>
+              )}
+              <p className="text-[#00BFFF]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
+              <Link
+                href="/admin/face-login"
+                className="inline-block text-[#00BFFF] hover:underline text-sm font-semibold"
+              >
+                Use Face Login on this device →
+              </Link>
+            </div>
           )}
 
           {/* Footer */}

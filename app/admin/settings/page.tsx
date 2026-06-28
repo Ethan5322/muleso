@@ -54,6 +54,20 @@ export default function AdminSettingsPage() {
         </p>
       </div>
 
+      {/* Face Login */}
+      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
+        <h3 className="text-lg font-bold text-white mb-2">🙂 Face Login</h3>
+        <p className="text-[#7A8BA8] text-sm mb-4">
+          Register your face to sign in by camera from your phone. Scan the QR on the login page to use it.
+        </p>
+        <a
+          href="/admin/face-enroll"
+          className="inline-block bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[#00C8FF] py-2 px-4 rounded-lg font-semibold transition-all"
+        >
+          Set up / Re-enroll Face
+        </a>
+      </div>
+
       {/* Activity Log */}
       <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-3">

@@ -33,8 +33,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // The login page renders its own full-screen UI — no admin chrome.
-  if (pathname === '/admin/login') {
+  // Login pages render their own full-screen UI — no admin chrome.
+  if (pathname === '/admin/login' || pathname === '/admin/face-login') {
     return <>{children}</>;
   }
 

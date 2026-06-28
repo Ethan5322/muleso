@@ -15,6 +15,7 @@
     "@stripe/stripe-js": "^9.7.0",
     "@supabase/supabase-js": "^2.107.0",
     "@types/three": "^0.184.1",
+    "@vladmandic/face-api": "^1.7.15",
     "anthropic": "^0.0.0",
     "caniuse-lite": "^1.0.30001793",
     "clsx": "^2.1.1",
