@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import PageHero from '@/components/PageHero';
+import PortfolioCover from '@/components/PortfolioCover';
 import { supabase } from '@/lib/supabase';
+
+type ThemeKey = 'blue' | 'gold' | 'green' | 'dark' | 'purple' | 'rose';
 
 interface Project {
   name: string;
@@ -15,6 +18,8 @@ interface Project {
   result: string;
   tech: string[];
   link?: string;
+  theme?: ThemeKey;
+  icon?: string;
 }
 
 // Curated fallback — shown if the portfolio table is empty or unavailable.
@@ -22,70 +27,77 @@ const fallbackProjects: Project[] = [
   {
     name: 'Habesha Celebration Events',
     category: 'Website',
-    client: 'Full-Service Ethiopian Wedding & Event Planning',
-    description: 'Professional event booking platform with responsive design and integrated payment system.',
+    client: 'Ethiopian Wedding & Event Planning',
+    description:
+      'A full-service event-planning platform with elegant galleries, package showcases, and a streamlined enquiry-to-booking flow — built to turn browsers into booked clients.',
     image: 'habesha-celebration-portfolio.png',
-    result: '+300% bookings increase',
-    tech: ['Next.js', 'React', 'Stripe'],
+    result: 'Live booking platform',
+    tech: ['Next.js', 'React', 'Framer Motion', 'Netlify'],
+    theme: 'rose',
   },
   {
-    name: 'Restaurant Booking Bot',
-    category: 'Chatbot',
-    client: 'Restaurant Reservation System',
-    description: 'AI-powered chatbot for reservation management, menu inquiries, and order tracking.',
-    image: 'tsi-ai-booking-portfolio.png',
-    result: '24/7 availability',
-    tech: ['Claude API', 'Node.js', 'Supabase'],
-  },
-  {
-    name: 'Law Firm Secretary AI',
-    category: 'Chatbot',
-    client: 'Legal Services',
-    description: 'Intelligent AI assistant for client intake screening and appointment scheduling.',
-    image: null,
-    result: '80% time saved',
-    tech: ['GPT-4o', 'Supabase', 'Twilio'],
-  },
-  {
-    name: 'Ethiopian Food Store',
-    category: 'E-commerce',
-    client: 'Online Retail',
-    description: 'Full-featured e-commerce platform with product catalog, shopping cart, and payment integration.',
-    image: null,
-    result: '$50K+ revenue',
-    tech: ['Next.js', 'Stripe', 'React'],
-  },
-  {
-    name: 'Church Community Site',
+    name: 'YoYo Gym',
     category: 'Website',
-    client: 'Religious Organization',
-    description: 'Community platform for event management, member communication, and donation processing.',
+    client: 'Fitness & Wellness Brand',
+    description:
+      'A high-energy website for a modern gym — class schedules, membership tiers, trainer profiles, and a bold join-now flow designed to convert visitors into members.',
     image: null,
-    result: '500+ members',
-    tech: ['HTML', 'CSS', 'JavaScript'],
+    result: 'Membership-ready site',
+    tech: ['Next.js', 'Tailwind CSS', 'Framer Motion'],
+    theme: 'green',
+    icon: '💪',
   },
   {
-    name: 'Habesha Events Logo & Branding',
-    category: 'Logo Design',
-    client: 'Brand Identity',
-    description: 'Professional logo design and complete brand identity system for events company.',
+    name: 'X-Boss Photography',
+    category: 'Photography',
+    client: 'Professional Photographer',
+    description:
+      'A cinematic portfolio site that lets the imagery lead — full-bleed galleries, themed collections, and a clean booking enquiry, optimised for fast, sharp image loading.',
     image: null,
-    result: 'Award-winning design',
-    tech: ['Adobe Illustrator', 'Canva Pro'],
+    result: 'Online bookings enabled',
+    tech: ['Next.js', 'Image Optimization', 'Tailwind CSS'],
+    theme: 'dark',
+    icon: '📷',
+  },
+  {
+    name: 'Shime Events',
+    category: 'Events',
+    client: 'Events & Celebrations',
+    description:
+      'A vibrant brand site with service packages, highlight galleries, and instant WhatsApp enquiry — paired with a custom branded QR code for on-the-ground marketing.',
+    image: null,
+    result: 'Site + branded QR',
+    tech: ['React', 'QR Codes', 'WhatsApp API'],
+    theme: 'rose',
+    icon: '🎉',
+  },
+  {
+    name: 'Tsedi',
+    category: 'Branding',
+    client: 'Brand Identity & Outreach',
+    description:
+      'Brand identity work paired with a custom branded QR-code system for client outreach — a consistent visual identity across print and digital touchpoints.',
+    image: null,
+    result: 'Brand kit delivered',
+    tech: ['Illustrator', 'QR Codes', 'Canva Pro'],
+    theme: 'gold',
+    icon: '🎨',
+  },
+  {
+    name: 'TSI AI Booking Assistant',
+    category: 'Chatbot',
+    client: 'Hospitality / Reservations',
+    description:
+      'An AI booking assistant that handles reservations, answers FAQs, and qualifies leads 24/7 — integrated directly into the business workflow with saved conversation history.',
+    image: 'tsi-ai-booking-portfolio.png',
+    result: '24/7 automation',
+    tech: ['Claude API', 'Supabase', 'Next.js'],
+    theme: 'green',
   },
 ];
 
 const imgSrc = (image: string | null) =>
   !image ? null : image.startsWith('http') ? image : `/${image}`;
-
-const categoryEmoji = (category: string) =>
-  category === 'Website' ? '🌐'
-  : category === 'Chatbot' ? '🤖'
-  : category === 'E-commerce' ? '🛍️'
-  : category === 'Logo' || category === 'Logo Design' ? '🎨'
-  : category === 'QR Code' ? '📱'
-  : category === 'PDF' ? '📄'
-  : '✨';
 
 export default function PortfolioPage() {
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
@@ -156,12 +168,13 @@ export default function PortfolioPage() {
                       <div className="absolute inset-0 border-2 border-[var(--accent-gold)]/20 pointer-events-none" />
                     </div>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--accent-blue)]/20 to-[var(--accent-purple)]/20 backdrop-blur-sm">
-                      <div className="text-center">
-                        <p className="text-4xl font-bold mb-3">{categoryEmoji(project.category)}</p>
-                        <p className="text-[var(--text-secondary)] text-sm font-semibold">{project.category}</p>
-                      </div>
-                    </div>
+                    <PortfolioCover
+                      title={project.name}
+                      category={project.category}
+                      tagline={project.result}
+                      theme={project.theme}
+                      icon={project.icon}
+                    />
                   )}
                 </div>
 
