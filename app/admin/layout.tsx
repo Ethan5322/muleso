@@ -12,6 +12,7 @@ import {
   ImageIcon,
   FileText,
   Settings,
+  Globe,
   LogOut,
   Menu,
   X,
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { label: 'QR Scans', href: '/admin/qr-scans', icon: QrCode },
   { label: 'Portfolio', href: '/admin/portfolio', icon: ImageIcon },
   { label: 'Pages', href: '/admin/pages', icon: FileText },
+  { label: 'Site Content', href: '/admin/site-content', icon: Globe },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 

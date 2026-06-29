@@ -5,10 +5,12 @@ import { motion } from 'framer-motion';
 import { Mail, MessageCircle, MapPin } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import { getRecaptchaToken } from '@/lib/captcha';
+import { useSiteSettings } from '@/lib/useSiteSettings';
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export default function ContactPage() {
+  const settings = useSiteSettings();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -254,7 +256,7 @@ export default function ContactPage() {
                 <p className="text-xs text-[var(--text-secondary)] text-center">
                   Prefer to chat?{' '}
                   <a
-                    href="https://wa.me/27759440377"
+                    href={`https://wa.me/${settings.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#25D366] hover:underline"
@@ -280,10 +282,10 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">Email</p>
                     <a
-                      href="mailto:mulukenendashaw68@gmail.com"
-                      className="text-[var(--accent-blue)] hover:underline font-semibold"
+                      href={`mailto:${settings.email}`}
+                      className="text-[var(--accent-blue)] hover:underline font-semibold break-all"
                     >
-                      mulukenendashaw68@gmail.com
+                      {settings.email}
                     </a>
                   </div>
                 </div>
@@ -293,12 +295,12 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">WhatsApp</p>
                     <a
-                      href="https://wa.me/27759440377"
+                      href={`https://wa.me/${settings.whatsapp}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[#25D366] hover:underline font-semibold"
                     >
-                      +27 (781) 500-968
+                      {settings.phone}
                     </a>
                   </div>
                 </div>
@@ -307,7 +309,7 @@ export default function ContactPage() {
                   <MapPin className="text-[var(--accent-blue)] mt-1 flex-shrink-0" size={20} />
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">Location</p>
-                    <p className="text-[var(--text-secondary)]">Pretoria, South Africa</p>
+                    <p className="text-[var(--text-secondary)]">{settings.address}</p>
                   </div>
                 </div>
               </div>
@@ -317,7 +319,7 @@ export default function ContactPage() {
                   Fast Response - Within 2 Hours
                 </p>
                 <p className="text-xs text-[var(--text-secondary)]">
-                  Mon-Fri 8am-6pm SAST | Sat 9am-1pm
+                  {settings.hours}
                 </p>
               </div>
 
