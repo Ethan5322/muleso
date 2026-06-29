@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { isAdminRequest } from '@/lib/adminAuth';
-import { DEFAULT_SETTINGS } from '@/lib/siteSettings';
+import { DEFAULT_SETTINGS, mergeSettings } from '@/lib/siteSettings';
 
 const ROW_ID = 'main';
 const FIELDS = ['phone', 'email', 'whatsapp', 'address', 'hours', 'linkedin', 'twitter', 'instagram'] as const;
@@ -15,7 +15,7 @@ export async function GET() {
       .eq('id', ROW_ID)
       .maybeSingle();
     if (error) throw error;
-    return NextResponse.json({ ...DEFAULT_SETTINGS, ...(data || {}) });
+    return NextResponse.json(mergeSettings(data));
   } catch {
     // Never break the public site — fall back to defaults
     return NextResponse.json(DEFAULT_SETTINGS);
@@ -39,7 +39,7 @@ export async function PUT(req: NextRequest) {
       .select()
       .maybeSingle();
     if (error) throw error;
-    return NextResponse.json({ ...DEFAULT_SETTINGS, ...(data || {}) });
+    return NextResponse.json(mergeSettings(data));
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Save failed' }, { status: 500 });
   }

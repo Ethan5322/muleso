@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow } from 'lucide-react';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
@@ -123,7 +123,42 @@ const ServiceCard = ({
   );
 };
 
+interface HomeTestimonial {
+  quote: string;
+  author: string;
+  role: string;
+  company: string;
+  rating: number;
+}
+
+const FALLBACK_TESTIMONIALS: HomeTestimonial[] = [
+  { quote: 'MuleSoo completely transformed our online presence. Our bookings tripled within 3 months. Professional, fast, and incredibly responsive.', author: 'Sarah Mkhize', role: 'CEO', company: 'Luxury Events SA', rating: 5 },
+  { quote: 'The AI chatbot they built for us handles 80% of customer inquiries automatically. Best investment we have made. Highly recommend!', author: 'James Okonkwo', role: 'Manager', company: 'Tech Solutions Ltd', rating: 5 },
+  { quote: 'From concept to launch in 2 weeks. The attention to detail is insane. Our logo and website are exactly what we needed. Worth every cent.', author: 'Patricia Nkosi', role: 'Founder', company: 'Beauty & Wellness Co', rating: 5 },
+];
+
 export default function Home() {
+  const [testimonials, setTestimonials] = useState<HomeTestimonial[]>(FALLBACK_TESTIMONIALS);
+
+  useEffect(() => {
+    fetch('/api/admin/testimonials')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((d) => {
+        if (Array.isArray(d) && d.length > 0) {
+          setTestimonials(
+            d.map((t: any) => ({
+              quote: t.quote,
+              author: t.author,
+              role: t.role || '',
+              company: t.company || '',
+              rating: t.rating || 5,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       {/* SECTION 1 - HERO */}
@@ -330,70 +365,17 @@ export default function Home() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <TestimonialCard
-              quote="MuleSoo completely transformed our online presence. Our bookings tripled within 3 months. Professional, fast, and incredibly responsive."
-              author="Sarah Mkhize"
-              role="CEO"
-              company="Luxury Events SA"
-              rating={5}
-              delay={0}
-            />
-            <TestimonialCard
-              quote="The AI chatbot they built for us handles 80% of customer inquiries automatically. Best investment we've made. Highly recommend!"
-              author="James Okonkwo"
-              role="Manager"
-              company="Tech Solutions Ltd"
-              rating={5}
-              delay={0.1}
-            />
-            <TestimonialCard
-              quote="From concept to launch in 2 weeks. The attention to detail is insane. Our logo and website are exactly what we needed. Worth every cent."
-              author="Patricia Nkosi"
-              role="Founder"
-              company="Beauty & Wellness Co"
-              rating={5}
-              delay={0.2}
-            />
-            <TestimonialCard
-              quote="Ethan is brilliant. He understands our business better than we do sometimes. The chatbot integration was seamless and our team productivity increased 40%."
-              author="David Chen"
-              role="Operations Director"
-              company="Import/Export Business"
-              rating={5}
-              delay={0.3}
-            />
-            <TestimonialCard
-              quote="We got our website when we needed it most. Fast turnaround, great quality, and the support after launch was phenomenal. Total game-changer."
-              author="Amahle Dlamini"
-              role="Founder"
-              company="Sustainable Fashion Startup"
-              rating={5}
-              delay={0.4}
-            />
-            <TestimonialCard
-              quote="The PDF guide we purchased completely changed how we approach our workflows. Clear, practical, and packed with insights. Worth 10x the price!"
-              author="Marcus Thompson"
-              role="CEO"
-              company="Digital Marketing Agency"
-              rating={5}
-              delay={0.5}
-            />
-            <TestimonialCard
-              quote="Exceptional work. The custom email setup was seamless, and our team credibility went up immediately. Ethan knows his craft inside out."
-              author="Thandi Mfeka"
-              role="Managing Director"
-              company="Corporate Training Institute"
-              rating={5}
-              delay={0.6}
-            />
-            <TestimonialCard
-              quote="Our new website launched on time and under budget. The 3D animations are stunning. More importantly, we're getting 5x more qualified leads. Incredible ROI!"
-              author="Nicholas Patel"
-              role="Founder"
-              company="Property Development Group"
-              rating={5}
-              delay={0.7}
-            />
+            {testimonials.map((t, i) => (
+              <TestimonialCard
+                key={`${t.author}-${i}`}
+                quote={t.quote}
+                author={t.author}
+                role={t.role}
+                company={t.company}
+                rating={t.rating}
+                delay={(i % 3) * 0.1}
+              />
+            ))}
           </div>
         </div>
       </section>

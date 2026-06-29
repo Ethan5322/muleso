@@ -26,5 +26,13 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 };
 
 export function mergeSettings(partial: Partial<SiteSettings> | null | undefined): SiteSettings {
-  return { ...DEFAULT_SETTINGS, ...(partial || {}) };
+  const out: SiteSettings = { ...DEFAULT_SETTINGS };
+  if (partial) {
+    (Object.keys(DEFAULT_SETTINGS) as (keyof SiteSettings)[]).forEach((k) => {
+      const v = partial[k];
+      // Only override the default when a real, non-empty value is provided
+      if (typeof v === 'string' && v.trim() !== '') out[k] = v;
+    });
+  }
+  return out;
 }
