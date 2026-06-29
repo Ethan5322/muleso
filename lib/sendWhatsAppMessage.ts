@@ -4,8 +4,8 @@
  */
 
 const CALLMEBOT_API_URL = 'https://api.callmebot.com/whatsapp.php';
-const CALLMEBOT_API_KEY = '5233738';
-const ADMIN_PHONE = '27759440377'; // Owner's WhatsApp number
+const CALLMEBOT_API_KEY = process.env.CALLMEBOT_API_KEY || '7268108';
+const ADMIN_PHONE = process.env.ADMIN_WHATSAPP || '27688529333'; // Owner's WhatsApp number
 
 interface SendWhatsAppParams {
   phone: string; // Recipient phone number (with country code, no +)
@@ -132,8 +132,8 @@ Reference: ${bookingDetails?.bookingReference || 'N/A'}
 4. We will confirm project start date
 
 ---NEED HELP?---
-Email: hello@mulukenendashaw68@gmail.com
-WhatsApp: +27 759 440 377
+Email: mulukenendashaw68@gmail.com
+WhatsApp: +27 68 852 9333
 Website: https://mulesoo.vercel.app
 
 Thank you for choosing MULESOO! We're excited to build something amazing with you!`;

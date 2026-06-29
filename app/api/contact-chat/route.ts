@@ -27,7 +27,7 @@ Time: ${new Date().toLocaleString()}
       try {
         const formData = new FormData();
         formData.append('From', `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`);
-        formData.append('To', `whatsapp:+27759440377`);
+        formData.append('To', `whatsapp:+27688529333`);
         formData.append('Body', leadMessage);
 
         await fetch(

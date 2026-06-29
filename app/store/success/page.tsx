@@ -34,7 +34,7 @@ export default function SuccessPage() {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="https://wa.me/27759440377?text=Hi%20MuleSoo%2C%20I%20just%20completed%20a%20purchase%20%E2%80%94%20please%20send%20my%20download%20link."
+            href="https://wa.me/27688529333?text=Hi%20MuleSoo%2C%20I%20just%20completed%20a%20purchase%20%E2%80%94%20please%20send%20my%20download%20link."
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#fff] text-[#000] font-bold font-sora rounded-lg hover:scale-105 transition-transform"

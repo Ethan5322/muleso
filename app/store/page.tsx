@@ -19,7 +19,7 @@ interface Product {
   accent: AccentKey;
 }
 
-const WHATSAPP = '27759440377';
+const WHATSAPP = '27688529333';
 
 export default function StorePage() {
   const [loadingName, setLoadingName] = useState<string | null>(null);

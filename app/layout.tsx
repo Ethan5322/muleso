@@ -115,7 +115,7 @@ export default function RootLayout({
                 postalCode: "0001",
                 addressCountry: "ZA",
               },
-              telephone: "+27759440377",
+              telephone: "+27688529333",
               email: "mulukenendashaw68@gmail.com",
               areaServed: {
                 "@type": "Country",
@@ -154,7 +154,7 @@ export default function RootLayout({
               contactPoint: {
                 "@type": "ContactPoint",
                 contactType: "Customer Service",
-                telephone: "+27759440377",
+                telephone: "+27688529333",
                 email: "mulukenendashaw68@gmail.com",
               },
             }),

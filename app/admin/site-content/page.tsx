@@ -6,8 +6,8 @@ import { Save, Loader2 } from 'lucide-react';
 import { SiteSettings, DEFAULT_SETTINGS } from '@/lib/siteSettings';
 
 const FIELDS: { key: keyof SiteSettings; label: string; placeholder: string; hint?: string }[] = [
-  { key: 'phone', label: 'Phone (display)', placeholder: '+27 75 944 0377' },
-  { key: 'whatsapp', label: 'WhatsApp number (digits only)', placeholder: '27759440377', hint: 'Used for wa.me links — no + or spaces' },
+  { key: 'phone', label: 'Phone (display)', placeholder: '+27 68 852 9333' },
+  { key: 'whatsapp', label: 'WhatsApp number (digits only)', placeholder: '27688529333', hint: 'Used for wa.me links — no + or spaces' },
   { key: 'email', label: 'Business email', placeholder: 'hello@mulesoo.com' },
   { key: 'address', label: 'Address / Location', placeholder: 'Pretoria, South Africa' },
   { key: 'hours', label: 'Business hours', placeholder: 'Mon–Fri 8am–6pm SAST | Sat 9am–1pm' },

@@ -14,37 +14,37 @@ function generateResponse(userMessage: string): string {
 
   // Website Design
   if (msg.includes('website') || msg.includes('web design') || msg.includes('web')) {
-    return `We build stunning, fast websites that convert visitors into clients! 🌐\n\nWe can create everything from simple 3-page sites to complex e-commerce platforms with 3D animations.\n\n💬 For custom pricing based on your specific needs, reach out to Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nWhat features would your website need?`;
+    return `We build stunning, fast websites that convert visitors into clients! 🌐\n\nWe can create everything from simple 3-page sites to complex e-commerce platforms with 3D animations.\n\n💬 For custom pricing based on your specific needs, reach out to Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333\n\nWhat features would your website need?`;
   }
 
   // Chatbot
   if (msg.includes('chatbot') || msg.includes('bot') || msg.includes('ai assistant')) {
-    return `Our AI chatbots work 24/7 to handle customer service, answer FAQs, and collect leads! 🤖\n\nWe can integrate with WhatsApp, your website, and Telegram.\n\n💬 For custom pricing, contact Ethan directly:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nWhat kind of support would your business need?`;
+    return `Our AI chatbots work 24/7 to handle customer service, answer FAQs, and collect leads! 🤖\n\nWe can integrate with WhatsApp, your website, and Telegram.\n\n💬 For custom pricing, contact Ethan directly:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333\n\nWhat kind of support would your business need?`;
   }
 
   // Logo Design
   if (msg.includes('logo') || msg.includes('branding') || msg.includes('brand identity')) {
-    return `We create professional logos and brand identities that make your business unforgettable! 🎨\n\nFrom concept to final files, we deliver world-class design.\n\n💬 For pricing and packages, contact Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nDescribe your business vision!`;
+    return `We create professional logos and brand identities that make your business unforgettable! 🎨\n\nFrom concept to final files, we deliver world-class design.\n\n💬 For pricing and packages, contact Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333\n\nDescribe your business vision!`;
   }
 
   // QR Codes
   if (msg.includes('qr')) {
-    return `Custom branded QR codes with built-in analytics! 📱\n\nPerfect for marketing campaigns, product packaging, and event tracking.\n\n💬 For pricing, reach out:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nWhat would you use these for?`;
+    return `Custom branded QR codes with built-in analytics! 📱\n\nPerfect for marketing campaigns, product packaging, and event tracking.\n\n💬 For pricing, reach out:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333\n\nWhat would you use these for?`;
   }
 
   // Email Setup
   if (msg.includes('email') || msg.includes('@')) {
-    return `Professional @yourdomain.com email setup builds instant credibility! 📧\n\nWe handle everything from setup to ongoing management.\n\n💬 For custom packages, contact Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nHow many team members need email?`;
+    return `Professional @yourdomain.com email setup builds instant credibility! 📧\n\nWe handle everything from setup to ongoing management.\n\n💬 For custom packages, contact Ethan:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333\n\nHow many team members need email?`;
   }
 
   // PDF Guides / Store
   if (msg.includes('pdf') || msg.includes('guide') || msg.includes('course') || msg.includes('store')) {
-    return `We sell expert digital guides on Claude Code, automation, chatbots, and deployment! 📚\n\nYou can purchase them instantly from our store at a fixed price.\n\n💬 For pricing on custom guides or bulk orders:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968`;
+    return `We sell expert digital guides on Claude Code, automation, chatbots, and deployment! 📚\n\nYou can purchase them instantly from our store at a fixed price.\n\n💬 For pricing on custom guides or bulk orders:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333`;
   }
 
   // Pricing
   if (msg.includes('price') || msg.includes('cost') || msg.includes('how much')) {
-    return `Great question! Pricing depends on your specific needs and project scope. 💰\n\nWe offer custom quotes for websites, chatbots, logos, email setup, and more.\n\n💬 Let's discuss your requirements:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: 0781500968\n\nOr use the contact form below! 👇`;
+    return `Great question! Pricing depends on your specific needs and project scope. 💰\n\nWe offer custom quotes for websites, chatbots, logos, email setup, and more.\n\n💬 Let's discuss your requirements:\n📧 Email: mulukenendashaw68@gmail.com\n📱 WhatsApp: +27 68 852 9333\n\nOr use the contact form below! 👇`;
   }
 
   // Process

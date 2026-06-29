@@ -255,7 +255,7 @@ export const generateCleanTermsPDF = async () => {
   doc.setFontSize(6);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 100, 100);
-  doc.text('MuleSoo Digital Services | Pretoria | mulukenendashaw68@gmail.com | +27 78 1500968', pageWidth / 2, footerY, {
+  doc.text('MuleSoo Digital Services | Pretoria | mulukenendashaw68@gmail.com | +27 68 852 9333', pageWidth / 2, footerY, {
     align: 'center',
   });
 

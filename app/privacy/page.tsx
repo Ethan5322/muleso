@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
             <p>
               For questions about this Privacy Policy, please contact us at:<br/>
               📧 Email: mulukenendashaw68@gmail.com<br/>
-              💬 WhatsApp: 0781500968<br/>
+              💬 WhatsApp: +27 68 852 9333<br/>
               📍 Pretoria, South Africa
             </p>
           </section>

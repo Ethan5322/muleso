@@ -218,7 +218,7 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.text('📱 WhatsApp:', margin, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(80, 80, 80);
-  doc.text('+27 78 1500968', margin + 35, yPos);
+  doc.text('+27 68 852 9333', margin + 35, yPos);
 
   // FOOTER
   const footerY = doc.internal.pageSize.getHeight() - 12;

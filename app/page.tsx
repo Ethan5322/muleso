@@ -470,7 +470,7 @@ export default function Home() {
                 <Mail size={18} /> Email Us
               </a>
               <a
-                href="https://wa.me/27759440377"
+                href="https://wa.me/27688529333"
                 className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
                 <MessageCircle size={18} /> WhatsApp Us

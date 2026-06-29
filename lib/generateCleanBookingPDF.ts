@@ -90,7 +90,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     doc.setTextColor(...INK);
     const rightX = pageWidth - margin;
     doc.text('Pretoria, South Africa', rightX, headerTop + 3, { align: 'right' });
-    doc.text('+27 759 440 377', rightX, headerTop + 7.5, { align: 'right' });
+    doc.text('+27 68 852 9333', rightX, headerTop + 7.5, { align: 'right' });
     doc.text('mulukenendashaw68@gmail.com', rightX, headerTop + 12, { align: 'right' });
     doc.text('mulesoo.vercel.app', rightX, headerTop + 16.5, { align: 'right' });
 

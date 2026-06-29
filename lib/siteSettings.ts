@@ -15,9 +15,9 @@ export interface SiteSettings {
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  phone: '+27 75 944 0377',
+  phone: '+27 68 852 9333',
   email: 'mulukenendashaw68@gmail.com',
-  whatsapp: '27759440377',
+  whatsapp: '27688529333',
   address: 'Pretoria, South Africa',
   hours: 'Mon–Fri 8am–6pm SAST | Sat 9am–1pm',
   linkedin: '',

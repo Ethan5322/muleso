@@ -141,10 +141,10 @@ export default function CustomAppsPage() {
               📧 Email: mulukenendashaw68@gmail.com
             </a>
             <a
-              href="https://wa.me/27759440377"
+              href="https://wa.me/27688529333"
               className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              💬 WhatsApp: +27 (781) 500-968
+              💬 WhatsApp: +27 68 852 9333
             </a>
           </div>
         </motion.div>
