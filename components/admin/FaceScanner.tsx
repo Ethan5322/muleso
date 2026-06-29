@@ -22,7 +22,7 @@ const QUALITY_MESSAGE: Record<Quality, string> = {
   none: 'No face detected — look straight at the camera in good light.',
   far: 'Move a little closer to the camera.',
   offcenter: 'Center your face in the oval.',
-  good: 'Perfect — hold still and capture.',
+  good: 'Perfect — hold still, recognising…',
 };
 
 export default function FaceScanner({
@@ -36,6 +36,10 @@ export default function FaceScanner({
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const capturingRef = useRef(false);
+  const cooldownRef = useRef(0);
+  const busyRef = useRef(busy);
+  busyRef.current = busy;
+  const captureRef = useRef<() => void>(() => {});
 
   const [status, setStatus] = useState('Loading face models…');
   const [ready, setReady] = useState(false);
@@ -125,22 +129,32 @@ export default function FaceScanner({
           new api.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 })
         );
         if (!active) return;
-        if (!det) {
-          setQuality('none');
-        } else {
+        let q: Quality = 'none';
+        if (det) {
           const areaRatio = (det.box.width * det.box.height) / (v.videoWidth * v.videoHeight);
           const cx = (det.box.x + det.box.width / 2) / v.videoWidth;
           const cy = (det.box.y + det.box.height / 2) / v.videoHeight;
-          if (areaRatio < 0.06) setQuality('far');
-          else if (cx < 0.3 || cx > 0.7 || cy < 0.25 || cy > 0.8) setQuality('offcenter');
-          else setQuality('good');
+          if (areaRatio < 0.06) q = 'far';
+          else if (cx < 0.3 || cx > 0.7 || cy < 0.25 || cy > 0.8) q = 'offcenter';
+          else q = 'good';
+        }
+        setQuality(q);
+
+        // Live recognition: auto-capture when the face is well-positioned
+        if (
+          q === 'good' &&
+          !capturingRef.current &&
+          !busyRef.current &&
+          Date.now() > cooldownRef.current
+        ) {
+          captureRef.current();
         }
       } catch {
         /* ignore frame errors */
       }
     };
 
-    const id = setInterval(tick, 700);
+    const id = setInterval(tick, 600);
     return () => {
       active = false;
       clearInterval(id);
@@ -180,8 +194,13 @@ export default function FaceScanner({
     } finally {
       capturingRef.current = false;
       setWorking(false);
+      // brief pause before the next auto-capture (so you can change angle)
+      cooldownRef.current = Date.now() + 1600;
     }
-  }, [ready, working, busy, quality, mode, captured, steps.length, onCapture, onComplete]);
+  }, [ready, working, busy, mode, captured, steps.length, onCapture, onComplete]);
+
+  // Keep the auto-capture loop pointed at the latest capture handler
+  captureRef.current = handleCapture;
 
   const ringColor =
     quality === 'good' ? 'border-[#00FF88]' : quality === 'none' ? 'border-red-400/60' : 'border-[#E8B84B]';
