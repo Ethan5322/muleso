@@ -50,10 +50,29 @@ export default function FaceScanner({
     let cancelled = false;
     const start = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false,
-        });
+        if (!window.isSecureContext) {
+          setError('Camera needs a secure (HTTPS) connection. Open the site via its https:// address.');
+          return;
+        }
+        if (!navigator.mediaDevices?.getUserMedia) {
+          setError('This browser cannot access the camera. Try Chrome, Edge, or Safari.');
+          return;
+        }
+
+        let stream: MediaStream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+            audio: false,
+          });
+        } catch (constraintErr: any) {
+          if (constraintErr?.name === 'OverconstrainedError') {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+          } else {
+            throw constraintErr;
+          }
+        }
+
         if (cancelled) {
           stream.getTracks().forEach((t) => t.stop());
           return;
@@ -69,11 +88,18 @@ export default function FaceScanner({
         setReady(true);
       } catch (err: any) {
         console.error('Camera/model error:', err);
-        setError(
-          err?.name === 'NotAllowedError'
-            ? 'Camera permission denied. Allow camera access and reload.'
-            : 'Could not start the camera or load models. Try another browser.'
-        );
+        const name = err?.name || '';
+        if (name === 'NotAllowedError' || name === 'SecurityError') {
+          setError(
+            'Camera is blocked. Tap the 🔒 lock icon in the address bar → Site settings → Camera → Allow, then reload. (If you just deployed, hard-refresh first.)'
+          );
+        } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
+          setError('No camera was found on this device.');
+        } else if (name === 'NotReadableError') {
+          setError('The camera is being used by another app. Close it and reload.');
+        } else {
+          setError(`Could not start the camera (${name || 'unknown'}). ${err?.message || ''}`.trim());
+        }
       }
     };
     start();
