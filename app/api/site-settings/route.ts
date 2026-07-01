@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { isAdminRequest } from '@/lib/adminAuth';
-import { DEFAULT_SETTINGS, mergeSettings } from '@/lib/siteSettings';
+import { DEFAULT_SETTINGS, mergeSettings, SETTINGS_FIELDS } from '@/lib/siteSettings';
 
 const ROW_ID = 'main';
-const FIELDS = ['phone', 'email', 'whatsapp', 'address', 'hours', 'linkedin', 'twitter', 'instagram'] as const;
+const FIELDS = SETTINGS_FIELDS;
 
 // Public read — used by the footer and contact page.
 export async function GET() {

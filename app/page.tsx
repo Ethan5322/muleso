@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow } from 'lucide-react';
+import { useSiteSettings } from '@/lib/useSiteSettings';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef(null);
@@ -138,6 +139,7 @@ const FALLBACK_TESTIMONIALS: HomeTestimonial[] = [
 ];
 
 export default function Home() {
+  const settings = useSiteSettings();
   const [testimonials, setTestimonials] = useState<HomeTestimonial[]>(FALLBACK_TESTIMONIALS);
 
   useEffect(() => {
@@ -175,7 +177,7 @@ export default function Home() {
               <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full w-fit mx-auto flex items-center gap-2">
                 <Rocket size={16} className="text-[var(--accent-blue)]" />
                 <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
-                  AI-Powered Digital Solutions
+                  {settings.hero_badge}
                 </span>
               </div>
             </motion.div>
@@ -187,7 +189,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold font-sora leading-tight gradient-text"
             >
-              Digital Excellence
+              {settings.hero_title}
             </motion.h1>
 
             {/* Subheadline */}
@@ -197,7 +199,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed font-light"
             >
-              Professional websites, AI chatbots, logos, and digital solutions built for businesses across South Africa.
+              {settings.hero_subtitle}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -228,10 +230,10 @@ export default function Home() {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)] border-y border-[var(--border)]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            <StatCounter value="50+" label="Projects Delivered" />
-            <StatCounter value="100%" label="Client Satisfaction" />
-            <StatCounter value="3+" label="Years Experience" />
-            <StatCounter value="24/7" label="Support Available" />
+            <StatCounter value={settings.stat1_value} label={settings.stat1_label} />
+            <StatCounter value={settings.stat2_value} label={settings.stat2_label} />
+            <StatCounter value={settings.stat3_value} label={settings.stat3_label} />
+            <StatCounter value={settings.stat4_value} label={settings.stat4_label} />
           </div>
         </div>
       </section>
