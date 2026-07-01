@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Users, FileText, Activity, BookOpen, QrCode, Clock } from 'lucide-react';
+import { Users, FileText, Activity, BookOpen, QrCode, Clock, Inbox } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 interface Stats {
@@ -15,6 +15,8 @@ interface Stats {
   totalScans: number;
   scansThisWeek: number;
   portfolioCount: number;
+  totalLeads: number;
+  newLeads: number;
 }
 
 interface RecentBooking {
@@ -40,14 +42,16 @@ export default function AdminOverview() {
   useEffect(() => {
     const load = async () => {
       try {
-        const [bookingsData, visitorsRes, scansRes, portfolioRes] = await Promise.all([
+        const [bookingsData, leadsData, visitorsRes, scansRes, portfolioRes] = await Promise.all([
           fetch('/api/admin/bookings').then((r) => (r.ok ? r.json() : [])).catch(() => []),
+          fetch('/api/admin/leads').then((r) => (r.ok ? r.json() : [])).catch(() => []),
           supabase.from('visitors').select('id,created_at'),
           supabase.from('qr_scans').select('id,created_at'),
           supabase.from('portfolio').select('id'),
         ]);
 
         const bookings = Array.isArray(bookingsData) ? bookingsData : [];
+        const leads = Array.isArray(leadsData) ? leadsData : [];
         const visitors = visitorsRes.data || [];
         const scans = scansRes.data || [];
         const portfolio = portfolioRes.data || [];
@@ -65,6 +69,8 @@ export default function AdminOverview() {
           totalScans: scans.length,
           scansThisWeek: scans.filter((s: any) => s.created_at >= weekAgoStr()).length,
           portfolioCount: portfolio.length,
+          totalLeads: leads.length,
+          newLeads: leads.filter((l: any) => l.status === 'New').length,
         });
         setRecent(bookings.slice(0, 5) as RecentBooking[]);
       } catch (error) {
@@ -78,6 +84,7 @@ export default function AdminOverview() {
 
   const kpis = stats
     ? [
+        { icon: Inbox, label: 'Leads', value: String(stats.totalLeads), sub: `${stats.newLeads} new`, color: 'from-cyan-600 to-blue-500' },
         { icon: BookOpen, label: 'Total Bookings', value: String(stats.totalBookings), sub: `${stats.pendingBookings} pending`, color: 'from-blue-600 to-cyan-500' },
         { icon: Activity, label: 'Conversion Rate', value: `${stats.conversion.toFixed(0)}%`, sub: `${stats.wonBookings} won`, color: 'from-emerald-600 to-teal-500' },
         { icon: Users, label: 'Total Visitors', value: String(stats.totalVisitors), sub: `${stats.visitorsToday} today`, color: 'from-purple-600 to-pink-500' },
@@ -100,9 +107,9 @@ export default function AdminOverview() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
+          ? Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="h-32 rounded-xl bg-[#0A0E17] border border-[#1E3A5F] animate-pulse" />
             ))
           : kpis.map((stat, i) => {

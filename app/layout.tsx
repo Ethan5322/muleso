@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://mulesoo.vercel.app/og-image.jpg",
+        url: `${SITE_URL}/mulesoo-website.jpg`,
         width: 1200,
         height: 630,
         alt: "MuleSoo Digital Services",
@@ -53,6 +53,7 @@ export const metadata: Metadata = {
     title: "MuleSoo Digital Services",
     description: "Professional websites and AI solutions for South African businesses",
     creator: "@MuleSooDigital",
+    images: [`${SITE_URL}/mulesoo-website.jpg`],
   },
   robots: {
     index: true,
@@ -105,7 +106,7 @@ export default function RootLayout({
               "@id": "https://mulesoo.vercel.app",
               name: "MuleSoo Digital Services",
               url: "https://mulesoo.vercel.app",
-              logo: "https://mulesoo.vercel.app/logo.png",
+              logo: "https://mulesoo.vercel.app/mulesoo-logo.png",
               description: "Professional web design, AI chatbots, logos, and digital solutions for South African businesses.",
               address: {
                 "@type": "PostalAddress",
@@ -142,7 +143,7 @@ export default function RootLayout({
               "@type": "Organization",
               name: "MuleSoo Digital Services",
               url: "https://mulesoo.vercel.app",
-              logo: "https://mulesoo.vercel.app/logo.png",
+              logo: "https://mulesoo.vercel.app/mulesoo-logo.png",
               description: "Award-winning digital agency providing web design, AI chatbots, and custom digital solutions.",
               foundingDate: "2022",
               founders: [
