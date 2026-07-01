@@ -63,16 +63,6 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button (Desktop) */}
-          <div className="hidden md:block">
-            <Link
-              href="/contact"
-              className="px-6 py-2 rounded-lg bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold text-sm font-sora hover:scale-105 transition-transform duration-200 hover:shadow-[0_0_30px_var(--glow-blue)]"
-            >
-              Get a Quote
-            </Link>
-          </div>
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -111,13 +101,6 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-                <Link
-                  href="/contact"
-                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold text-center font-sora mt-6"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Get a Quote
-                </Link>
               </div>
             </motion.div>
           )}

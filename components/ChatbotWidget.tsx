@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, Download, CheckCircle, Clock, Save } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, ArrowLeft, Download, CheckCircle, Clock, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
@@ -158,7 +158,10 @@ export default function ChatbotWidget() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
+  const [history, setHistory] = useState<StageType[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isGoingBack = useRef(false);
+  const prevStage = useRef<StageType>('greeting');
 
   const currentStageIndex = STAGE_ORDER.indexOf(stage);
   const progressPercent = stage === 'greeting' ? 0 : ((currentStageIndex + 1) / STAGE_ORDER.length) * 100;
@@ -194,6 +197,27 @@ export default function ChatbotWidget() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Track stage transitions so the user can step back through the booking.
+  useEffect(() => {
+    if (isGoingBack.current) {
+      isGoingBack.current = false;
+    } else if (prevStage.current !== stage && stage !== 'greeting') {
+      const from = prevStage.current;
+      setHistory((h) => [...h, from]);
+    }
+    prevStage.current = stage;
+  }, [stage]);
+
+  const goBack = () => {
+    if (history.length === 0) return;
+    const prev = history[history.length - 1];
+    isGoingBack.current = true;
+    setHistory(history.slice(0, -1));
+    setInputValue('');
+    setValidationError('');
+    setStage(prev);
+  };
 
   const addMessage = (text: string, sender: 'user' | 'bot', isTyping = false) => {
     const newMessage: Message = {
@@ -282,6 +306,7 @@ export default function ChatbotWidget() {
     setIsOpen(false);
     setMessages([]);
     setStage('greeting');
+    setHistory([]);
     setShowConfetti(false);
     setBookingData({
       fullName: '',
@@ -585,7 +610,17 @@ export default function ChatbotWidget() {
 
             {/* Header */}
             <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-3xl flex-shrink-0 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                {stage !== 'greeting' && stage !== 'summary' && history.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={goBack}
+                    aria-label="Go back"
+                    className="p-1.5 -ml-1 rounded-lg hover:bg-white/20 transition-colors"
+                  >
+                    <ArrowLeft size={20} />
+                  </button>
+                )}
                 <div className="text-2xl font-bold font-sora">
                   <span className="text-[var(--accent-blue)]">MULE</span>
                   <span>SOO</span>
@@ -1024,7 +1059,7 @@ export default function ChatbotWidget() {
                   className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-gradient-to-r from-[var(--accent-green)] to-[#00FF88] text-black font-bold rounded-xl hover:shadow-[0_0_20px_rgba(0,255,136,0.5)] transition-all text-base"
                 >
                   <CheckCircle size={18} />
-                  Completed &amp; Close
+                  Finish &amp; Close
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
