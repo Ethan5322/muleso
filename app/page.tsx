@@ -627,13 +627,15 @@ export default function Home() {
             <p className="text-[var(--text-secondary)] mb-4">Still have questions?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:mulukenendashaw68@gmail.com"
+                href={`mailto:${settings.email}`}
                 className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
                 <Mail size={18} /> Email Us
               </a>
               <a
-                href="https://wa.me/27688529333"
+                href={`https://wa.me/${settings.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
               >
                 <MessageCircle size={18} /> WhatsApp Us
@@ -716,7 +718,7 @@ export default function Home() {
         >
           <span className="inline-flex items-center gap-2 border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full mb-6">
             <Zap size={16} className="text-[var(--accent-blue)]" />
-            <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">199+ AI Automation Systems</span>
+            <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">200 AI Automation Systems</span>
           </span>
           <h2 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-5">
             Not sure what you need? Explore what we can build.
