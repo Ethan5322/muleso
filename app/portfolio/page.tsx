@@ -34,7 +34,7 @@ const fallbackProjects: Project[] = [
     name: 'MuleSoo Digital Services',
     category: 'Website',
     client: 'Our Flagship Platform',
-    description: 'Our own corporate platform — a fast, animated Next.js site with an AI booking assistant and a full admin control center.',
+    description: 'The all-in-one platform that captures leads, books clients, and runs the business 24/7 — you are looking at it right now.',
     image: 'mulesoo-website.jpg',
     result: 'You are looking at it',
     tech: ['Next.js', 'Supabase', 'Framer Motion', 'AI'],
@@ -62,7 +62,7 @@ const fallbackProjects: Project[] = [
     name: 'Habesha Celebration Events',
     category: 'Website',
     client: 'Ethiopian Wedding & Event Planning',
-    description: 'A full-service event-planning platform with elegant galleries, package showcases, and a smooth enquiry-to-booking flow.',
+    description: 'An elegant events platform that turns wedding dreams into confirmed bookings — working for you 24/7, even mid-event.',
     image: 'habesha-celebration-portfolio.png',
     result: 'Live booking platform',
     tech: ['Next.js', 'React', 'Framer Motion', 'Netlify'],
@@ -90,7 +90,7 @@ const fallbackProjects: Project[] = [
     name: 'YoYo Gym',
     category: 'Website',
     client: 'Fitness & Wellness Brand',
-    description: 'A high-energy website for a modern gym — class schedules, membership tiers, trainer profiles, and a bold join-now flow.',
+    description: 'A high-energy website that turns curious visitors into paying members — and keeps every class full.',
     image: 'yoyo-gym.jpg',
     result: 'Membership-ready site',
     tech: ['Next.js', 'Tailwind CSS', 'Framer Motion'],
@@ -118,7 +118,7 @@ const fallbackProjects: Project[] = [
     name: 'X-Boss Photography',
     category: 'Photography',
     client: 'Professional Photographer',
-    description: 'A cinematic portfolio site that lets the imagery lead — full-bleed galleries and a clean booking enquiry.',
+    description: 'A cinematic showcase that makes the work unforgettable — and turns admirers into booked, paying shoots.',
     image: 'xboss-photography.jpg',
     result: 'Online bookings enabled',
     tech: ['Next.js', 'Image Optimization', 'Tailwind CSS'],
@@ -146,7 +146,7 @@ const fallbackProjects: Project[] = [
     name: 'Shime Events',
     category: 'Events',
     client: 'Events & Celebrations',
-    description: 'A vibrant brand site with service packages, galleries, instant WhatsApp enquiry, and a custom branded QR code.',
+    description: 'A vibrant events brand that books celebrations online and on the ground — scan, tap, booked in seconds.',
     image: 'shime-events.jpg',
     result: 'Site + branded QR',
     tech: ['React', 'QR Codes', 'WhatsApp API'],
@@ -174,7 +174,7 @@ const fallbackProjects: Project[] = [
     name: 'Tsedi',
     category: 'Branding',
     client: 'Brand Identity & Outreach',
-    description: 'Brand identity paired with a custom branded QR-code system for client outreach — one consistent look across print and digital.',
+    description: 'A complete brand identity that makes the business instantly recognisable — and impossible to forget.',
     image: 'tsedi.jpg',
     result: 'Brand kit delivered',
     tech: ['Illustrator', 'QR Codes', 'Canva Pro'],
@@ -201,7 +201,7 @@ const fallbackProjects: Project[] = [
     name: 'TSI AI Booking Assistant',
     category: 'Chatbot',
     client: 'Hospitality / Reservations',
-    description: 'An AI assistant that handles reservations, answers FAQs, and qualifies leads 24/7 — with full conversation history.',
+    description: 'A tireless AI receptionist that answers customers and takes bookings around the clock — so you never miss a sale.',
     image: 'tsi-ai-booking-portfolio.png',
     result: '24/7 automation',
     tech: ['Claude API', 'Supabase', 'Next.js'],
@@ -310,14 +310,8 @@ export default function PortfolioPage() {
                 <div className="p-6 space-y-3">
                   <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent-blue)] transition-colors">{project.name}</h3>
                   {project.client && <p className="text-xs text-[var(--accent-gold)] font-semibold">{project.client}</p>}
-                  <p className="text-sm text-[var(--text-secondary)] line-clamp-2 min-h-10">{project.description}</p>
-                  {project.tech.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {project.tech.map((tech) => (
-                        <span key={tech} className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md">{tech}</span>
-                      ))}
-                    </div>
-                  )}
+                  <p className="text-sm text-[var(--text-secondary)] line-clamp-3">{project.description}</p>
+                  <p className="text-xs font-semibold text-[var(--accent-blue)] pt-1">View project details →</p>
                 </div>
               </motion.button>
             );
@@ -415,15 +409,6 @@ export default function PortfolioPage() {
                         </li>
                       ))}
                     </ul>
-                  </div>
-                )}
-
-                {/* Tech */}
-                {selected.tech.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {selected.tech.map((t) => (
-                      <span key={t} className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md">{t}</span>
-                    ))}
                   </div>
                 )}
 
