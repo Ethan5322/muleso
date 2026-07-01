@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow } from 'lucide-react';
+import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow, CreditCard, CheckCircle, Gauge, ShieldCheck, Clock, Zap } from 'lucide-react';
 import { useSiteSettings } from '@/lib/useSiteSettings';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
@@ -326,6 +326,61 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SECTION 3.5 - HOW AI BOOKING WORKS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full mb-6">
+              <Zap size={16} className="text-[var(--accent-blue)]" />
+              <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">Our AI Booking System</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">
+              Clients Book You on Autopilot
+            </h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+              From a single QR code to a paid, verified booking — 24/7, while you focus on the work.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {[
+              { icon: QrCode, title: 'Scan the QR', desc: 'Your customer scans your branded QR code — on a flyer, shop, or online.' },
+              { icon: MessageCircle, title: 'Chat with AI', desc: 'A friendly assistant collects their details, needs and preferences.' },
+              { icon: CreditCard, title: 'Pay online', desc: 'They pay a deposit or fee securely in a few taps.' },
+              { icon: CheckCircle, title: 'Get verified', desc: 'Instant verification code + email confirmation, automatically.' },
+              { icon: Gauge, title: 'You track it', desc: 'Every booking, payment and client in your admin dashboard.' },
+            ].map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  viewport={{ once: true }}
+                  className="glass-card p-6 text-center relative"
+                >
+                  <span className="absolute top-3 right-4 text-4xl font-bold font-sora text-[var(--border)]">
+                    {i + 1}
+                  </span>
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mx-auto mb-4">
+                    <Icon className="text-white" size={26} />
+                  </div>
+                  <h3 className="font-bold font-sora text-[var(--text-primary)] mb-2">{step.title}</h3>
+                  <p className="text-sm text-[var(--text-secondary)]">{step.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 4 - PROCESS */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto">
@@ -365,6 +420,57 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4.5 - WHY MULESOO */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">
+              Why Businesses Choose MuleSoo
+            </h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+              Agency quality and real automation — without the agency price tag.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: Code2, title: 'You Own Everything', desc: 'Full source code and data are yours after payment — no lock-in, ever.' },
+              { icon: ShieldCheck, title: 'POPIA-Compliant', desc: 'Built to South African data-protection standards from day one.' },
+              { icon: CreditCard, title: 'Secure Online Payments', desc: 'Take deposits and payments through the system, safely.' },
+              { icon: Gauge, title: 'Real Admin Dashboard', desc: 'Track leads, bookings, payments and clients — all in one place.' },
+              { icon: Clock, title: '2-Hour Response', desc: 'We reply fast and deliver on schedule, every time.' },
+              { icon: Rocket, title: 'Fast, Premium Delivery', desc: 'World-class design and AI automation, launched in weeks.' },
+            ].map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  viewport={{ once: true }}
+                  className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all flex items-start gap-4"
+                >
+                  <div className="w-12 h-12 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center flex-shrink-0">
+                    <Icon className="text-[var(--accent-blue)]" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold font-sora text-[var(--text-primary)] mb-1">{item.title}</h3>
+                    <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
