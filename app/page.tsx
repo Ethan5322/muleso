@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow, CreditCard, CheckCircle, Gauge, ShieldCheck, Clock, Zap } from 'lucide-react';
+import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow, CreditCard, CheckCircle, Gauge, ShieldCheck, Clock, Zap, Check, X } from 'lucide-react';
 import { useSiteSettings } from '@/lib/useSiteSettings';
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
@@ -475,8 +476,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 5 - TESTIMONIALS */}
+      {/* SECTION 4.7 - FEATURED WORK */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">Featured Work</h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+              Real systems, running real businesses. Explore the full case studies in our portfolio.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { img: 'mulesoo-website.jpg', title: 'MuleSoo Platform', category: 'Flagship', benefit: 'Captures leads, books clients with AI, and runs the whole business 24/7.' },
+              { img: 'yoyo-gym.jpg', title: 'YoYo Gym', category: 'Gym Platform', benefit: 'Memberships, recurring billing and face check-in — on autopilot.' },
+              { img: 'shime-events.jpg', title: 'Shime Events', category: 'Events', benefit: 'Bilingual AI bookings with online deposits and PDF contracts.' },
+            ].map((p, i) => (
+              <motion.div
+                key={p.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                viewport={{ once: true }}
+                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[var(--accent-blue)] hover:-translate-y-1 transition-all"
+              >
+                <div className="relative w-full h-48 overflow-hidden">
+                  <Image src={`/${p.img}`} alt={p.title} width={800} height={450} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] to-transparent" />
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 border border-white/20">{p.category.toUpperCase()}</span>
+                </div>
+                <div className="p-6">
+                  <h3 className="font-bold font-sora text-lg text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">{p.title}</h3>
+                  <p className="text-sm text-[var(--text-secondary)]">{p.benefit}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/portfolio" className="inline-block px-10 py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors">
+              View Full Portfolio →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 - TESTIMONIALS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -587,6 +639,68 @@ export default function Home() {
                 <MessageCircle size={18} /> WhatsApp Us
               </a>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SECTION 6.5 - COMPARISON */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">The Smart Choice</h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+              Agency quality, freelancer value — plus AI automation neither one offers.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="overflow-x-auto glass-card rounded-2xl"
+          >
+            <table className="w-full border-collapse min-w-[560px]">
+              <thead>
+                <tr className="border-b border-[var(--border)]">
+                  <th className="text-left p-4 text-[var(--text-secondary)] font-sora font-semibold text-sm">Feature</th>
+                  <th className="p-4 text-center font-sora font-bold text-[var(--accent-gold)] bg-[var(--glow-gold)]">MuleSoo</th>
+                  <th className="p-4 text-center font-sora font-semibold text-[var(--text-secondary)] text-sm">Freelancer</th>
+                  <th className="p-4 text-center font-sora font-semibold text-[var(--text-secondary)] text-sm">Big Agency</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { f: 'World-class, custom design', m: 'yes', fr: 'maybe', a: 'yes' },
+                  { f: 'Fast delivery (weeks, not months)', m: 'yes', fr: 'maybe', a: 'no' },
+                  { f: 'Affordable, transparent pricing', m: 'yes', fr: 'yes', a: 'no' },
+                  { f: 'AI booking & automation', m: 'yes', fr: 'no', a: 'no' },
+                  { f: 'Admin dashboard included', m: 'yes', fr: 'no', a: 'maybe' },
+                  { f: 'You own the code & data', m: 'yes', fr: 'maybe', a: 'no' },
+                  { f: 'POPIA-compliant', m: 'yes', fr: 'no', a: 'yes' },
+                  { f: 'Ongoing support', m: 'yes', fr: 'no', a: 'yes' },
+                ].map((row, i) => {
+                  const cell = (v: string) =>
+                    v === 'yes' ? <Check size={20} className="text-[var(--accent-green)] mx-auto" />
+                    : v === 'no' ? <X size={20} className="text-red-400/70 mx-auto" />
+                    : <span className="text-[var(--text-secondary)] text-sm">Sometimes</span>;
+                  return (
+                    <tr key={i} className="border-b border-[var(--border)] last:border-0">
+                      <td className="p-4 text-sm text-[var(--text-primary)]">{row.f}</td>
+                      <td className="p-4 text-center bg-[var(--glow-gold)]/30">{cell(row.m)}</td>
+                      <td className="p-4 text-center">{cell(row.fr)}</td>
+                      <td className="p-4 text-center">{cell(row.a)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </motion.div>
         </div>
       </section>
