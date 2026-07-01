@@ -27,6 +27,7 @@ interface Project {
   capabilities?: string[];
   adminTracking?: string[];
   boosts?: string[];
+  upcoming?: boolean;
 }
 
 const fallbackProjects: Project[] = [
@@ -255,6 +256,39 @@ const fallbackProjects: Project[] = [
       'Responds instantly — improving conversion',
     ],
   },
+  {
+    name: 'DR. Hospital — AI Clinic System',
+    category: 'Healthcare',
+    client: 'Clinic & Hospital Management',
+    description: 'An AI-powered clinic & hospital platform that connects patients, doctors, nurses and management in one live system — from a QR booking and AI symptom intake all the way to a fully tracked, AI-drafted discharge.',
+    image: null,
+    result: 'Upcoming — in active development',
+    tech: ['Next.js', 'Supabase', 'Claude AI', 'Paystack'],
+    theme: 'blue',
+    upcoming: true,
+    purpose:
+      'DR. Hospital runs the entire patient journey for a clinic or small hospital — from the first QR scan to walking out with a discharge summary. It automates the repetitive intake and admin work with structured AI workflows, while every clinical decision stays with licensed doctors and nurses. It connects the three groups that normally work in disconnected tools — patients, clinical staff and management — into one live, role-aware platform.',
+    capabilities: [
+      'Patient journey: scan QR → pay booking fee → capture personal details → AI-guided symptom & pain intake (pain mapping, severity, history, red-flag screening) → automatic queue placement → WhatsApp/SMS updates',
+      'Doctors & nurses open a pre-organised AI summary of the complaint (not a raw form), capture vitals, write a structured note, and issue prescriptions — AI drafts, the clinician always approves',
+      'Deterministic, clinician-reviewable red-flag emergency screening',
+      'Discharge done properly: AI-drafted patient-friendly summary, completion checklist (payment, prescription, follow-up) and a same-day satisfaction check-in',
+      'WhatsApp-first — works on budget Android phones and unreliable clinic Wi-Fi',
+      'Built for POPIA, the National Health Act & HPCSA confidentiality from day one',
+    ],
+    adminTracking: [
+      'Management dashboard — revenue, doctor utilisation, wait times, no-show rate & patient satisfaction, live',
+      'Front-desk live scheduling, payments & walk-in management',
+      'Role-aware access for patients, reception, nurses, doctors & management',
+      'Every stage tracked — intake, consultation, prescription, discharge & follow-up',
+    ],
+    boosts: [
+      'Patients stop repeating their symptoms to three people — captured once, structured',
+      'Doctors start every consultation with context, not a blank page',
+      'Management sees revenue, wait times & no-shows live — no month-end spreadsheet scramble',
+      'Fewer no-shows, faster throughput, and a discharge that actually follows up',
+    ],
+  },
 ];
 
 const imgSrc = (image: string | null) =>
@@ -328,6 +362,12 @@ export default function PortfolioPage() {
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-gold)]" />
 
+                {project.upcoming && (
+                  <span className="absolute top-3 right-3 z-30 px-3 py-1 rounded-full text-[10px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg tracking-wider">
+                    COMING SOON
+                  </span>
+                )}
+
                 <div className="relative w-full h-60 overflow-hidden bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
                   {src ? (
                     <>
@@ -394,7 +434,12 @@ export default function PortfolioPage() {
                   <X size={20} />
                 </button>
                 <div className="absolute bottom-3 left-4 right-4">
-                  <span className="inline-block px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 border border-white/20 mb-2">{selected.category.toUpperCase()}</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-block px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 border border-white/20">{selected.category.toUpperCase()}</span>
+                    {selected.upcoming && (
+                      <span className="inline-block px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777]">COMING SOON</span>
+                    )}
+                  </div>
                   <h3 className="text-2xl font-bold font-sora text-white leading-tight">{selected.name}</h3>
                   <p className="text-[var(--accent-gold)] text-sm font-semibold">{selected.client}</p>
                 </div>
