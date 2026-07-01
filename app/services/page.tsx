@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Bot, ArrowRight, Zap, ShieldCheck, Clock } from 'lucide-react';
+import { Bot, ArrowRight, Zap } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
 interface Service {
@@ -55,53 +55,47 @@ export default function ServicesPage() {
         subtitle="Complete digital solutions to build and grow your business"
       />
 
-      {/* Featured: AI Automation Library */}
-      <section className="pt-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="relative overflow-hidden glass-card rounded-2xl border border-[var(--accent-blue)] p-8 md:p-10"
-          >
-            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--glow-blue)] to-[var(--glow-purple)] opacity-60" />
-            <div className="flex flex-col lg:flex-row lg:items-center gap-8">
-              <div className="flex-1">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold font-sora text-[var(--accent-blue)] bg-[var(--glow-blue)] border border-[var(--accent-blue)]/40 mb-4">
-                  <Zap size={13} /> 200 Systems · 9 Industries
-                </span>
-                <h2 className="text-3xl md:text-4xl font-bold font-sora gradient-text mb-3 flex items-center gap-3">
-                  <Bot className="text-[var(--accent-blue)]" size={32} /> AI Automation
-                </h2>
-                <p className="text-[var(--text-secondary)] max-w-2xl mb-5">
-                  Smart booking, payment, support and workflow systems engineered to
-                  <span className="text-[var(--text-primary)] font-semibold"> outperform the latest software your industry already uses</span> —
-                  built around your exact business, owned entirely by you.
-                </p>
-                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--text-secondary)] mb-6">
-                  <span className="inline-flex items-center gap-1.5"><Clock size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
-                  <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You own it</span>
-                  <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--accent-blue)]" /> No commission</span>
-                </div>
-                <Link
-                  href="/ai-automation"
-                  className="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform shadow-lg hover:shadow-[0_0_25px_var(--glow-blue)]"
-                >
-                  Explore the AI Automation Library <ArrowRight size={18} />
-                </Link>
-              </div>
-              <div className="hidden lg:flex flex-shrink-0 w-40 h-40 rounded-2xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] items-center justify-center shadow-[0_20px_50px_-15px_rgba(0,200,255,0.5)]">
-                <Bot className="text-white" size={72} />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Flagship: AI Automation — same card shape, elegantly highlighted */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="relative glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)] hover:shadow-[0_0_35px_-8px_var(--glow-blue)] transition-all duration-300 flex flex-col"
+            >
+              <span className="absolute top-5 right-5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold font-sora uppercase tracking-wide text-[var(--accent-blue)] bg-[var(--glow-blue)] border border-[var(--accent-blue)]/40">
+                <Zap size={11} /> Flagship
+              </span>
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(0,200,255,0.6)]">
+                <Bot className="text-white" size={30} />
+              </div>
+              <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-3">
+                AI Automation
+              </h3>
+              <p className="text-[var(--text-secondary)] mb-6">
+                200 AI systems across 9 industries — engineered to outperform the latest software your competitors use.
+              </p>
+              <ul className="space-y-2 mb-6">
+                {['200 systems, 9 industries', 'Works 24/7 on web & WhatsApp', 'Beats the latest industry tools', 'No commission — you own it', 'Custom-built to your workflow'].map((feature) => (
+                  <li key={feature} className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
+                    <span className="text-[var(--accent-green)]">✓</span> {feature}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto">
+                <p className="text-lg font-bold gold-text font-sora mb-4">From R5,000</p>
+                <Link
+                  href="/ai-automation"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] w-full text-center"
+                >
+                  Explore the Library <ArrowRight size={17} />
+                </Link>
+              </div>
+            </motion.div>
+
             {services.map((service, i) => (
               <motion.div
                 key={`${service.title}-${i}`}
