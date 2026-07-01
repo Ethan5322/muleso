@@ -116,6 +116,26 @@ const STAGE_ORDER: StageType[] = [
   'summary',
 ];
 
+// Stages a user can actually land on and interact with (have their own screen).
+// Excludes the transient 'service' stage and the terminal 'summary'.
+const NAVIGABLE_STAGES = new Set<StageType>([
+  'greeting',
+  'budget',
+  'usage_type',
+  'name',
+  'email',
+  'phone',
+  'company',
+  'nationality',
+  'client_id_type',
+  'client_id',
+  'contact_method',
+  'timeline',
+  'details',
+  'review',
+  'terms',
+]);
+
 // Validation functions
 const validateEmail = (email: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -202,7 +222,11 @@ export default function ChatbotWidget() {
   useEffect(() => {
     if (isGoingBack.current) {
       isGoingBack.current = false;
-    } else if (prevStage.current !== stage && stage !== 'greeting') {
+    } else if (
+      prevStage.current !== stage &&
+      stage !== 'greeting' &&
+      NAVIGABLE_STAGES.has(prevStage.current)
+    ) {
       const from = prevStage.current;
       setHistory((h) => [...h, from]);
     }
