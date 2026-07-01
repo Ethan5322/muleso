@@ -29,7 +29,7 @@ export default function StartBookingButton({
 
   return (
     <button
-      onClick={openChatbot}
+      onClick={() => openChatbot()}
       className={`
         ${sizeClasses[size]}
         ${variantClasses[variant]}

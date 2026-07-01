@@ -153,7 +153,8 @@ const validateName = (name: string): boolean => {
 export default function ChatbotWidget() {
   const pathname = usePathname();
   const router = useRouter();
-  const { isOpen, setIsOpen, openChatbot } = useChatbot();
+  const { isOpen, setIsOpen, openChatbot, presetBooking, consumePreset } = useChatbot();
+  const presetHandled = useRef(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [stage, setStage] = useState<StageType>('greeting');
@@ -209,6 +210,32 @@ export default function ChatbotWidget() {
       openChatbot();
     }
   }, [pathname, openChatbot]);
+
+  // When opened with a preset (e.g. "Buy this AI system"), skip service selection:
+  // pre-fill the service + project details and jump straight into the booking flow.
+  useEffect(() => {
+    if (!presetBooking) {
+      presetHandled.current = false;
+      return;
+    }
+    if (!isOpen || presetHandled.current) return;
+    presetHandled.current = true;
+    const preset = consumePreset();
+    if (!preset) return;
+
+    const price = getServicePrice(preset.service);
+    setStage('service');
+    setBookingData(prev => ({ ...prev, service: preset.service, projectDetails: preset.details }));
+    addMessage(`I'd like to book: ${preset.details}`, 'user');
+    setTimeout(() => {
+      addMessage(
+        `Excellent choice! 🚀 We'll build this for you.\n\nStarting from ${price} — what's your budget range?`,
+        'bot'
+      );
+      setStage('budget');
+    }, 350);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, presetBooking]);
 
   const scrollToBottom = () => {
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
