@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { verifyRecaptchaToken } from '@/lib/captcha';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
@@ -29,6 +30,23 @@ export async function POST(req: NextRequest) {
       if (!result.success || result.score < 0.3) {
         return NextResponse.json({ error: 'Verification failed. Please try again.' }, { status: 400 });
       }
+    }
+
+    // Store the lead (best-effort — never block the user if this fails)
+    try {
+      await supabaseAdmin.from('leads').insert({
+        name,
+        email,
+        company: company || null,
+        service,
+        budget,
+        details,
+        source: source || null,
+        status: 'New',
+        created_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.error('Lead save failed (continuing):', e);
     }
 
     // Deliver the lead by email

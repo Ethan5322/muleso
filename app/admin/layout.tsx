@@ -15,6 +15,7 @@ import {
   Globe,
   Quote,
   Wrench,
+  Inbox,
   LogOut,
   Menu,
   X,
@@ -23,6 +24,7 @@ import toast from 'react-hot-toast';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+  { label: 'Leads', href: '/admin/leads', icon: Inbox },
   { label: 'Bookings', href: '/admin/bookings', icon: BookOpen },
   { label: 'Visitors', href: '/admin/visitors', icon: Users },
   { label: 'QR Scans', href: '/admin/qr-scans', icon: QrCode },
