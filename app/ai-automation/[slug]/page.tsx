@@ -11,6 +11,7 @@ import {
   findAutomation, getDetail, getDeptMeta, iconKeyFor, ADMIN_CONTROLS, SYSTEM_CAN_DO, AUTOMATIONS,
 } from '@/lib/aiAutomations';
 import AutomationIcon from '@/components/AutomationIcon';
+import AutomationBanner from '@/components/AutomationBanner';
 import { useChatbot } from '@/context/ChatbotContext';
 import { useSiteSettings } from '@/lib/useSiteSettings';
 
@@ -76,56 +77,73 @@ export default function AutomationDetailPage() {
           />
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-14">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
           <Link href="/ai-automation" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-blue)] hover:underline mb-8">
             <ArrowLeft size={16} /> Back to Library
           </Link>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div className="flex items-center gap-3 mb-5">
-              <span
-                className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-[0_10px_30px_-8px_rgba(0,200,255,0.5)]"
-                style={{ background: `linear-gradient(135deg, ${meta.color}, var(--accent-purple))` }}
-              >
-                <AutomationIcon iconKey={iconKeyFor(automation.name)} size={26} />
-              </span>
-              <div>
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-bold font-sora text-[var(--accent-blue)] bg-[var(--glow-blue)]">
-                  {automation.category}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
+            {/* left — selling copy */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div className="flex items-center gap-3 mb-5">
+                <span
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-[0_10px_30px_-8px_rgba(0,200,255,0.5)]"
+                  style={{ background: `linear-gradient(135deg, ${meta.color}, var(--accent-purple))` }}
+                >
+                  <AutomationIcon iconKey={iconKeyFor(automation.name)} size={26} />
                 </span>
-                <p className="text-[11px] font-mono text-[var(--text-secondary)] mt-1">
-                  System #{String(automation.id).padStart(3, '0')} · MuleSoo AI Library
-                </p>
+                <div>
+                  <span
+                    className="inline-block px-3 py-1 rounded-full text-xs font-bold font-sora"
+                    style={{ color: meta.color, backgroundColor: meta.glow }}
+                  >
+                    {automation.category}
+                  </span>
+                  <p className="text-[11px] font-mono text-[var(--text-secondary)] mt-1">
+                    System #{String(automation.id).padStart(3, '0')} · MuleSoo AI Library
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <h1 className="text-4xl md:text-5xl font-extrabold font-sora gradient-text leading-[1.05] mb-4">{title}</h1>
-            <p className="text-lg text-[var(--text-secondary)] max-w-2xl">{automation.desc}</p>
+              <h1 className="text-4xl md:text-5xl font-extrabold font-sora gradient-text leading-[1.05] mb-4">{title}</h1>
+              <p className="text-lg text-[var(--text-secondary)]">{automation.desc}</p>
 
-            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--text-secondary)]">
-              <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--accent-blue)]" /> Built with AI</span>
-              <span className="inline-flex items-center gap-1.5"><Sparkles size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
-              <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You control it all</span>
-            </div>
+              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--text-secondary)]">
+                <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--accent-blue)]" /> Built with AI</span>
+                <span className="inline-flex items-center gap-1.5"><Sparkles size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
+                <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You control it all</span>
+              </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={startBooking}
-                className="px-7 py-3.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
-              >
-                Buy / Build This System →
-              </button>
-              <a
-                href={`https://wa.me/${waNumber}?text=${waText}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-7 py-3.5 border border-[var(--border)] text-[var(--text-primary)] font-bold rounded-lg hover:border-[#25D366] hover:text-[#25D366] transition-colors"
-              >
-                <MessageCircle size={18} /> Ask on WhatsApp
-              </a>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={startBooking}
+                  className="px-7 py-3.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
+                >
+                  Buy / Build This System →
+                </button>
+                <a
+                  href={`https://wa.me/${waNumber}?text=${waText}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-7 py-3.5 border border-[var(--border)] text-[var(--text-primary)] font-bold rounded-lg hover:border-[#25D366] hover:text-[#25D366] transition-colors"
+                >
+                  <MessageCircle size={18} /> Ask on WhatsApp
+                </a>
+              </div>
+            </motion.div>
+
+            {/* right — live "working system" banner (coded, per-system demo) */}
+            <div className="order-first lg:order-last">
+              <AutomationBanner
+                name={automation.name}
+                title={title}
+                iconKey={iconKeyFor(automation.name)}
+                color={meta.color}
+                glow={meta.glow}
+              />
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
