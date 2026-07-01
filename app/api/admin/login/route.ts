@@ -1,26 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTwoFactorCode } from '@/lib/twoFactorUtils';
-
-function getAdminPassword(): string | null {
-  let p = process.env.ADMIN_PASSWORD;
-  if (!p) return null;
-  p = p.trim();
-  if ((p.startsWith('"') && p.endsWith('"')) || (p.startsWith("'") && p.endsWith("'"))) {
-    p = p.slice(1, -1);
-  }
-  return p;
-}
+import { verifyAdminPassword } from '@/lib/adminPassword';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 
 export async function POST(request: NextRequest) {
   try {
     const { password, twoFactorCode } = await request.json();
-    const ADMIN_PASSWORD = getAdminPassword();
+    const { valid, configured } = await verifyAdminPassword(password);
 
     // Server misconfiguration guard
-    if (!ADMIN_PASSWORD) {
-      console.error('ADMIN_PASSWORD env var is not set');
+    if (!configured) {
+      console.error('No admin password configured (DB or env)');
       return NextResponse.json(
         { success: false, error: 'Server not configured' },
         { status: 500 }
@@ -28,8 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 1: Verify password (server-side only)
-    const submitted = typeof password === 'string' ? password.trim() : '';
-    if (!submitted || submitted !== ADMIN_PASSWORD) {
+    if (!valid) {
       return NextResponse.json(
         { success: false, error: 'Invalid password' },
         { status: 401 }

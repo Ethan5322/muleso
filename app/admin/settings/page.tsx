@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Download, RefreshCw, ShieldCheck } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { getAllAuditLogs, downloadAuditLogsCSV, AuditLogEntry } from '@/lib/auditLog';
 
 const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
@@ -11,6 +11,39 @@ const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
 export default function AdminSettingsPage() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPw, setCurrentPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
+  const [changing, setChanging] = useState(false);
+
+  const changePassword = async () => {
+    if (newPw.length < 8) {
+      toast.error('New password must be at least 8 characters');
+      return;
+    }
+    if (newPw !== confirmPw) {
+      toast.error('New passwords do not match');
+      return;
+    }
+    setChanging(true);
+    try {
+      const res = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: currentPw, newPassword: newPw }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to change password');
+      toast.success('✅ Password changed. Use it next time you log in.');
+      setCurrentPw('');
+      setNewPw('');
+      setConfirmPw('');
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setChanging(false);
+    }
+  };
 
   const loadLogs = async () => {
     setLoading(true);
@@ -32,6 +65,7 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="max-w-4xl space-y-6">
+      <Toaster position="top-center" />
       <div>
         <h2 className="text-3xl font-bold text-white mb-2 font-sora">Settings</h2>
         <p className="text-[#7A8BA8]">Account, security, and activity</p>
@@ -49,9 +83,27 @@ export default function AdminSettingsPage() {
           className="w-full bg-[#1A2332] border border-[#1E3A5F] text-[#00C8FF] py-2 px-4 rounded-lg text-sm"
         />
         <p className="text-xs text-[#7A8BA8] mt-3">
-          🔐 Password is managed via the <code className="text-[#00C8FF]">ADMIN_PASSWORD</code> environment
-          variable and protected by email 2FA. Update it in your hosting environment, then redeploy.
+          🔐 Protected by email 2FA. Change your password below — it&apos;s stored securely (hashed) and
+          takes effect immediately, no redeploy needed.
         </p>
+      </div>
+
+      {/* Change Password */}
+      <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
+        <h3 className="text-lg font-bold text-white mb-4">🔑 Change Password</h3>
+        <div className="space-y-3 max-w-md">
+          <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} placeholder="Current password" autoComplete="current-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]" />
+          <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="New password (min 8 chars)" autoComplete="new-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]" />
+          <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="Confirm new password" autoComplete="new-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]" />
+          <button
+            type="button"
+            onClick={changePassword}
+            disabled={changing || !currentPw || !newPw}
+            className="bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold py-2.5 px-6 rounded-lg text-sm disabled:opacity-50"
+          >
+            {changing ? 'Changing…' : 'Change Password'}
+          </button>
+        </div>
       </div>
 
       {/* Face Login */}
