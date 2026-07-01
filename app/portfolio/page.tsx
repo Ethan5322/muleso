@@ -230,6 +230,16 @@ const fallbackProjects: Project[] = [
 const imgSrc = (image: string | null) =>
   !image ? null : image.startsWith('http') ? image : `/${image}`;
 
+// The end-to-end booking journey we build into every project.
+const BOOKING_STEPS: { title: string; text: string }[] = [
+  { title: 'Get your QR code', text: 'We create a custom branded QR code — print it and place it anywhere: your shop, flyers, packaging, or event.' },
+  { title: 'Customer scans & chats', text: 'They scan the code and instantly start chatting with your AI assistant — no app to download, no long forms.' },
+  { title: 'AI collects everything', text: 'The assistant captures their full details and event/project info, then helps them choose the right package.' },
+  { title: 'Secure online payment', text: 'The customer pays online through the system in a few taps — safe and instant.' },
+  { title: 'Instant confirmation', text: 'They receive a unique verification code and an email confirmation straight away.' },
+  { title: 'You track & deliver', text: 'You get the verification code and track the payment, event, or project in your dashboard — then deliver your service, all in one place.' },
+];
+
 export default function PortfolioPage() {
   const settings = useSiteSettings();
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
@@ -411,6 +421,26 @@ export default function PortfolioPage() {
                     </ul>
                   </div>
                 )}
+
+                {/* How customers book */}
+                <div className="border-t border-[var(--border)] pt-5">
+                  <h4 className="text-sm font-bold font-sora text-[var(--accent-purple)] uppercase tracking-wide mb-4">
+                    How your customers book — end to end
+                  </h4>
+                  <ol className="space-y-3">
+                    {BOOKING_STEPS.map((step, i) => (
+                      <li key={step.title} className="flex gap-3">
+                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] text-white text-xs font-bold flex items-center justify-center">
+                          {i + 1}
+                        </span>
+                        <div>
+                          <p className="text-sm font-semibold text-[var(--text-primary)]">{step.title}</p>
+                          <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{step.text}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
 
                 {/* CTA */}
                 <div className="border-t border-[var(--border)] pt-5">
