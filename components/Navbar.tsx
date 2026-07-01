@@ -21,6 +21,7 @@ export default function Navbar() {
   const navLinks = [
     { label: 'Home', href: '/' },
     { label: 'Services', href: '/services' },
+    { label: 'AI Automation', href: '/ai-automation' },
     { label: 'Portfolio', href: '/portfolio' },
     { label: 'Store', href: '/store' },
     { label: 'QR Codes', href: '/qr-download' },

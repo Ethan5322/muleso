@@ -99,6 +99,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {[
                 { label: 'About Us', href: '/about' },
+                { label: 'AI Automation Library', href: '/ai-automation' },
                 { label: 'Portfolio', href: '/portfolio' },
                 { label: 'PDF Store', href: '/store' },
                 { label: 'Contact', href: '/contact' },
