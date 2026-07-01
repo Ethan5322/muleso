@@ -705,6 +705,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SECTION 6.7 - AI AUTOMATION LIBRARY CTA */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto text-center glass-card rounded-2xl border border-[var(--accent-blue)] p-10 md:p-14"
+        >
+          <span className="inline-flex items-center gap-2 border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full mb-6">
+            <Zap size={16} className="text-[var(--accent-blue)]" />
+            <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">199+ AI Automation Systems</span>
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-5">
+            Not sure what you need? Explore what we can build.
+          </h2>
+          <p className="text-[var(--text-secondary)] text-lg mb-8 max-w-2xl mx-auto">
+            Smart booking, payment, support and workflow systems for every industry — or request a fully
+            custom build designed around your exact process.
+          </p>
+          <Link
+            href="/ai-automation"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
+          >
+            What do you want us to build for you? →
+          </Link>
+        </motion.div>
+      </section>
+
       {/* SECTION 7 - FINAL CTA */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
         <motion.div
