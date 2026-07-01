@@ -166,7 +166,23 @@ export default function Home() {
     <>
       {/* SECTION 1 - HERO */}
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto w-full text-center">
+        {/* coded corporate backdrop (decorative, non-interactive) */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full bg-[var(--accent-blue)] opacity-[0.06] blur-[130px]" />
+          <div className="absolute top-24 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--accent-purple)] opacity-[0.07] blur-[130px]" />
+          <div
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage:
+                'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
+              backgroundSize: '56px 56px',
+              maskImage: 'radial-gradient(ellipse at 50% 40%, black 25%, transparent 72%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at 50% 40%, black 25%, transparent 72%)',
+            }}
+          />
+        </div>
+
+        <div className="max-w-5xl mx-auto w-full text-center relative">
           <motion.div className="space-y-6">
             {/* Badge */}
             <motion.div
@@ -222,6 +238,27 @@ export default function Home() {
               >
                 View Our Work
               </Link>
+            </motion.div>
+
+            {/* Trust chips */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 pt-6 text-sm text-[var(--text-secondary)]"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Zap size={16} className="text-[var(--accent-blue)]" /> 200 AI systems
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <ShieldCheck size={16} className="text-[var(--accent-gold)]" /> POPIA-compliant
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Check size={16} className="text-[var(--accent-green)]" /> You own everything
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Clock size={16} className="text-[var(--accent-blue)]" /> 2-hour response
+              </span>
             </motion.div>
           </motion.div>
         </div>
