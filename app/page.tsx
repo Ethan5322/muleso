@@ -226,6 +226,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SECTION 1.5 - TRUST BAR */}
+      <section className="py-10 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-6">
+            Trusted by businesses across South Africa
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+            {['Habesha Celebration Events', 'Shime Events', 'YoYo Gym', 'Tsedi Catering', 'DR. Hospital'].map(
+              (brand) => (
+                <span
+                  key={brand}
+                  className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-60 hover:opacity-100 transition-opacity"
+                >
+                  {brand}
+                </span>
+              )
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 2 - STATS BAR */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)] border-y border-[var(--border)]">
         <div className="max-w-7xl mx-auto">
