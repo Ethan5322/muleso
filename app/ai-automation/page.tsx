@@ -3,8 +3,9 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Search, ArrowRight, Sparkles, Bot, Zap, ShieldCheck, Clock } from 'lucide-react';
-import { AUTOMATIONS, CATEGORIES } from '@/lib/aiAutomations';
+import { Search, ArrowRight, Sparkles, Bot, Zap, ShieldCheck, Clock, TrendingUp } from 'lucide-react';
+import { AUTOMATIONS, CATEGORIES, getDeptMeta, iconKeyFor } from '@/lib/aiAutomations';
+import AutomationIcon from '@/components/AutomationIcon';
 
 export default function AiAutomationLibrary() {
   const [query, setQuery] = useState('');
@@ -25,7 +26,6 @@ export default function AiAutomationLibrary() {
     [q, category]
   );
 
-  // group filtered results by department, preserving CATEGORIES order
   const grouped = useMemo(
     () =>
       CATEGORIES.map((dept) => ({
@@ -39,7 +39,6 @@ export default function AiAutomationLibrary() {
     <div className="min-h-screen pb-20">
       {/* ===== CORPORATE COVER ===== */}
       <section className="relative overflow-hidden border-b border-[var(--border)]">
-        {/* layered glow backdrop */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full bg-[var(--accent-blue)] opacity-[0.07] blur-[120px]" />
           <div className="absolute top-20 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--accent-purple)] opacity-[0.08] blur-[120px]" />
@@ -81,11 +80,11 @@ export default function AiAutomationLibrary() {
             transition={{ delay: 0.15 }}
             className="mt-5 max-w-2xl mx-auto text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed"
           >
-            200 ready-to-build AI systems across 9 industries — smart booking, payments, support,
-            lead capture and workflow automation. Pick one, or ask us to build it fully custom.
+            200 ready-to-build AI systems across 9 industries. Each one is engineered to
+            <span className="text-[var(--text-primary)] font-semibold"> outperform the latest software your industry already uses</span> —
+            because you own it, it never sleeps, and it’s built around your exact business.
           </motion.p>
 
-          {/* trust chips */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -94,10 +93,10 @@ export default function AiAutomationLibrary() {
           >
             <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--accent-blue)]" /> 200 systems</span>
             <span className="inline-flex items-center gap-1.5"><Clock size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
-            <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You control everything</span>
+            <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You own everything</span>
+            <span className="inline-flex items-center gap-1.5"><TrendingUp size={15} className="text-[var(--accent-purple)]" /> No commission, ever</span>
           </motion.div>
 
-          {/* search */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -141,51 +140,84 @@ export default function AiAutomationLibrary() {
         </div>
 
         {/* department sections */}
-        <div className="mt-10 space-y-14">
-          {grouped.map(({ dept, items }) => (
-            <section key={dept}>
-              <div className="flex items-center gap-3 mb-5">
-                <h2 className="text-lg sm:text-xl font-bold font-sora text-[var(--text-primary)]">{dept}</h2>
-                <span className="text-xs font-semibold text-[var(--accent-blue)] bg-[var(--glow-blue)] px-2 py-0.5 rounded-full">
-                  {items.length}
-                </span>
-                <div className="flex-1 h-px bg-[var(--border)]" />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {items.map((a, i) => (
-                  <motion.div
-                    key={a.slug}
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: Math.min(i, 8) * 0.02 }}
-                    viewport={{ once: true }}
+        <div className="mt-10 space-y-16">
+          {grouped.map(({ dept, items }) => {
+            const meta = getDeptMeta(dept);
+            return (
+              <section key={dept}>
+                {/* department header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <span
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: meta.glow, color: meta.color }}
                   >
-                    <Link
-                      href={`/ai-automation/${a.slug}`}
-                      className="group block h-full glass-card rounded-xl border border-[var(--border)] p-5 transition-all hover:border-[var(--accent-blue)] hover:-translate-y-1 hover:shadow-[0_16px_40px_-15px_rgba(0,200,255,0.35)]"
+                    <AutomationIcon iconKey={meta.icon} size={22} />
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="text-lg sm:text-xl font-bold font-sora text-[var(--text-primary)] leading-tight">{dept}</h2>
+                    <p className="text-xs text-[var(--text-secondary)] truncate">
+                      Beats today’s tools: {meta.usesToday}
+                    </p>
+                  </div>
+                  <span
+                    className="ml-auto text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: meta.glow, color: meta.color }}
+                  >
+                    {items.length}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {items.map((a, i) => (
+                    <motion.div
+                      key={a.slug}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: Math.min(i, 8) * 0.02 }}
+                      viewport={{ once: true }}
                     >
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-[11px] font-mono text-[var(--text-secondary)]">
-                          #{String(a.id).padStart(3, '0')}
+                      <Link
+                        href={`/ai-automation/${a.slug}`}
+                        className="group relative block h-full glass-card rounded-xl border border-[var(--border)] p-5 overflow-hidden transition-all hover:-translate-y-1"
+                        style={{ ['--dept' as string]: meta.color }}
+                      >
+                        {/* top accent line */}
+                        <span
+                          className="absolute inset-x-0 top-0 h-[3px] opacity-70"
+                          style={{ background: `linear-gradient(90deg, ${meta.color}, transparent)` }}
+                        />
+                        <div className="flex items-center justify-between mb-3">
+                          <span
+                            className="w-11 h-11 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform"
+                            style={{ backgroundColor: meta.glow, color: meta.color }}
+                          >
+                            <AutomationIcon iconKey={iconKeyFor(a.name)} size={20} />
+                          </span>
+                          <span className="text-[11px] font-mono text-[var(--text-secondary)]">
+                            #{String(a.id).padStart(3, '0')}
+                          </span>
+                        </div>
+                        <h3
+                          className="font-bold font-sora text-[var(--text-primary)] leading-tight mb-1.5 transition-colors"
+                          style={{ ['--tw-text-opacity' as string]: '1' }}
+                        >
+                          <span className="group-hover:text-[color:var(--dept)]">{a.name.replace(/^AI\s+/, '')}</span>
+                        </h3>
+                        <p className="text-sm text-[var(--text-secondary)] line-clamp-2">{a.desc}</p>
+                        <span
+                          className="inline-flex items-center gap-1 text-xs font-semibold mt-3"
+                          style={{ color: meta.color }}
+                        >
+                          Why we beat the latest system{' '}
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                         </span>
-                        <span className="w-9 h-9 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center text-[var(--accent-blue)] group-hover:scale-110 transition-transform">
-                          <Bot size={17} />
-                        </span>
-                      </div>
-                      <h3 className="font-bold font-sora text-[var(--text-primary)] leading-tight mb-1.5 group-hover:text-[var(--accent-blue)] transition-colors">
-                        {a.name.replace(/^AI\s+/, '')}
-                      </h3>
-                      <p className="text-sm text-[var(--text-secondary)] line-clamp-2">{a.desc}</p>
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--accent-blue)] mt-3">
-                        See how it works <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-                      </span>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-          ))}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
 
           {grouped.length === 0 && (
             <p className="text-center text-[var(--text-secondary)] py-16">

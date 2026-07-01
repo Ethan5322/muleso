@@ -8,8 +8,9 @@ import {
   Sparkles, Bot, ShieldCheck, Zap, ArrowRight,
 } from 'lucide-react';
 import {
-  findAutomation, getDetail, ADMIN_CONTROLS, SYSTEM_CAN_DO, AUTOMATIONS,
+  findAutomation, getDetail, getDeptMeta, iconKeyFor, ADMIN_CONTROLS, SYSTEM_CAN_DO, AUTOMATIONS,
 } from '@/lib/aiAutomations';
+import AutomationIcon from '@/components/AutomationIcon';
 import { useChatbot } from '@/context/ChatbotContext';
 import { useSiteSettings } from '@/lib/useSiteSettings';
 
@@ -33,6 +34,7 @@ export default function AutomationDetailPage() {
   }
 
   const d = getDetail(automation.name);
+  const meta = getDeptMeta(automation.category);
   const title = automation.name.replace(/^AI\s+/, '');
   const waNumber = settings.whatsapp || '27688529333';
   const waText = encodeURIComponent(`Hi MuleSoo, I'd like you to build the "${automation.name}" for my business.`);
@@ -81,8 +83,11 @@ export default function AutomationDetailPage() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="flex items-center gap-3 mb-5">
-              <span className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center text-white shadow-[0_10px_30px_-8px_rgba(0,200,255,0.5)]">
-                <Bot size={26} />
+              <span
+                className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-[0_10px_30px_-8px_rgba(0,200,255,0.5)]"
+                style={{ background: `linear-gradient(135deg, ${meta.color}, var(--accent-purple))` }}
+              >
+                <AutomationIcon iconKey={iconKeyFor(automation.name)} size={26} />
               </span>
               <div>
                 <span className="inline-block px-3 py-1 rounded-full text-xs font-bold font-sora text-[var(--accent-blue)] bg-[var(--glow-blue)]">
@@ -175,6 +180,73 @@ export default function AutomationDetailPage() {
 
             <div className="border-t border-[var(--border)] pt-5 text-sm text-[var(--text-secondary)]">
               <span className="font-semibold text-[var(--text-primary)]">Why MuleSoo: </span>{d.whyMuleSoo}
+            </div>
+          </div>
+
+          {/* ===== WHY WE BEAT THE LATEST SYSTEMS ===== */}
+          <div className="mt-8 glass-card rounded-2xl p-8">
+            <div className="flex items-start gap-3 mb-2">
+              <span
+                className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                style={{ backgroundColor: meta.glow, color: meta.color }}
+              >
+                <TrendingUp size={18} />
+              </span>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] leading-tight">
+                  Already using the latest software? Here’s why ours still wins.
+                </h2>
+                <p className="text-sm text-[var(--text-secondary)] mt-1">
+                  Most {automation.category.toLowerCase()} businesses run on {meta.usesToday}
+                </p>
+              </div>
+            </div>
+
+            {/* comparison table */}
+            <div className="mt-6 overflow-x-auto">
+              <table className="w-full border-collapse min-w-[520px]">
+                <thead>
+                  <tr className="border-b border-[var(--border)]">
+                    <th className="text-left p-3 text-xs font-sora font-semibold text-[var(--text-secondary)] uppercase tracking-wide w-1/4">
+                      What matters
+                    </th>
+                    <th className="text-left p-3 text-xs font-sora font-semibold text-[var(--text-secondary)] uppercase tracking-wide">
+                      The latest {automation.category.split(',')[0].split(' & ')[0].toLowerCase()} software
+                    </th>
+                    <th
+                      className="text-left p-3 text-xs font-sora font-bold uppercase tracking-wide rounded-t-lg"
+                      style={{ color: meta.color, backgroundColor: meta.glow }}
+                    >
+                      A MuleSoo AI system
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {meta.rows.map((row) => (
+                    <tr key={row.dim} className="border-b border-[var(--border)] last:border-0 align-top">
+                      <td className="p-3 text-sm font-semibold text-[var(--text-primary)]">{row.dim}</td>
+                      <td className="p-3 text-sm text-[var(--text-secondary)]">{row.theirs}</td>
+                      <td className="p-3 text-sm text-[var(--text-primary)]" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                        <span className="inline-flex items-start gap-1.5">
+                          <Check size={15} className="mt-0.5 flex-shrink-0" style={{ color: meta.color }} />
+                          <span>{row.ours}</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* pitch */}
+            <div
+              className="mt-6 rounded-xl p-5 border"
+              style={{ borderColor: meta.color, backgroundColor: meta.glow }}
+            >
+              <p className="text-[var(--text-primary)] font-semibold leading-relaxed">
+                <Sparkles size={16} className="inline mr-1.5 -mt-1" style={{ color: meta.color }} />
+                {meta.pitch}
+              </p>
             </div>
           </div>
 

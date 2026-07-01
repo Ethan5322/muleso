@@ -393,3 +393,188 @@ export function getDetail(name: string): AutomationDetail {
     whyMuleSoo: WHY,
   };
 }
+
+/* ============================================================
+ * DEPARTMENT META — the persuasive "why we beat the LATEST
+ * systems each industry already uses" comparison + theming.
+ * ============================================================ */
+
+export interface CompareRow {
+  dim: string;   // the dimension being compared
+  theirs: string; // what the latest industry software does
+  ours: string;   // what a MuleSoo AI system does
+}
+
+export interface DeptMeta {
+  icon: string;      // icon key mapped to a Lucide icon in the UI
+  color: string;     // accent hex for this department
+  glow: string;      // soft rgba glow for tiles
+  usesToday: string; // names the real, latest systems the industry runs on
+  rows: CompareRow[];
+  pitch: string;     // closing seller line
+}
+
+const OWN = 'You own the system, the customers and the data — nobody else can touch them.';
+
+export const DEPARTMENT_META: Record<string, DeptMeta> = {
+  'Business, Booking & Hospitality': {
+    icon: 'hotel',
+    color: '#00C8FF',
+    glow: 'rgba(0,200,255,0.14)',
+    usesToday: 'Booking.com, Airbnb and PMS suites like Cloudbeds, eZee or NightsBridge with channel managers.',
+    rows: [
+      { dim: 'Who owns the guest', theirs: 'The platform owns the guest and hides their real contact details from you.', ours: 'You own every guest contact and can re-market to them for free, forever.' },
+      { dim: 'What it costs you', theirs: '15–20% commission skimmed off every single booking.', ours: 'Direct, commission-free bookings on your own website and WhatsApp.' },
+      { dim: 'After-hours enquiries', theirs: 'Static listings — room, price and availability questions wait for staff.', ours: 'AI answers instantly and closes the booking 24/7, even at 2am.' },
+      { dim: 'Fit to your property', theirs: 'Rigid, one-size-fits-all templates and rules.', ours: 'Built around your exact room types, seasons, deposits and upsells.' },
+      { dim: 'Channel & language', theirs: 'App-first and English-first.', ours: 'Books right inside WhatsApp, in your guests’ own language.' },
+    ],
+    pitch: 'Every portal booking costs you a fifth of the revenue AND the guest relationship. A handful of direct bookings and your MuleSoo system has already paid for itself.',
+  },
+  'Healthcare & Wellness': {
+    icon: 'medical',
+    color: '#00FF88',
+    glow: 'rgba(0,255,136,0.12)',
+    usesToday: 'practice-management systems like GoodX or Healthbridge, plus basic web booking widgets.',
+    rows: [
+      { dim: 'What it’s built for', theirs: 'Billing, claims and records — not talking to patients.', ours: 'Built to converse with patients, screen them and book them.' },
+      { dim: 'After-hours', theirs: 'Patients still phone during hours and sit on hold.', ours: 'Books, screens and answers FAQs 24/7 on WhatsApp.' },
+      { dim: 'No-shows', theirs: 'Manual or basic reminders — high no-show rate.', ours: 'Smart, timed reminders and easy rescheduling that cut no-shows.' },
+      { dim: 'Intake', theirs: 'Paperwork completed on arrival, slowing everyone down.', ours: 'Collects and checks intake details before the visit.' },
+      { dim: 'Cost & fit', theirs: 'Per-seat licences with generic, rigid flows.', ours: 'One POPIA-compliant system tailored to your practice.' },
+    ],
+    pitch: 'Your practice software keeps the admin running. Ours keeps the diary full and the waiting room calm.',
+  },
+  'Beauty, Fitness & Lifestyle': {
+    icon: 'beauty',
+    color: '#7B2FFF',
+    glow: 'rgba(123,47,255,0.14)',
+    usesToday: 'marketplace apps like Fresha and Booksy, and gym software like Glofox or GymMaster.',
+    rows: [
+      { dim: 'Who owns your clients', theirs: 'The marketplace owns your client list — you’re renting your own customers.', ours: 'You own every client outright; no one else can see or contact them.' },
+      { dim: 'Competition', theirs: 'Lists rivals next to you and markets competitors to your clients.', ours: 'Yours alone — zero competitor ads, zero client poaching.' },
+      { dim: 'No-shows & retention', theirs: 'Basic reminders only.', ours: 'Auto-rebooks no-shows and runs loyalty, upsells and renewals.' },
+      { dim: 'Fees', theirs: 'Monthly fees plus commission on new clients.', ours: 'One system you own — no per-client cut, ever.' },
+      { dim: 'Booking channel', theirs: 'Requires an app download.', ours: 'Books instantly on WhatsApp — no app, no friction.' },
+    ],
+    pitch: 'Marketplaces rent you your own customers and sell them your competitors. Ours makes those customers yours for good.',
+  },
+  'Food, Restaurants & Catering': {
+    icon: 'food',
+    color: '#E8B84B',
+    glow: 'rgba(232,184,75,0.14)',
+    usesToday: 'OpenTable/Dineplan, tablet POS systems and delivery apps like Uber Eats or Mr D.',
+    rows: [
+      { dim: 'What it costs you', theirs: 'Per-cover fees plus 20–30% commission on delivery.', ours: 'Direct reservations, orders and catering quotes — commission-free.' },
+      { dim: 'Who owns the diner', theirs: 'The app owns the diner and their data.', ours: 'You keep every customer contact for repeat business.' },
+      { dim: 'After-hours', theirs: 'A missed call is a missed table.', ours: 'Takes bookings, takeaway orders and quotes 24/7.' },
+      { dim: 'Reputation', theirs: 'Unhappy diners go straight to public reviews.', ours: 'Recovers unhappy diners privately before they post.' },
+      { dim: 'Fit', theirs: 'Generic menu templates.', ours: 'Knows your menu, specials and catering packages.' },
+    ],
+    pitch: 'Delivery apps and reservation portals skim your margin on every plate. Ours protects the margin and the relationship.',
+  },
+  'Real Estate & Property': {
+    icon: 'property',
+    color: '#22D3EE',
+    glow: 'rgba(34,211,238,0.13)',
+    usesToday: 'portals like Property24 and Private Property, plus agency CRMs.',
+    rows: [
+      { dim: 'Lead quality', theirs: 'Cold leads shared with 3–5 rival agents at once.', ours: 'Exclusive leads, captured and qualified the instant they enquire.' },
+      { dim: 'Response speed', theirs: 'You call back hours later — if at all.', ours: 'AI engages in seconds, 24/7, while the lead is still hot.' },
+      { dim: 'Cost', theirs: 'You pay per listing and still chase the leads yourself.', ours: 'You own the system and it works every lead for you.' },
+      { dim: 'Qualification', theirs: 'You sift tyre-kickers from buyers by hand.', ours: 'Separates serious buyers from browsers automatically.' },
+      { dim: 'Follow-up', theirs: 'Leads go cold in a spreadsheet.', ours: 'Follows up relentlessly until they book a viewing.' },
+    ],
+    pitch: 'In property, the first agent to respond wins the deal. Ours responds in seconds — day, night and weekends.',
+  },
+  'Legal, Finance & Professional Services': {
+    icon: 'legal',
+    color: '#8B93FF',
+    glow: 'rgba(139,147,255,0.13)',
+    usesToday: 'practice suites like Clio, LEAP or AJS, plus static website contact forms.',
+    rows: [
+      { dim: 'First contact', theirs: 'A receptionist or a form — after-hours leads are simply lost.', ours: 'A professional AI intake conversation, 24/7.' },
+      { dim: 'Qualification', theirs: 'Staff screen every enquiry manually.', ours: 'Screens and qualifies cases and flags conflicts up front.' },
+      { dim: 'Documents', theirs: 'Chased back and forth over email.', ours: 'Requests, collects and tracks documents automatically.' },
+      { dim: 'Integration', theirs: 'Great at matters and billing, weak at winning new clients.', ours: 'Feeds clean, structured records into your existing suite.' },
+      { dim: 'Confidentiality', theirs: 'Generic third-party tools.', ours: 'On your own domain, confidential and POPIA-compliant.' },
+    ],
+    pitch: 'Your practice software manages the clients you’ve already won. Ours wins the ones who message after 5pm.',
+  },
+  'Education & Training': {
+    icon: 'education',
+    color: '#38BDF8',
+    glow: 'rgba(56,189,248,0.13)',
+    usesToday: 'school admin systems and LMS platforms like Moodle or Google Classroom.',
+    rows: [
+      { dim: 'What it’s for', theirs: 'Managing students you already have — not converting enquiries.', ours: 'Turns enquiring parents and students into enrolments.' },
+      { dim: 'After-hours', theirs: 'Admissions enquiries hit voicemail.', ours: 'Answers admissions questions and books tours 24/7.' },
+      { dim: 'Registration', theirs: 'Manual forms and follow-up.', ours: 'Automates registration, reminders and attendance.' },
+      { dim: 'Language', theirs: 'English-first portals.', ours: 'Talks to parents in their language on WhatsApp.' },
+      { dim: 'Fit', theirs: 'Rigid, generic modules.', ours: 'Tailored to your programmes and intake process.' },
+    ],
+    pitch: 'Your LMS teaches the students you have. Ours fills the empty seats you’re quietly losing to slow replies.',
+  },
+  'Home Services, Repairs & Local Businesses': {
+    icon: 'home',
+    color: '#FB923C',
+    glow: 'rgba(251,146,60,0.13)',
+    usesToday: 'field-service apps like Jobber or ServiceM8 and missed-call text-back tools.',
+    rows: [
+      { dim: 'New enquiries', theirs: 'Schedules the jobs you’ve already won.', ours: 'Wins the job — captures, quotes and books new enquiries.' },
+      { dim: 'After-hours', theirs: 'The 8pm emergency goes unanswered.', ours: 'Answers, quotes and books instantly, any hour.' },
+      { dim: 'Quoting', theirs: 'A callback is needed before you can quote.', ours: 'Collects the details and sends an estimate on the spot.' },
+      { dim: 'Speed', theirs: 'First to answer wins — and it usually isn’t you.', ours: 'Responds in seconds so you win the job.' },
+      { dim: 'Fit', theirs: 'Generic job templates.', ours: 'Built around your services, areas and pricing.' },
+    ],
+    pitch: 'Customers dial the next number the moment you don’t pick up. Ours picks up every single time.',
+  },
+  'Logistics, Sales & Operations': {
+    icon: 'logistics',
+    color: '#2DD4BF',
+    glow: 'rgba(45,212,191,0.13)',
+    usesToday: 'TMS/ERP platforms and CRMs like Salesforce or Zoho.',
+    rows: [
+      { dim: 'Response speed', theirs: 'Quotes, status updates and tickets wait for a person.', ours: 'Instant quotes, live status and ticket triage, 24/7.' },
+      { dim: 'Staffing', theirs: 'Needs trained staff to operate and answer.', ours: 'AI handles routine requests with no extra headcount.' },
+      { dim: 'Cost', theirs: 'Heavy per-seat licences.', ours: 'One system you own outright.' },
+      { dim: 'Fit', theirs: 'Powerful but rigid and slow to adapt.', ours: 'Shaped precisely to your workflow.' },
+      { dim: 'Customer experience', theirs: 'Answers “next business day”.', ours: 'Customers get answers right now.' },
+    ],
+    pitch: 'Your ERP runs operations. Ours makes sure no quote, order or ticket ever sits waiting for a reply.',
+  },
+};
+
+export const getDeptMeta = (dept: string): DeptMeta =>
+  DEPARTMENT_META[dept] ?? DEPARTMENT_META['Business, Booking & Hospitality'];
+
+/** Extra note reused across departments in the UI. */
+export const OWNERSHIP_NOTE = OWN;
+
+/**
+ * Icon key that represents WHAT a system automates.
+ * The UI maps these keys to Lucide icons.
+ */
+export function iconKeyFor(name: string): string {
+  const n = name.toLowerCase();
+  const has = (...k: string[]) => k.some((x) => n.includes(x));
+
+  if (has('salon', 'barber', 'nail', 'spa', 'massage', 'beauty', 'bridal', 'makeup', 'hair', 'skincare', 'tattoo', 'piercing', 'esthetician', 'microblading', 'cosmetic')) return 'beauty';
+  if (has('gym', 'fitness', 'trainer', 'yoga', 'pilates', 'tennis', 'golf', 'swim', 'dance', 'martial', 'bootcamp', 'sport', 'workout', 'recreation', 'coaching', 'court', 'membership', 'class')) return 'fitness';
+  if (has('restaurant', 'food', 'catering', 'menu', 'takeaway', 'dining', 'bakery', 'coffee', 'chef', 'kitchen', 'meal', 'waitlist', 'wholesale food')) return 'food';
+  if (has('hotel', 'lodge', 'resort', 'guest', 'room', 'check-in', 'concierge', 'travel', 'tour', 'vacation', 'airport', 'car rental', 'stay', 'front desk', 'property guest')) return 'hotel';
+  if (has('property', 'real estate', 'rental', 'tenant', 'landlord', 'lease', 'mortgage', 'valuation', 'viewing', 'open-house', 'estate agent', 'building', 'interior', 'furnishing', 'short-stay')) return 'property';
+  if (has('law', 'legal', 'lawyer', 'case', 'court', 'contract', 'compliance', 'trademark', 'visa')) return 'legal';
+  if (has('tax', 'account', 'payroll', 'bookkeeping', 'insurance', 'invoice', 'debt', 'financial', 'policy')) return 'finance';
+  if (has('school', 'tutor', 'course', 'exam', 'student', 'admission', 'scholarship', 'teacher', 'seminar', 'conference', 'workshop', 'language', 'music lesson', 'driving school', 'internship', 'alumni', 'career', 'transport')) return 'education';
+  if (has('doctor', 'dentist', 'clinic', 'patient', 'medical', 'pharmacy', 'vet', 'physio', 'therapy', 'lab', 'vaccination', 'optometrist', 'triage', 'mental health', 'wellness', 'home care', 'claims')) return 'medical';
+  if (has('plumber', 'electrician', 'handyman', 'repair', 'cleaning', 'laundry', 'appliance', 'ac ', 'locksmith', 'solar', 'renovation', 'garden', 'pool', 'roofing', 'painting', 'flooring', 'inspection', 'security', 'pest')) return 'home';
+  if (has('freight', 'logistics', 'warehouse', 'delivery', 'supplier', 'procurement', 'fleet', 'dealership', 'vehicle', 'customs', 'import', 'export', 'shipping', 'moving')) return 'logistics';
+  if (has('reminder')) return 'bell';
+  if (has('payment', 'pay ', 'deposit')) return 'payment';
+  if (has('quote')) return 'quote';
+  if (has('lead', 'qualification')) return 'lead';
+  if (has('support', 'chatbot', 'faq', 'complaint', 'ticket', 'concierge', 'crm')) return 'support';
+  if (has('order', 'sales')) return 'order';
+  return 'booking';
+}
