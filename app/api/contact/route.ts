@@ -49,6 +49,14 @@ export async function POST(req: NextRequest) {
       console.error('Lead save failed (continuing):', e);
     }
 
+    // Alert the owner instantly (WhatsApp + Telegram) — don't block the response.
+    try {
+      const { sendLeadNotification } = await import('@/lib/sendWhatsAppMessage');
+      await sendLeadNotification(name, service, email);
+    } catch (e) {
+      console.error('Lead alert failed (continuing):', e);
+    }
+
     // Deliver the lead by email
     if (resend) {
       const html = `

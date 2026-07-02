@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { CAPABILITIES, type CorpAdmin } from '@/lib/corp/constants';
-import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText, Trash2, MessageSquareLock, Check } from 'lucide-react';
+import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText, Trash2, MessageSquareLock, Check, IdCard } from 'lucide-react';
 import RegisterAdmin from './RegisterAdmin';
+import { generateIdCard } from '@/lib/corp/generateIdCard';
 
 interface Capability {
   department_admin_id: string;
@@ -83,6 +84,19 @@ export default function ControlPanel() {
     });
     await load();
     setBusy(null);
+  };
+
+  const downloadCard = async (adminId: string) => {
+    setBusy(`card:${adminId}`);
+    try {
+      const res = await fetch(`/corporate/api/admin-card?id=${encodeURIComponent(adminId)}`);
+      if (res.ok) {
+        const { card } = await res.json();
+        await generateIdCard(card);
+      }
+    } finally {
+      setBusy(null);
+    }
   };
 
   const deleteAdmin = async (adminId: string, name: string) => {
@@ -190,6 +204,15 @@ export default function ControlPanel() {
                   })}
                   <td className="p-3">
                     <div className="flex items-center justify-center gap-3">
+                      <button
+                        type="button"
+                        disabled={busy === `card:${a.id}`}
+                        onClick={() => downloadCard(a.id)}
+                        title="Download / re-issue ID card"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#00C8FF] hover:text-[#7B2FFF] disabled:opacity-40"
+                      >
+                        {busy === `card:${a.id}` ? <Loader2 size={14} className="animate-spin" /> : <IdCard size={14} />}
+                      </button>
                       {a.status === 'active' ? (
                         <button
                           type="button"

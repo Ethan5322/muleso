@@ -7,6 +7,28 @@ const CALLMEBOT_API_URL = 'https://api.callmebot.com/whatsapp.php';
 const CALLMEBOT_API_KEY = process.env.CALLMEBOT_API_KEY || '7268108';
 const ADMIN_PHONE = process.env.ADMIN_WHATSAPP || '27688529333'; // Owner's WhatsApp number
 
+// Optional Telegram alerts (set both env vars to enable). No-ops if unset.
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
+
+/** Send an alert to the owner's Telegram (only if configured). */
+export async function sendTelegramMessage(message: string): Promise<void> {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+  } catch (e) {
+    console.error('Telegram send failed:', e);
+  }
+}
+
 interface SendWhatsAppParams {
   phone: string; // Recipient phone number (with country code, no +)
   message: string; // Message to send
@@ -159,7 +181,7 @@ export async function sendAdminNotification(
   verificationCode: string,
   budget: string
 ): Promise<WhatsAppResult> {
-  const message = `New Booking Alert
+  const message = `🔔 New Booking Alert
 
 Client: ${clientName}
 Service: ${service}
@@ -168,10 +190,29 @@ Verification Code: ${verificationCode}
 
 Check admin panel for details.`;
 
-  return sendWhatsAppMessage({
-    phone: ADMIN_PHONE,
-    message,
-  });
+  const result = await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  await sendTelegramMessage(message);
+  return result;
+}
+
+/**
+ * Alert the owner (WhatsApp + Telegram) about a new lead / contact enquiry.
+ */
+export async function sendLeadNotification(
+  name: string,
+  service: string,
+  email: string
+): Promise<void> {
+  const message = `🔔 New Lead / Enquiry
+
+Name: ${name}
+Service: ${service || 'Not specified'}
+Email: ${email || 'Not provided'}
+
+Check the admin panel → Leads.`;
+
+  await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  await sendTelegramMessage(message);
 }
 
 /**
