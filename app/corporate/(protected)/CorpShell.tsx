@@ -28,7 +28,7 @@ export default function CorpShell({
   const nav = [
     { href: '/corporate', label: 'Dashboard', icon: LayoutDashboard, on: true },
     { href: '/corporate/messages', label: 'Messages', icon: MessageSquare, on: true },
-    { href: '/corporate/channel', label: 'Team Channel', icon: Hash, on: false },
+    { href: '/corporate/channel', label: 'Team Channel', icon: Hash, on: true },
     ...(admin.is_super_admin
       ? [{ href: '/corporate/control', label: 'Control Panel', icon: ShieldCheck, on: true }]
       : []),
