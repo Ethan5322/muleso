@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { CAPABILITIES, type CorpAdmin } from '@/lib/corp/constants';
-import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText } from 'lucide-react';
+import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
+import RegisterAdmin from './RegisterAdmin';
 
 interface Capability {
   department_admin_id: string;
@@ -74,6 +75,18 @@ export default function ControlPanel() {
     setBusy(null);
   };
 
+  const deleteAdmin = async (adminId: string, name: string) => {
+    if (!confirm(`Permanently delete ${name}? This removes their account and all their data.`)) return;
+    setBusy(`del:${adminId}`);
+    await fetch('/corporate/api/admin-delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ department_admin_id: adminId }),
+    });
+    await load();
+    setBusy(null);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center gap-2 text-[#A8B2D0] p-8">
@@ -86,9 +99,12 @@ export default function ControlPanel() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-2">
-        <ShieldCheck className="text-[#00C8FF]" size={22} />
-        <h1 className="text-2xl font-bold font-sora">Super Admin Control Panel</h1>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="text-[#00C8FF]" size={22} />
+          <h1 className="text-2xl font-bold font-sora">Super Admin Control Panel</h1>
+        </div>
+        <RegisterAdmin onDone={load} />
       </div>
 
       {/* Capability grid */}
@@ -141,7 +157,7 @@ export default function ControlPanel() {
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-40 ${
                             on ? 'bg-[#00C8FF]' : 'bg-[#1A2640]'
                           }`}
-                          aria-pressed={on}
+                          title={`${on ? 'Disable' : 'Enable'} ${c.label} for ${a.display_name || 'admin'}`}
                         >
                           <span
                             className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${
@@ -152,26 +168,37 @@ export default function ControlPanel() {
                       </td>
                     );
                   })}
-                  <td className="p-3 text-center">
-                    {a.status === 'active' ? (
+                  <td className="p-3">
+                    <div className="flex items-center justify-center gap-3">
+                      {a.status === 'active' ? (
+                        <button
+                          type="button"
+                          disabled={busy === `status:${a.id}`}
+                          onClick={() => setStatus(a.id, 'suspended')}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-red-400 hover:text-red-300 disabled:opacity-40"
+                        >
+                          <Ban size={14} /> Suspend
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={busy === `status:${a.id}`}
+                          onClick={() => setStatus(a.id, 'active')}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-[#00FF88] hover:text-[#4dffab] disabled:opacity-40"
+                        >
+                          <RotateCcw size={14} /> Reactivate
+                        </button>
+                      )}
                       <button
                         type="button"
-                        disabled={busy === `status:${a.id}`}
-                        onClick={() => setStatus(a.id, 'suspended')}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-red-400 hover:text-red-300 disabled:opacity-40"
+                        disabled={busy === `del:${a.id}`}
+                        onClick={() => deleteAdmin(a.id, a.display_name || 'this admin')}
+                        title="Permanently delete"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#6E7A91] hover:text-red-400 disabled:opacity-40"
                       >
-                        <Ban size={14} /> Suspend
+                        <Trash2 size={14} />
                       </button>
-                    ) : (
-                      <button
-                        type="button"
-                        disabled={busy === `status:${a.id}`}
-                        onClick={() => setStatus(a.id, 'active')}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#00FF88] hover:text-[#4dffab] disabled:opacity-40"
-                      >
-                        <RotateCcw size={14} /> Reactivate
-                      </button>
-                    )}
+                    </div>
                   </td>
                 </tr>
               ))}
