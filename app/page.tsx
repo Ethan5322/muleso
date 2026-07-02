@@ -268,7 +268,7 @@ export default function Home() {
       <section className="py-10 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-6">
-            Trusted by businesses across South Africa
+            Trusted by businesses across the world
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
             {['Habesha Celebration Events', 'Shime Events', 'YoYo Gym', 'Tsedi Catering', 'DR. Hospital'].map(
