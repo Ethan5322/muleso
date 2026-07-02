@@ -30,7 +30,7 @@ export default function CorpShell({
     { href: '/corporate/messages', label: 'Messages', icon: MessageSquare, on: false },
     { href: '/corporate/channel', label: 'Team Channel', icon: Hash, on: false },
     ...(admin.is_super_admin
-      ? [{ href: '/corporate/control', label: 'Control Panel', icon: ShieldCheck, on: false }]
+      ? [{ href: '/corporate/control', label: 'Control Panel', icon: ShieldCheck, on: true }]
       : []),
   ];
 
