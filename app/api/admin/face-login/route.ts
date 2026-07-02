@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getAllReferences,
   getThreshold,
-  bestDistance,
+  robustDistance,
   FACE_DESCRIPTOR_LENGTH,
 } from '@/lib/faceMatch';
+
+const median = (arr: number[]) => {
+  const s = [...arr].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+};
 
 /**
  * Face login: the phone sends a 128-float face descriptor; the server
@@ -13,9 +19,16 @@ import {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { descriptor } = await request.json();
+    const body = await request.json();
+    // Accept a single descriptor (legacy) or an array of frame descriptors (robust).
+    const frames: number[][] = Array.isArray(body?.descriptors)
+      ? body.descriptors
+      : Array.isArray(body?.descriptor)
+        ? [body.descriptor]
+        : [];
+    const valid = frames.filter((d) => Array.isArray(d) && d.length === FACE_DESCRIPTOR_LENGTH).map((d) => d.map(Number));
 
-    if (!Array.isArray(descriptor) || descriptor.length !== FACE_DESCRIPTOR_LENGTH) {
+    if (valid.length === 0) {
       return NextResponse.json({ success: false, error: 'Invalid face data' }, { status: 400 });
     }
 
@@ -27,10 +40,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const distance = bestDistance(descriptor.map(Number), references);
     const threshold = getThreshold();
+    // Distance per frame, then require the MEDIAN to pass AND most frames to pass.
+    const dists = valid.map((f) => robustDistance(f, references));
+    const distance = median(dists);
+    const passing = dists.filter((d) => d <= threshold).length;
+    const enoughFrames = passing >= Math.ceil(valid.length / 2);
 
-    if (distance > threshold) {
+    if (distance > threshold || !enoughFrames) {
       return NextResponse.json(
         { success: false, error: 'Face not recognized. Please try again or use password login.' },
         { status: 401 }

@@ -11,13 +11,13 @@ export default function FaceLoginPage() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
-  const handleCapture = async (descriptor: number[]) => {
+  const handleCapture = async (descriptors: number[][]) => {
     setBusy(true);
     try {
       const res = await fetch('/api/admin/face-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ descriptor }),
+        body: JSON.stringify({ descriptors }),
       });
       const data = await res.json();
 

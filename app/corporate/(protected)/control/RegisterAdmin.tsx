@@ -63,7 +63,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
         is_visitor: isVisitor,
         expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
         photo_data_url: face.photo,
-        face_descriptor: face.descriptor,
+        face_descriptor: face.descriptors, // multi-sample enrol template
       }),
     });
     const data = await res.json().catch(() => ({}));

@@ -84,7 +84,7 @@ export default function CorporateLoginPage() {
     const res = await fetch('/corporate/api/login/face', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ descriptor: r.descriptor }),
+      body: JSON.stringify({ descriptors: r.descriptors }),
     });
     if (res.ok) goIn();
     else {

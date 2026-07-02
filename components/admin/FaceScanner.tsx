@@ -11,7 +11,7 @@ interface FaceScannerProps {
   steps?: string[];
   actionLabel?: string;
   busy?: boolean;
-  onCapture?: (descriptor: number[]) => Promise<void> | void;
+  onCapture?: (descriptors: number[][]) => Promise<void> | void;
   onComplete?: (descriptors: number[][], photo?: string | null) => Promise<void> | void;
 }
 
@@ -32,7 +32,7 @@ export default function FaceScanner({
   const busyRef = useRef(busy);
   busyRef.current = busy;
 
-  const TARGET = mode === 'multi' ? Math.max(5, steps.length) : 1;
+  const TARGET = mode === 'multi' ? Math.max(6, steps.length) : 5;
 
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -95,8 +95,7 @@ export default function FaceScanner({
     workingRef.current = true;
     try {
       if (mode === 'single') {
-        const d = await getFaceDescriptor(videoRef.current!);
-        if (d) await onCapture?.(d);
+        await onCapture?.(samplesRef.current);
       } else {
         // Capture an ID photo (35×45) from the same live scan so enrolling a
         // face also updates the staff ID picture.
@@ -157,20 +156,14 @@ export default function FaceScanner({
         setGuide(good ? (mode === 'multi' ? `${g} — scanning…` : 'Recognising…') : g);
 
         if (good && Date.now() > cooldownRef.current) {
-          cooldownRef.current = Date.now() + 700;
-          if (mode === 'single') {
-            setDone(true);
-            await finish();
-          } else {
-            const d = await getFaceDescriptor(v);
-            if (d) {
-              samplesRef.current = [...samplesRef.current, d];
-              const p = Math.round((samplesRef.current.length / TARGET) * 100);
-              setProgress(p);
-              if (samplesRef.current.length >= TARGET) {
-                setDone(true);
-                await finish();
-              }
+          cooldownRef.current = Date.now() + (mode === 'single' ? 220 : 650);
+          const d = await getFaceDescriptor(v);
+          if (d) {
+            samplesRef.current = [...samplesRef.current, d];
+            setProgress(Math.round((samplesRef.current.length / TARGET) * 100));
+            if (samplesRef.current.length >= TARGET) {
+              setDone(true);
+              await finish();
             }
           }
         }

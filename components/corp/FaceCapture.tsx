@@ -8,7 +8,8 @@ const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
 
 export interface FaceCaptureResult {
   photo: string | null; // ID-standard (35x45) data URL in register mode
-  descriptor: number[];
+  descriptor: number[]; // averaged descriptor (compat)
+  descriptors: number[][]; // multiple samples — enroll template (register) or probe frames (login)
 }
 
 export default function FaceCapture({
@@ -147,7 +148,23 @@ export default function FaceCapture({
       photo = canvas.toDataURL('image/jpeg', 0.92);
     }
 
-    onCapture({ photo, descriptor: data.descriptor });
+    // Collect several frames — for register these become the multi-sample enrol
+    // template; for login they're averaged into a clean probe. Both make
+    // recognition far more reliable and harder to false-accept.
+    const frames: number[][] = [data.descriptor];
+    const N = mode === 'register' ? 5 : 4;
+    setStatus(mode === 'register' ? 'Hold still — capturing samples…' : 'Scanning…');
+    for (let i = 1; i < N; i++) {
+      await new Promise((r) => setTimeout(r, 150));
+      const d = await getFaceCaptureData(videoRef.current!);
+      if (d) frames.push(d.descriptor);
+    }
+    const n = frames[0].length;
+    const avg = new Array(n).fill(0);
+    for (const f of frames) for (let i = 0; i < n; i++) avg[i] += f[i];
+    for (let i = 0; i < n; i++) avg[i] /= frames.length;
+
+    onCapture({ photo, descriptor: avg, descriptors: frames });
     setStatus(mode === 'register' ? 'Face & ID photo captured ✓' : 'Face captured ✓');
     setBusy(false);
   };
