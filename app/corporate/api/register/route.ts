@@ -33,6 +33,14 @@ export async function POST(req: NextRequest) {
   if (String(password).length < 8) {
     return NextResponse.json({ error: 'password must be at least 8 characters' }, { status: 400 });
   }
+  // Creating an Auth user requires the service-role key. Without it Supabase
+  // returns "User not allowed" — fail fast with a clear, actionable message.
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json(
+      { error: 'Server not configured: add SUPABASE_SERVICE_ROLE_KEY in Vercel → Settings → Environment Variables, then redeploy.' },
+      { status: 500 }
+    );
+  }
 
   // 1) Create the Supabase Auth user (email confirmed so they can log in immediately).
   const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
@@ -42,7 +50,11 @@ export async function POST(req: NextRequest) {
     user_metadata: { display_name },
   });
   if (createErr || !created?.user) {
-    return NextResponse.json({ error: createErr?.message || 'could not create user' }, { status: 400 });
+    const msg = createErr?.message || '';
+    const friendly = /not allowed|service_role|permission|401|403/i.test(msg)
+      ? 'Could not create the account — the server’s SUPABASE_SERVICE_ROLE_KEY is missing or invalid. Set it in Vercel and redeploy.'
+      : msg || 'could not create user';
+    return NextResponse.json({ error: friendly }, { status: 400 });
   }
   const userId = created.user.id;
 
