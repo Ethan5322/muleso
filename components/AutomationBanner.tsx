@@ -1,8 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ShieldCheck, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, Zap, ArrowRight } from 'lucide-react';
 import AutomationIcon from '@/components/AutomationIcon';
+import { useChatbot } from '@/context/ChatbotContext';
 
 interface Line {
   from: 'bot' | 'user';
@@ -64,17 +65,27 @@ export default function AutomationBanner({
   iconKey,
   color,
   glow,
+  onStart,
 }: {
   name: string;
   title: string;
   iconKey: string;
   color: string;
   glow: string;
+  onStart?: () => void;
 }) {
   const lines = demoFor(name);
+  const { isOpen } = useChatbot();
 
   return (
-    <div className="relative w-full max-w-md mx-auto">
+    <AnimatePresence>
+      {!isOpen && (
+        <motion.div
+          key="automation-banner"
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="relative w-full max-w-md mx-auto"
+        >
       {/* ambient glow */}
       <div
         className="absolute -inset-6 -z-10 rounded-[2rem] blur-3xl opacity-40"
@@ -171,10 +182,14 @@ export default function AutomationBanner({
           </motion.div>
         </div>
 
-        {/* input bar mockup */}
-        <div className="flex items-center gap-2 px-3 py-3 border-t border-[var(--border)] bg-[var(--bg-secondary)]">
+        {/* start bar — tapping hands off to the real booking widget */}
+        <button
+          type="button"
+          onClick={onStart}
+          className="w-full flex items-center gap-2 px-3 py-3 border-t border-[var(--border)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card)] transition-colors text-left"
+        >
           <div className="flex-1 bg-[var(--bg-card)] border border-[var(--border)] rounded-full px-4 py-2 text-[12px] text-[var(--text-secondary)]">
-            Type a message…
+            Tap to start your booking…
           </div>
           <span
             className="w-9 h-9 rounded-full flex items-center justify-center text-white flex-shrink-0"
@@ -184,13 +199,25 @@ export default function AutomationBanner({
               <path d="M12 19V5M5 12l7-7 7 7" />
             </svg>
           </span>
-        </div>
+        </button>
       </motion.div>
+
+      {/* primary CTA — starts the live booking with this system pre-selected */}
+      <button
+        type="button"
+        onClick={onStart}
+        className="mt-4 w-full py-3 rounded-xl font-bold font-sora text-white flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform"
+        style={{ background: `linear-gradient(135deg, ${color}, var(--accent-purple))`, boxShadow: `0 12px 30px -12px ${glow}` }}
+      >
+        Start with this system <ArrowRight size={17} />
+      </button>
 
       {/* footer tag */}
       <p className="text-center text-[11px] text-[var(--text-secondary)] mt-3">
         🔒 Powered by <span className="font-semibold text-[var(--text-primary)]">MuleSoo AI</span> · works on web &amp; WhatsApp
       </p>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

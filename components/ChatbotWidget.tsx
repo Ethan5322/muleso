@@ -223,17 +223,21 @@ export default function ChatbotWidget() {
     const preset = consumePreset();
     if (!preset) return;
 
-    const price = getServicePrice(preset.service);
+    // Start a clean conversation and auto-answer the first question (the service)
+    // with the exact system the client chose, then jump straight to budget.
+    const price = preset.price || getServicePrice('Build AI Automation');
+    setMessages([]);
+    setHistory([]);
     setStage('service');
     setBookingData(prev => ({ ...prev, service: preset.service, projectDetails: preset.details }));
-    addMessage(`I'd like to book: ${preset.details}`, 'user');
+    addMessage(`✅ ${preset.service}`, 'user');
     setTimeout(() => {
       addMessage(
-        `Excellent choice! 🚀 We'll build this for you.\n\nStarting from ${price} — what's your budget range?`,
+        `Excellent choice! 🚀 The ${preset.service} — starting from ${price}.\n\nTo tailor your quote, what's your budget range?`,
         'bot'
       );
       setStage('budget');
-    }, 350);
+    }, 400);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, presetBooking]);
 

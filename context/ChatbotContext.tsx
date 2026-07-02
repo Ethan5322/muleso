@@ -3,8 +3,9 @@
 import { createContext, useCallback, useContext, useState, ReactNode } from 'react';
 
 export interface PresetBooking {
-  service: string; // service value, e.g. 'Build AI Automation'
-  details: string; // pre-filled project details, e.g. the system name + description
+  service: string; // the chosen system name — becomes the booking's service (shows on dashboard)
+  details: string; // pre-filled project details, e.g. buy/custom + system name + description
+  price?: string;  // price to show in the opening message, e.g. 'R5,000'
 }
 
 interface ChatbotContextType {

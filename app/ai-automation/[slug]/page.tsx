@@ -40,9 +40,14 @@ export default function AutomationDetailPage() {
   const waNumber = settings.whatsapp || '27688529333';
   const waText = encodeURIComponent(`Hi MuleSoo, I'd like you to build the "${automation.name}" for my business.`);
 
-  // "Buy / custom to buy" → opens the booking flow pre-loaded with this system.
-  const startBooking = () =>
-    openChatbot({ service: 'Build AI Automation', details: `${title} — ${automation.desc}` });
+  // "Buy / custom to buy" → opens the booking flow with THIS system auto-selected
+  // as the first answer, then continues to budget and the rest of the questions.
+  const startBooking = (mode: 'buy' | 'custom' = 'buy') =>
+    openChatbot({
+      service: mode === 'custom' ? `${title} (custom build)` : title,
+      details: `${mode === 'custom' ? 'Custom build request' : 'Buy'}: ${title} — ${automation.desc}`,
+      price: mode === 'custom' ? 'a custom quote' : 'R5,000',
+    });
 
   // related systems from the same department
   const related = AUTOMATIONS.filter(
@@ -117,7 +122,7 @@ export default function AutomationDetailPage() {
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
-                  onClick={startBooking}
+                  onClick={() => startBooking('buy')}
                   className="px-7 py-3.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
                 >
                   Buy / Build This System →
@@ -141,6 +146,7 @@ export default function AutomationDetailPage() {
                 iconKey={iconKeyFor(automation.name)}
                 color={meta.color}
                 glow={meta.glow}
+                onStart={() => startBooking('buy')}
               />
             </div>
           </div>
@@ -282,14 +288,14 @@ export default function AutomationDetailPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 type="button"
-                onClick={startBooking}
+                onClick={() => startBooking('buy')}
                 className="px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
               >
                 Buy This System
               </button>
               <button
                 type="button"
-                onClick={startBooking}
+                onClick={() => startBooking('custom')}
                 className="px-8 py-4 border border-[var(--accent-gold)] text-[var(--accent-gold)] font-bold font-sora rounded-lg hover:bg-[var(--glow-gold)] transition-colors"
               >
                 Customise & Buy
