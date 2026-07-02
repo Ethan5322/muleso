@@ -50,11 +50,13 @@ export async function POST(req: NextRequest) {
     user_metadata: { display_name },
   });
   if (createErr || !created?.user) {
-    const msg = createErr?.message || '';
-    const friendly = /not allowed|service_role|permission|401|403/i.test(msg)
-      ? 'Could not create the account — the server’s SUPABASE_SERVICE_ROLE_KEY is missing or invalid. Set it in Vercel and redeploy.'
-      : msg || 'could not create user';
-    return NextResponse.json({ error: friendly }, { status: 400 });
+    const msg = createErr?.message || 'could not create user';
+    const status = (createErr as { status?: number } | null)?.status;
+    console.error('[corp register] createUser failed:', status, msg);
+    const hint = /not allowed|not_admin|forbidden|401|403|invalid|jwt/i.test(msg)
+      ? ' — This means SUPABASE_SERVICE_ROLE_KEY is not the real service_role secret (it may be the anon key) or the project was not redeployed after adding it. Check /corporate/api/health.'
+      : '';
+    return NextResponse.json({ error: `Account creation failed: ${msg}${hint}` }, { status: 400 });
   }
   const userId = created.user.id;
 
