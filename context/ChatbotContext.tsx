@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useCallback, useContext, useState, ReactNode } from 'react';
 
 export interface PresetBooking {
   service: string; // service value, e.g. 'Build AI Automation'
@@ -22,17 +22,19 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [presetBooking, setPresetBooking] = useState<PresetBooking | null>(null);
 
-  const openChatbot = (preset?: PresetBooking) => {
+  // Stable identities so consumers' effects don't re-run on every render
+  // (a re-created openChatbot was causing the widget to re-open right after close).
+  const openChatbot = useCallback((preset?: PresetBooking) => {
     if (preset) setPresetBooking(preset);
     setIsOpen(true);
-  };
-  const closeChatbot = () => setIsOpen(false);
+  }, []);
 
-  const consumePreset = () => {
-    const p = presetBooking;
+  const closeChatbot = useCallback(() => setIsOpen(false), []);
+
+  const consumePreset = useCallback(() => {
     setPresetBooking(null);
-    return p;
-  };
+    return presetBooking;
+  }, [presetBooking]);
 
   return (
     <ChatbotContext.Provider
