@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { CAPABILITIES, type CorpAdmin } from '@/lib/corp/constants';
-import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText, Trash2 } from 'lucide-react';
+import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText, Trash2, MessageSquareLock, Check } from 'lucide-react';
 import RegisterAdmin from './RegisterAdmin';
 
 interface Capability {
@@ -18,24 +18,34 @@ interface AuditLog {
   detail: Record<string, unknown>;
   created_at: string;
 }
+interface DmMeta {
+  id: string;
+  sender_id: string;
+  recipient_id: string;
+  read_at: string | null;
+  created_at: string;
+}
 
 export default function ControlPanel() {
   const [admins, setAdmins] = useState<CorpAdmin[]>([]);
   const [caps, setCaps] = useState<Capability[]>([]);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [nameById, setNameById] = useState<Record<string, string>>({});
+  const [dmMeta, setDmMeta] = useState<DmMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const [a, l] = await Promise.all([
+    const [a, l, d] = await Promise.all([
       fetch('/corporate/api/admins').then((r) => r.json()),
       fetch('/corporate/api/audit').then((r) => r.json()),
+      fetch('/corporate/api/dm-oversight').then((r) => r.json()).catch(() => ({ items: [] })),
     ]);
     setAdmins(a.admins ?? []);
     setCaps(a.capabilities ?? []);
     setLogs(l.logs ?? []);
-    setNameById(l.nameById ?? {});
+    setNameById({ ...(l.nameById ?? {}), ...(d.nameById ?? {}) });
+    setDmMeta(d.items ?? []);
     setLoading(false);
   }, []);
 
@@ -242,6 +252,35 @@ export default function ControlPanel() {
               {Object.keys(log.detail || {}).length > 0 && (
                 <div className="text-xs text-[#6E7A91] mt-0.5 font-mono">{JSON.stringify(log.detail)}</div>
               )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* DM oversight — METADATA ONLY (bodies stay private) */}
+      <section className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl">
+        <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
+          <MessageSquareLock size={16} className="text-[#7B2FFF]" />
+          <h2 className="font-semibold font-sora text-sm">Message oversight</h2>
+          <span className="ml-auto text-[11px] text-[#6E7A91] inline-flex items-center gap-1">
+            <Check size={12} className="text-[#00FF88]" /> Metadata only — contents stay private
+          </span>
+        </div>
+        <div className="divide-y divide-[#101a30] max-h-96 overflow-y-auto">
+          {dmMeta.length === 0 && <p className="p-5 text-sm text-[#6E7A91]">No messages yet.</p>}
+          {dmMeta.map((m) => (
+            <div key={m.id} className="px-5 py-2.5 text-sm flex items-center justify-between gap-3">
+              <span className="text-[#F0F2FA] truncate">
+                <span className="font-semibold">{nameById[m.sender_id] || 'Admin'}</span>
+                <span className="text-[#6E7A91]"> → </span>
+                <span className="font-semibold">{nameById[m.recipient_id] || 'Admin'}</span>
+                <span className={`ml-2 text-[11px] ${m.read_at ? 'text-[#00FF88]' : 'text-[#E8B84B]'}`}>
+                  {m.read_at ? 'read' : 'unread'}
+                </span>
+              </span>
+              <span className="text-xs text-[#6E7A91] whitespace-nowrap">
+                {new Date(m.created_at).toLocaleString()}
+              </span>
             </div>
           ))}
         </div>
