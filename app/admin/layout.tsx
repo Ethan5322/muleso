@@ -16,6 +16,7 @@ import {
   Quote,
   Wrench,
   Inbox,
+  Building2,
   LogOut,
   Menu,
   X,
@@ -33,6 +34,7 @@ const NAV_ITEMS = [
   { label: 'Services', href: '/admin/services', icon: Wrench },
   { label: 'Testimonials', href: '/admin/testimonials', icon: Quote },
   { label: 'Site Content', href: '/admin/site-content', icon: Globe },
+  { label: 'Team Admins', href: '/admin/team', icon: Building2 },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 

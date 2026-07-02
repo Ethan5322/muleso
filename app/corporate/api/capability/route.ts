@@ -1,12 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { requireSuperAdmin, writeAudit } from '@/lib/corp/api';
+import { requireManager, writeAudit } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Super Admin: toggle a capability for a department admin.
+// Manager: toggle a capability for a department admin.
 export async function POST(req: NextRequest) {
-  const { ctx, error } = await requireSuperAdmin();
+  const { actorId, error } = await requireManager(req);
   if (error) return error;
 
   const { department_admin_id, capability_key, enabled } = await req.json();
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         department_admin_id,
         capability_key,
         enabled,
-        updated_by: ctx.admin.id,
+        updated_by: actorId,
         updated_at: new Date().toISOString(),
       },
       { onConflict: 'department_admin_id,capability_key' }
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: upsertError.message }, { status: 500 });
   }
 
-  await writeAudit(ctx.admin.id, 'capability_toggled', department_admin_id, {
+  await writeAudit(actorId, 'capability_toggled', department_admin_id, {
     capability_key,
     enabled,
   });

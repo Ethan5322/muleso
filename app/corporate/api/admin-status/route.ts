@@ -1,19 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { requireSuperAdmin, writeAudit } from '@/lib/corp/api';
+import { requireManager, writeAudit } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Super Admin: suspend or reactivate a department admin (never touches their password).
+// Manager: suspend or reactivate a department admin (never touches their password).
 export async function POST(req: NextRequest) {
-  const { ctx, error } = await requireSuperAdmin();
+  const { actorId, error } = await requireManager(req);
   if (error) return error;
 
   const { department_admin_id, status } = await req.json();
   if (!department_admin_id || !['active', 'suspended'].includes(status)) {
     return NextResponse.json({ error: 'invalid payload' }, { status: 400 });
   }
-  if (department_admin_id === ctx.admin.id) {
+  if (actorId && department_admin_id === actorId) {
     return NextResponse.json({ error: 'You cannot suspend your own account.' }, { status: 400 });
   }
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 });
 
   await writeAudit(
-    ctx.admin.id,
+    actorId,
     status === 'suspended' ? 'account_suspended' : 'account_reactivated',
     department_admin_id,
     { status }

@@ -1,12 +1,12 @@
-import { NextResponse } from 'next/server';
-import { requireSuperAdmin } from '@/lib/corp/api';
+import { NextResponse, type NextRequest } from 'next/server';
+import { requireManager } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Super Admin: recent governance audit entries (joined with admin display names).
-export async function GET() {
-  const { error } = await requireSuperAdmin();
+// Manager: recent governance audit entries (joined with admin display names).
+export async function GET(req: NextRequest) {
+  const { error } = await requireManager(req);
   if (error) return error;
 
   const { data: logs } = await supabaseAdmin

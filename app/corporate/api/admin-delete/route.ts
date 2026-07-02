@@ -1,19 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { requireSuperAdmin, writeAudit } from '@/lib/corp/api';
+import { requireManager, writeAudit } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Super Admin: permanently delete a department admin (Auth user + all corp data via cascade).
+// Manager: permanently delete a department admin (Auth user + all corp data via cascade).
 export async function POST(req: NextRequest) {
-  const { ctx, error } = await requireSuperAdmin();
+  const { actorId, error } = await requireManager(req);
   if (error) return error;
 
   const { department_admin_id } = await req.json();
   if (!department_admin_id) {
     return NextResponse.json({ error: 'missing admin id' }, { status: 400 });
   }
-  if (department_admin_id === ctx.admin.id) {
+  if (actorId && department_admin_id === actorId) {
     return NextResponse.json({ error: 'You cannot delete your own account.' }, { status: 400 });
   }
 
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     await supabaseAdmin.from('corp_department_admins').delete().eq('id', department_admin_id);
   }
 
-  await writeAudit(ctx.admin.id, 'admin_deleted', null, {
+  await writeAudit(actorId, 'admin_deleted', null, {
     deleted_admin_id: department_admin_id,
     display_name: target?.display_name ?? null,
   });

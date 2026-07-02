@@ -1,12 +1,12 @@
-import { NextResponse } from 'next/server';
-import { requireSuperAdmin } from '@/lib/corp/api';
+import { NextResponse, type NextRequest } from 'next/server';
+import { requireManager } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Super Admin: list all department admins + their capability grants.
-export async function GET() {
-  const { ctx, error } = await requireSuperAdmin();
+// Manager (main admin or corp super admin): list admins + capability grants.
+export async function GET(req: NextRequest) {
+  const { actorId, error } = await requireManager(req);
   if (error) return error;
 
   const [{ data: admins }, { data: caps }] = await Promise.all([
@@ -21,6 +21,6 @@ export async function GET() {
   return NextResponse.json({
     admins: admins ?? [],
     capabilities: caps ?? [],
-    me: ctx.admin.id,
+    me: actorId, // null for the main admin
   });
 }

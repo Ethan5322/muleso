@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { requireSuperAdmin, writeAudit } from '@/lib/corp/api';
+import { requireManager, writeAudit } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { makeVerificationCode, makeQrToken } from '@/lib/corp/identity';
 import { CAPABILITIES } from '@/lib/corp/constants';
@@ -10,7 +10,7 @@ export const maxDuration = 30;
 // Super Admin: register a new department admin (creates the Auth user, captures
 // face + photo, issues staff number / verification code / QR token, seeds caps).
 export async function POST(req: NextRequest) {
-  const { ctx, error } = await requireSuperAdmin();
+  const { actorId, error } = await requireManager(req);
   if (error) return error;
 
   const body = await req.json();
@@ -82,11 +82,11 @@ export async function POST(req: NextRequest) {
       department_admin_id: userId,
       capability_key: c.key,
       enabled: enabledSet.has(c.key),
-      updated_by: ctx.admin.id,
+      updated_by: actorId,
     }))
   );
 
-  await writeAudit(ctx.admin.id, 'admin_registered', userId, { display_name, staff_number });
+  await writeAudit(actorId, 'admin_registered', userId, { display_name, staff_number });
 
   return NextResponse.json({
     ok: true,

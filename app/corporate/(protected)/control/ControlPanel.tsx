@@ -130,7 +130,7 @@ export default function ControlPanel() {
               {deptAdmins.length === 0 && (
                 <tr>
                   <td colSpan={CAPABILITIES.length + 2} className="p-6 text-center text-[#6E7A91]">
-                    No department admins registered yet. Seed them in Supabase.
+                    No department admins yet. Use “Register new admin” above to add one.
                   </td>
                 </tr>
               )}
