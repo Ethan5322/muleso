@@ -19,6 +19,8 @@ export default function BookingsPage() {
   const [editingStatus, setEditingStatus] = useState<Booking['status']>('Pending');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [sortKey, setSortKey] = useState<'created_at' | 'name' | 'service' | 'budget' | 'status'>('created_at');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
 
   // Check authentication
   useEffect(() => {
@@ -54,7 +56,9 @@ export default function BookingsPage() {
     const t = term.toLowerCase();
     const filtered = bookings.filter((b) => {
       const matchesSearch =
-        b.name.toLowerCase().includes(t) || b.email.toLowerCase().includes(t);
+        b.name.toLowerCase().includes(t) ||
+        b.email.toLowerCase().includes(t) ||
+        (b.service || '').toLowerCase().includes(t);
       const matchesStatus = status === 'All' || b.status === status;
       return matchesSearch && matchesStatus;
     });
@@ -160,6 +164,29 @@ export default function BookingsPage() {
     toast.success('Bookings exported as CSV');
   };
 
+  const toggleSort = (k: typeof sortKey) => {
+    if (sortKey === k) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    else {
+      setSortKey(k);
+      setSortDir('asc');
+    }
+  };
+  const arrow = (k: typeof sortKey) => (sortKey === k ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
+
+  const sortedBookings = [...filteredBookings].sort((a, b) => {
+    let av: string, bv: string;
+    switch (sortKey) {
+      case 'name': av = a.name?.toLowerCase() || ''; bv = b.name?.toLowerCase() || ''; break;
+      case 'service': av = a.service?.toLowerCase() || ''; bv = b.service?.toLowerCase() || ''; break;
+      case 'budget': av = a.budget?.toLowerCase() || ''; bv = b.budget?.toLowerCase() || ''; break;
+      case 'status': av = a.status || ''; bv = b.status || ''; break;
+      default: av = a.created_at || ''; bv = b.created_at || '';
+    }
+    if (av < bv) return sortDir === 'asc' ? -1 : 1;
+    if (av > bv) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
   if (!isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -228,19 +255,19 @@ export default function BookingsPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[#00C8FF]/20">
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Date</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('created_at')}>Date{arrow('created_at')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('name')}>Name{arrow('name')}</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Email</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Phone</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Service</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Budget</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('service')}>Service{arrow('service')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('budget')}>Budget{arrow('budget')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('status')}>Status{arrow('status')}</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredBookings.length > 0 ? (
-                  filteredBookings.map((booking, idx) => (
+                {sortedBookings.length > 0 ? (
+                  sortedBookings.map((booking, idx) => (
                     <tr
                       key={booking.id}
                       className={`border-b border-[#00C8FF]/10 hover:bg-[#0A0E17] transition-colors ${

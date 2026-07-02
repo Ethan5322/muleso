@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { Loader2, X, Mail, MessageCircle, Trash2, Save } from 'lucide-react';
+import { Loader2, X, Mail, MessageCircle, Trash2, Save, Search, Download } from 'lucide-react';
 
 interface Lead {
   id: string;
@@ -34,6 +34,9 @@ export default function LeadsInbox() {
   const [editStatus, setEditStatus] = useState('New');
   const [editNotes, setEditNotes] = useState('');
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState('');
+  const [sortKey, setSortKey] = useState<'created_at' | 'name' | 'service' | 'status'>('created_at');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
 
   const load = async () => {
     setLoading(true);
@@ -102,7 +105,51 @@ export default function LeadsInbox() {
     Won: leads.filter((l) => l.status === 'Won').length,
     Lost: leads.filter((l) => l.status === 'Lost').length,
   };
-  const visible = filter === 'All' ? leads : leads.filter((l) => l.status === filter);
+  const term = search.trim().toLowerCase();
+  const toggleSort = (k: typeof sortKey) => {
+    if (sortKey === k) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    else { setSortKey(k); setSortDir('asc'); }
+  };
+  const arrow = (k: typeof sortKey) => (sortKey === k ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
+
+  const visible = leads
+    .filter(
+      (l) =>
+        (filter === 'All' || l.status === filter) &&
+        (term === '' ||
+          l.name?.toLowerCase().includes(term) ||
+          l.email?.toLowerCase().includes(term) ||
+          (l.service || '').toLowerCase().includes(term))
+    )
+    .sort((a, b) => {
+      let av: string, bv: string;
+      switch (sortKey) {
+        case 'name': av = a.name?.toLowerCase() || ''; bv = b.name?.toLowerCase() || ''; break;
+        case 'service': av = (a.service || '').toLowerCase(); bv = (b.service || '').toLowerCase(); break;
+        case 'status': av = a.status || ''; bv = b.status || ''; break;
+        default: av = a.created_at || ''; bv = b.created_at || '';
+      }
+      if (av < bv) return sortDir === 'asc' ? -1 : 1;
+      if (av > bv) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+
+  const handleExport = () => {
+    const headers = ['Date', 'Name', 'Email', 'Company', 'Service', 'Budget', 'Source', 'Status', 'Notes'];
+    const rows = leads.map((l) => [
+      new Date(l.created_at).toLocaleDateString(),
+      l.name, l.email, l.company || '', l.service, l.budget, l.source || '', l.status, (l.notes || '').replace(/\n/g, ' '),
+    ]);
+    const csv = [headers, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `leads-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Leads exported as CSV');
+  };
 
   return (
     <div className="text-white">
@@ -110,6 +157,26 @@ export default function LeadsInbox() {
       <div className="mb-6">
         <h2 className="text-3xl font-bold font-sora">Leads Inbox</h2>
         <p className="text-[#7A8BA8]">Contact-form enquiries — {leads.length} total</p>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-2.5 text-[#00C8FF]" size={18} />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, email or service…"
+            className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:border-[#00C8FF]"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleExport}
+          className="flex items-center gap-2 bg-[#00FF88]/15 hover:bg-[#00FF88]/25 border border-[#00FF88]/60 text-[#00FF88] px-4 py-2 rounded-lg transition-all"
+        >
+          <Download size={18} /> Export CSV
+        </button>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -139,11 +206,11 @@ export default function LeadsInbox() {
             <table className="w-full">
               <thead className="bg-[#1A2332]">
                 <tr>
-                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm">Date</th>
-                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm">Name</th>
-                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm">Service</th>
+                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm cursor-pointer select-none" onClick={() => toggleSort('created_at')}>Date{arrow('created_at')}</th>
+                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm cursor-pointer select-none" onClick={() => toggleSort('name')}>Name{arrow('name')}</th>
+                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm cursor-pointer select-none" onClick={() => toggleSort('service')}>Service{arrow('service')}</th>
                   <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm">Budget</th>
-                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm">Status</th>
+                  <th className="text-left px-6 py-3 text-[#7A8BA8] font-semibold text-sm cursor-pointer select-none" onClick={() => toggleSort('status')}>Status{arrow('status')}</th>
                   <th className="text-center px-6 py-3 text-[#7A8BA8] font-semibold text-sm">Action</th>
                 </tr>
               </thead>
