@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { createCorpBrowserClient } from '@/lib/corp/supabaseBrowser';
 import { Building2, LogOut, LayoutDashboard, MessageSquare, Hash, ShieldCheck } from 'lucide-react';
@@ -17,6 +18,41 @@ export default function CorpShell({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [unreadDM, setUnreadDM] = useState(0);
+
+  const loadUnread = useCallback(async () => {
+    try {
+      const r = await fetch('/corporate/api/notifications');
+      if (r.ok) {
+        const d = await r.json();
+        setUnreadDM(d.unreadDM ?? 0);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    loadUnread();
+    const poll = setInterval(loadUnread, 15000);
+    return () => clearInterval(poll);
+    // refresh when navigating (e.g. after reading a thread)
+  }, [loadUnread, pathname]);
+
+  useEffect(() => {
+    const supabase = createCorpBrowserClient();
+    const ch = supabase
+      .channel('corp-notif-' + admin.id)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'corp_direct_messages', filter: `recipient_id=eq.${admin.id}` },
+        () => loadUnread()
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(ch);
+    };
+  }, [admin.id, loadUnread]);
 
   const signOut = async () => {
     const supabase = createCorpBrowserClient();
@@ -74,9 +110,15 @@ export default function CorpShell({
                 ? 'bg-[#00C8FF]/10 text-[#00C8FF]'
                 : 'text-[#A8B2D0] hover:bg-[#0D1528] hover:text-[#F0F2FA]'
             }`;
+            const badge =
+              item.href === '/corporate/messages' && unreadDM > 0 ? (
+                <span className="ml-auto text-[10px] font-bold bg-[#00C8FF] text-black rounded-full px-1.5 py-0.5">
+                  {unreadDM}
+                </span>
+              ) : null;
             return item.on ? (
               <Link key={item.href} href={item.href} className={cls}>
-                <Icon size={17} /> {item.label}
+                <Icon size={17} /> {item.label} {badge}
               </Link>
             ) : (
               <span
