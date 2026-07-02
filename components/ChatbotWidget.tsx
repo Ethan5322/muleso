@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, ArrowLeft, Download, CheckCircle, Clock, Save } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, ArrowLeft, ArrowRight, Download, CheckCircle, Clock, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
@@ -180,8 +180,9 @@ export default function ChatbotWidget() {
   const [validationError, setValidationError] = useState('');
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const [history, setHistory] = useState<StageType[]>([]);
+  const [future, setFuture] = useState<StageType[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const isGoingBack = useRef(false);
+  const isNavigating = useRef(false);
   const prevStage = useRef<StageType>('greeting');
 
   const currentStageIndex = STAGE_ORDER.indexOf(stage);
@@ -228,6 +229,7 @@ export default function ChatbotWidget() {
     const price = preset.price || getServicePrice('Build AI Automation');
     setMessages([]);
     setHistory([]);
+    setFuture([]);
     setStage('service');
     setBookingData(prev => ({ ...prev, service: preset.service, projectDetails: preset.details }));
     addMessage(`✅ ${preset.service}`, 'user');
@@ -251,15 +253,19 @@ export default function ChatbotWidget() {
 
   // Track stage transitions so the user can step back through the booking.
   useEffect(() => {
-    if (isGoingBack.current) {
-      isGoingBack.current = false;
+    if (isNavigating.current) {
+      // back/forward handled the stacks already — don't record again
+      isNavigating.current = false;
     } else if (
       prevStage.current !== stage &&
       stage !== 'greeting' &&
       NAVIGABLE_STAGES.has(prevStage.current)
     ) {
+      // normal forward progression: record where we came from, and moving onto a
+      // new path invalidates any "forward" (redo) history
       const from = prevStage.current;
       setHistory((h) => [...h, from]);
+      setFuture([]);
     }
     prevStage.current = stage;
   }, [stage]);
@@ -267,11 +273,23 @@ export default function ChatbotWidget() {
   const goBack = () => {
     if (history.length === 0) return;
     const prev = history[history.length - 1];
-    isGoingBack.current = true;
-    setHistory(history.slice(0, -1));
+    isNavigating.current = true;
+    setHistory((h) => h.slice(0, -1));
+    setFuture((f) => [stage, ...f]);
     setInputValue('');
     setValidationError('');
     setStage(prev);
+  };
+
+  const goForward = () => {
+    if (future.length === 0) return;
+    const next = future[0];
+    isNavigating.current = true;
+    setFuture((f) => f.slice(1));
+    setHistory((h) => [...h, stage]);
+    setInputValue('');
+    setValidationError('');
+    setStage(next);
   };
 
   const addMessage = (text: string, sender: 'user' | 'bot', isTyping = false) => {
@@ -362,6 +380,7 @@ export default function ChatbotWidget() {
     setMessages([]);
     setStage('greeting');
     setHistory([]);
+    setFuture([]);
     setShowConfetti(false);
     setBookingData({
       fullName: '',
@@ -665,16 +684,30 @@ export default function ChatbotWidget() {
 
             {/* Header */}
             <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-3xl flex-shrink-0 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {stage !== 'greeting' && stage !== 'summary' && history.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={goBack}
-                    aria-label="Go back"
-                    className="p-1.5 -ml-1 rounded-lg hover:bg-white/20 transition-colors"
-                  >
-                    <ArrowLeft size={20} />
-                  </button>
+              <div className="flex items-center gap-1.5">
+                {stage !== 'greeting' && stage !== 'summary' && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={goBack}
+                      disabled={history.length === 0}
+                      aria-label="Go back one step"
+                      title="Back"
+                      className="p-1.5 -ml-1 rounded-lg hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ArrowLeft size={20} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={goForward}
+                      disabled={future.length === 0}
+                      aria-label="Go forward one step"
+                      title="Forward"
+                      className="p-1.5 rounded-lg hover:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ArrowRight size={20} />
+                    </button>
+                  </>
                 )}
                 <div className="text-2xl font-bold font-sora">
                   <span className="text-[var(--accent-blue)]">MULE</span>
