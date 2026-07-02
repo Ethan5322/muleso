@@ -6,44 +6,48 @@ to `false` to disable instantly (no redeploy).
 
 ## One-time setup
 
-### 1. Run the schema
-Supabase → SQL Editor → run each file once:
-1. `migrations/corporate_admin.sql` — tables + RLS (safe to re-run)
-2. `migrations/corporate_admin_realtime.sql` — instant delivery (optional; UI polls otherwise)
+### 1. Run the schema (one file)
+Supabase → SQL Editor → run **`migrations/corporate_admin.sql`** once.
+(Creates all `corp_` tables, RLS, the secrets table, staff-number function, and
+enables realtime. Safe to re-run.)
 
-### 2. Create login accounts
-Supabase → **Authentication → Users → Add user** (email + password) for:
-- You (Super Admin)
-- Up to 5 department admins
+### 2. Create YOUR Super Admin account
+Supabase → **Authentication → Users → Add user** (your email + password).
+Copy your **User UID**.
 
-Copy each **User UID**.
+### 3. Register yourself as Super Admin
+Edit **`migrations/corporate_admin_seed.sql`** — paste your UID + email — and run it.
 
-### 3. Register them
-Edit `migrations/corporate_admin_seed.sql`, replace the placeholder UUIDs/names
-with the real ones, delete rows you don't need, and run it.
-
-### 4. Environment
-In Vercel, ensure these are set (you already have the first two):
+### 4. Environment (Vercel)
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`  ← needed for the control panel + DM-metadata oversight
+- `SUPABASE_SERVICE_ROLE_KEY`  ← **required** for registration, ID cards, and face/code/QR login
 
-## Using it
-- Sign in at **`/corporate`** (redirects to `/corporate/login`).
-- **Super Admin** → Control Panel: toggle each admin's capabilities, suspend/reactivate
-  (never touches passwords), and review the audit log.
-- **Everyone** → Messages (private, DB-enforced), Team Channel (threaded, reactions, pins).
+### 5. Log in and add your team
+Go to **`/corporate`** → sign in with your password → **Control Panel →
+Register new admin**. For each admin you:
+- enter name / email / password / department / capabilities,
+- **capture their face + 3:4 ID photo** with the camera,
+- click **Register & issue ID** → then **Download ID card** (PDF with photo,
+  staff number, verification code, and a login QR).
 
-## Capabilities
-`can_send_dm`, `can_post_channel`, `can_view_department_reports`,
-`can_manage_bookings`, `can_export_data`. Checked server-side on every action.
+Department admins are created entirely from the panel — no manual Supabase steps.
 
-## Privacy model
-- DMs: Postgres RLS returns a message only to its sender or recipient — enforced by
-  the database, not just the UI.
-- Super Admin sees DM **metadata only** by default (that a message exists, between
-  whom, when) — never the body. (Chosen policy.)
+## How admins log in (any of these)
+- **Password** (email + password you set)
+- **Face** — biometric scan matched to their enrolment
+- **Verification code** — the code printed on their ID card
+- **QR** — scan the ID-card QR (opens `/corporate/qr-login`)
 
-## To add a WhatsApp/email ping (optional, later)
-Baseline notifications are in-app realtime badges. External pings can reuse the
-existing CallMeBot / Resend integrations once per-admin contact details are added.
+## Super Admin powers
+- **Capabilities grid** — grant/revoke per admin (checked server-side + RLS)
+- **Suspend / reactivate** — blocks access without deleting data or touching passwords
+- **Delete** — permanently removes an admin + all their data
+- **Audit log** — every capability change, suspension, registration and deletion
+
+## Privacy
+- DMs: Postgres RLS returns a message only to its sender or recipient.
+- Super Admin: DM **metadata only** (never the body).
+- Login secrets (verification code, QR token, face descriptor) live in
+  `corp_admin_secrets` — reachable only by the server (service-role), never by
+  other admins.
