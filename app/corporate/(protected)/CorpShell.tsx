@@ -99,6 +99,31 @@ export default function CorpShell({
         </div>
       </header>
 
+      {/* Mobile nav (horizontal scroll) */}
+      <nav className="md:hidden border-b border-[#1A2640] bg-[#0A0F1E]/80 overflow-x-auto">
+        <div className="flex gap-1 px-3 py-2 min-w-max">
+          {nav.filter((i) => i.on).map((item) => {
+            const Icon = item.icon;
+            const active = pathname === item.href;
+            const showBadge = item.href === '/corporate/messages' && unreadDM > 0;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
+                  active ? 'bg-[#00C8FF]/15 text-[#00C8FF]' : 'text-[#A8B2D0] bg-[#0D1528]'
+                }`}
+              >
+                <Icon size={14} /> {item.label}
+                {showBadge && (
+                  <span className="text-[9px] font-bold bg-[#00C8FF] text-black rounded-full px-1">{unreadDM}</span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
       <div className="flex-1 max-w-6xl w-full mx-auto px-4 py-6 flex gap-6">
         {/* Sidebar nav */}
         <nav className="hidden md:flex flex-col gap-1 w-52 flex-shrink-0">

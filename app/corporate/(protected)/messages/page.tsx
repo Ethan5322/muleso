@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createCorpBrowserClient } from '@/lib/corp/supabaseBrowser';
-import { Loader2, Send, MessageSquare } from 'lucide-react';
+import { Loader2, Send, MessageSquare, ArrowLeft } from 'lucide-react';
 
 interface DM {
   id: string;
@@ -136,8 +136,8 @@ export default function MessagesPage() {
 
   return (
     <div className="h-[calc(100vh-160px)] flex gap-4">
-      {/* Contact list (structured recipients) */}
-      <aside className="w-64 flex-shrink-0 bg-[#0A0F1E] border border-[#1A2640] rounded-xl overflow-hidden flex flex-col">
+      {/* Contact list (structured recipients) — full width on mobile, hidden when a thread is open */}
+      <aside className={`${selected ? 'hidden md:flex' : 'flex'} w-full md:w-64 flex-shrink-0 bg-[#0A0F1E] border border-[#1A2640] rounded-xl overflow-hidden flex-col`}>
         <div className="px-4 py-3 border-b border-[#1A2640]">
           <h2 className="font-semibold font-sora text-sm">Messages</h2>
           <p className="text-[11px] text-[#6E7A91]">Private &amp; end-to-end by database rule</p>
@@ -176,8 +176,8 @@ export default function MessagesPage() {
         </div>
       </aside>
 
-      {/* Thread */}
-      <section className="flex-1 min-w-0 bg-[#0A0F1E] border border-[#1A2640] rounded-xl flex flex-col">
+      {/* Thread — full width on mobile, hidden until a contact is picked */}
+      <section className={`${selected ? 'flex' : 'hidden md:flex'} flex-1 min-w-0 bg-[#0A0F1E] border border-[#1A2640] rounded-xl flex-col`}>
         {!selected ? (
           <div className="flex-1 flex flex-col items-center justify-center text-[#6E7A91]">
             <MessageSquare size={32} className="mb-2" />
@@ -185,11 +185,21 @@ export default function MessagesPage() {
           </div>
         ) : (
           <>
-            <div className="px-4 py-3 border-b border-[#1A2640]">
-              <p className="font-semibold text-sm">{selectedContact?.display_name || 'Admin'}</p>
-              <p className="text-[11px] text-[#6E7A91]">
-                {selectedContact?.department_name || `Dept ${selectedContact?.department_id ?? ''}`}
-              </p>
+            <div className="px-4 py-3 border-b border-[#1A2640] flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="md:hidden -ml-1 p-1 rounded-lg text-[#A8B2D0] hover:text-white"
+                aria-label="Back to conversations"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <div>
+                <p className="font-semibold text-sm">{selectedContact?.display_name || 'Admin'}</p>
+                <p className="text-[11px] text-[#6E7A91]">
+                  {selectedContact?.department_name || `Dept ${selectedContact?.department_id ?? ''}`}
+                </p>
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
