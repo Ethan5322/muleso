@@ -13,106 +13,165 @@ export interface IdCardData {
   email?: string | null;
 }
 
-const BLUE = '#00C8FF';
-const PURPLE = '#7B2FFF';
+type RGB = [number, number, number];
+const BLUE: RGB = [0, 200, 255];
+const PURPLE: RGB = [123, 47, 255];
+const GOLD: RGB = [232, 184, 75];
+const INK: RGB = [10, 15, 30];
+const CARD: RGB = [13, 21, 40];
+const MUTED: RGB = [130, 145, 175];
+const WHITE: RGB = [255, 255, 255];
 
-/** Generate & download a corporate staff ID card (portrait, ~54x86mm). */
+/** Generate & download a corporate staff ID card — standard CR80 (85.6×54mm). */
 export async function generateIdCard(data: IdCardData): Promise<void> {
-  const W = 54;
-  const H = 86;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [W, H] });
+  const W = 85.6;
+  const H = 54;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [W, H] });
 
-  // Background
-  doc.setFillColor(10, 15, 30);
-  doc.rect(0, 0, W, H, 'F');
+  // Card background
+  doc.setFillColor(...CARD);
+  doc.roundedRect(0, 0, W, H, 3, 3, 'F');
 
-  // Header band
-  doc.setFillColor(0, 200, 255);
-  doc.rect(0, 0, W, 13, 'F');
-  doc.setFillColor(123, 47, 255);
-  doc.rect(0, 12.4, W, 0.6, 'F');
+  // ---- Header gradient bar ----
+  const headerH = 11;
+  const slices = 60;
+  for (let i = 0; i < slices; i++) {
+    const t = i / (slices - 1);
+    doc.setFillColor(
+      Math.round(BLUE[0] + (PURPLE[0] - BLUE[0]) * t),
+      Math.round(BLUE[1] + (PURPLE[1] - BLUE[1]) * t),
+      Math.round(BLUE[2] + (PURPLE[2] - BLUE[2]) * t)
+    );
+    doc.rect((W / slices) * i, 0, W / slices + 0.5, headerH, 'F');
+  }
+  // gold underline
+  doc.setFillColor(...GOLD);
+  doc.rect(0, headerH, W, 0.5, 'F');
+
+  // Logo mark
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(4, 2.6, 6, 6, 1, 1, 'F');
+  doc.setTextColor(...PURPLE);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.text('M', 7, 7, { align: 'center' });
+
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(11);
-  doc.text('MULESOO', W / 2, 6.2, { align: 'center' });
+  doc.setFontSize(9);
+  doc.text('MULESOO', 12, 6);
   doc.setFont('helvetica', 'normal');
-  doc.setFontSize(5);
-  doc.text('DIGITAL SERVICES — STAFF ID', W / 2, 10, { align: 'center' });
+  doc.setFontSize(4.2);
+  doc.text('D I G I T A L   S E R V I C E S', 12, 9);
 
-  // Photo (3:4) centered
-  const pw = 24;
-  const ph = 32;
-  const px = (W - pw) / 2;
-  const py = 17;
-  doc.setDrawColor(0, 200, 255);
-  doc.setLineWidth(0.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(6.5);
+  doc.setTextColor(...INK);
+  doc.text('STAFF ID', W - 4, 7, { align: 'right' });
+
+  // ---- Photo (ID standard 35:45) ----
+  const px = 5;
+  const py = 15;
+  const pw = 22;
+  const ph = 28.3; // 22 * 45/35
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(px - 0.8, py - 0.8, pw + 1.6, ph + 1.6, 1, 1, 'F');
   if (data.photo_data_url) {
     try {
       doc.addImage(data.photo_data_url, 'JPEG', px, py, pw, ph);
     } catch {
-      doc.setFillColor(20, 28, 46);
+      doc.setFillColor(230, 235, 245);
       doc.rect(px, py, pw, ph, 'F');
     }
   } else {
-    doc.setFillColor(20, 28, 46);
+    doc.setFillColor(230, 235, 245);
     doc.rect(px, py, pw, ph, 'F');
   }
-  doc.rect(px, py, pw, ph, 'S');
 
-  // Name + department
-  let y = py + ph + 6;
-  doc.setTextColor(240, 242, 250);
+  // ID line under photo
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
-  doc.text(data.display_name, W / 2, y, { align: 'center' });
-  y += 4;
-  doc.setFont('helvetica', 'normal');
   doc.setFontSize(6);
-  doc.setTextColor(168, 178, 208);
-  doc.text(data.department_name || 'MuleSoo', W / 2, y, { align: 'center' });
+  doc.setTextColor(...BLUE);
+  doc.text(data.staff_number, px + pw / 2, py + ph + 4, { align: 'center' });
 
-  // Staff number
-  y += 5.5;
-  doc.setTextColor(0, 200, 255);
+  // ---- Details (right of photo) ----
+  const dx = 31;
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
-  doc.text(data.staff_number, W / 2, y, { align: 'center' });
+  doc.setFontSize(12);
+  doc.setTextColor(240, 242, 250);
+  doc.text(truncate(data.display_name, 22), dx, 18);
 
-  // Verification code
-  y += 5;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...MUTED);
+  doc.text(truncate(data.department_name || 'MuleSoo Team', 28), dx, 22.5);
+
+  doc.setDrawColor(...GOLD);
+  doc.setLineWidth(0.3);
+  doc.line(dx, 25, dx + 30, 25);
+
+  const field = (label: string, value: string, x: number, y: number) => {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(4.6);
+    doc.setTextColor(...MUTED);
+    doc.text(label.toUpperCase(), x, y);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(235, 240, 250);
+    doc.text(value, x, y + 3.6);
+  };
+
+  const issued = new Date();
+  const valid = new Date();
+  valid.setFullYear(valid.getFullYear() + 2);
+  const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  field('Issued', fmt(issued), dx, 30);
+  field('Valid thru', fmt(valid), dx + 20, 30);
+
+  // Verification code (gold, prominent)
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(4.6);
-  doc.setTextColor(110, 122, 145);
-  doc.text('VERIFICATION CODE', W / 2, y, { align: 'center' });
-  y += 3;
-  doc.setFontSize(6.6);
-  doc.setTextColor(232, 184, 75);
+  doc.setTextColor(...MUTED);
+  doc.text('VERIFICATION CODE', dx, 39);
   doc.setFont('helvetica', 'bold');
-  doc.text(data.verification_code, W / 2, y, { align: 'center' });
+  doc.setFontSize(8.5);
+  doc.setTextColor(...GOLD);
+  doc.text(data.verification_code, dx, 43);
 
-  // QR (login)
+  // ---- QR (bottom-right) ----
   const qrUrl = `https://mulesoo.vercel.app/corporate/qr-login?token=${encodeURIComponent(data.qr_token)}`;
   try {
     const qr = await QRCode.toDataURL(qrUrl, { width: 300, margin: 0, color: { dark: '#0A0F1E', light: '#FFFFFF' } });
-    const qs = 16;
+    const qs = 18;
+    const qx = W - qs - 5;
+    const qy = 15;
     doc.setFillColor(255, 255, 255);
-    doc.roundedRect(W / 2 - qs / 2 - 1, y + 2, qs + 2, qs + 2, 1, 1, 'F');
-    doc.addImage(qr, 'PNG', W / 2 - qs / 2, y + 3, qs, qs);
+    doc.roundedRect(qx - 1, qy - 1, qs + 2, qs + 2, 1, 1, 'F');
+    doc.addImage(qr, 'PNG', qx, qy, qs, qs);
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(4.4);
-    doc.setTextColor(168, 178, 208);
-    doc.setFont('helvetica', 'normal');
-    doc.text('SCAN TO LOG IN', W / 2, y + qs + 6, { align: 'center' });
+    doc.setTextColor(...MUTED);
+    doc.text('SCAN TO LOG IN', qx + qs / 2, qy + qs + 3, { align: 'center' });
   } catch {
-    /* skip QR if generation fails */
+    /* skip QR if it fails */
   }
 
-  // Footer
+  // ---- Footer ----
+  doc.setDrawColor(30, 40, 66);
+  doc.setLineWidth(0.3);
+  doc.line(5, H - 5, W - 5, H - 5);
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(4);
-  doc.setTextColor(110, 122, 145);
-  doc.text('mulesoo.vercel.app', W / 2, H - 3, { align: 'center' });
+  doc.setTextColor(...MUTED);
+  doc.text('Property of MuleSoo Digital Services · mulesoo.vercel.app', 5, H - 2.5);
 
   const filename = `MuleSoo_StaffID_${data.staff_number.replace(/[^A-Za-z0-9]/g, '')}.pdf`;
-  const blob = doc.output('blob');
-  downloadBlob(blob, filename);
+  downloadBlob(doc.output('blob'), filename);
+}
+
+function truncate(s: string, n: number): string {
+  return s.length > n ? s.slice(0, n - 1) + '…' : s;
 }
 
 function downloadBlob(blob: Blob, filename: string) {

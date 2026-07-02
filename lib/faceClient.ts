@@ -23,12 +23,26 @@ export async function loadFaceApi(): Promise<any> {
 }
 
 export async function getFaceDescriptor(video: HTMLVideoElement): Promise<number[] | null> {
+  const data = await getFaceCaptureData(video);
+  return data ? data.descriptor : null;
+}
+
+export interface FaceCaptureData {
+  descriptor: number[];
+  box: { x: number; y: number; width: number; height: number };
+}
+
+/** Returns the face descriptor AND the detected face box (for ID-photo cropping). */
+export async function getFaceCaptureData(video: HTMLVideoElement): Promise<FaceCaptureData | null> {
   const fa = await loadFaceApi();
-  // Lower threshold + larger input = more forgiving detection in real lighting.
   const result = await fa
     .detectSingleFace(video, new fa.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.3 }))
     .withFaceLandmarks()
     .withFaceDescriptor();
   if (!result) return null;
-  return Array.from(result.descriptor as Float32Array);
+  const b = result.detection.box;
+  return {
+    descriptor: Array.from(result.descriptor as Float32Array),
+    box: { x: b.x, y: b.y, width: b.width, height: b.height },
+  };
 }
