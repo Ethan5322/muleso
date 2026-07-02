@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import AdminNotifications from '@/components/admin/AdminNotifications';
+import AdminSearch from '@/components/admin/AdminSearch';
 
 type NavItem = { label: string; href: string; icon: typeof LayoutDashboard; exact?: boolean };
 type NavSection = { title: string; items: NavItem[] };
@@ -190,6 +191,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
 
           <div className="flex items-center gap-2">
+            <AdminSearch />
             <AdminNotifications />
 
             {/* Profile menu */}
