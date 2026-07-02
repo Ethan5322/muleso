@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Loader2, ScanFace, Camera } from 'lucide-react';
-import { loadFaceApi, getFaceDescriptor } from '@/lib/faceClient';
+import { loadFaceApi, getFaceDescriptor, getFaceCaptureData, cropIdPhoto } from '@/lib/faceClient';
 
 interface FaceScannerProps {
   /** single = live login recognition. multi = guided auto-enroll (progress %). */
@@ -12,7 +12,7 @@ interface FaceScannerProps {
   actionLabel?: string;
   busy?: boolean;
   onCapture?: (descriptor: number[]) => Promise<void> | void;
-  onComplete?: (descriptors: number[][]) => Promise<void> | void;
+  onComplete?: (descriptors: number[][], photo?: string | null) => Promise<void> | void;
 }
 
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
@@ -98,7 +98,16 @@ export default function FaceScanner({
         const d = await getFaceDescriptor(videoRef.current!);
         if (d) await onCapture?.(d);
       } else {
-        await onComplete?.(samplesRef.current);
+        // Capture an ID photo (35×45) from the same live scan so enrolling a
+        // face also updates the staff ID picture.
+        let photo: string | null = null;
+        try {
+          const cap = await getFaceCaptureData(videoRef.current!);
+          if (cap) photo = cropIdPhoto(videoRef.current!, cap.box);
+        } catch {
+          /* photo optional */
+        }
+        await onComplete?.(samplesRef.current, photo);
       }
     } finally {
       workingRef.current = false;

@@ -32,6 +32,35 @@ export interface FaceCaptureData {
   box: { x: number; y: number; width: number; height: number };
 }
 
+/** Crop a standard 35×45 (7:9) ID photo from the video, centered on the face box. */
+export function cropIdPhoto(
+  video: HTMLVideoElement,
+  box: { x: number; y: number; width: number; height: number }
+): string {
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+  const ratio = 35 / 45;
+  let photoH = box.height / 0.55; // face box ≈ 55% of photo height
+  let photoW = photoH * ratio;
+  const faceCx = box.x + box.width / 2;
+  let top = box.y - photoH * 0.22; // headroom
+  let left = faceCx - photoW / 2;
+  if (photoW > vw) { photoW = vw; photoH = photoW / ratio; }
+  if (photoH > vh) { photoH = vh; photoW = photoH * ratio; }
+  left = Math.max(0, Math.min(left, vw - photoW));
+  top = Math.max(0, Math.min(top, vh - photoH));
+  const canvas = document.createElement('canvas');
+  canvas.width = 420;
+  canvas.height = 540;
+  const cx = canvas.getContext('2d');
+  if (cx) {
+    cx.fillStyle = '#f2f4f8';
+    cx.fillRect(0, 0, 420, 540);
+    cx.drawImage(video, left, top, photoW, photoH, 0, 0, 420, 540);
+  }
+  return canvas.toDataURL('image/jpeg', 0.9);
+}
+
 /** Returns the face descriptor AND the detected face box (for ID-photo cropping). */
 export async function getFaceCaptureData(video: HTMLVideoElement): Promise<FaceCaptureData | null> {
   const fa = await loadFaceApi();

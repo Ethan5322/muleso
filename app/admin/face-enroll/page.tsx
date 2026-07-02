@@ -17,13 +17,13 @@ export default function FaceEnrollPage() {
   const [enrolledCount, setEnrolledCount] = useState<number | null>(null);
   const [key, setKey] = useState(0); // remount scanner to restart
 
-  const handleComplete = async (descriptors: number[][]) => {
+  const handleComplete = async (descriptors: number[][], photo?: string | null) => {
     setBusy(true);
     try {
       const res = await fetch('/api/admin/face-enroll', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ descriptors }),
+        body: JSON.stringify({ descriptors, photo }),
       });
       const data = await res.json();
       if (data.success) {
