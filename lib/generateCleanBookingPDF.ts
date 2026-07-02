@@ -410,13 +410,75 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
 
     const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
     const filename = `MuleSoo_Booking_Agreement_${(bookingData.fullName || 'Client').replace(/\s+/g, '_')}_${date}.pdf`;
-    doc.save(filename);
+
+    // Robust, cross-device download (jsPDF's doc.save() silently fails on many
+    // mobile / in-app browsers). Returns true only if a save was actually triggered.
+    const blob = doc.output('blob');
+    const ok = downloadBlob(blob, filename);
+    if (!ok) {
+      // last-resort fallback to jsPDF's own saver
+      doc.save(filename);
+    }
     console.log('✅ Corporate booking PDF generated:', filename);
   } catch (error) {
     console.error('❌ PDF generation failed:', error);
     throw error;
   }
 };
+
+/**
+ * Download a Blob reliably across browsers.
+ * - Desktop & Android: anchor with `download` attribute.
+ * - Legacy Edge/IE: msSaveOrOpenBlob.
+ * - iOS Safari (ignores `download`): open the PDF in a new tab so the user can
+ *   save/share it via the system share sheet.
+ * Returns true if a download/open was triggered.
+ */
+function downloadBlob(blob: Blob, filename: string): boolean {
+  try {
+    const nav = window.navigator as Navigator & {
+      msSaveOrOpenBlob?: (b: Blob, name: string) => boolean;
+    };
+    if (typeof nav.msSaveOrOpenBlob === 'function') {
+      nav.msSaveOrOpenBlob(blob, filename);
+      return true;
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const supportsDownload = 'download' in a;
+    const ua = navigator.userAgent || '';
+    const isIOS =
+      /iP(hone|ad|od)/.test(ua) ||
+      (navigator.platform === 'MacIntel' && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints! > 1);
+
+    if (!supportsDownload || isIOS) {
+      // iOS ignores the download attribute — open the file so it can be saved.
+      const win = window.open(url, '_blank');
+      if (!win) {
+        // popup blocked — navigate the current tab to the PDF as a last resort
+        window.location.href = url;
+      }
+      setTimeout(() => URL.revokeObjectURL(url), 15000);
+      return true;
+    }
+
+    a.href = url;
+    a.download = filename;
+    a.rel = 'noopener';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 4000);
+    return true;
+  } catch (err) {
+    console.error('downloadBlob failed:', err);
+    return false;
+  }
+}
 
 function generateVerificationCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
