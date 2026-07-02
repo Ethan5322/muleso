@@ -295,7 +295,7 @@ export function getDetail(name: string): AutomationDetail {
 
   if (has('reminder')) {
     return {
-      problem: 'The business loses money to no-shows and forgotten appointments, and staff waste time chasing people manually.',
+      problem: 'No-shows and forgotten appointments quietly drain revenue when reminders don’t go out reliably and on time.',
       howItWorks: 'The AI sends timed WhatsApp, SMS and email reminders before each appointment, and lets customers confirm or reschedule in one tap.',
       features: ['Automated multi-channel reminders', 'One-tap confirm or reschedule', 'Smart timing rules', 'No-show tracking'],
       adminControl: 'Control reminder timing, message templates, and follow-up rules.',
@@ -335,7 +335,7 @@ export function getDetail(name: string): AutomationDetail {
   }
   if (has('intake', 'document', 'triage', 'checklist', 'qualification', 'lead')) {
     return {
-      problem: 'Manual intake and lead handling is slow, inconsistent, and lets good enquiries slip through.',
+      problem: 'Slow, inconsistent intake lets good enquiries slip through and piles admin onto your team.',
       howItWorks: 'An AI conversation captures and validates all the details, screens/qualifies, and organises everything for your team.',
       features: ['Guided AI intake & screening', 'Validated, structured data', 'Instant routing to the right person', 'CRM-ready records'],
       adminControl: 'Control forms, questions, routing rules, and approval steps.',
@@ -385,7 +385,7 @@ export function getDetail(name: string): AutomationDetail {
   }
   // Default: booking / scheduler / registration / system
   return {
-    problem: 'Doing this manually is slow and error-prone — and every missed message is a lost customer.',
+    problem: 'Every missed message or slow reply is a lost customer — especially after hours and on weekends.',
     howItWorks: 'Customers scan a QR or click a link, chat with a friendly AI that collects their details, checks availability, and confirms — automatically, 24/7.',
     features: ['Conversational AI booking', 'Works 24/7 on web & WhatsApp', 'Instant confirmation & records', 'Optional online deposit/payment'],
     adminControl: 'Control services, pricing, hours, availability, and booking rules.',
@@ -409,7 +409,7 @@ export interface DeptMeta {
   icon: string;      // icon key mapped to a Lucide icon in the UI
   color: string;     // accent hex for this department
   glow: string;      // soft rgba glow for tiles
-  usesToday: string; // names the real, latest systems the industry runs on
+  usesToday: string; // generic description of the latest systems in the industry
   rows: CompareRow[];
   pitch: string;     // closing seller line
 }
@@ -421,127 +421,127 @@ export const DEPARTMENT_META: Record<string, DeptMeta> = {
     icon: 'hotel',
     color: '#00C8FF',
     glow: 'rgba(0,200,255,0.14)',
-    usesToday: 'Booking.com, Airbnb and PMS suites like Cloudbeds, eZee or NightsBridge with channel managers.',
+    usesToday: 'even the latest booking platforms and property-management software',
     rows: [
-      { dim: 'Who owns the guest', theirs: 'The platform owns the guest and hides their real contact details from you.', ours: 'You own every guest contact and can re-market to them for free, forever.' },
-      { dim: 'What it costs you', theirs: '15–20% commission skimmed off every single booking.', ours: 'Direct, commission-free bookings on your own website and WhatsApp.' },
-      { dim: 'After-hours enquiries', theirs: 'Static listings — room, price and availability questions wait for staff.', ours: 'AI answers instantly and closes the booking 24/7, even at 2am.' },
-      { dim: 'Fit to your property', theirs: 'Rigid, one-size-fits-all templates and rules.', ours: 'Built around your exact room types, seasons, deposits and upsells.' },
+      { dim: 'Who owns the guest', theirs: 'Your guests and their details live on someone else’s platform.', ours: 'You own every guest contact and can re-market to them for free, forever.' },
+      { dim: 'What it costs you', theirs: 'A commission is taken off every booking.', ours: 'Direct, commission-free bookings on your own site and WhatsApp.' },
+      { dim: 'After-hours enquiries', theirs: 'Room, price and availability questions wait until you’re open.', ours: 'Answers instantly and closes the booking 24/7, even at 2am.' },
+      { dim: 'Fit to your property', theirs: 'One-size-fits-all — you adapt to it.', ours: 'Built around your exact room types, seasons, deposits and upsells.' },
       { dim: 'Channel & language', theirs: 'App-first and English-first.', ours: 'Books right inside WhatsApp, in your guests’ own language.' },
     ],
-    pitch: 'Every portal booking costs you a fifth of the revenue AND the guest relationship. A handful of direct bookings and your MuleSoo system has already paid for itself.',
+    pitch: 'A booking system that never sleeps and keeps 100% of the revenue means more direct bookings, more repeat guests, and a system that pays for itself fast.',
   },
   'Healthcare & Wellness': {
     icon: 'medical',
     color: '#00FF88',
     glow: 'rgba(0,255,136,0.12)',
-    usesToday: 'practice-management systems like GoodX or Healthbridge, plus basic web booking widgets.',
+    usesToday: 'even the most modern practice-management software',
     rows: [
       { dim: 'What it’s built for', theirs: 'Billing, claims and records — not talking to patients.', ours: 'Built to converse with patients, screen them and book them.' },
-      { dim: 'After-hours', theirs: 'Patients still phone during hours and sit on hold.', ours: 'Books, screens and answers FAQs 24/7 on WhatsApp.' },
-      { dim: 'No-shows', theirs: 'Manual or basic reminders — high no-show rate.', ours: 'Smart, timed reminders and easy rescheduling that cut no-shows.' },
-      { dim: 'Intake', theirs: 'Paperwork completed on arrival, slowing everyone down.', ours: 'Collects and checks intake details before the visit.' },
-      { dim: 'Cost & fit', theirs: 'Per-seat licences with generic, rigid flows.', ours: 'One POPIA-compliant system tailored to your practice.' },
+      { dim: 'After-hours', theirs: 'Patients still wait until office hours to reach you.', ours: 'Books, screens and answers questions 24/7 on WhatsApp.' },
+      { dim: 'No-shows', theirs: 'Reminders are limited, so no-shows stay high.', ours: 'Smart, timed reminders and easy rescheduling that cut no-shows.' },
+      { dim: 'Intake', theirs: 'Forms are completed on arrival, slowing everyone down.', ours: 'Collects and checks intake details before the visit.' },
+      { dim: 'Cost & fit', theirs: 'Generic, rigid flows you have to work around.', ours: 'One POPIA-compliant system tailored to your practice.' },
     ],
-    pitch: 'Your practice software keeps the admin running. Ours keeps the diary full and the waiting room calm.',
+    pitch: 'A fuller diary, far fewer no-shows and a calmer front desk — your practice earns more from the same hours.',
   },
   'Beauty, Fitness & Lifestyle': {
     icon: 'beauty',
     color: '#7B2FFF',
     glow: 'rgba(123,47,255,0.14)',
-    usesToday: 'marketplace apps like Fresha and Booksy, and gym software like Glofox or GymMaster.',
+    usesToday: 'even the latest salon and gym booking apps',
     rows: [
-      { dim: 'Who owns your clients', theirs: 'The marketplace owns your client list — you’re renting your own customers.', ours: 'You own every client outright; no one else can see or contact them.' },
-      { dim: 'Competition', theirs: 'Lists rivals next to you and markets competitors to your clients.', ours: 'Yours alone — zero competitor ads, zero client poaching.' },
-      { dim: 'No-shows & retention', theirs: 'Basic reminders only.', ours: 'Auto-rebooks no-shows and runs loyalty, upsells and renewals.' },
-      { dim: 'Fees', theirs: 'Monthly fees plus commission on new clients.', ours: 'One system you own — no per-client cut, ever.' },
-      { dim: 'Booking channel', theirs: 'Requires an app download.', ours: 'Books instantly on WhatsApp — no app, no friction.' },
+      { dim: 'Who owns your clients', theirs: 'Your client list lives on someone else’s platform.', ours: 'You own every client outright; no one else can see or contact them.' },
+      { dim: 'Competition', theirs: 'Your clients are shown other businesses like yours.', ours: 'Yours alone — zero competitor ads, zero client poaching.' },
+      { dim: 'Retention', theirs: 'Little more than a basic reminder.', ours: 'Auto-rebooks no-shows and runs loyalty, upsells and renewals.' },
+      { dim: 'Fees', theirs: 'Ongoing fees plus a cut of new clients.', ours: 'One system you own — no per-client cut, ever.' },
+      { dim: 'Booking channel', theirs: 'Needs an app download to book.', ours: 'Books instantly on WhatsApp — no app, no friction.' },
     ],
-    pitch: 'Marketplaces rent you your own customers and sell them your competitors. Ours makes those customers yours for good.',
+    pitch: 'More re-bookings, more loyalty spend and a client list that’s finally yours — that’s a fuller chair and a bigger monthly take.',
   },
   'Food, Restaurants & Catering': {
     icon: 'food',
     color: '#E8B84B',
     glow: 'rgba(232,184,75,0.14)',
-    usesToday: 'OpenTable/Dineplan, tablet POS systems and delivery apps like Uber Eats or Mr D.',
+    usesToday: 'even modern reservation and ordering systems',
     rows: [
-      { dim: 'What it costs you', theirs: 'Per-cover fees plus 20–30% commission on delivery.', ours: 'Direct reservations, orders and catering quotes — commission-free.' },
-      { dim: 'Who owns the diner', theirs: 'The app owns the diner and their data.', ours: 'You keep every customer contact for repeat business.' },
-      { dim: 'After-hours', theirs: 'A missed call is a missed table.', ours: 'Takes bookings, takeaway orders and quotes 24/7.' },
+      { dim: 'What it costs you', theirs: 'Fees and commission on covers and delivery.', ours: 'Direct reservations, orders and catering quotes — commission-free.' },
+      { dim: 'Who owns the diner', theirs: 'The platform keeps the diner and their data.', ours: 'You keep every customer contact for repeat business.' },
+      { dim: 'After-hours', theirs: 'An unanswered message is a missed table.', ours: 'Takes bookings, takeaway orders and quotes 24/7.' },
       { dim: 'Reputation', theirs: 'Unhappy diners go straight to public reviews.', ours: 'Recovers unhappy diners privately before they post.' },
       { dim: 'Fit', theirs: 'Generic menu templates.', ours: 'Knows your menu, specials and catering packages.' },
     ],
-    pitch: 'Delivery apps and reservation portals skim your margin on every plate. Ours protects the margin and the relationship.',
+    pitch: 'More covers, more direct orders and protected margins on every plate — plus a customer list you can bring back again and again.',
   },
   'Real Estate & Property': {
     icon: 'property',
     color: '#22D3EE',
     glow: 'rgba(34,211,238,0.13)',
-    usesToday: 'portals like Property24 and Private Property, plus agency CRMs.',
+    usesToday: 'even the latest property portals and agency software',
     rows: [
-      { dim: 'Lead quality', theirs: 'Cold leads shared with 3–5 rival agents at once.', ours: 'Exclusive leads, captured and qualified the instant they enquire.' },
-      { dim: 'Response speed', theirs: 'You call back hours later — if at all.', ours: 'AI engages in seconds, 24/7, while the lead is still hot.' },
-      { dim: 'Cost', theirs: 'You pay per listing and still chase the leads yourself.', ours: 'You own the system and it works every lead for you.' },
-      { dim: 'Qualification', theirs: 'You sift tyre-kickers from buyers by hand.', ours: 'Separates serious buyers from browsers automatically.' },
-      { dim: 'Follow-up', theirs: 'Leads go cold in a spreadsheet.', ours: 'Follows up relentlessly until they book a viewing.' },
+      { dim: 'Lead quality', theirs: 'Leads arrive late and shared with rival agents.', ours: 'Exclusive leads, captured and qualified the instant they enquire.' },
+      { dim: 'Response speed', theirs: 'The lead is contacted hours later — if at all.', ours: 'Engages in seconds, 24/7, while the lead is still hot.' },
+      { dim: 'Cost', theirs: 'You pay per listing and still chase every lead.', ours: 'You own the system and it works every lead for you.' },
+      { dim: 'Qualification', theirs: 'Browsers and serious buyers arrive mixed together.', ours: 'Separates serious buyers from browsers automatically.' },
+      { dim: 'Follow-up', theirs: 'Leads go cold before anyone follows up.', ours: 'Follows up relentlessly until they book a viewing.' },
     ],
-    pitch: 'In property, the first agent to respond wins the deal. Ours responds in seconds — day, night and weekends.',
+    pitch: 'The first agent to respond wins the deal. Responding in seconds — day, night and weekends — means more viewings and more closings.',
   },
   'Legal, Finance & Professional Services': {
     icon: 'legal',
     color: '#8B93FF',
     glow: 'rgba(139,147,255,0.13)',
-    usesToday: 'practice suites like Clio, LEAP or AJS, plus static website contact forms.',
+    usesToday: 'even the most modern practice-management software',
     rows: [
-      { dim: 'First contact', theirs: 'A receptionist or a form — after-hours leads are simply lost.', ours: 'A professional AI intake conversation, 24/7.' },
-      { dim: 'Qualification', theirs: 'Staff screen every enquiry manually.', ours: 'Screens and qualifies cases and flags conflicts up front.' },
+      { dim: 'First contact', theirs: 'After-hours enquiries are simply lost.', ours: 'A professional AI intake conversation, 24/7.' },
+      { dim: 'Qualification', theirs: 'Every enquiry has to be screened before it moves.', ours: 'Screens and qualifies cases and flags conflicts up front.' },
       { dim: 'Documents', theirs: 'Chased back and forth over email.', ours: 'Requests, collects and tracks documents automatically.' },
-      { dim: 'Integration', theirs: 'Great at matters and billing, weak at winning new clients.', ours: 'Feeds clean, structured records into your existing suite.' },
+      { dim: 'Winning clients', theirs: 'Strong on matters and billing, weak at converting enquiries.', ours: 'Feeds clean, structured records into your existing setup.' },
       { dim: 'Confidentiality', theirs: 'Generic third-party tools.', ours: 'On your own domain, confidential and POPIA-compliant.' },
     ],
-    pitch: 'Your practice software manages the clients you’ve already won. Ours wins the ones who message after 5pm.',
+    pitch: 'More qualified consultations booked — including the enquiries that arrive after 5pm — means a fuller calendar and more billable work.',
   },
   'Education & Training': {
     icon: 'education',
     color: '#38BDF8',
     glow: 'rgba(56,189,248,0.13)',
-    usesToday: 'school admin systems and LMS platforms like Moodle or Google Classroom.',
+    usesToday: 'even the latest school and learning-management systems',
     rows: [
-      { dim: 'What it’s for', theirs: 'Managing students you already have — not converting enquiries.', ours: 'Turns enquiring parents and students into enrolments.' },
+      { dim: 'What it’s for', theirs: 'Managing enrolled students — not converting enquiries.', ours: 'Turns enquiring parents and students into enrolments.' },
       { dim: 'After-hours', theirs: 'Admissions enquiries hit voicemail.', ours: 'Answers admissions questions and books tours 24/7.' },
-      { dim: 'Registration', theirs: 'Manual forms and follow-up.', ours: 'Automates registration, reminders and attendance.' },
+      { dim: 'Registration', theirs: 'Sign-up and follow-up are slow and scattered.', ours: 'Automates registration, reminders and attendance.' },
       { dim: 'Language', theirs: 'English-first portals.', ours: 'Talks to parents in their language on WhatsApp.' },
       { dim: 'Fit', theirs: 'Rigid, generic modules.', ours: 'Tailored to your programmes and intake process.' },
     ],
-    pitch: 'Your LMS teaches the students you have. Ours fills the empty seats you’re quietly losing to slow replies.',
+    pitch: 'Every enquiry answered instantly means more tours booked and more enrolments — the seats you were quietly losing to slow replies.',
   },
   'Home Services, Repairs & Local Businesses': {
     icon: 'home',
     color: '#FB923C',
     glow: 'rgba(251,146,60,0.13)',
-    usesToday: 'field-service apps like Jobber or ServiceM8 and missed-call text-back tools.',
+    usesToday: 'even modern job-scheduling software',
     rows: [
-      { dim: 'New enquiries', theirs: 'Schedules the jobs you’ve already won.', ours: 'Wins the job — captures, quotes and books new enquiries.' },
+      { dim: 'New enquiries', theirs: 'Handles the jobs you’ve already won.', ours: 'Wins the job — captures, quotes and books new enquiries.' },
       { dim: 'After-hours', theirs: 'The 8pm emergency goes unanswered.', ours: 'Answers, quotes and books instantly, any hour.' },
-      { dim: 'Quoting', theirs: 'A callback is needed before you can quote.', ours: 'Collects the details and sends an estimate on the spot.' },
+      { dim: 'Quoting', theirs: 'A callback is needed before a quote goes out.', ours: 'Collects the details and sends an estimate on the spot.' },
       { dim: 'Speed', theirs: 'First to answer wins — and it usually isn’t you.', ours: 'Responds in seconds so you win the job.' },
       { dim: 'Fit', theirs: 'Generic job templates.', ours: 'Built around your services, areas and pricing.' },
     ],
-    pitch: 'Customers dial the next number the moment you don’t pick up. Ours picks up every single time.',
+    pitch: 'Answering every enquiry the instant it arrives means you win the jobs your competitors miss — more booked work, less downtime.',
   },
   'Logistics, Sales & Operations': {
     icon: 'logistics',
     color: '#2DD4BF',
     glow: 'rgba(45,212,191,0.13)',
-    usesToday: 'TMS/ERP platforms and CRMs like Salesforce or Zoho.',
+    usesToday: 'even the latest ERP and CRM platforms',
     rows: [
       { dim: 'Response speed', theirs: 'Quotes, status updates and tickets wait for a person.', ours: 'Instant quotes, live status and ticket triage, 24/7.' },
-      { dim: 'Staffing', theirs: 'Needs trained staff to operate and answer.', ours: 'AI handles routine requests with no extra headcount.' },
+      { dim: 'Staffing', theirs: 'Needs trained staff to operate and answer.', ours: 'Handles routine requests with no extra headcount.' },
       { dim: 'Cost', theirs: 'Heavy per-seat licences.', ours: 'One system you own outright.' },
       { dim: 'Fit', theirs: 'Powerful but rigid and slow to adapt.', ours: 'Shaped precisely to your workflow.' },
       { dim: 'Customer experience', theirs: 'Answers “next business day”.', ours: 'Customers get answers right now.' },
     ],
-    pitch: 'Your ERP runs operations. Ours makes sure no quote, order or ticket ever sits waiting for a reply.',
+    pitch: 'Instant quotes, status and support around the clock means happier customers, faster deals and no request left waiting for a reply.',
   },
 };
 
@@ -577,4 +577,30 @@ export function iconKeyFor(name: string): string {
   if (has('support', 'chatbot', 'faq', 'complaint', 'ticket', 'concierge', 'crm')) return 'support';
   if (has('order', 'sales')) return 'order';
   return 'booking';
+}
+
+/** Emoji that clearly represents each system on cards/banners. */
+const EMOJI_BY_KEY: Record<string, string> = {
+  beauty: '💇',
+  fitness: '💪',
+  food: '🍽️',
+  hotel: '🏨',
+  property: '🏠',
+  legal: '⚖️',
+  finance: '💰',
+  education: '🎓',
+  medical: '🩺',
+  home: '🔧',
+  logistics: '🚚',
+  bell: '⏰',
+  payment: '💳',
+  quote: '🧾',
+  lead: '🎯',
+  support: '💬',
+  order: '🛒',
+  booking: '📅',
+};
+
+export function emojiFor(name: string): string {
+  return EMOJI_BY_KEY[iconKeyFor(name)] ?? '📅';
 }

@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Search, ArrowRight, Sparkles, Bot, Zap, ShieldCheck, Clock, TrendingUp } from 'lucide-react';
-import { AUTOMATIONS, CATEGORIES, getDeptMeta, iconKeyFor } from '@/lib/aiAutomations';
+import { AUTOMATIONS, CATEGORIES, getDeptMeta, emojiFor } from '@/lib/aiAutomations';
 import AutomationIcon from '@/components/AutomationIcon';
 
 export default function AiAutomationLibrary() {
@@ -156,7 +156,7 @@ export default function AiAutomationLibrary() {
                   <div className="min-w-0">
                     <h2 className="text-lg sm:text-xl font-bold font-sora text-[var(--text-primary)] leading-tight">{dept}</h2>
                     <p className="text-xs text-[var(--text-secondary)] truncate">
-                      Beats today’s tools: {meta.usesToday}
+                      Beats {meta.usesToday}
                     </p>
                   </div>
                   <span
@@ -188,10 +188,10 @@ export default function AiAutomationLibrary() {
                         />
                         <div className="flex items-center justify-between mb-3">
                           <span
-                            className="w-11 h-11 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform"
-                            style={{ backgroundColor: meta.glow, color: meta.color }}
+                            className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl leading-none group-hover:scale-110 transition-transform border"
+                            style={{ backgroundColor: meta.glow, borderColor: `${meta.color}55` }}
                           >
-                            <AutomationIcon iconKey={iconKeyFor(a.name)} size={20} />
+                            <span role="img" aria-label={dept}>{emojiFor(a.name)}</span>
                           </span>
                           <span className="text-[11px] font-mono text-[var(--text-secondary)]">
                             #{String(a.id).padStart(3, '0')}

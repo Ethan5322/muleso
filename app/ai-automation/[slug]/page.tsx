@@ -215,7 +215,7 @@ export default function AutomationDetailPage() {
                   Already using the latest software? Here’s why ours still wins.
                 </h2>
                 <p className="text-sm text-[var(--text-secondary)] mt-1">
-                  Most {automation.category.toLowerCase()} businesses run on {meta.usesToday}
+                  Compared with {meta.usesToday}, here’s how a MuleSoo AI system boosts your business:
                 </p>
               </div>
             </div>
