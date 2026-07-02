@@ -1,14 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { Camera, Loader2, ScanFace, Check } from 'lucide-react';
+import { Loader2, ScanFace, Camera } from 'lucide-react';
 import { loadFaceApi, getFaceDescriptor } from '@/lib/faceClient';
 
 interface FaceScannerProps {
-  /** Login = one capture. Enroll = several guided captures. */
+  /** single = live login recognition. multi = guided auto-enroll (progress %). */
   mode?: 'single' | 'multi';
-  /** Prompts shown per step in multi mode. */
+  /** Rotating angle prompts for enroll mode. */
   steps?: string[];
   actionLabel?: string;
   busy?: boolean;
@@ -16,67 +15,54 @@ interface FaceScannerProps {
   onComplete?: (descriptors: number[][]) => Promise<void> | void;
 }
 
-type Quality = 'none' | 'far' | 'offcenter' | 'good';
-
-const QUALITY_MESSAGE: Record<Quality, string> = {
-  none: 'No face detected — look straight at the camera in good light.',
-  far: 'Move a little closer to the camera.',
-  offcenter: 'Center your face in the oval.',
-  good: 'Perfect — hold still, recognising…',
-};
+const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
 
 export default function FaceScanner({
   mode = 'single',
-  steps = [],
-  actionLabel = 'Scan My Face',
+  steps = ['Look straight ahead', 'Turn your head slightly LEFT', 'Turn your head slightly RIGHT', 'Tilt your head slightly UP'],
   busy = false,
   onCapture,
   onComplete,
 }: FaceScannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const capturingRef = useRef(false);
+  const workingRef = useRef(false);
   const cooldownRef = useRef(0);
+  const samplesRef = useRef<number[][]>([]);
   const busyRef = useRef(busy);
   busyRef.current = busy;
-  const captureRef = useRef<() => void>(() => {});
 
-  const [status, setStatus] = useState('Loading face models…');
+  const TARGET = mode === 'multi' ? Math.max(5, steps.length) : 1;
+
   const [ready, setReady] = useState(false);
-  const [working, setWorking] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [quality, setQuality] = useState<Quality>('none');
-  const [stepIndex, setStepIndex] = useState(0);
-  const [captured, setCaptured] = useState<number[][]>([]);
+  const [pct, setPct] = useState(0); // live face-quality %
+  const [guide, setGuide] = useState('Loading camera…');
+  const [progress, setProgress] = useState(0); // enrolment progress %
+  const [done, setDone] = useState(false);
 
-  // Start camera + load models
+  // Start camera + models
   useEffect(() => {
     let cancelled = false;
-    const start = async () => {
+    (async () => {
       try {
         if (!window.isSecureContext) {
-          setError('Camera needs a secure (HTTPS) connection. Open the site via its https:// address.');
+          setError('Camera needs a secure (HTTPS) connection.');
           return;
         }
         if (!navigator.mediaDevices?.getUserMedia) {
           setError('This browser cannot access the camera. Try Chrome, Edge, or Safari.');
           return;
         }
-
         let stream: MediaStream;
         try {
           stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
             audio: false,
           });
-        } catch (constraintErr: any) {
-          if (constraintErr?.name === 'OverconstrainedError') {
-            stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-          } else {
-            throw constraintErr;
-          }
+        } catch {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         }
-
         if (cancelled) {
           stream.getTracks().forEach((t) => t.stop());
           return;
@@ -86,201 +72,161 @@ export default function FaceScanner({
           videoRef.current.srcObject = stream;
           await videoRef.current.play().catch(() => {});
         }
-        setStatus('Loading face models…');
         await loadFaceApi();
         if (cancelled) return;
         setReady(true);
-      } catch (err: any) {
-        console.error('Camera/model error:', err);
-        const name = err?.name || '';
-        if (name === 'NotAllowedError' || name === 'SecurityError') {
-          setError(
-            'Camera is blocked. Tap the 🔒 lock icon in the address bar → Site settings → Camera → Allow, then reload. (If you just deployed, hard-refresh first.)'
-          );
-        } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
-          setError('No camera was found on this device.');
-        } else if (name === 'NotReadableError') {
-          setError('The camera is being used by another app. Close it and reload.');
-        } else {
-          setError(`Could not start the camera (${name || 'unknown'}). ${err?.message || ''}`.trim());
-        }
+        setGuide('Center your face in the circle');
+      } catch (err: unknown) {
+        const name = (err as { name?: string })?.name || '';
+        if (name === 'NotAllowedError' || name === 'SecurityError')
+          setError('Camera is blocked. Allow camera access for this site, then reload.');
+        else if (name === 'NotFoundError') setError('No camera found on this device.');
+        else if (name === 'NotReadableError') setError('The camera is in use by another app.');
+        else setError('Could not start the camera. Reload and allow camera access.');
       }
-    };
-    start();
+    })();
     return () => {
       cancelled = true;
       streamRef.current?.getTracks().forEach((t) => t.stop());
     };
   }, []);
 
-  // Live quality feedback loop
+  const finish = useCallback(async () => {
+    workingRef.current = true;
+    try {
+      if (mode === 'single') {
+        const d = await getFaceDescriptor(videoRef.current!);
+        if (d) await onCapture?.(d);
+      } else {
+        await onComplete?.(samplesRef.current);
+      }
+    } finally {
+      workingRef.current = false;
+    }
+  }, [mode, onCapture, onComplete]);
+
+  // Live quality + guidance + auto capture/collect loop
   useEffect(() => {
     if (!ready) return;
     let active = true;
 
     const tick = async () => {
-      if (!active || capturingRef.current || !videoRef.current) return;
+      if (!active || workingRef.current || busyRef.current || done || !videoRef.current) return;
       try {
-        const api: any = await loadFaceApi();
+        const api = await loadFaceApi();
         const v = videoRef.current;
         if (!v || v.videoWidth === 0) return;
-        const det = await api.detectSingleFace(
-          v,
-          new api.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 })
-        );
+        const det = await api.detectSingleFace(v, new api.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
         if (!active) return;
-        let q: Quality = 'none';
-        if (det) {
-          const areaRatio = (det.box.width * det.box.height) / (v.videoWidth * v.videoHeight);
-          const cx = (det.box.x + det.box.width / 2) / v.videoWidth;
-          const cy = (det.box.y + det.box.height / 2) / v.videoHeight;
-          if (areaRatio < 0.06) q = 'far';
-          else if (cx < 0.3 || cx > 0.7 || cy < 0.25 || cy > 0.8) q = 'offcenter';
-          else q = 'good';
-        }
-        setQuality(q);
 
-        // Live recognition: auto-capture when the face is well-positioned
-        if (
-          q === 'good' &&
-          !capturingRef.current &&
-          !busyRef.current &&
-          Date.now() > cooldownRef.current
-        ) {
-          captureRef.current();
+        if (!det) {
+          setPct(0);
+          setGuide('No face detected — center it in the circle');
+          return;
+        }
+        const areaRatio = (det.box.width * det.box.height) / (v.videoWidth * v.videoHeight);
+        const cx = (det.box.x + det.box.width / 2) / v.videoWidth;
+        const cy = (det.box.y + det.box.height / 2) / v.videoHeight;
+
+        const sizeScore = clamp(areaRatio / 0.16, 0, 1);
+        const centerScore = clamp(1 - (Math.abs(cx - 0.5) + Math.abs(cy - 0.5)) * 1.6, 0, 1);
+        const quality = Math.round(clamp(det.score * 40 + sizeScore * 30 + centerScore * 30, 0, 100));
+        setPct(quality);
+
+        let g = 'Perfect — hold still';
+        if (areaRatio < 0.06) g = 'Move a little closer';
+        else if (areaRatio > 0.42) g = 'Move back slightly';
+        else if (cy < 0.3) g = 'Lower your chin slightly';
+        else if (cy > 0.78) g = 'Raise your chin slightly';
+        else if (cx < 0.36) g = 'Move slightly to center';
+        else if (cx > 0.64) g = 'Move slightly to center';
+
+        const good = quality >= 68;
+        if (good && mode === 'multi') {
+          g = steps[Math.min(samplesRef.current.length, steps.length - 1)];
+        }
+        setGuide(good ? (mode === 'multi' ? `${g} — scanning…` : 'Recognising…') : g);
+
+        if (good && Date.now() > cooldownRef.current) {
+          cooldownRef.current = Date.now() + 700;
+          if (mode === 'single') {
+            setDone(true);
+            await finish();
+          } else {
+            const d = await getFaceDescriptor(v);
+            if (d) {
+              samplesRef.current = [...samplesRef.current, d];
+              const p = Math.round((samplesRef.current.length / TARGET) * 100);
+              setProgress(p);
+              if (samplesRef.current.length >= TARGET) {
+                setDone(true);
+                await finish();
+              }
+            }
+          }
         }
       } catch {
         /* ignore frame errors */
       }
     };
 
-    const id = setInterval(tick, 600);
+    const id = setInterval(tick, 500);
     return () => {
       active = false;
       clearInterval(id);
     };
-  }, [ready]);
+  }, [ready, mode, steps, TARGET, done, finish]);
 
-  const liveMessage = ready ? QUALITY_MESSAGE[quality] : status;
-
-  const handleCapture = useCallback(async () => {
-    if (!videoRef.current || !ready || working || busy || capturingRef.current) return;
-    capturingRef.current = true;
-    setWorking(true);
-    setError(null);
-    try {
-      const descriptor = await getFaceDescriptor(videoRef.current);
-      if (!descriptor) {
-        setError('No face detected. Center your face in the oval, get closer, and make sure the area is well-lit — then try again.');
-        return;
-      }
-
-      if (mode === 'single') {
-        await onCapture?.(descriptor);
-        return;
-      }
-
-      // multi: collect this step, advance or finish
-      const next = [...captured, descriptor];
-      setCaptured(next);
-      if (next.length >= (steps.length || 1)) {
-        await onComplete?.(next);
-      } else {
-        setStepIndex((i) => i + 1);
-      }
-    } catch (err) {
-      console.error('Capture error:', err);
-      setError('Capture failed. Please try again.');
-    } finally {
-      capturingRef.current = false;
-      setWorking(false);
-      // brief pause before the next auto-capture (so you can change angle)
-      cooldownRef.current = Date.now() + 1600;
-    }
-  }, [ready, working, busy, mode, captured, steps.length, onCapture, onComplete]);
-
-  // Keep the auto-capture loop pointed at the latest capture handler
-  captureRef.current = handleCapture;
-
-  const ringColor =
-    quality === 'good' ? 'border-[#00FF88]' : quality === 'none' ? 'border-red-400/60' : 'border-[#E8B84B]';
+  const ring = pct >= 68 ? 'border-[#00FF88]' : pct >= 35 ? 'border-[#E8B84B]' : 'border-red-400/60';
 
   return (
     <div className="space-y-4">
-      {/* Multi-step prompt */}
-      {mode === 'multi' && steps.length > 0 && (
-        <div className="text-center">
-          <p className="text-[#00C8FF] font-semibold">{steps[stepIndex]}</p>
-          <div className="flex justify-center gap-1.5 mt-2">
-            {steps.map((_, i) => (
-              <span
-                key={i}
-                className={`w-2.5 h-2.5 rounded-full ${
-                  i < captured.length ? 'bg-[#00FF88]' : i === stepIndex ? 'bg-[#00C8FF]' : 'bg-[#1E3A5F]'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
       <div className="relative mx-auto w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden border border-[#1E3A5F] bg-black">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover"
-          style={{ transform: 'scaleX(-1)' }}
-        />
+        <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className={`w-40 h-52 rounded-[50%] border-2 transition-colors ${ringColor}`} />
+          <div className={`w-40 h-52 rounded-[50%] border-2 transition-colors ${ring}`} />
         </div>
-        {(!ready || working || busy) && (
+        {/* live quality % */}
+        {ready && !error && (
+          <div className="absolute top-2 left-2 bg-black/55 rounded-lg px-2.5 py-1 text-xs font-bold">
+            <span className={pct >= 68 ? 'text-[#00FF88]' : 'text-[#E8B84B]'}>{pct}%</span>
+            <span className="text-[#7A8BA8] font-normal"> quality</span>
+          </div>
+        )}
+        {(!ready || busy || done) && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <Loader2 className="animate-spin text-[#00C8FF]" size={32} />
           </div>
         )}
       </div>
 
-      <p
-        className={`text-center text-sm ${
-          quality === 'good' && ready ? 'text-[#00FF88]' : 'text-[#7A8BA8]'
-        }`}
-      >
-        {liveMessage}
-      </p>
-      {error && (
-        <p className="text-center text-sm text-red-400 bg-red-500/10 border border-red-500/40 rounded-lg px-3 py-2">
-          {error}
-        </p>
+      {/* Enrolment progress */}
+      {mode === 'multi' && (
+        <div>
+          <div className="flex justify-between text-xs mb-1">
+            <span className="text-[#7A8BA8]">Enrolling biometric</span>
+            <span className="text-[#00C8FF] font-bold">{progress}%</span>
+          </div>
+          <div className="h-2 rounded-full bg-[#1A2332] overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] transition-all" style={{ width: `${progress}%` }} />
+          </div>
+        </div>
       )}
 
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        type="button"
-        onClick={handleCapture}
-        disabled={!ready || working || busy}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold rounded-xl transition-all disabled:opacity-50"
-      >
-        {working || busy ? (
-          <Loader2 className="animate-spin" size={18} />
-        ) : mode === 'multi' ? (
-          <Check size={18} />
-        ) : (
-          <ScanFace size={18} />
-        )}
-        {working || busy
-          ? 'Working…'
-          : mode === 'multi'
-            ? `Capture ${captured.length + 1} / ${steps.length || 1}`
-            : actionLabel}
-      </motion.button>
-
-      <p className="text-center text-xs text-[#7A8BA8] flex items-center justify-center gap-1">
-        <Camera size={12} /> Your camera feed stays on your device — only a numeric face signature is sent.
+      <p className={`text-center text-sm font-semibold ${pct >= 68 && ready ? 'text-[#00FF88]' : 'text-[#7A8BA8]'}`}>
+        {ready ? guide : 'Loading camera…'}
       </p>
+
+      {error && (
+        <p className="text-center text-sm text-red-400 bg-red-500/10 border border-red-500/40 rounded-lg px-3 py-2">{error}</p>
+      )}
+
+      <div className="flex items-center justify-center gap-2 text-xs text-[#7A8BA8]">
+        {mode === 'single' ? <ScanFace size={14} className="text-[#00C8FF]" /> : <Camera size={14} className="text-[#00C8FF]" />}
+        {mode === 'single'
+          ? 'Look at the camera — recognition is automatic. No photo is taken; only a numeric face signature is used.'
+          : 'Move slowly through the prompts — samples are captured automatically as a numeric signature (no photo stored).'}
+      </div>
     </div>
   );
 }

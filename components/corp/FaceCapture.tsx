@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { loadFaceApi, getFaceCaptureData } from '@/lib/faceClient';
 import { Camera, Loader2, CheckCircle2, VideoOff } from 'lucide-react';
 
+const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
+
 export interface FaceCaptureResult {
   photo: string | null; // ID-standard (35x45) data URL in register mode
   descriptor: number[];
@@ -24,6 +26,8 @@ export default function FaceCapture({
   const [busy, setBusy] = useState(false);
   const [denied, setDenied] = useState(false);
   const [status, setStatus] = useState('Starting camera…');
+  const [pct, setPct] = useState(0);
+  const [guide, setGuide] = useState('');
 
   const startCamera = async () => {
     setDenied(false);
@@ -56,6 +60,47 @@ export default function FaceCapture({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Live quality % + directional guidance
+  useEffect(() => {
+    if (!ready) return;
+    let active = true;
+    const tick = async () => {
+      if (!active || busy || !videoRef.current) return;
+      try {
+        const api = await loadFaceApi();
+        const v = videoRef.current;
+        if (!v || v.videoWidth === 0) return;
+        const det = await api.detectSingleFace(v, new api.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
+        if (!active) return;
+        if (!det) {
+          setPct(0);
+          setGuide('No face — center it in the oval');
+          return;
+        }
+        const areaRatio = (det.box.width * det.box.height) / (v.videoWidth * v.videoHeight);
+        const cx = (det.box.x + det.box.width / 2) / v.videoWidth;
+        const cy = (det.box.y + det.box.height / 2) / v.videoHeight;
+        const sizeScore = clamp(areaRatio / 0.16, 0, 1);
+        const centerScore = clamp(1 - (Math.abs(cx - 0.5) + Math.abs(cy - 0.5)) * 1.6, 0, 1);
+        setPct(Math.round(clamp(det.score * 40 + sizeScore * 30 + centerScore * 30, 0, 100)));
+        let g = 'Perfect — capture now';
+        if (areaRatio < 0.06) g = 'Move a little closer';
+        else if (areaRatio > 0.42) g = 'Move back slightly';
+        else if (cy < 0.3) g = 'Lower your chin slightly';
+        else if (cy > 0.78) g = 'Raise your chin slightly';
+        else if (cx < 0.36 || cx > 0.64) g = 'Move to center';
+        setGuide(g);
+      } catch {
+        /* ignore */
+      }
+    };
+    const id = setInterval(tick, 500);
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
+  }, [ready, busy]);
 
   const capture = async () => {
     if (!videoRef.current) return;
@@ -115,7 +160,15 @@ export default function FaceCapture({
         {/* Face-position guide (ID framing) */}
         {ready && !captured && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="h-[78%] aspect-[7/9] rounded-[50%] border-2 border-[#00C8FF]/70 shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" />
+            <div className={`h-[78%] aspect-[7/9] rounded-[50%] border-2 ${pct >= 68 ? 'border-[#00FF88]' : 'border-[#00C8FF]/70'} shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]`} />
+          </div>
+        )}
+
+        {/* Live quality % */}
+        {ready && !captured && !denied && (
+          <div className="absolute top-2 left-2 bg-black/55 rounded-lg px-2 py-0.5 text-[11px] font-bold">
+            <span className={pct >= 68 ? 'text-[#00FF88]' : 'text-[#E8B84B]'}>{pct}%</span>
+            <span className="text-[#8A9AB8] font-normal"> quality</span>
           </div>
         )}
 
@@ -140,7 +193,7 @@ export default function FaceCapture({
         )}
       </div>
 
-      <p className="text-xs text-[#A8B2D0]">{status}</p>
+      <p className="text-xs text-[#A8B2D0]">{ready && !captured && guide ? guide : status}</p>
 
       <button
         type="button"
