@@ -23,8 +23,8 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
         // Get referrer
         const referrer = document.referrer || null;
 
-        // Don't track admin routes
-        if (pathname.startsWith('/admin')) {
+        // Don't track admin / corporate routes
+        if (pathname.startsWith('/admin') || pathname.startsWith('/corporate')) {
           return;
         }
 
@@ -58,8 +58,8 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
     trackQRScan();
   }, [pathname]);
 
-  // Admin routes provide their own shell (app/admin/layout.tsx) — no public chrome.
-  if (pathname.startsWith('/admin')) {
+  // Admin & corporate routes provide their own shell — no public chrome.
+  if (pathname.startsWith('/admin') || pathname.startsWith('/corporate')) {
     return <>{children}</>;
   }
 
