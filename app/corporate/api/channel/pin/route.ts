@@ -6,8 +6,11 @@ export const dynamic = 'force-dynamic';
 
 // Pin / unpin a channel message (author or Super Admin — enforced by RLS).
 export async function POST(req: NextRequest) {
-  const { error } = await requireCorp();
+  const { ctx, error } = await requireCorp();
   if (error) return error;
+  if (ctx.admin.is_visitor) {
+    return NextResponse.json({ error: 'Read-only visitor access.' }, { status: 403 });
+  }
 
   const { message_id, pinned } = await req.json();
   if (!message_id || typeof pinned !== 'boolean') {

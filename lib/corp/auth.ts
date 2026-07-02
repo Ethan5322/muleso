@@ -47,6 +47,8 @@ export async function getCorpContext(): Promise<CorpContext | null> {
 
   if (!admin) return null;
   if (admin.status !== 'active') return null;
+  // Temporary access: block once expired (main admin controls the date).
+  if (admin.expires_at && new Date(admin.expires_at).getTime() < Date.now()) return null;
 
   return { userId: user.id, email: user.email ?? null, admin: admin as CorpAdmin };
 }

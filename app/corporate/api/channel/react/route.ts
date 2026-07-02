@@ -8,6 +8,9 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   const { ctx, error } = await requireCorp();
   if (error) return error;
+  if (ctx.admin.is_visitor) {
+    return NextResponse.json({ error: 'Read-only visitor access.' }, { status: 403 });
+  }
 
   const { message_id, emoji } = await req.json();
   if (!message_id || !emoji) {

@@ -22,6 +22,7 @@ import {
   X,
   ChevronDown,
   ShieldCheck,
+  IdCard,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import AdminNotifications from '@/components/admin/AdminNotifications';
@@ -103,6 +104,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const isActive = (item: NavItem) => (item.exact ? pathname === item.href : pathname.startsWith(item.href));
+
+  const downloadMyCard = async () => {
+    setProfileOpen(false);
+    try {
+      const res = await fetch('/corporate/api/my-card');
+      if (!res.ok) {
+        toast.error('Could not load your ID card');
+        return;
+      }
+      const { card } = await res.json();
+      const { generateIdCard } = await import('@/lib/corp/generateIdCard');
+      await generateIdCard(card);
+      toast.success('ID card downloaded');
+    } catch {
+      toast.error('Could not generate ID card');
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -199,6 +217,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                       <ShieldCheck size={12} className="text-[#00FF88]" /> 2FA + Face secured
                     </p>
                   </div>
+                  <button
+                    type="button"
+                    onClick={downloadMyCard}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#8A9AB8] hover:bg-[#141d2e] hover:text-white"
+                  >
+                    <IdCard size={15} /> My ID Card
+                  </button>
                   <Link
                     href="/admin/settings"
                     onClick={() => setProfileOpen(false)}

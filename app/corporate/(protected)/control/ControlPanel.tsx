@@ -137,11 +137,21 @@ export default function ControlPanel() {
               {deptAdmins.map((a) => (
                 <tr key={a.id} className="border-b border-[#101a30] last:border-0">
                   <td className="p-3">
-                    <div className="font-semibold text-[#F0F2FA]">{a.display_name || 'Unnamed'}</div>
-                    <div className="text-xs text-[#6E7A91]">
-                      {a.department_name || `Dept ${a.department_id ?? ''}`}
-                      {a.status === 'suspended' && (
-                        <span className="ml-2 text-red-400 font-semibold">· suspended</span>
+                    <div className="font-semibold text-[#F0F2FA] flex items-center gap-2">
+                      {a.display_name || 'Unnamed'}
+                      {a.is_visitor && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#E8B84B]/15 text-[#E8B84B] uppercase tracking-wide">
+                          Visitor
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs text-[#6E7A91] flex items-center gap-2 mt-0.5">
+                      <span>{a.department_name || `Dept ${a.department_id ?? ''}`}</span>
+                      {a.status === 'suspended' && <span className="text-red-400 font-semibold">· suspended</span>}
+                      {a.expires_at && (
+                        <span className={new Date(a.expires_at) < new Date() ? 'text-red-400 font-semibold' : 'text-[#8A9AB8]'}>
+                          · {new Date(a.expires_at) < new Date() ? 'Expired' : `Expires ${new Date(a.expires_at).toLocaleDateString()}`}
+                        </span>
                       )}
                     </div>
                   </td>

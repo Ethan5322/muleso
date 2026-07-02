@@ -20,6 +20,8 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
   const [deptId, setDeptId] = useState('');
   const [deptName, setDeptName] = useState('');
   const [caps, setCaps] = useState<string[]>(CAPABILITIES.map((c) => c.key));
+  const [isVisitor, setIsVisitor] = useState(false);
+  const [expiresAt, setExpiresAt] = useState('');
   const [face, setFace] = useState<FaceCaptureResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +35,8 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
 
   const reset = () => {
     setName(''); setEmail(''); setPassword(''); setDeptId(''); setDeptName('');
-    setCaps(CAPABILITIES.map((c) => c.key)); setFace(null); setResult(null); setError(null);
+    setCaps(CAPABILITIES.map((c) => c.key)); setIsVisitor(false); setExpiresAt('');
+    setFace(null); setResult(null); setError(null);
   };
 
   const submit = async () => {
@@ -56,7 +59,9 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
         password,
         department_id: deptId ? Number(deptId) : null,
         department_name: deptName || null,
-        capabilities: caps,
+        capabilities: isVisitor ? [] : caps,
+        is_visitor: isVisitor,
+        expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
         photo_data_url: face.photo,
         face_descriptor: face.descriptor,
       }),
@@ -160,17 +165,63 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
               <Field label="Dept #" value={deptId} onChange={setDeptId} />
               <Field label="Department name" value={deptName} onChange={setDeptName} />
             </div>
+
+            {/* Role */}
             <div>
-              <label className="block text-xs font-semibold text-[#A8B2D0] mb-1.5">Capabilities</label>
-              <div className="space-y-1.5">
-                {CAPABILITIES.map((c) => (
-                  <label key={c.key} className="flex items-center gap-2 text-sm text-[#D4DAEA]">
-                    <input type="checkbox" checked={caps.includes(c.key)} onChange={() => toggleCap(c.key)} />
-                    {c.label}
-                  </label>
-                ))}
+              <label className="block text-xs font-semibold text-[#A8B2D0] mb-1.5">Access level</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsVisitor(false)}
+                  className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
+                    !isVisitor ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                  }`}
+                >
+                  Department admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsVisitor(true)}
+                  className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
+                    isVisitor ? 'bg-[#E8B84B]/15 text-[#E8B84B] border-[#E8B84B]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                  }`}
+                >
+                  Read-only visitor
+                </button>
               </div>
+              {isVisitor && (
+                <p className="text-[11px] text-[#8A9AB8] mt-1.5">Can view only — cannot edit, send, or delete anything.</p>
+              )}
             </div>
+
+            {/* Temporary access expiry */}
+            <div>
+              <label className="block text-xs font-semibold text-[#A8B2D0] mb-1">
+                Access expires {isVisitor ? '(recommended)' : '(optional)'}
+              </label>
+              <input
+                type="date"
+                value={expiresAt}
+                onChange={(e) => setExpiresAt(e.target.value)}
+                title="Access expiry date"
+                className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+              />
+              <p className="text-[11px] text-[#8A9AB8] mt-1">Leave blank for permanent access. You can revoke anytime.</p>
+            </div>
+
+            {!isVisitor && (
+              <div>
+                <label className="block text-xs font-semibold text-[#A8B2D0] mb-1.5">Capabilities</label>
+                <div className="space-y-1.5">
+                  {CAPABILITIES.map((c) => (
+                    <label key={c.key} className="flex items-center gap-2 text-sm text-[#D4DAEA]">
+                      <input type="checkbox" checked={caps.includes(c.key)} onChange={() => toggleCap(c.key)} />
+                      {c.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right: face capture */}

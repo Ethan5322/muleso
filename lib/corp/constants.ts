@@ -14,5 +14,8 @@ export interface CorpAdmin {
   display_name: string | null;
   status: 'active' | 'suspended';
   is_super_admin: boolean;
+  is_visitor: boolean;
+  expires_at: string | null;
+  staff_number?: string | null;
   created_at: string;
 }

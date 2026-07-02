@@ -23,6 +23,8 @@ export async function POST(req: NextRequest) {
     capabilities, // string[] of enabled capability keys
     photo_data_url,
     face_descriptor, // number[] (128) or null
+    is_visitor, // read-only visitor account
+    expires_at, // ISO date string or null — temporary access
   } = body || {};
 
   if (!email || !password || !display_name) {
@@ -61,6 +63,8 @@ export async function POST(req: NextRequest) {
     photo_data_url: photo_data_url ?? null,
     status: 'active',
     is_super_admin: false,
+    is_visitor: !!is_visitor,
+    expires_at: expires_at || null,
   });
   if (rowErr) {
     await supabaseAdmin.auth.admin.deleteUser(userId); // rollback
