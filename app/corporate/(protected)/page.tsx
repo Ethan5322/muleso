@@ -1,18 +1,19 @@
+import Link from 'next/link';
 import { getCorpContext } from '@/lib/corp/auth';
 import { createCorpServerClient } from '@/lib/corp/supabaseServer';
 import { CAPABILITIES } from '@/lib/corp/constants';
-import { MessageSquare, Hash, ShieldCheck, BadgeCheck, Check } from 'lucide-react';
+import { MessageSquare, Hash, ShieldCheck, BadgeCheck, Check, CheckSquare } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CorporateDashboard() {
   const ctx = await getCorpContext();
   const admin = ctx!.admin;
+  const supabase = await createCorpServerClient();
 
   // Load this admin's granted responsibilities (RLS lets them read their own).
   let enabledKeys: string[] = [];
   if (!admin.is_super_admin) {
-    const supabase = await createCorpServerClient();
     const { data } = await supabase
       .from('corp_admin_capabilities')
       .select('capability_key, enabled')
@@ -20,6 +21,17 @@ export default async function CorporateDashboard() {
     enabledKeys = (data ?? []).filter((c) => c.enabled).map((c) => c.capability_key);
   }
   const responsibilities = CAPABILITIES.filter((c) => enabledKeys.includes(c.key));
+
+  // Work at a glance (RLS scopes rows to this admin's department / assignments).
+  const { data: myTasks } = await supabase.from('corp_tasks').select('status, assignee_id, due_date');
+  const tasks = myTasks ?? [];
+  const today = new Date(new Date().toDateString());
+  const kpis = {
+    open: tasks.filter((t) => t.status !== 'done').length,
+    mine: tasks.filter((t) => t.assignee_id === admin.id && t.status !== 'done').length,
+    inProgress: tasks.filter((t) => t.status === 'in_progress').length,
+    overdue: tasks.filter((t) => t.status !== 'done' && t.due_date && new Date(t.due_date) < today).length,
+  };
 
   return (
     <div className="space-y-6">
@@ -43,6 +55,27 @@ export default async function CorporateDashboard() {
           )}
         </p>
       </div>
+
+      {/* Work at a glance */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: admin.is_super_admin ? 'Open tasks' : 'Dept. open tasks', value: kpis.open, color: '#00C8FF' },
+          { label: 'Assigned to me', value: kpis.mine, color: '#7B2FFF' },
+          { label: 'In progress', value: kpis.inProgress, color: '#E8B84B' },
+          { label: 'Overdue', value: kpis.overdue, color: kpis.overdue ? '#FF5C7C' : '#6E7A91' },
+        ].map((k) => (
+          <div key={k.label} className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-4">
+            <p className="text-3xl font-bold font-sora" style={{ color: k.color }}>{k.value}</p>
+            <p className="text-[11px] text-[#A8B2D0] mt-1">{k.label}</p>
+          </div>
+        ))}
+      </div>
+      <Link
+        href="/corporate/work"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white text-sm font-semibold"
+      >
+        <CheckSquare size={16} /> Go to My Work
+      </Link>
 
       {/* Responsibilities */}
       {!admin.is_super_admin && (

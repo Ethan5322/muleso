@@ -19,6 +19,7 @@ import {
   Building2,
   ScanBarcode,
   MessageSquare,
+  ListChecks,
   LogOut,
   Menu,
   X,
@@ -61,6 +62,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Team',
     items: [
       { label: 'Team Admins', href: '/admin/team', icon: Building2 },
+      { label: 'Tasks', href: '/admin/tasks', icon: ListChecks },
       { label: 'Team Chat', href: '/admin/team-chat', icon: MessageSquare },
       { label: 'Scan ID', href: '/admin/scan', icon: ScanBarcode },
     ],

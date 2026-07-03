@@ -24,6 +24,36 @@ export const ROLE_PRESETS: { title: string; caps: string[] }[] = [
   { title: 'Finance Officer', caps: ['can_manage_payments', 'can_view_department_reports', 'can_export_data', 'can_send_dm', 'can_post_channel'] },
 ];
 
+/** Work/task system — statuses & priorities each department moves work through. */
+export const TASK_STATUS: { key: string; label: string; color: string }[] = [
+  { key: 'open', label: 'Open', color: '#00C8FF' },
+  { key: 'in_progress', label: 'In progress', color: '#E8B84B' },
+  { key: 'blocked', label: 'Blocked', color: '#FF5C7C' },
+  { key: 'done', label: 'Done', color: '#00FF88' },
+];
+
+export const TASK_PRIORITY: { key: string; label: string; color: string }[] = [
+  { key: 'low', label: 'Low', color: '#6E7A91' },
+  { key: 'normal', label: 'Normal', color: '#A8B2D0' },
+  { key: 'high', label: 'High', color: '#E8B84B' },
+  { key: 'urgent', label: 'Urgent', color: '#FF5C7C' },
+];
+
+export interface CorpTask {
+  id: string;
+  title: string;
+  detail: string | null;
+  department_id: number | null;
+  assignee_id: string | null;
+  created_by: string | null;
+  status: 'open' | 'in_progress' | 'blocked' | 'done';
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  due_date: string | null;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CorpAdmin {
   id: string;
   department_id: number | null;
