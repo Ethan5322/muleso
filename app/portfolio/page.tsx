@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Gauge, TrendingUp, MessageCircle } from 'lucide-react';
+import { X, Check, Gauge, TrendingUp, MessageCircle, ExternalLink, Globe } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import PortfolioCover from '@/components/PortfolioCover';
 import { supabase } from '@/lib/supabase';
@@ -21,6 +21,7 @@ interface Project {
   result: string;
   tech: string[];
   link?: string;
+  site?: string; // public live site (portfolio proof)
   theme?: ThemeKey;
   fit?: 'cover' | 'contain';
   purpose?: string;
@@ -40,6 +41,7 @@ const fallbackProjects: Project[] = [
     result: 'You are looking at it',
     tech: ['Next.js', 'Supabase', 'Stripe', 'AI'],
     theme: 'blue',
+    site: 'https://mulesoo.vercel.app',
     purpose:
       'This very website is our proof of work: a premium, animated platform with a real business engine behind it. An AI assistant books clients and generates a professional PDF agreement, an online store takes card payments, and a complete admin panel lets us run everything — leads, bookings, content, services, testimonials and payments — from one place, secured with a password, email 2FA, and even face-recognition login.',
     capabilities: [
@@ -103,6 +105,7 @@ const fallbackProjects: Project[] = [
     result: 'Runs the gym on autopilot',
     tech: ['React', 'Supabase', 'Paystack', 'Face Recognition'],
     theme: 'green',
+    site: 'https://yoyogym.vercel.app',
     purpose:
       'This is a full membership, booking, billing and marketing platform that runs a gym almost on autopilot. New members scan a QR, get guided through joining by an AI assistant — health screening, goals, plan choice and e-signature — pay securely online, and receive a digital membership card. From there it handles recurring billing, class bookings, face & QR check-in, staff roles, campaigns and analytics — all from one modern admin panel.',
     capabilities: [
@@ -144,6 +147,7 @@ const fallbackProjects: Project[] = [
     result: 'Online bookings enabled',
     tech: ['Next.js', 'Image Optimization', 'Tailwind CSS'],
     theme: 'dark',
+    site: 'https://xbossphotography.vercel.app',
     purpose:
       'A striking showcase that makes a photographer’s work unforgettable and turns admirers into paying clients.',
     capabilities: [
@@ -172,6 +176,7 @@ const fallbackProjects: Project[] = [
     result: 'AI bookings + online deposits',
     tech: ['React', 'Supabase', 'Chapa', 'jsPDF'],
     theme: 'rose',
+    site: 'https://shimeeventplaning.vercel.app',
     purpose:
       'A complete event-booking system for a luxury events business. Clients chat with a bilingual AI assistant that collects everything, checks date availability, takes the deposit online, and issues a signed PDF contract — while the owner manages every booking from a secure admin panel.',
     capabilities: [
@@ -205,6 +210,7 @@ const fallbackProjects: Project[] = [
     result: 'QR-to-deposit in one chat',
     tech: ['React', 'Supabase', 'Paystack', 'Google Calendar'],
     theme: 'gold',
+    site: 'https://tsedicatering.vercel.app',
     purpose:
       'Tsedi turns one QR code into a warm, personal booking assistant. Clients scan it and the AI chats them through their whole event booking — details, guests, special requests, date & time — checks the calendar live, takes a secure deposit, and issues a verification code. It books events 24/7 so the owner never has to reply to every enquiry by hand.',
     capabilities: [
@@ -237,6 +243,7 @@ const fallbackProjects: Project[] = [
     result: '24/7 automation',
     tech: ['Claude API', 'Supabase', 'Next.js'],
     theme: 'green',
+    site: 'https://tsedicatering.vercel.app',
     purpose:
       'A tireless digital receptionist that talks to customers, takes bookings, and never misses an enquiry — day or night.',
     capabilities: [
@@ -304,10 +311,26 @@ const BOOKING_STEPS: { title: string; text: string }[] = [
   { title: 'You track & deliver', text: 'You get the verification code and track the payment, event, or project in your dashboard — then deliver your service, all in one place.' },
 ];
 
+// Portfolio order — projects with a live public site first; Habesha (no site yet) last.
+const rankOf = (name: string): number => {
+  const n = name.toLowerCase();
+  if (n.includes('mulesoo')) return 0;
+  if (n.includes('yoyo') || n.includes('gym')) return 1;
+  if (n.includes('boss') || n.includes('photograph')) return 2;
+  if (n.includes('catering')) return 3;
+  if (n.includes('tsi') || n.includes('booking assistant')) return 4;
+  if (n.includes('shime')) return 5;
+  if (n.includes('hospital') || n.includes('dr.')) return 6;
+  if (n.includes('habesha')) return 99; // no live site yet — always last
+  return 50;
+};
+
 export default function PortfolioPage() {
   const settings = useSiteSettings();
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
   const [selected, setSelected] = useState<Project | null>(null);
+
+  const orderedProjects = [...projects].sort((a, b) => rankOf(a.name) - rankOf(b.name));
 
   useEffect(() => {
     const load = async () => {
@@ -325,6 +348,7 @@ export default function PortfolioPage() {
               result: item.result || '',
               tech: Array.isArray(item.tech_stack) ? item.tech_stack : [],
               link: item.link || undefined,
+              site: item.link || undefined,
               purpose: item.solution || item.description || '',
               capabilities: item.challenge ? [item.challenge] : [],
               boosts: item.result ? [item.result] : [],
@@ -347,7 +371,7 @@ export default function PortfolioPage() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {projects.map((project, index) => {
+          {orderedProjects.map((project, index) => {
             const src = imgSrc(project.image);
             return (
               <motion.button
@@ -391,7 +415,14 @@ export default function PortfolioPage() {
                   <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight group-hover:text-[var(--accent-blue)] transition-colors">{project.name}</h3>
                   {project.client && <p className="text-xs text-[var(--accent-gold)] font-semibold">{project.client}</p>}
                   <p className="text-sm text-[var(--text-secondary)] line-clamp-3">{project.description}</p>
-                  <p className="text-xs font-semibold text-[var(--accent-blue)] pt-1">View project details →</p>
+                  <div className="flex items-center justify-between pt-1">
+                    <p className="text-xs font-semibold text-[var(--accent-blue)]">View project details →</p>
+                    {project.site && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[var(--accent-green)]">
+                        <Globe size={11} /> Live site
+                      </span>
+                    )}
+                  </div>
                 </div>
               </motion.button>
             );
@@ -450,6 +481,24 @@ export default function PortfolioPage() {
                 <div>
                   <p className="text-[var(--text-secondary)] leading-relaxed">{selected.purpose || selected.description}</p>
                 </div>
+
+                {/* Live site — portfolio proof */}
+                {selected.site && (
+                  <a
+                    href={selected.site}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-[var(--accent-blue)]/40 bg-[var(--glow-blue)] px-4 py-3.5 hover:border-[var(--accent-blue)] transition-colors"
+                  >
+                    <span className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-semibold">
+                      <Globe size={17} className="text-[var(--accent-blue)]" />
+                      Want proof? Visit the live working site
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[var(--accent-blue)] font-bold text-sm whitespace-nowrap">
+                      Open <ExternalLink size={14} />
+                    </span>
+                  </a>
+                )}
 
                 {/* Capabilities */}
                 {selected.capabilities && selected.capabilities.length > 0 && (
