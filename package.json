@@ -17,6 +17,8 @@
     "@supabase/supabase-js": "^2.107.0",
     "@types/three": "^0.184.1",
     "@vladmandic/face-api": "^1.7.15",
+    "@zxing/browser": "^0.2.0",
+    "@zxing/library": "^0.22.0",
     "anthropic": "^0.0.0",
     "caniuse-lite": "^1.0.30001793",
     "clsx": "^2.1.1",

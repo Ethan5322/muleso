@@ -27,12 +27,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Cannot delete a super admin.' }, { status: 400 });
   }
 
-  // Deleting the Auth user cascades corp_department_admins (FK on delete cascade)
-  // and everything referencing it (secrets, capabilities, messages, reactions).
-  const { error: delErr } = await supabaseAdmin.auth.admin.deleteUser(department_admin_id);
-  if (delErr) {
-    // Fallback: remove the roster row directly (also cascades corp tables).
-    await supabaseAdmin.from('corp_department_admins').delete().eq('id', department_admin_id);
+  // 1) Remove ALL corporate data first — the roster row cascades to secrets,
+  //    capabilities, direct messages, channel messages, reactions and mentions
+  //    (every corp_ FK is ON DELETE CASCADE). This is the source of truth for
+  //    "shows in Team", so deleting it guarantees they disappear everywhere.
+  const { error: rowErr } = await supabaseAdmin
+    .from('corp_department_admins')
+    .delete()
+    .eq('id', department_admin_id);
+  if (rowErr) {
+    return NextResponse.json({ error: `Could not delete: ${rowErr.message}` }, { status: 500 });
+  }
+
+  // 2) Remove their login account too (best-effort — the row is already gone).
+  try {
+    await supabaseAdmin.auth.admin.deleteUser(department_admin_id);
+  } catch (e) {
+    console.error('auth user delete failed (row already removed):', e);
   }
 
   await writeAudit(actorId, 'admin_deleted', null, {

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ScanBarcode, Camera, Loader2, CheckCircle2, XCircle, X, Ban, RotateCcw, IdCard, Users } from 'lucide-react';
+import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
 
 interface Staff {
@@ -27,8 +28,7 @@ export default function ScanPage() {
   const [acting, setActing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const rafRef = useRef<number | null>(null);
+  const controlsRef = useRef<IScannerControls | null>(null);
   const lastCode = useRef('');
 
   useEffect(() => {
@@ -82,51 +82,49 @@ export default function ScanPage() {
   };
 
   const stopCam = () => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    streamRef.current?.getTracks().forEach((t) => t.stop());
-    streamRef.current = null;
+    controlsRef.current?.stop();
+    controlsRef.current = null;
     setCamOn(false);
   };
 
-  const startCam = async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const BD = (window as any).BarcodeDetector;
-    if (!BD) {
-      setCamMsg('Camera scanning not supported on this browser — use a barcode scanner or type the code.');
-      return;
-    }
-    try {
-      setCamMsg('Point the camera at the barcode…');
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-      setCamOn(true);
-      const detector = new BD({ formats: ['code_128'] });
-      const tick = async () => {
-        if (!videoRef.current || !streamRef.current) return;
-        try {
-          const codes = await detector.detect(videoRef.current);
-          if (codes && codes.length) {
-            const val = codes[0].rawValue as string;
-            stopCam();
-            lookup(val);
-            return;
-          }
-        } catch {
-          /* keep trying */
-        }
-        rafRef.current = requestAnimationFrame(tick);
-      };
-      rafRef.current = requestAnimationFrame(tick);
-    } catch {
-      setCamMsg('Could not open the camera. Allow camera access or use a barcode scanner.');
-    }
+  const startCam = () => {
+    setCamMsg('');
+    setCamOn(true);
   };
 
-  useEffect(() => () => stopCam(), []);
+  // Start the cross-browser barcode reader once the <video> is on screen.
+  useEffect(() => {
+    if (!camOn) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const reader = new BrowserMultiFormatReader();
+        if (!videoRef.current) return;
+        const controls = await reader.decodeFromVideoDevice(undefined, videoRef.current, (res) => {
+          if (res) {
+            controls.stop();
+            controlsRef.current = null;
+            setCamOn(false);
+            lookup(res.getText());
+          }
+        });
+        if (cancelled) controls.stop();
+        else {
+          controlsRef.current = controls;
+          setCamMsg('Point the camera at the barcode…');
+        }
+      } catch {
+        setCamOn(false);
+        setCamMsg('Could not open the camera. Allow camera access, or use a hardware scanner / type the code.');
+      }
+    })();
+    return () => {
+      cancelled = true;
+      controlsRef.current?.stop();
+      controlsRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [camOn]);
 
   const s = result?.staff;
   const expired = s?.expires_at && new Date(s.expires_at).getTime() < Date.now();
