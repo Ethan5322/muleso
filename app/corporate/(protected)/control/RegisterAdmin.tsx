@@ -23,9 +23,36 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
   const [isVisitor, setIsVisitor] = useState(false);
   const [expiresAt, setExpiresAt] = useState('');
   const [face, setFace] = useState<FaceCaptureResult | null>(null);
+  const [photoMode, setPhotoMode] = useState<'capture' | 'upload'>('capture');
+  const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RegisteredResult | null>(null);
+
+  // The photo actually used on the ID (from live capture or gallery upload).
+  const idPhoto = photoMode === 'capture' ? face?.photo ?? null : uploadedPhoto;
+
+  const handleFile = (file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const ratio = 35 / 45;
+        const iw = img.width, ih = img.height;
+        let cw = iw, ch = iw / ratio;
+        if (ch > ih) { ch = ih; cw = ih * ratio; }
+        const sx = (iw - cw) / 2, sy = (ih - ch) / 2;
+        const canvas = document.createElement('canvas');
+        canvas.width = 420; canvas.height = 540;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, sx, sy, cw, ch, 0, 0, 420, 540);
+        setUploadedPhoto(canvas.toDataURL('image/jpeg', 0.9));
+      };
+      img.src = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
 
   const genPassword = () =>
     setPassword(Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 6).toUpperCase() + '!7');
@@ -36,7 +63,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
   const reset = () => {
     setName(''); setEmail(''); setPassword(''); setDeptId(''); setDeptName('');
     setCaps(CAPABILITIES.map((c) => c.key)); setIsVisitor(false); setExpiresAt('');
-    setFace(null); setResult(null); setError(null);
+    setFace(null); setPhotoMode('capture'); setUploadedPhoto(null); setResult(null); setError(null);
   };
 
   const submit = async () => {
@@ -45,8 +72,12 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
       setError('Name, email and password are required.');
       return;
     }
-    if (!face) {
-      setError('Please capture the admin’s face & photo first.');
+    if (!idPhoto) {
+      setError(
+        photoMode === 'capture'
+          ? 'Please capture the admin’s face & photo first.'
+          : 'Please upload a photo for the ID.'
+      );
       return;
     }
     setBusy(true);
@@ -62,8 +93,10 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
         capabilities: isVisitor ? [] : caps,
         is_visitor: isVisitor,
         expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
-        photo_data_url: face.photo,
-        face_descriptor: face.descriptors, // multi-sample enrol template
+        photo_data_url: idPhoto,
+        // Biometric only when captured live. Uploaded-photo registrations have
+        // no face template — the sub-admin enrols it themselves later.
+        face_descriptor: photoMode === 'capture' ? face?.descriptors ?? null : null,
       }),
     });
     const data = await res.json().catch(() => ({}));
@@ -88,7 +121,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
       department_name: deptName,
       verification_code: result.verification_code,
       qr_token: result.qr_token,
-      photo_data_url: face?.photo ?? null,
+      photo_data_url: idPhoto,
       email,
     });
   };
@@ -224,15 +257,55 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
             )}
           </div>
 
-          {/* Right: face capture */}
+          {/* Right: face capture OR gallery photo */}
           <div>
-            <label className="block text-xs font-semibold text-[#A8B2D0] mb-1.5">
-              Face & ID photo (biometric login)
-            </label>
-            <FaceCapture mode="register" captured={!!face} onCapture={setFace} />
-            {face?.photo && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={face.photo} alt="captured" className="mt-3 w-24 rounded-lg border border-[#1A2640]" />
+            <label className="block text-xs font-semibold text-[#A8B2D0] mb-1.5">ID photo &amp; biometric</label>
+            <div className="flex gap-2 mb-3">
+              <button
+                type="button"
+                onClick={() => setPhotoMode('capture')}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
+                  photoMode === 'capture' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                }`}
+              >
+                Live face capture
+              </button>
+              <button
+                type="button"
+                onClick={() => setPhotoMode('upload')}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
+                  photoMode === 'upload' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                }`}
+              >
+                Upload photo
+              </button>
+            </div>
+
+            {photoMode === 'capture' ? (
+              <>
+                <FaceCapture mode="register" captured={!!face} onCapture={setFace} />
+                {face?.photo && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={face.photo} alt="captured" className="mt-3 w-24 rounded-lg border border-[#1A2640]" />
+                )}
+              </>
+            ) : (
+              <div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFile(e.target.files?.[0])}
+                  title="Upload ID photo"
+                  className="block w-full text-xs text-[#A8B2D0] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#00C8FF]/15 file:text-[#00C8FF] file:font-semibold"
+                />
+                <p className="text-[11px] text-[#8A9AB8] mt-2">
+                  For remote staff. No biometric is set — they enrol their own face later in Settings; until then they log in by password, code, or QR.
+                </p>
+                {uploadedPhoto && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={uploadedPhoto} alt="uploaded" className="mt-3 w-24 rounded-lg border border-[#1A2640]" />
+                )}
+              </div>
             )}
           </div>
 
