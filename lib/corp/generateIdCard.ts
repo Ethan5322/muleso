@@ -170,7 +170,7 @@ export async function generateIdCard(data: IdCardData): Promise<void> {
   doc.text(data.verification_code, dx, 42);
 
   // ============ ZONE 3: QR (x: 63.6–80.6) ============
-  const qrUrl = `https://mulesoo.vercel.app/corporate/qr-login?token=${encodeURIComponent(data.qr_token)}`;
+  const qrUrl = `https://mulesoo.vercel.app/staff-access?token=${encodeURIComponent(data.qr_token)}`;
   try {
     const qr = await QRCode.toDataURL(qrUrl, { width: 300, margin: 0, color: { dark: '#0A0F1E', light: '#FFFFFF' } });
     const qs = 17;

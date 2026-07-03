@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createCorpBrowserClient } from '@/lib/corp/supabaseBrowser';
 import FaceCapture, { type FaceCaptureResult } from '@/components/corp/FaceCapture';
-import { Building2, Loader2, KeyRound, ScanFace, Hash } from 'lucide-react';
+import { Building2, Loader2, KeyRound, ScanFace, Hash, QrCode } from 'lucide-react';
 
 type Method = 'password' | 'face' | 'code';
 
@@ -16,10 +16,33 @@ export default function CorporateLoginPage() {
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [qrToken, setQrToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get('token');
+    if (t) setQrToken(t);
+  }, []);
 
   const goIn = () => {
     router.replace('/corporate');
     router.refresh();
+  };
+
+  const qrSignIn = async () => {
+    if (!qrToken) return;
+    setLoading(true);
+    setError(null);
+    const res = await fetch('/corporate/api/login/qr', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: qrToken }),
+    });
+    if (res.ok) goIn();
+    else {
+      const d = await res.json().catch(() => ({}));
+      setError(d.error || 'QR sign-in failed.');
+      setLoading(false);
+    }
   };
 
   const passwordLogin = async (e: React.FormEvent) => {
@@ -110,6 +133,19 @@ export default function CorporateLoginPage() {
           <h1 className="text-2xl font-bold font-sora">MuleSoo Corporate</h1>
           <p className="text-sm text-[#A8B2D0] mt-1">Department admin sign-in</p>
         </div>
+
+        {/* One-tap QR sign-in (arrived from a staff ID scan) */}
+        {qrToken && (
+          <button
+            type="button"
+            onClick={qrSignIn}
+            disabled={loading}
+            className="w-full mb-4 py-3 rounded-lg bg-gradient-to-r from-[#E8B84B] to-[#FFC107] text-black font-bold font-sora flex items-center justify-center gap-2 disabled:opacity-60"
+          >
+            {loading ? <Loader2 className="animate-spin" size={18} /> : <QrCode size={18} />}
+            Sign in with your staff ID
+          </button>
+        )}
 
         {/* Method tabs */}
         <div className="flex gap-1 bg-[#0A0F1E] border border-[#1A2640] rounded-lg p-1 mb-4">

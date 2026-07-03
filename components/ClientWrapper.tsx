@@ -24,7 +24,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
         const referrer = document.referrer || null;
 
         // Don't track admin / corporate routes
-        if (pathname.startsWith('/admin') || pathname.startsWith('/corporate')) {
+        if (pathname.startsWith('/admin') || pathname.startsWith('/corporate') || pathname.startsWith('/staff-access')) {
           return;
         }
 
@@ -59,7 +59,7 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
   }, [pathname]);
 
   // Admin & corporate routes provide their own shell — no public chrome.
-  if (pathname.startsWith('/admin') || pathname.startsWith('/corporate')) {
+  if (pathname.startsWith('/admin') || pathname.startsWith('/corporate') || pathname.startsWith('/staff-access')) {
     return <>{children}</>;
   }
 
