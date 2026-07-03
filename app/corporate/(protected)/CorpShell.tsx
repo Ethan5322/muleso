@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { createCorpBrowserClient } from '@/lib/corp/supabaseBrowser';
-import { Building2, LogOut, LayoutDashboard, MessageSquare, Hash, ShieldCheck } from 'lucide-react';
+import { Building2, LogOut, LayoutDashboard, MessageSquare, Hash, ShieldCheck, Settings } from 'lucide-react';
 import type { CorpAdmin } from '@/lib/corp/constants';
 
 export default function CorpShell({
@@ -65,6 +65,7 @@ export default function CorpShell({
     { href: '/corporate', label: 'Dashboard', icon: LayoutDashboard, on: true },
     { href: '/corporate/messages', label: 'Messages', icon: MessageSquare, on: true },
     { href: '/corporate/channel', label: 'Team Channel', icon: Hash, on: true },
+    { href: '/corporate/settings', label: 'Settings', icon: Settings, on: true },
     ...(admin.is_super_admin
       ? [{ href: '/corporate/control', label: 'Control Panel', icon: ShieldCheck, on: true }]
       : []),
