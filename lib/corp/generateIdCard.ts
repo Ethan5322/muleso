@@ -2,6 +2,26 @@
 
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
+import JsBarcode from 'jsbarcode';
+
+/** Render a Code128 barcode (of the verification code) to a white PNG. */
+function makeBarcodePng(text: string): string | null {
+  try {
+    const canvas = document.createElement('canvas');
+    JsBarcode(canvas, text, {
+      format: 'CODE128',
+      displayValue: false,
+      margin: 0,
+      height: 70,
+      width: 2,
+      background: '#ffffff',
+      lineColor: '#0A0F1E',
+    });
+    return canvas.toDataURL('image/png');
+  } catch {
+    return null;
+  }
+}
 
 export interface IdCardData {
   display_name: string;
@@ -187,14 +207,27 @@ export async function generateIdCard(data: IdCardData): Promise<void> {
     /* skip QR if it fails */
   }
 
+  // ============ BARCODE (bottom strip) — scannable by the main admin ============
+  const barcode = makeBarcodePng(data.verification_code);
+  if (barcode) {
+    const bw = W - 16;
+    const bx = 8;
+    const by = 44.2;
+    const bh = 5;
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(bx - 1, by - 1, bw + 2, bh + 2, 0.8, 0.8, 'F');
+    try {
+      doc.addImage(barcode, 'PNG', bx, by, bw, bh);
+    } catch {
+      /* skip barcode if it fails */
+    }
+  }
+
   // ---- Footer ----
-  doc.setDrawColor(30, 40, 66);
-  doc.setLineWidth(0.3);
-  doc.line(5, H - 5, W - 5, H - 5);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(4);
   doc.setTextColor(...MUTED);
-  doc.text('Property of MuleSoo Digital Services · mulesoo.vercel.app', 5, H - 2.5);
+  doc.text('Property of MuleSoo Digital Services · mulesoo.vercel.app', W / 2, H - 1.6, { align: 'center' });
 
   const filename = `MuleSoo_StaffID_${data.staff_number.replace(/[^A-Za-z0-9]/g, '')}.pdf`;
   downloadBlob(doc.output('blob'), filename);
