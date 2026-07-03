@@ -21,11 +21,39 @@ const INK: RGB = [10, 15, 30];
 const CARD: RGB = [13, 21, 40];
 const MUTED: RGB = [130, 145, 175];
 
+/** Rasterize the official SVG logo to a PNG data URL for embedding in the PDF. */
+async function loadLogoPng(): Promise<string | null> {
+  try {
+    const res = await fetch('/mulesoo-logo-new.svg');
+    if (!res.ok) return null;
+    let svg = await res.text();
+    // ensure an intrinsic size so the browser renders it into the canvas
+    if (!/\bwidth=/.test(svg)) svg = svg.replace('<svg ', '<svg width="256" height="256" ');
+    const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+    const img = new Image();
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = reject;
+      img.src = url;
+    });
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    ctx?.drawImage(img, 0, 0, 256, 256);
+    URL.revokeObjectURL(url);
+    return canvas.toDataURL('image/png');
+  } catch {
+    return null;
+  }
+}
+
 /** Generate & download a corporate staff ID card — standard CR80 (85.6×54mm). */
 export async function generateIdCard(data: IdCardData): Promise<void> {
   const W = 85.6;
   const H = 54;
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [W, H] });
+  const logoPng = await loadLogoPng();
 
   // ---- Card background ----
   doc.setFillColor(...CARD);
@@ -46,20 +74,24 @@ export async function generateIdCard(data: IdCardData): Promise<void> {
   doc.setFillColor(...GOLD);
   doc.rect(0, headerH, W, 0.5, 'F');
 
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(4, 2.6, 6, 6, 1, 1, 'F');
-  doc.setTextColor(...PURPLE);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(9);
-  doc.text('M', 7, 7, { align: 'center' });
+  // Official logo (transparent PNG) placed directly on the header
+  let textX = 4;
+  if (logoPng) {
+    try {
+      doc.addImage(logoPng, 'PNG', 2.5, 1, 9, 9);
+      textX = 12.5;
+    } catch {
+      /* fall back to wordmark-only */
+    }
+  }
 
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9);
-  doc.text('MULESOO', 12, 6);
+  doc.text('MULESOO', textX, 6);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(4.2);
-  doc.text('D I G I T A L   S E R V I C E S', 12, 9);
+  doc.text('D I G I T A L   S E R V I C E S', textX, 9);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(6.5);
