@@ -35,12 +35,16 @@ export async function GET() {
 
   const nameById: Record<string, string> = {};
   (admins ?? []).forEach((a) => (nameById[a.id] = a.display_name || 'Admin'));
+  const roster = (admins ?? [])
+    .filter((a) => a.id !== ctx.admin.id && a.display_name)
+    .map((a) => ({ id: a.id, display_name: a.display_name as string }));
 
   return NextResponse.json({
     channel,
     messages: messages ?? [],
     reactions: reactions ?? [],
     nameById,
+    roster,
     me: ctx.admin.id,
     isSuper: ctx.admin.is_super_admin,
   });

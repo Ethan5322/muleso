@@ -10,11 +10,18 @@ export async function GET() {
   if (error) return error;
 
   const supabase = await createCorpServerClient();
-  const { count } = await supabase
-    .from('corp_direct_messages')
-    .select('id', { count: 'exact', head: true })
-    .eq('recipient_id', ctx.admin.id)
-    .is('read_at', null);
+  const [{ count: dmCount }, { count: mentionCount }] = await Promise.all([
+    supabase
+      .from('corp_direct_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('recipient_id', ctx.admin.id)
+      .is('read_at', null),
+    supabase
+      .from('corp_channel_mentions')
+      .select('id', { count: 'exact', head: true })
+      .eq('mentioned_admin_id', ctx.admin.id)
+      .is('read_at', null),
+  ]);
 
-  return NextResponse.json({ unreadDM: count ?? 0 });
+  return NextResponse.json({ unreadDM: dmCount ?? 0, unreadMentions: mentionCount ?? 0 });
 }

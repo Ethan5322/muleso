@@ -19,6 +19,7 @@ export default function CorpShell({
   const router = useRouter();
   const pathname = usePathname();
   const [unreadDM, setUnreadDM] = useState(0);
+  const [unreadMentions, setUnreadMentions] = useState(0);
 
   const loadUnread = useCallback(async () => {
     try {
@@ -26,6 +27,7 @@ export default function CorpShell({
       if (r.ok) {
         const d = await r.json();
         setUnreadDM(d.unreadDM ?? 0);
+        setUnreadMentions(d.unreadMentions ?? 0);
       }
     } catch {
       /* ignore */
@@ -46,6 +48,11 @@ export default function CorpShell({
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'corp_direct_messages', filter: `recipient_id=eq.${admin.id}` },
+        () => loadUnread()
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'corp_channel_mentions', filter: `mentioned_admin_id=eq.${admin.id}` },
         () => loadUnread()
       )
       .subscribe();
@@ -106,7 +113,7 @@ export default function CorpShell({
           {nav.filter((i) => i.on).map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
-            const showBadge = item.href === '/corporate/messages' && unreadDM > 0;
+            const count = item.href === '/corporate/messages' ? unreadDM : item.href === '/corporate/channel' ? unreadMentions : 0;
             return (
               <Link
                 key={item.href}
@@ -116,8 +123,8 @@ export default function CorpShell({
                 }`}
               >
                 <Icon size={14} /> {item.label}
-                {showBadge && (
-                  <span className="text-[9px] font-bold bg-[#00C8FF] text-black rounded-full px-1">{unreadDM}</span>
+                {count > 0 && (
+                  <span className="text-[9px] font-bold bg-[#00C8FF] text-black rounded-full px-1">{count}</span>
                 )}
               </Link>
             );
@@ -136,10 +143,11 @@ export default function CorpShell({
                 ? 'bg-[#00C8FF]/10 text-[#00C8FF]'
                 : 'text-[#A8B2D0] hover:bg-[#0D1528] hover:text-[#F0F2FA]'
             }`;
+            const count = item.href === '/corporate/messages' ? unreadDM : item.href === '/corporate/channel' ? unreadMentions : 0;
             const badge =
-              item.href === '/corporate/messages' && unreadDM > 0 ? (
+              count > 0 ? (
                 <span className="ml-auto text-[10px] font-bold bg-[#00C8FF] text-black rounded-full px-1.5 py-0.5">
-                  {unreadDM}
+                  {count}
                 </span>
               ) : null;
             return item.on ? (

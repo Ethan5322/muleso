@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { requireCorp, adminHasCapability } from '@/lib/corp/api';
 import { createCorpServerClient } from '@/lib/corp/supabaseServer';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,5 +39,24 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
+
+  // Parse @mentions (match active admins' display names) and notify them.
+  try {
+    const { data: admins } = await supabaseAdmin
+      .from('corp_department_admins')
+      .select('id, display_name')
+      .eq('status', 'active');
+    const mentioned = (admins ?? []).filter(
+      (a) => a.display_name && a.id !== ctx.admin.id && text.includes('@' + a.display_name)
+    );
+    if (mentioned.length) {
+      await supabaseAdmin.from('corp_channel_mentions').insert(
+        mentioned.map((a) => ({ message_id: data.id, mentioned_admin_id: a.id }))
+      );
+    }
+  } catch (e) {
+    console.error('mention parse failed (continuing):', e);
+  }
+
   return NextResponse.json({ ok: true, message: data });
 }

@@ -29,6 +29,8 @@ export default function ChannelPage() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [reactions, setReactions] = useState<Reaction[]>([]);
   const [nameById, setNameById] = useState<Record<string, string>>({});
+  const [roster, setRoster] = useState<{ id: string; display_name: string }[]>([]);
+  const [mentionOpen, setMentionOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
@@ -46,7 +48,10 @@ export default function ChannelPage() {
     setMessages(d.messages ?? []);
     setReactions(d.reactions ?? []);
     setNameById(d.nameById ?? {});
+    setRoster(d.roster ?? []);
     setLoading(false);
+    // viewing the channel clears mention notifications
+    fetch('/corporate/api/channel/read-mentions', { method: 'POST' }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -74,6 +79,56 @@ export default function ChannelPage() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages.length]);
+
+  // --- @mentions ---
+  const activeQuery = (() => {
+    const at = input.lastIndexOf('@');
+    if (at === -1) return null;
+    const after = input.slice(at + 1);
+    if (after.includes('\n')) return null;
+    return after;
+  })();
+  const suggestions =
+    mentionOpen && activeQuery !== null
+      ? roster.filter((r) => r.display_name.toLowerCase().includes(activeQuery.toLowerCase())).slice(0, 6)
+      : [];
+  const pickMention = (name: string) => {
+    const at = input.lastIndexOf('@');
+    setInput(input.slice(0, at) + '@' + name + ' ');
+    setMentionOpen(false);
+  };
+  const onInputChange = (v: string) => {
+    setInput(v);
+    setMentionOpen(v.lastIndexOf('@') !== -1);
+  };
+
+  const allNames = [...roster.map((r) => r.display_name), nameById[me]].filter(Boolean) as string[];
+  const renderBody = (text: string): React.ReactNode[] => {
+    const names = [...allNames].sort((a, b) => b.length - a.length);
+    const nodes: React.ReactNode[] = [];
+    let idx = 0;
+    while (idx < text.length) {
+      if (text[idx] === '@') {
+        const rest = text.slice(idx + 1);
+        const match = names.find((n) => rest.startsWith(n));
+        if (match) {
+          const isMe = match === nameById[me];
+          nodes.push(
+            <span key={idx} className={`font-semibold ${isMe ? 'bg-[#00C8FF]/20 text-[#00C8FF] rounded px-0.5' : 'text-[#00C8FF]'}`}>
+              @{match}
+            </span>
+          );
+          idx += 1 + match.length;
+          continue;
+        }
+      }
+      const last = nodes[nodes.length - 1];
+      if (typeof last === 'string') nodes[nodes.length - 1] = last + text[idx];
+      else nodes.push(text[idx]);
+      idx++;
+    }
+    return nodes;
+  };
 
   const send = async (body: string, parent?: string) => {
     if (!body.trim() || !channel) return;
@@ -145,7 +200,7 @@ export default function ChannelPage() {
               </span>
             </div>
           </div>
-          <p className="text-sm text-[#D4DAEA] mt-1 whitespace-pre-wrap">{m.body}</p>
+          <p className="text-sm text-[#D4DAEA] mt-1 whitespace-pre-wrap">{renderBody(m.body)}</p>
 
           <div className="flex items-center gap-2 mt-2 flex-wrap">
             {EMOJIS.map((e) => {
@@ -252,12 +307,28 @@ export default function ChannelPage() {
 
       {err && <div className="px-4 py-2 text-xs text-red-400 border-t border-[#1A2640]">{err}</div>}
 
-      <div className="p-3 border-t border-[#1A2640] flex items-center gap-2">
+      <div className="relative p-3 border-t border-[#1A2640] flex items-center gap-2">
+        {/* @mention autocomplete */}
+        {suggestions.length > 0 && (
+          <div className="absolute bottom-full left-3 mb-1 w-64 bg-[#0A0F1E] border border-[#1A2640] rounded-lg shadow-2xl overflow-hidden z-20">
+            <p className="px-3 py-1.5 text-[10px] uppercase tracking-wide text-[#6E7A91] border-b border-[#1A2640]">Mention</p>
+            {suggestions.map((r) => (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => pickMention(r.display_name)}
+                className="w-full text-left px-3 py-2 text-sm text-[#D4DAEA] hover:bg-[#0D1528]"
+              >
+                @{r.display_name}
+              </button>
+            ))}
+          </div>
+        )}
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send(input))}
-          placeholder="Share an update with the team…"
+          placeholder="Share an update…  use @ to mention someone"
           className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
         />
         <button
