@@ -76,11 +76,18 @@ export default function ControlPanel() {
   };
 
   const setStatus = async (adminId: string, status: 'active' | 'suspended') => {
+    let days: number | null = null;
+    if (status === 'suspended') {
+      const input = window.prompt('Suspend for how many days?\n(leave blank = indefinite, until you reactivate)');
+      if (input === null) return; // cancelled
+      const n = parseInt(input, 10);
+      if (input.trim() !== '' && Number.isFinite(n) && n > 0) days = n;
+    }
     setBusy(`status:${adminId}`);
     await fetch('/corporate/api/admin-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ department_admin_id: adminId, status }),
+      body: JSON.stringify({ department_admin_id: adminId, status, days }),
     });
     await load();
     setBusy(null);
@@ -169,9 +176,14 @@ export default function ControlPanel() {
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-[#6E7A91] flex items-center gap-2 mt-0.5">
+                    {a.role_title && <div className="text-[11px] text-[#00C8FF] mt-0.5">{a.role_title}</div>}
+                    <div className="text-xs text-[#6E7A91] flex items-center gap-2 mt-0.5 flex-wrap">
                       <span>{a.department_name || `Dept ${a.department_id ?? ''}`}</span>
-                      {a.status === 'suspended' && <span className="text-red-400 font-semibold">· suspended</span>}
+                      {a.status === 'suspended' && (
+                        <span className="text-red-400 font-semibold">
+                          · suspended{a.suspended_until ? ` until ${new Date(a.suspended_until).toLocaleDateString()}` : ''}
+                        </span>
+                      )}
                       {a.expires_at && (
                         <span className={new Date(a.expires_at) < new Date() ? 'text-red-400 font-semibold' : 'text-[#8A9AB8]'}>
                           · {new Date(a.expires_at) < new Date() ? 'Expired' : `Expires ${new Date(a.expires_at).toLocaleDateString()}`}

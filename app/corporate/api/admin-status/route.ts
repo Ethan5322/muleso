@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { actorId, error } = await requireManager(req);
   if (error) return error;
 
-  const { department_admin_id, status } = await req.json();
+  const { department_admin_id, status, days } = await req.json();
   if (!department_admin_id || !['active', 'suspended'].includes(status)) {
     return NextResponse.json({ error: 'invalid payload' }, { status: 400 });
   }
@@ -17,9 +17,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'You cannot suspend your own account.' }, { status: 400 });
   }
 
+  const n = Number(days);
+  const suspended_until =
+    status === 'suspended' && Number.isFinite(n) && n > 0
+      ? new Date(Date.now() + n * 86400000).toISOString()
+      : null;
+
   const { error: updErr } = await supabaseAdmin
     .from('corp_department_admins')
-    .update({ status })
+    .update({ status, suspended_until })
     .eq('id', department_admin_id)
     .eq('is_super_admin', false); // never suspend a super admin via this route
 
@@ -29,7 +35,7 @@ export async function POST(req: NextRequest) {
     actorId,
     status === 'suspended' ? 'account_suspended' : 'account_reactivated',
     department_admin_id,
-    { status }
+    { status, days: suspended_until ? n : null }
   );
 
   return NextResponse.json({ ok: true });

@@ -46,7 +46,21 @@ export async function getCorpContext(): Promise<CorpContext | null> {
     .maybeSingle();
 
   if (!admin) return null;
-  if (admin.status !== 'active') return null;
+
+  // Timed suspension: auto-lift once the suspension period has passed.
+  if (admin.status === 'suspended') {
+    if (admin.suspended_until && new Date(admin.suspended_until).getTime() < Date.now()) {
+      await supabaseAdmin
+        .from('corp_department_admins')
+        .update({ status: 'active', suspended_until: null })
+        .eq('id', admin.id);
+      admin.status = 'active';
+      admin.suspended_until = null;
+    } else {
+      return null; // still suspended
+    }
+  }
+
   // Temporary access: block once expired (main admin controls the date).
   if (admin.expires_at && new Date(admin.expires_at).getTime() < Date.now()) return null;
 

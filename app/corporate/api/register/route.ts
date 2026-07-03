@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     department_id,
     department_name,
     capabilities, // string[] of enabled capability keys
+    role_title, // job title / responsibility
     photo_data_url,
     face_descriptor, // number[] (128) or null
     is_visitor, // read-only visitor account
@@ -72,6 +73,7 @@ export async function POST(req: NextRequest) {
     department_id: department_id ?? null,
     department_name: department_name ?? null,
     display_name,
+    role_title: role_title || null,
     email: String(email).trim().toLowerCase(),
     staff_number,
     photo_data_url: photo_data_url ?? null,

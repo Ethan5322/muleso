@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FaceCapture, { type FaceCaptureResult } from '@/components/corp/FaceCapture';
 import { imageToIdData } from '@/lib/faceClient';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
-import { CAPABILITIES } from '@/lib/corp/constants';
+import { CAPABILITIES, ROLE_PRESETS } from '@/lib/corp/constants';
 import { Loader2, UserPlus, IdCard, X } from 'lucide-react';
 
 interface RegisteredResult {
@@ -21,6 +21,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
   const [deptId, setDeptId] = useState('');
   const [deptName, setDeptName] = useState('');
   const [caps, setCaps] = useState<string[]>(CAPABILITIES.map((c) => c.key));
+  const [roleTitle, setRoleTitle] = useState('');
   const [isVisitor, setIsVisitor] = useState(false);
   const [expiresAt, setExpiresAt] = useState('');
   const [face, setFace] = useState<FaceCaptureResult | null>(null);
@@ -52,8 +53,15 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
 
   const reset = () => {
     setName(''); setEmail(''); setPassword(''); setDeptId(''); setDeptName('');
-    setCaps(CAPABILITIES.map((c) => c.key)); setIsVisitor(false); setExpiresAt('');
+    setCaps(CAPABILITIES.map((c) => c.key)); setRoleTitle(''); setIsVisitor(false); setExpiresAt('');
     setFace(null); setPhotoMode('capture'); setUploadedPhoto(null); setResult(null); setError(null);
+  };
+
+  const applyPreset = (title: string) => {
+    const p = ROLE_PRESETS.find((x) => x.title === title);
+    if (!p) return;
+    setRoleTitle(p.title);
+    setCaps(p.caps);
   };
 
   const submit = async () => {
@@ -80,6 +88,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
         password,
         department_id: deptId ? Number(deptId) : null,
         department_name: deptName || null,
+        role_title: roleTitle || null,
         capabilities: isVisitor ? [] : caps,
         is_visitor: isVisitor,
         expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
@@ -188,6 +197,33 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
               <Field label="Dept #" value={deptId} onChange={setDeptId} />
               <Field label="Department name" value={deptName} onChange={setDeptName} />
             </div>
+
+            {/* Job role / responsibility */}
+            {!isVisitor && (
+              <div>
+                <label className="block text-xs font-semibold text-[#A8B2D0] mb-1">Role / responsibility</label>
+                <div className="flex gap-2">
+                  <input
+                    value={roleTitle}
+                    onChange={(e) => setRoleTitle(e.target.value)}
+                    placeholder="e.g. Sales Representative"
+                    className="flex-1 px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                  />
+                  <select
+                    value=""
+                    onChange={(e) => e.target.value && applyPreset(e.target.value)}
+                    title="Apply a role preset"
+                    className="px-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-xs text-[#00C8FF]"
+                  >
+                    <option value="">Preset…</option>
+                    {ROLE_PRESETS.map((p) => (
+                      <option key={p.title} value={p.title}>{p.title}</option>
+                    ))}
+                  </select>
+                </div>
+                <p className="text-[11px] text-[#8A9AB8] mt-1">A preset fills the role title and its responsibilities below.</p>
+              </div>
+            )}
 
             {/* Role */}
             <div>
