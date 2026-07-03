@@ -36,6 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# separately-deployed sibling projects (their own git repos — not part of this site)
+/Yoyo GYM/
+/shime/
+/tsedi/tsedi-booking/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
