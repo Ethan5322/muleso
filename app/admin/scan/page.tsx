@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ScanBarcode, Camera, Loader2, CheckCircle2, XCircle, X } from 'lucide-react';
+import Link from 'next/link';
+import { ScanBarcode, Camera, Loader2, CheckCircle2, XCircle, X, Ban, RotateCcw, IdCard, Users } from 'lucide-react';
+import { generateIdCard } from '@/lib/corp/generateIdCard';
 
 interface Staff {
+  id?: string;
   display_name?: string;
   staff_number?: string;
   department_name?: string;
@@ -21,10 +24,12 @@ export default function ScanPage() {
   const [result, setResult] = useState<{ found: boolean; staff?: Staff } | null>(null);
   const [camOn, setCamOn] = useState(false);
   const [camMsg, setCamMsg] = useState('');
+  const [acting, setActing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number | null>(null);
+  const lastCode = useRef('');
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -33,6 +38,7 @@ export default function ScanPage() {
   const lookup = async (raw: string) => {
     const c = raw.trim();
     if (!c) return;
+    lastCode.current = c;
     setLoading(true);
     setResult(null);
     try {
@@ -44,6 +50,34 @@ export default function ScanPage() {
     } finally {
       setLoading(false);
       setCode('');
+    }
+  };
+
+  const setStatus = async (id: string, status: 'active' | 'suspended') => {
+    setActing(true);
+    await fetch('/corporate/api/admin-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ department_admin_id: id, status }),
+    });
+    // refresh the shown record
+    if (code || result?.staff) {
+      const r = await fetch(`/api/admin/staff-lookup?code=${encodeURIComponent(lastCode.current)}`);
+      setResult(await r.json());
+    }
+    setActing(false);
+  };
+
+  const reissueCard = async (id: string) => {
+    setActing(true);
+    try {
+      const r = await fetch(`/corporate/api/admin-card?id=${encodeURIComponent(id)}`);
+      if (r.ok) {
+        const { card } = await r.json();
+        await generateIdCard(card);
+      }
+    } finally {
+      setActing(false);
     }
   };
 
@@ -192,6 +226,46 @@ export default function ScanPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Quick actions (corporate staff only, not the super admin) */}
+              {s?.id && !s.is_super_admin && (
+                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-[#1E3A5F]">
+                  {s.status === 'active' ? (
+                    <button
+                      type="button"
+                      disabled={acting}
+                      onClick={() => setStatus(s.id!, 'suspended')}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600/15 text-red-400 border border-red-500/40 disabled:opacity-50"
+                    >
+                      <Ban size={14} /> Suspend
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={acting}
+                      onClick={() => setStatus(s.id!, 'active')}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#00FF88]/15 text-[#00FF88] border border-[#00FF88]/40 disabled:opacity-50"
+                    >
+                      <RotateCcw size={14} /> Reactivate
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    disabled={acting}
+                    onClick={() => reissueCard(s.id!)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#00C8FF]/15 text-[#00C8FF] border border-[#00C8FF]/40 disabled:opacity-50"
+                  >
+                    <IdCard size={14} /> Re-download ID
+                  </button>
+                  <Link
+                    href="/admin/team"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1A2332] text-[#8A9AB8] border border-[#1E3A5F]"
+                  >
+                    <Users size={14} /> Team Admins
+                  </Link>
+                  {acting && <Loader2 className="animate-spin text-[#00C8FF]" size={16} />}
+                </div>
+              )}
             </div>
           )}
         </div>

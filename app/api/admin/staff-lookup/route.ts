@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
 
   const { data: staff } = await supabaseAdmin
     .from('corp_department_admins')
-    .select('display_name, staff_number, department_name, status, is_visitor, expires_at, email, photo_data_url, created_at')
+    .select('id, display_name, staff_number, department_name, status, is_visitor, expires_at, email, photo_data_url, created_at')
     .eq('id', secret.department_admin_id)
     .maybeSingle();
 
