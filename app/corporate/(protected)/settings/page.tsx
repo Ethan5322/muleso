@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import FaceCapture, { type FaceCaptureResult } from '@/components/corp/FaceCapture';
-import { ScanFace, CheckCircle2, Loader2 } from 'lucide-react';
+import { imageToIdData } from '@/lib/faceClient';
+import { generateIdCard } from '@/lib/corp/generateIdCard';
+import { ScanFace, CheckCircle2, Loader2, IdCard } from 'lucide-react';
 
 export default function CorporateSettings() {
   const [enrolled, setEnrolled] = useState<boolean | null>(null);
   const [enrolling, setEnrolling] = useState(false);
+  const [mode, setMode] = useState<'capture' | 'upload'>('capture');
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -24,7 +27,7 @@ export default function CorporateSettings() {
     load();
   }, []);
 
-  const onCapture = async (r: FaceCaptureResult) => {
+  const enrol = async (descriptors: number[][], photo: string | null) => {
     setSaving(true);
     setErr(null);
     setMsg(null);
@@ -32,7 +35,7 @@ export default function CorporateSettings() {
       const res = await fetch('/corporate/api/my-face', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ descriptors: r.descriptors, photo: r.photo }),
+        body: JSON.stringify({ descriptors, photo }),
       });
       if (res.ok) {
         setMsg('✓ Face enrolled. You can now sign in with Face on the login screen.');
@@ -47,13 +50,44 @@ export default function CorporateSettings() {
     }
   };
 
+  const onCapture = (r: FaceCaptureResult) => enrol(r.descriptors, r.photo);
+
+  const onFile = (file: File | undefined) => {
+    if (!file) return;
+    setErr(null);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      setSaving(true);
+      const { photo, descriptor } = await imageToIdData(reader.result as string);
+      if (!descriptor) {
+        setSaving(false);
+        setErr('No face detected in that photo. Use a clear, front-facing photo or use the live camera.');
+        return;
+      }
+      await enrol([descriptor], photo);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const downloadMyCard = async () => {
+    try {
+      const r = await fetch('/corporate/api/my-id-card');
+      if (!r.ok) return;
+      const { card } = await r.json();
+      await generateIdCard(card);
+    } catch {
+      /* ignore */
+    }
+  };
+
   return (
     <div className="max-w-xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold font-sora">My Settings</h1>
-        <p className="text-[#A8B2D0] text-sm mt-1">Manage your biometric sign-in.</p>
+        <p className="text-[#A8B2D0] text-sm mt-1">Manage your biometric sign-in and ID card.</p>
       </div>
 
+      {/* Biometric */}
       <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-6">
         <div className="flex items-center gap-3 mb-4">
           <span className="w-10 h-10 rounded-lg bg-[#00C8FF]/10 text-[#00C8FF] flex items-center justify-center">
@@ -62,7 +96,7 @@ export default function CorporateSettings() {
           <div>
             <h2 className="font-semibold font-sora text-sm">Face sign-in</h2>
             <p className="text-xs text-[#6E7A91]">
-              {enrolled === null ? 'Checking…' : enrolled ? 'Enrolled — you can log in with Face.' : 'Not set up yet — log in by password, code, or QR until you enrol.'}
+              {enrolled === null ? 'Checking…' : enrolled ? 'Enrolled — you can log in with Face.' : 'Not set up — log in by password, code, or QR until you enrol.'}
             </p>
           </div>
           {enrolled && (
@@ -85,18 +119,61 @@ export default function CorporateSettings() {
           </button>
         ) : (
           <div className="space-y-3">
-            <p className="text-xs text-[#A8B2D0]">Center your face in the oval; it captures automatically.</p>
-            <FaceCapture mode="register" onCapture={onCapture} />
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setMode('capture')}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${mode === 'capture' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'}`}
+              >
+                Live camera
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode('upload')}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${mode === 'upload' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'}`}
+              >
+                From gallery
+              </button>
+            </div>
+
+            {mode === 'capture' ? (
+              <>
+                <p className="text-xs text-[#A8B2D0]">Center your face in the oval; it captures automatically.</p>
+                <FaceCapture mode="register" onCapture={onCapture} />
+              </>
+            ) : (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => onFile(e.target.files?.[0])}
+                title="Upload a clear front-facing photo"
+                className="block w-full text-xs text-[#A8B2D0] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#00C8FF]/15 file:text-[#00C8FF] file:font-semibold"
+              />
+            )}
+
             {saving && (
-              <p className="text-xs text-[#00C8FF] flex items-center gap-1">
-                <Loader2 className="animate-spin" size={12} /> Saving…
-              </p>
+              <p className="text-xs text-[#00C8FF] flex items-center gap-1"><Loader2 className="animate-spin" size={12} /> Saving…</p>
             )}
             <button type="button" onClick={() => setEnrolling(false)} className="text-xs text-[#6E7A91] hover:text-white">
               Cancel
             </button>
           </div>
         )}
+      </div>
+
+      {/* ID card */}
+      <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-6 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="font-semibold font-sora text-sm">My staff ID card</h2>
+          <p className="text-xs text-[#6E7A91]">Download your badge (photo, staff no., verification code, QR).</p>
+        </div>
+        <button
+          type="button"
+          onClick={downloadMyCard}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#E8B84B] to-[#FFC107] text-black font-bold font-sora text-sm"
+        >
+          <IdCard size={16} /> Download
+        </button>
       </div>
     </div>
   );

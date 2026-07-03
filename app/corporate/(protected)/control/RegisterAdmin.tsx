@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import FaceCapture, { type FaceCaptureResult } from '@/components/corp/FaceCapture';
+import { imageToIdData } from '@/lib/faceClient';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
 import { CAPABILITIES } from '@/lib/corp/constants';
 import { Loader2, UserPlus, IdCard, X } from 'lucide-react';
@@ -35,21 +36,10 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
   const handleFile = (file: File | undefined) => {
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const ratio = 35 / 45;
-        const iw = img.width, ih = img.height;
-        let cw = iw, ch = iw / ratio;
-        if (ch > ih) { ch = ih; cw = ih * ratio; }
-        const sx = (iw - cw) / 2, sy = (ih - ch) / 2;
-        const canvas = document.createElement('canvas');
-        canvas.width = 420; canvas.height = 540;
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(img, sx, sy, cw, ch, 0, 0, 420, 540);
-        setUploadedPhoto(canvas.toDataURL('image/jpeg', 0.9));
-      };
-      img.src = reader.result as string;
+    reader.onload = async () => {
+      // Auto-crop to the standard 35×45 ID photo, centred on the detected face.
+      const { photo } = await imageToIdData(reader.result as string);
+      setUploadedPhoto(photo);
     };
     reader.readAsDataURL(file);
   };
