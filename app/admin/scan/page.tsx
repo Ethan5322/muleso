@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ScanBarcode, Camera, Loader2, CheckCircle2, XCircle, X, Ban, RotateCcw, IdCard, Users } from 'lucide-react';
 import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser';
+import { DecodeHintType, BarcodeFormat } from '@zxing/library';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
 
 interface Staff {
@@ -11,13 +12,24 @@ interface Staff {
   display_name?: string;
   staff_number?: string;
   department_name?: string;
+  role_title?: string;
   status?: string;
   is_visitor?: boolean;
   is_super_admin?: boolean;
   expires_at?: string | null;
+  suspended_until?: string | null;
   email?: string;
   photo_data_url?: string | null;
 }
+
+const SCAN_HINTS = new Map();
+SCAN_HINTS.set(DecodeHintType.POSSIBLE_FORMATS, [
+  BarcodeFormat.QR_CODE,
+  BarcodeFormat.CODE_128,
+  BarcodeFormat.CODE_39,
+  BarcodeFormat.EAN_13,
+]);
+SCAN_HINTS.set(DecodeHintType.TRY_HARDER, true);
 
 export default function ScanPage() {
   const [code, setCode] = useState('');
@@ -98,7 +110,7 @@ export default function ScanPage() {
     let cancelled = false;
     (async () => {
       try {
-        const reader = new BrowserMultiFormatReader();
+        const reader = new BrowserMultiFormatReader(SCAN_HINTS);
         if (!videoRef.current) return;
         const controls = await reader.decodeFromVideoDevice(undefined, videoRef.current, (res) => {
           if (res) {
@@ -139,7 +151,7 @@ export default function ScanPage() {
       {/* Scanner input (works with any USB/Bluetooth barcode scanner) */}
       <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-xl p-5 space-y-3">
         <label className="block text-xs font-semibold text-[#7A8BA8]">
-          Scan the barcode on the ID (or type the verification code) and press Enter
+          Scan the barcode <span className="text-[#00C8FF]">or QR</span> on the ID (or type the verification code) and press Enter
         </label>
         <div className="flex gap-2">
           <input
@@ -170,7 +182,10 @@ export default function ScanPage() {
           </button>
         ) : (
           <div className="relative rounded-lg overflow-hidden border border-[#1E3A5F]">
-            <video ref={videoRef} playsInline muted className="w-full h-48 object-cover" />
+            <video ref={videoRef} autoPlay playsInline muted className="w-full h-56 object-cover" />
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="w-4/5 h-16 border-2 border-[#00C8FF]/70 rounded-lg" />
+            </div>
             <button type="button" onClick={stopCam} className="absolute top-2 right-2 bg-black/60 rounded-full p-1">
               <X size={16} />
             </button>
@@ -203,6 +218,7 @@ export default function ScanPage() {
                     {s?.is_visitor && <Badge color="#E8B84B">Visitor</Badge>}
                   </div>
                   <p className="text-sm text-[#00C8FF] font-mono">{s?.staff_number}</p>
+                  {s?.role_title && <p className="text-sm text-[#F0F2FA] font-semibold">{s.role_title}</p>}
                   <p className="text-sm text-[#7A8BA8]">{s?.department_name}</p>
                   {s?.email && <p className="text-xs text-[#7A8BA8] mt-1">{s.email}</p>}
 

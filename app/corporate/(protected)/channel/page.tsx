@@ -11,6 +11,7 @@ interface Msg {
   parent_message_id: string | null;
   body: string;
   pinned: boolean;
+  target_department_id: number | null;
   created_at: string;
 }
 interface Reaction {
@@ -30,6 +31,9 @@ export default function ChannelPage() {
   const [reactions, setReactions] = useState<Reaction[]>([]);
   const [nameById, setNameById] = useState<Record<string, string>>({});
   const [roster, setRoster] = useState<{ id: string; display_name: string }[]>([]);
+  const [departments, setDepartments] = useState<{ id: number; name: string }[]>([]);
+  const [deptNameById, setDeptNameById] = useState<Record<number, string>>({});
+  const [target, setTarget] = useState<string>(''); // '' = all staff
   const [mentionOpen, setMentionOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState('');
@@ -49,6 +53,8 @@ export default function ChannelPage() {
     setReactions(d.reactions ?? []);
     setNameById(d.nameById ?? {});
     setRoster(d.roster ?? []);
+    setDepartments(d.departments ?? []);
+    setDeptNameById(d.deptNameById ?? {});
     setLoading(false);
     // viewing the channel clears mention notifications
     fetch('/corporate/api/channel/read-mentions', { method: 'POST' }).catch(() => {});
@@ -137,7 +143,13 @@ export default function ChannelPage() {
     const res = await fetch('/corporate/api/channel/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ channel_id: channel.id, body, parent_message_id: parent || null }),
+      body: JSON.stringify({
+        channel_id: channel.id,
+        body,
+        parent_message_id: parent || null,
+        // replies inherit the thread; top-level posts use the selected target
+        target_department_id: parent ? null : target || null,
+      }),
     });
     if (res.ok) {
       if (parent) {
@@ -192,7 +204,14 @@ export default function ChannelPage() {
       <div className={`${isReply ? 'ml-6 border-l border-[#1A2640] pl-3' : ''}`}>
         <div className="bg-[#0D1528] border border-[#1A2640] rounded-xl px-4 py-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-semibold text-sm text-[#F0F2FA]">{nameById[m.sender_id] || 'Admin'}</span>
+            <span className="font-semibold text-sm text-[#F0F2FA] flex items-center gap-2">
+              {nameById[m.sender_id] || 'Admin'}
+              {m.target_department_id != null && (
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#7B2FFF]/15 text-[#a78bfa]">
+                  → {deptNameById[m.target_department_id] || `Dept ${m.target_department_id}`}
+                </span>
+              )}
+            </span>
             <div className="flex items-center gap-2">
               {m.pinned && <Pin size={12} className="text-[#E8B84B]" />}
               <span className="text-[10px] text-[#6E7A91]">
@@ -324,11 +343,24 @@ export default function ChannelPage() {
             ))}
           </div>
         )}
+        {departments.length > 0 && (
+          <select
+            value={target}
+            onChange={(e) => setTarget(e.target.value)}
+            title="Send to"
+            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-2 py-2 text-xs text-[#A8B2D0] max-w-[130px]"
+          >
+            <option value="">📢 All staff</option>
+            {departments.map((d) => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </select>
+        )}
         <input
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send(input))}
-          placeholder="Share an update…  use @ to mention someone"
+          placeholder={target ? `Message ${deptNameById[Number(target)] || 'department'}…` : 'Share an update…  @ to mention'}
           className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
         />
         <button

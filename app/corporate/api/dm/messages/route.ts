@@ -1,32 +1,30 @@
-import { NextResponse } from 'next/server';
-import { requireCorp } from '@/lib/corp/api';
-import { createCorpServerClient } from '@/lib/corp/supabaseServer';
+import { NextResponse, type NextRequest } from 'next/server';
+import { getMessagingIdentity } from '@/lib/corp/api';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Current admin's DMs (RLS returns only rows where they are sender/recipient)
-// + the roster of other admins for the recipient dropdown.
-export async function GET() {
-  const { ctx, error } = await requireCorp();
-  if (error) return error;
-
-  const supabase = await createCorpServerClient();
+// Current admin's DMs + the roster of other admins (for the recipient list).
+export async function GET(req: NextRequest) {
+  const id = await getMessagingIdentity(req);
+  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 
   const [{ data: messages }, { data: roster }] = await Promise.all([
-    supabase
+    supabaseAdmin
       .from('corp_direct_messages')
       .select('*')
+      .or(`sender_id.eq.${id.adminId},recipient_id.eq.${id.adminId}`)
       .order('created_at', { ascending: true })
       .limit(1000),
-    supabase
+    supabaseAdmin
       .from('corp_department_admins')
       .select('id, display_name, department_name, department_id, status, is_super_admin')
-      .neq('id', ctx.admin.id)
+      .neq('id', id.adminId)
       .eq('status', 'active'),
   ]);
 
   return NextResponse.json({
-    me: ctx.admin.id,
+    me: id.adminId,
     messages: messages ?? [],
     contacts: roster ?? [],
   });

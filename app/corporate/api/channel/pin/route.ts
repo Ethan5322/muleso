@@ -1,28 +1,36 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { requireCorp } from '@/lib/corp/api';
-import { createCorpServerClient } from '@/lib/corp/supabaseServer';
+import { getMessagingIdentity } from '@/lib/corp/api';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
 
-// Pin / unpin a channel message (author or Super Admin — enforced by RLS).
+// Pin / unpin a channel message (author or super/main admin).
 export async function POST(req: NextRequest) {
-  const { ctx, error } = await requireCorp();
-  if (error) return error;
-  if (ctx.admin.is_visitor) {
-    return NextResponse.json({ error: 'Read-only visitor access.' }, { status: 403 });
-  }
+  const id = await getMessagingIdentity(req);
+  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (id.isVisitor) return NextResponse.json({ error: 'Read-only visitor access.' }, { status: 403 });
 
   const { message_id, pinned } = await req.json();
   if (!message_id || typeof pinned !== 'boolean') {
     return NextResponse.json({ error: 'invalid payload' }, { status: 400 });
   }
 
-  const supabase = await createCorpServerClient();
-  const { error: updErr } = await supabase
+  // Only the author or a super/main admin can pin.
+  if (!id.isSuper) {
+    const { data: msg } = await supabaseAdmin
+      .from('corp_team_channel_messages')
+      .select('sender_id')
+      .eq('id', message_id)
+      .maybeSingle();
+    if (!msg || msg.sender_id !== id.adminId) {
+      return NextResponse.json({ error: 'Not allowed.' }, { status: 403 });
+    }
+  }
+
+  const { error } = await supabaseAdmin
     .from('corp_team_channel_messages')
     .update({ pinned })
     .eq('id', message_id);
-
-  if (updErr) return NextResponse.json({ error: updErr.message }, { status: 500 });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }

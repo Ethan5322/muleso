@@ -4,7 +4,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { createCorpBrowserClient } from '@/lib/corp/supabaseBrowser';
-import { Building2, LogOut, LayoutDashboard, MessageSquare, Hash, ShieldCheck, Settings } from 'lucide-react';
+import { Building2, LogOut, LayoutDashboard, MessageSquare, Hash, ShieldCheck, Settings, ArrowLeft } from 'lucide-react';
 import type { CorpAdmin } from '@/lib/corp/constants';
 
 export default function CorpShell({
@@ -84,6 +84,14 @@ export default function CorpShell({
       <header className="border-b border-[#1A2640] bg-[#0A0F1E]/80 backdrop-blur sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              title="Back"
+              className="p-1.5 -ml-1 rounded-lg text-[#A8B2D0] hover:text-white hover:bg-[#0D1528] transition-colors"
+            >
+              <ArrowLeft size={18} />
+            </button>
             <span className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center">
               <Building2 className="text-white" size={18} />
             </span>
