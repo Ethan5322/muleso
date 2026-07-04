@@ -80,6 +80,14 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
+// The most-used destinations — surfaced as a bottom tab bar on phones.
+const QUICK_NAV: NavItem[] = [
+  { label: 'Home', href: '/admin', icon: LayoutDashboard, exact: true },
+  { label: 'Leads', href: '/admin/leads', icon: Inbox },
+  { label: 'Tasks', href: '/admin/tasks', icon: ListChecks },
+  { label: 'Chat', href: '/admin/team-chat', icon: MessageSquare },
+];
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -150,10 +158,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const NavLinks = () => (
-    <nav className="p-3 space-y-5">
+    <nav className="p-3 space-y-4">
       {NAV_SECTIONS.map((section) => (
         <div key={section.title}>
-          <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#4A5A78]">
+          <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#4A5A78]">
             {section.title}
           </p>
           <div className="space-y-0.5">
@@ -165,13 +173,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  aria-current={active ? 'page' : undefined}
+                  className={`group relative flex items-center gap-3 pl-3.5 pr-3 py-2.5 rounded-lg font-medium text-sm transition-all ${
                     active
-                      ? 'bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white shadow-lg shadow-[#00C8FF]/20'
+                      ? 'bg-[#00C8FF]/10 text-white'
                       : 'text-[#8A9AB8] hover:text-white hover:bg-[#141d2e]'
                   }`}
                 >
-                  <Icon size={18} />
+                  {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-gradient-to-b from-[#00C8FF] to-[#7B2FFF]" />}
+                  <Icon size={18} className={active ? 'text-[#00C8FF]' : 'text-[#6E7A91] group-hover:text-[#00C8FF]'} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -263,28 +273,59 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </header>
 
       <div className="flex">
-        {/* Desktop sidebar */}
-        <aside className="hidden lg:block w-60 shrink-0 bg-[#0A0E17] border-r border-[#1E3A5F] min-h-[calc(100vh-61px)]">
-          <NavLinks />
+        {/* Desktop sidebar — sticky & self-scrolling so long nav never gets cut off */}
+        <aside className="hidden lg:block w-60 shrink-0 bg-[#0A0E17] border-r border-[#1E3A5F]">
+          <div className="sticky top-[61px] h-[calc(100vh-61px)] overflow-y-auto">
+            <NavLinks />
+          </div>
         </aside>
 
-        {/* Mobile drawer */}
+        {/* Mobile drawer (full nav) */}
         {mobileOpen && (
           <>
             <div className="lg:hidden fixed inset-0 bg-black/60 z-40" onClick={() => setMobileOpen(false)} />
             <motion.aside
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              className="lg:hidden fixed top-[61px] left-0 bottom-0 w-64 bg-[#0A0E17] border-r border-[#1E3A5F] z-40 overflow-y-auto"
+              transition={{ type: 'tween', duration: 0.22 }}
+              className="lg:hidden fixed top-[61px] left-0 bottom-0 w-72 max-w-[82vw] bg-[#0A0E17] border-r border-[#1E3A5F] z-40 overflow-y-auto"
             >
               <NavLinks />
             </motion.aside>
           </>
         )}
 
-        {/* Main content */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8">{children}</main>
+        {/* Main content — extra bottom padding on phones to clear the tab bar */}
+        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">{children}</main>
       </div>
+
+      {/* Mobile bottom tab bar — quick access to the most-used areas */}
+      <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0A0E17]/95 backdrop-blur border-t border-[#1E3A5F] flex items-stretch">
+        {QUICK_NAV.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
+                active ? 'text-[#00C8FF]' : 'text-[#6E7A91]'
+              }`}
+            >
+              <Icon size={20} />
+              {item.label}
+            </Link>
+          );
+        })}
+        <button
+          type="button"
+          onClick={() => setMobileOpen(true)}
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium text-[#6E7A91]"
+        >
+          <Menu size={20} />
+          More
+        </button>
+      </nav>
     </div>
   );
 }
