@@ -210,7 +210,9 @@ export default function ChatbotWidget() {
     return Math.round(numeric * DEPOSIT_PERCENT);
   };
 
-  // Load Paystack's inline popup script once, on demand.
+  // Load Paystack's inline popup script once. We call this early (on open) so
+  // the script is already in memory by the time the client taps "Pay" — that
+  // removes the "searching…" delay before the popup appears.
   const loadPaystack = (): Promise<void> =>
     new Promise((resolve, reject) => {
       if (typeof window === 'undefined') return reject(new Error('no window'));
@@ -257,7 +259,10 @@ export default function ChatbotWidget() {
     }
   };
 
-  // Open the Paystack popup (shows Card / Instant EFT / Bank Transfer channels).
+  // Open the Paystack popup instantly (script is preloaded). Shows Card /
+  // Instant EFT / Bank Transfer channels. We mark the client "paid" the moment
+  // Paystack's callback fires (optimistic), then confirm server-side in the
+  // background — so the success screen is instant, not gated on our API.
   const handlePayDeposit = async () => {
     const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
     if (!publicKey) {
@@ -289,7 +294,10 @@ export default function ChatbotWidget() {
           ],
         },
         callback: (response: any) => {
-          // Paystack's callback is not async-aware; kick off verification.
+          // Show success immediately — Paystack only fires this on a real
+          // successful charge — then confirm with our server in the background.
+          setPaymentStatus('paid');
+          setShowConfetti(true);
           verifyPayment(response.reference);
         },
         onClose: () => {
@@ -303,6 +311,13 @@ export default function ChatbotWidget() {
       toast.error('Could not open the payment window. Please try again.');
     }
   };
+
+  // Preload Paystack the moment the chat opens, so tapping "Pay" opens the
+  // payment window instantly instead of waiting for the script to download.
+  useEffect(() => {
+    if (isOpen) loadPaystack().catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   // Get step visual dots
   const getStepDots = () => {
