@@ -19,6 +19,8 @@ const REQUIRED_TABLES = [
   'corp_config',
   'corp_departments',
   'corp_tasks',
+  'corp_task_comments',
+  'corp_task_mentions',
 ];
 
 async function checkSchema() {
