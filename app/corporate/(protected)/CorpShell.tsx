@@ -20,6 +20,7 @@ export default function CorpShell({
   const pathname = usePathname();
   const [unreadDM, setUnreadDM] = useState(0);
   const [unreadMentions, setUnreadMentions] = useState(0);
+  const [myOpenTasks, setMyOpenTasks] = useState(0);
 
   const loadUnread = useCallback(async () => {
     try {
@@ -28,6 +29,7 @@ export default function CorpShell({
         const d = await r.json();
         setUnreadDM(d.unreadDM ?? 0);
         setUnreadMentions(d.unreadMentions ?? 0);
+        setMyOpenTasks(d.myOpenTasks ?? 0);
       }
     } catch {
       /* ignore */
@@ -53,6 +55,11 @@ export default function CorpShell({
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'corp_channel_mentions', filter: `mentioned_admin_id=eq.${admin.id}` },
+        () => loadUnread()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'corp_tasks', filter: `assignee_id=eq.${admin.id}` },
         () => loadUnread()
       )
       .subscribe();
@@ -122,7 +129,11 @@ export default function CorpShell({
           {nav.filter((i) => i.on).map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href;
-            const count = item.href === '/corporate/messages' ? unreadDM : item.href === '/corporate/channel' ? unreadMentions : 0;
+            const count =
+              item.href === '/corporate/messages' ? unreadDM
+              : item.href === '/corporate/channel' ? unreadMentions
+              : item.href === '/corporate/work' ? myOpenTasks
+              : 0;
             return (
               <Link
                 key={item.href}
@@ -152,7 +163,11 @@ export default function CorpShell({
                 ? 'bg-[#00C8FF]/10 text-[#00C8FF]'
                 : 'text-[#A8B2D0] hover:bg-[#0D1528] hover:text-[#F0F2FA]'
             }`;
-            const count = item.href === '/corporate/messages' ? unreadDM : item.href === '/corporate/channel' ? unreadMentions : 0;
+            const count =
+              item.href === '/corporate/messages' ? unreadDM
+              : item.href === '/corporate/channel' ? unreadMentions
+              : item.href === '/corporate/work' ? myOpenTasks
+              : 0;
             const badge =
               count > 0 ? (
                 <span className="ml-auto text-[10px] font-bold bg-[#00C8FF] text-black rounded-full px-1.5 py-0.5">
