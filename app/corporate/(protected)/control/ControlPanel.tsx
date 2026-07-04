@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { CAPABILITIES, type CorpAdmin } from '@/lib/corp/constants';
 import { Loader2, ShieldCheck, Ban, RotateCcw, ScrollText, Trash2, MessageSquareLock, Check, IdCard } from 'lucide-react';
+import toast from 'react-hot-toast';
 import RegisterAdmin from './RegisterAdmin';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
 
@@ -70,8 +71,12 @@ export default function ControlPanel() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ department_admin_id: adminId, capability_key: key, enabled: next }),
     });
-    if (!res.ok) await load(); // revert on failure
-    else load();
+    if (!res.ok) {
+      toast.error('Could not update that capability — please try again.');
+      await load(); // revert on failure
+    } else {
+      load();
+    }
     setBusy(null);
   };
 
@@ -84,11 +89,13 @@ export default function ControlPanel() {
       if (input.trim() !== '' && Number.isFinite(n) && n > 0) days = n;
     }
     setBusy(`status:${adminId}`);
-    await fetch('/corporate/api/admin-status', {
+    const res = await fetch('/corporate/api/admin-status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ department_admin_id: adminId, status, days }),
     });
+    if (res.ok) toast.success(status === 'suspended' ? 'Admin suspended' : 'Admin reactivated');
+    else toast.error('Action failed — please try again.');
     await load();
     setBusy(null);
   };
@@ -100,7 +107,11 @@ export default function ControlPanel() {
       if (res.ok) {
         const { card } = await res.json();
         await generateIdCard(card);
+      } else {
+        toast.error('Could not load that ID card.');
       }
+    } catch {
+      toast.error('Could not generate the ID card.');
     } finally {
       setBusy(null);
     }
@@ -109,11 +120,13 @@ export default function ControlPanel() {
   const deleteAdmin = async (adminId: string, name: string) => {
     if (!confirm(`Permanently delete ${name}? This removes their account and all their data.`)) return;
     setBusy(`del:${adminId}`);
-    await fetch('/corporate/api/admin-delete', {
+    const res = await fetch('/corporate/api/admin-delete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ department_admin_id: adminId }),
     });
+    if (res.ok) toast.success(`${name} deleted`);
+    else toast.error('Could not delete — please try again.');
     await load();
     setBusy(null);
   };
