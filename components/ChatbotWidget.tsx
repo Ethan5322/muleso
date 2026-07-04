@@ -40,7 +40,13 @@ interface BookingData {
   termsAccepted: boolean;
   bookingReference: string;
   verificationCode?: string;
+  bookingId?: string;
 }
+
+// Deposit charged at booking time = this share of the service starting price.
+// (Balance is invoiced on delivery.) Custom / "Other" jobs use a flat secure fee.
+const DEPOSIT_PERCENT = 0.5;
+const CUSTOM_DEPOSIT = 1500;
 
 const COUNTRY_CODES: { [key: string]: string } = {
   'south africa': '+27',
@@ -177,6 +183,7 @@ export default function ChatbotWidget() {
     bookingReference: '',
   });
   const [showConfetti, setShowConfetti] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'paid'>('idle');
   const [validationError, setValidationError] = useState('');
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const [history, setHistory] = useState<StageType[]>([]);
@@ -192,6 +199,109 @@ export default function ChatbotWidget() {
   const getServicePrice = (serviceName: string) => {
     const service = SERVICES.find(s => s.value === serviceName);
     return service?.price || 'Custom';
+  };
+
+  // Deposit (in ZAR) to secure this booking. 50% of the starting price for
+  // fixed-price services; a flat fee for Custom/Other jobs.
+  const getServiceDeposit = (serviceName: string): number => {
+    const priceStr = getServicePrice(serviceName);
+    const numeric = parseInt(priceStr.replace(/[^0-9]/g, ''), 10);
+    if (!numeric || isNaN(numeric)) return CUSTOM_DEPOSIT;
+    return Math.round(numeric * DEPOSIT_PERCENT);
+  };
+
+  // Load Paystack's inline popup script once, on demand.
+  const loadPaystack = (): Promise<void> =>
+    new Promise((resolve, reject) => {
+      if (typeof window === 'undefined') return reject(new Error('no window'));
+      if ((window as any).PaystackPop) return resolve();
+      const existing = document.getElementById('paystack-inline-js') as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener('load', () => resolve());
+        existing.addEventListener('error', () => reject(new Error('paystack load failed')));
+        return;
+      }
+      const s = document.createElement('script');
+      s.id = 'paystack-inline-js';
+      s.src = 'https://js.paystack.co/v1/inline.js';
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('paystack load failed'));
+      document.body.appendChild(s);
+    });
+
+  // Re-check the payment server-side, then flip the UI to "paid".
+  const verifyPayment = async (reference: string) => {
+    try {
+      const res = await fetch('/api/paystack/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reference,
+          bookingId: bookingData.bookingId,
+          bookingReference: bookingData.bookingReference,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setPaymentStatus('paid');
+        setShowConfetti(true);
+        toast.success('✅ Payment confirmed — your booking is secured!');
+      } else {
+        setPaymentStatus('idle');
+        toast.error(data.error || 'We could not verify the payment. If money left your account, contact us on WhatsApp.');
+      }
+    } catch {
+      setPaymentStatus('idle');
+      toast.error('Payment verification failed. Please contact us on WhatsApp.');
+    }
+  };
+
+  // Open the Paystack popup (shows Card / Instant EFT / Bank Transfer channels).
+  const handlePayDeposit = async () => {
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+    if (!publicKey) {
+      toast.error('Online payment is not set up yet. Ethan will send you a payment link.');
+      return;
+    }
+    const deposit = getServiceDeposit(bookingData.service);
+    const email =
+      bookingData.email?.trim() ||
+      `${bookingData.phoneNumber.replace(/\D/g, '') || 'client'}@mulesoo.booking`;
+
+    try {
+      setPaymentStatus('processing');
+      await loadPaystack();
+      const PaystackPop = (window as any).PaystackPop;
+      const handler = PaystackPop.setup({
+        key: publicKey,
+        email,
+        amount: deposit * 100, // Paystack expects the smallest unit (cents)
+        currency: 'ZAR',
+        ref: `MULE-${Date.now()}`,
+        label: `MuleSoo — ${bookingData.service || 'Project'} deposit`,
+        channels: ['card', 'eft', 'bank', 'bank_transfer', 'mobile_money', 'ussd', 'qr'],
+        metadata: {
+          custom_fields: [
+            { display_name: 'Client', variable_name: 'client', value: bookingData.fullName },
+            { display_name: 'Service', variable_name: 'service', value: bookingData.service },
+            { display_name: 'Booking Ref', variable_name: 'booking_ref', value: bookingData.bookingReference },
+          ],
+        },
+        callback: (response: any) => {
+          // Paystack's callback is not async-aware; kick off verification.
+          verifyPayment(response.reference);
+        },
+        onClose: () => {
+          setPaymentStatus((s) => (s === 'paid' ? s : 'idle'));
+        },
+      });
+      handler.openIframe();
+    } catch (e) {
+      console.error('Paystack open error:', e);
+      setPaymentStatus('idle');
+      toast.error('Could not open the payment window. Please try again.');
+    }
   };
 
   // Get step visual dots
@@ -366,8 +476,12 @@ export default function ChatbotWidget() {
       }
 
       const responseData = await response.json();
-      if (responseData.verificationCode) {
-        setBookingData(prev => ({ ...prev, verificationCode: responseData.verificationCode }));
+      if (responseData.verificationCode || responseData.bookingId) {
+        setBookingData(prev => ({
+          ...prev,
+          verificationCode: responseData.verificationCode ?? prev.verificationCode,
+          bookingId: responseData.bookingId ?? prev.bookingId,
+        }));
       }
     } catch (error) {
       console.error('Error submitting booking:', error);
@@ -382,6 +496,7 @@ export default function ChatbotWidget() {
     setHistory([]);
     setFuture([]);
     setShowConfetti(false);
+    setPaymentStatus('idle');
     setBookingData({
       fullName: '',
       email: '',
@@ -400,6 +515,7 @@ export default function ChatbotWidget() {
       clientIDType: '',
       clientID: '',
       verificationCode: undefined,
+      bookingId: undefined,
     });
   };
 
@@ -966,6 +1082,51 @@ export default function ChatbotWidget() {
                       <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
                       <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ethan will contact you within 2 hours</p>
                     </div>
+
+                    {/* Deposit Payment */}
+                    {paymentStatus === 'paid' ? (
+                      <div className="bg-[rgba(0,255,136,0.08)] border border-[var(--accent-green)] p-4 rounded-lg text-center">
+                        <p className="text-[var(--accent-green)] font-bold flex items-center justify-center gap-2">
+                          <CheckCircle size={18} /> Deposit Paid — Booking Secured!
+                        </p>
+                        <p className="text-xs text-[var(--text-secondary)] mt-1">
+                          A receipt has been sent to your email by Paystack.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="bg-[var(--bg-primary)] border border-[var(--accent-gold)] p-4 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm font-semibold text-[var(--text-primary)]">
+                            🔒 Secure Your Booking
+                          </p>
+                          <p className="text-lg font-bold text-[var(--accent-gold)]">
+                            R{getServiceDeposit(bookingData.service).toLocaleString('en-ZA')}
+                          </p>
+                        </div>
+                        <p className="text-xs text-[var(--text-secondary)] mb-3">
+                          Pay a deposit now to lock in your slot. The balance is invoiced on delivery.
+                        </p>
+                        <motion.button
+                          whileHover={{ scale: paymentStatus === 'processing' ? 1 : 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={handlePayDeposit}
+                          disabled={paymentStatus === 'processing'}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(0,200,255,0.4)] transition-all text-base disabled:opacity-60"
+                        >
+                          {paymentStatus === 'processing' ? (
+                            <>
+                              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              Opening payment…
+                            </>
+                          ) : (
+                            <>💳 Pay R{getServiceDeposit(bookingData.service).toLocaleString('en-ZA')} Deposit</>
+                          )}
+                        </motion.button>
+                        <p className="text-[10px] text-[var(--text-secondary)] text-center mt-2">
+                          💳 Card · ⚡ Instant EFT · 🏦 Bank Transfer — secured by Paystack 🔒
+                        </p>
+                      </div>
+                    )}
 
                   {/* Client Details Summary */}
                   <div className="space-y-3 text-sm">

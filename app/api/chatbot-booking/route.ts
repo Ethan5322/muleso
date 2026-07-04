@@ -47,8 +47,9 @@ export async function POST(req: NextRequest) {
     const verificationCode = generateVerificationCode();
 
     // Save to Supabase if configured
+    let bookingId: string | null = null;
     if (hasSupabase && supabase) {
-      const { error } = await supabase
+      const { data: inserted, error } = await supabase
         .from('bookings')
         .insert({
           name: fullName,
@@ -70,6 +71,8 @@ export async function POST(req: NextRequest) {
 
       if (error) {
         console.error('Supabase error:', error);
+      } else {
+        bookingId = inserted?.[0]?.id ?? null;
       }
     }
 
@@ -126,6 +129,7 @@ export async function POST(req: NextRequest) {
       {
         message: 'Booking received! Check your WhatsApp for confirmation. Ethan will contact you within 2 hours.',
         verificationCode: verificationCode,
+        bookingId,
         booking: {
           fullName,
           email,
