@@ -81,11 +81,11 @@ export default function AdminOverview() {
   }, [bookings, leads]);
 
   const kpis = [
-    { icon: Inbox, label: 'Leads', value: leads.length, sub: `${newLeads} new`, color: 'from-cyan-600 to-blue-500' },
-    { icon: BookOpen, label: 'Bookings', value: bookings.length, sub: `${pending} pending`, color: 'from-blue-600 to-cyan-500' },
-    { icon: Activity, label: 'Conversion', value: `${conversion}%`, sub: `${won} won`, color: 'from-emerald-600 to-teal-500' },
-    { icon: Users, label: 'Visitors', value: visitors.length, sub: `${visitorsToday} today`, color: 'from-purple-600 to-pink-500' },
-    { icon: QrCode, label: 'QR Scans', value: scans.length, sub: `${portfolioCount} projects`, color: 'from-amber-600 to-orange-500' },
+    { icon: Inbox, label: 'Leads', value: leads.length, sub: `${newLeads} new`, color: 'from-cyan-600 to-blue-500', href: '/admin/leads' },
+    { icon: BookOpen, label: 'Bookings', value: bookings.length, sub: `${pending} pending`, color: 'from-blue-600 to-cyan-500', href: '/admin/bookings' },
+    { icon: Activity, label: 'Conversion', value: `${conversion}%`, sub: `${won} won`, color: 'from-emerald-600 to-teal-500', href: '/admin/bookings' },
+    { icon: Users, label: 'Visitors', value: visitors.length, sub: `${visitorsToday} today`, color: 'from-purple-600 to-pink-500', href: '/admin/visitors' },
+    { icon: QrCode, label: 'QR Scans', value: scans.length, sub: `${portfolioCount} projects`, color: 'from-amber-600 to-orange-500', href: '/admin/qr-scans' },
   ];
 
   const quickActions = [
@@ -129,7 +129,11 @@ export default function AdminOverview() {
           : kpis.map((s, i) => {
               const Icon = s.icon;
               return (
-                <div key={i} className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-xl p-5 hover:border-[#00C8FF] transition-all">
+                <Link
+                  key={i}
+                  href={s.href}
+                  className="block bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-xl p-5 hover:border-[#00C8FF] hover:-translate-y-0.5 transition-all"
+                >
                   <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${s.color} flex items-center justify-center mb-3`}>
                     <Icon className="text-white" size={20} />
                   </div>
@@ -138,7 +142,7 @@ export default function AdminOverview() {
                     <p className="text-2xl font-bold text-white">{s.value}</p>
                     <span className="text-[11px] text-emerald-400 font-semibold">{s.sub}</span>
                   </div>
-                </div>
+                </Link>
               );
             })}
       </div>
@@ -199,7 +203,11 @@ export default function AdminOverview() {
           ) : (
             <div className="space-y-2">
               {activity.map((a) => (
-                <div key={`${a.kind}-${a.id}`} className="flex items-center gap-3 p-2.5 hover:bg-[#141d2e] rounded-lg transition">
+                <Link
+                  key={`${a.kind}-${a.id}`}
+                  href={a.kind === 'booking' ? '/admin/bookings' : '/admin/leads'}
+                  className="flex items-center gap-3 p-2.5 hover:bg-[#141d2e] rounded-lg transition"
+                >
                   <span className={`w-8 h-8 rounded-lg flex items-center justify-center ${a.kind === 'booking' ? 'bg-[#00C8FF]/10 text-[#00C8FF]' : 'bg-[#7B2FFF]/10 text-[#a78bfa]'}`}>
                     {a.kind === 'booking' ? <BookOpen size={15} /> : <Inbox size={15} />}
                   </span>
@@ -217,7 +225,7 @@ export default function AdminOverview() {
                   {a.status && (
                     <span className="text-[11px] font-semibold text-[#8A9AB8]">{a.status}</span>
                   )}
-                </div>
+                </Link>
               ))}
             </div>
           )}
