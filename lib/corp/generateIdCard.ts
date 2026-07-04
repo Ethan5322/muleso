@@ -236,12 +236,11 @@ async function renderIdCardCanvas(data: IdCardData): Promise<HTMLCanvasElement> 
   }
 
   // ============ BARCODE ============
-  // Encode a link to the holder's details page (not just the raw code), so that
-  // scanning the barcode opens the staff record — "just like an ID". The
-  // human-readable verification code still shows above. The page is admin-only,
-  // so only the main admin sees the details.
-  const idUrl = `https://mulesoo.vercel.app/admin/id/${encodeURIComponent(data.verification_code)}`;
-  const barcode = makeBarcodePng(idUrl);
+  // Encode the verification code (short = reliably scannable by the admin
+  // camera and hardware scanners). Scanning it in the admin Scan page resolves
+  // it to the holder's full details. A long URL here makes the 1D barcode too
+  // dense for a webcam to read.
+  const barcode = makeBarcodePng(data.verification_code);
   if (barcode) {
     try {
       const bImg = await loadImg(barcode);

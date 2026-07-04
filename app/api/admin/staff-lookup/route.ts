@@ -11,9 +11,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const rawCode = (req.nextUrl.searchParams.get('code') || '').trim();
-  // If a QR/URL was scanned, pull the token out of it.
+  let rawCode = (req.nextUrl.searchParams.get('code') || '').trim();
   let token = (req.nextUrl.searchParams.get('token') || '').trim();
+
+  // If a details URL was scanned (…/admin/id/<code> or …/id/<code>), pull the code out.
+  const idMatch = rawCode.match(/\/id\/([^/?#\s]+)/i);
+  if (idMatch) rawCode = decodeURIComponent(idMatch[1]);
+
+  // If a login QR/URL was scanned, pull the token out of it.
   if (!token && /token=/.test(rawCode)) {
     token = rawCode.split('token=')[1]?.split(/[&\s]/)[0] || '';
   }

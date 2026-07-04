@@ -108,22 +108,38 @@ export default function ScanPage() {
   useEffect(() => {
     if (!camOn) return;
     let cancelled = false;
+    let localControls: IScannerControls | null = null;
+
     (async () => {
       try {
         const reader = new BrowserMultiFormatReader(SCAN_HINTS);
         if (!videoRef.current) return;
-        const controls = await reader.decodeFromVideoDevice(undefined, videoRef.current, (res) => {
-          if (res) {
-            controls.stop();
+
+        const onResult = (res: { getText: () => string } | undefined) => {
+          if (res && !cancelled) {
+            localControls?.stop();
             controlsRef.current = null;
             setCamOn(false);
             lookup(res.getText());
           }
-        });
-        if (cancelled) controls.stop();
+        };
+
+        try {
+          // Prefer the rear camera — it focuses far better on printed codes.
+          localControls = await reader.decodeFromConstraints(
+            { video: { facingMode: { ideal: 'environment' } } },
+            videoRef.current,
+            onResult
+          );
+        } catch {
+          // Fallback: let the browser choose a camera (e.g. laptop webcam).
+          localControls = await reader.decodeFromVideoDevice(undefined, videoRef.current, onResult);
+        }
+
+        if (cancelled) localControls?.stop();
         else {
-          controlsRef.current = controls;
-          setCamMsg('Point the camera at the barcode…');
+          controlsRef.current = localControls;
+          setCamMsg('Hold the QR or barcode steady and fill the frame. QR scans easiest.');
         }
       } catch {
         setCamOn(false);
@@ -132,6 +148,7 @@ export default function ScanPage() {
     })();
     return () => {
       cancelled = true;
+      localControls?.stop();
       controlsRef.current?.stop();
       controlsRef.current = null;
     };
