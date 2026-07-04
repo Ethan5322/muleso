@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Loader2, Plus, Trash2, Flag, CalendarDays, User, Building2, CheckCircle2, MessageSquare, Send } from 'lucide-react';
+import { Loader2, Plus, Trash2, Flag, CalendarDays, User, Building2, CheckCircle2, MessageSquare, Send, Download } from 'lucide-react';
 import { TASK_STATUS, TASK_PRIORITY, type CorpTask } from '@/lib/corp/constants';
+import { downloadCSV } from '@/lib/csv';
 
 interface TaskComment {
   id: string;
@@ -15,6 +16,7 @@ interface TaskComment {
 function TaskComments({ taskId }: { taskId: string }) {
   const [comments, setComments] = useState<TaskComment[]>([]);
   const [nameById, setNameById] = useState<Record<string, string>>({});
+  const [roster, setRoster] = useState<{ id: string; display_name: string }[]>([]);
   const [me, setMe] = useState('');
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
@@ -27,6 +29,7 @@ function TaskComments({ taskId }: { taskId: string }) {
         const d = await r.json();
         setComments(d.comments ?? []);
         setNameById(d.nameById ?? {});
+        setRoster(d.roster ?? []);
         setMe(d.me ?? '');
       }
     } catch {
@@ -35,6 +38,8 @@ function TaskComments({ taskId }: { taskId: string }) {
       setLoading(false);
     }
   }, [taskId]);
+
+  const mention = (nm: string) => setInput((v) => `${v}${v && !v.endsWith(' ') ? ' ' : ''}@${nm} `);
 
   useEffect(() => {
     load();
@@ -77,11 +82,24 @@ function TaskComments({ taskId }: { taskId: string }) {
         </div>
       )}
       <div className="flex items-center gap-2">
+        {roster.length > 0 && (
+          <select
+            value=""
+            onChange={(e) => e.target.value && mention(e.target.value)}
+            title="Mention a teammate"
+            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-1.5 py-1.5 text-xs text-[#00C8FF] max-w-[42px]"
+          >
+            <option value="">@</option>
+            {roster.map((a) => (
+              <option key={a.id} value={a.display_name}>{a.display_name}</option>
+            ))}
+          </select>
+        )}
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), send())}
-          placeholder="Add a progress note…"
+          placeholder="Add a note… use @ to mention"
           className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#00C8FF]"
         />
         <button type="button" onClick={send} disabled={sending || !input.trim()} className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50">
@@ -116,9 +134,6 @@ const FILTERS = [
 
 function priorityMeta(p: string) {
   return TASK_PRIORITY.find((x) => x.key === p) ?? TASK_PRIORITY[1];
-}
-function statusMeta(s: string) {
-  return TASK_STATUS.find((x) => x.key === s) ?? TASK_STATUS[0];
 }
 
 export default function TaskBoard({ title = 'Work' }: { title?: string }) {
@@ -211,6 +226,23 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
     setCreating(false);
   };
 
+  const exportCsv = () => {
+    if (!data) return;
+    downloadCSV(
+      `tasks-${new Date().toISOString().slice(0, 10)}.csv`,
+      filtered.map((t) => ({
+        title: t.title,
+        status: t.status,
+        priority: t.priority,
+        department: t.department_id != null ? data.deptNameById[t.department_id] || `Dept ${t.department_id}` : '',
+        assignee: t.assignee_id ? data.nameById[t.assignee_id] || '' : '',
+        due_date: t.due_date || '',
+        created: t.created_at.slice(0, 10),
+        detail: t.detail || '',
+      }))
+    );
+  };
+
   if (loading) {
     return <p className="text-[#7A8BA8] text-sm flex items-center gap-2"><Loader2 className="animate-spin" size={15} /> Loading work…</p>;
   }
@@ -227,13 +259,24 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
             {data.isSuper ? 'Assign work to any department or person, and track it to done.' : 'Your department’s queue. Claim a task and move it to done.'}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowForm((v) => !v)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white text-sm font-semibold"
-        >
-          <Plus size={16} /> New task
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={exportCsv}
+            disabled={filtered.length === 0}
+            title="Export the tasks shown to CSV"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#1A2640] text-[#A8B2D0] hover:text-white text-sm font-semibold disabled:opacity-40"
+          >
+            <Download size={15} /> Export
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowForm((v) => !v)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white text-sm font-semibold"
+          >
+            <Plus size={16} /> New task
+          </button>
+        </div>
       </div>
 
       {showForm && (

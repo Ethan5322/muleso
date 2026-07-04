@@ -29,7 +29,8 @@ export default function CorpShell({
         const d = await r.json();
         setUnreadDM(d.unreadDM ?? 0);
         setUnreadMentions(d.unreadMentions ?? 0);
-        setMyOpenTasks(d.myOpenTasks ?? 0);
+        // My Work badge reflects open assignments AND unread @mentions on notes.
+        setMyOpenTasks((d.myOpenTasks ?? 0) + (d.unreadTaskMentions ?? 0));
       }
     } catch {
       /* ignore */
@@ -60,6 +61,11 @@ export default function CorpShell({
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'corp_tasks', filter: `assignee_id=eq.${admin.id}` },
+        () => loadUnread()
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'corp_task_mentions', filter: `mentioned_admin_id=eq.${admin.id}` },
         () => loadUnread()
       )
       .subscribe();

@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
   if (!id) return NextResponse.json({ unreadDM: 0, unreadMentions: 0 });
 
-  const [{ count: dmCount }, { count: mentionCount }, { count: taskCount }] = await Promise.all([
+  const [{ count: dmCount }, { count: mentionCount }, { count: taskCount }, { count: taskMentionCount }] = await Promise.all([
     supabaseAdmin
       .from('corp_direct_messages')
       .select('id', { count: 'exact', head: true })
@@ -26,7 +26,18 @@ export async function GET(req: NextRequest) {
       .select('id', { count: 'exact', head: true })
       .eq('assignee_id', id.adminId)
       .neq('status', 'done'),
+    // Unread @mentions on task notes.
+    supabaseAdmin
+      .from('corp_task_mentions')
+      .select('id', { count: 'exact', head: true })
+      .eq('mentioned_admin_id', id.adminId)
+      .is('read_at', null),
   ]);
 
-  return NextResponse.json({ unreadDM: dmCount ?? 0, unreadMentions: mentionCount ?? 0, myOpenTasks: taskCount ?? 0 });
+  return NextResponse.json({
+    unreadDM: dmCount ?? 0,
+    unreadMentions: mentionCount ?? 0,
+    myOpenTasks: taskCount ?? 0,
+    unreadTaskMentions: taskMentionCount ?? 0,
+  });
 }

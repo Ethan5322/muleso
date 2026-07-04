@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, BarChart3, Users, AlertTriangle, CheckCircle2, Inbox } from 'lucide-react';
+import { Loader2, BarChart3, Users, AlertTriangle, CheckCircle2, Inbox, Download } from 'lucide-react';
+import { downloadCSV } from '@/lib/csv';
 
 interface DeptReport {
   id: number;
@@ -51,9 +52,34 @@ export default function DepartmentReports() {
 
   return (
     <div className="text-white">
-      <div className="mb-5">
-        <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><BarChart3 className="text-[#00C8FF]" size={22} /> Department Reports</h1>
-        <p className="text-[#7A8BA8] text-sm mt-0.5">Workload and completion rate for every department — see who’s delivering and where work is piling up.</p>
+      <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><BarChart3 className="text-[#00C8FF]" size={22} /> Department Reports</h1>
+          <p className="text-[#7A8BA8] text-sm mt-0.5">Workload and completion rate for every department — see who’s delivering and where work is piling up.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() =>
+            downloadCSV(
+              `department-report-${new Date().toISOString().slice(0, 10)}.csv`,
+              reports.map((r) => ({
+                department: r.name,
+                members: r.headcount,
+                open: r.open,
+                in_progress: r.in_progress,
+                blocked: r.blocked,
+                done: r.done,
+                overdue: r.overdue,
+                total: r.total,
+                completion_percent: r.completion,
+              }))
+            )
+          }
+          disabled={reports.length === 0}
+          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#1A2640] text-[#A8B2D0] hover:text-white text-sm font-semibold disabled:opacity-40"
+        >
+          <Download size={15} /> Export CSV
+        </button>
       </div>
 
       {/* Totals */}

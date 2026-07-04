@@ -27,11 +27,25 @@ export async function GET(req: NextRequest) {
     .order('created_at', { ascending: true })
     .limit(200);
 
-  const { data: admins } = await supabaseAdmin.from('corp_department_admins').select('id, display_name');
+  const { data: admins } = await supabaseAdmin
+    .from('corp_department_admins')
+    .select('id, display_name, status');
   const nameById: Record<string, string> = {};
   (admins ?? []).forEach((a) => (nameById[a.id] = a.display_name || 'Admin'));
+  // Teammates available to @mention (active, named, not me).
+  const roster = (admins ?? [])
+    .filter((a) => a.display_name && a.status === 'active' && a.id !== id.adminId)
+    .map((a) => ({ id: a.id as string, display_name: a.display_name as string }));
 
-  return NextResponse.json({ comments: comments ?? [], nameById, me: id.adminId });
+  // Opening the thread clears any @mentions on this task for me.
+  await supabaseAdmin
+    .from('corp_task_mentions')
+    .update({ read_at: new Date().toISOString() })
+    .eq('task_id', taskId)
+    .eq('mentioned_admin_id', id.adminId)
+    .is('read_at', null);
+
+  return NextResponse.json({ comments: comments ?? [], nameById, roster, me: id.adminId });
 }
 
 // POST — add a comment to a task.
@@ -52,5 +66,24 @@ export async function POST(req: NextRequest) {
     .select()
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // @mentions → notify matched active admins (same convention as the channel).
+  try {
+    const { data: admins } = await supabaseAdmin
+      .from('corp_department_admins')
+      .select('id, display_name')
+      .eq('status', 'active');
+    const mentioned = (admins ?? []).filter(
+      (a) => a.display_name && a.id !== id.adminId && text.includes('@' + a.display_name)
+    );
+    if (mentioned.length) {
+      await supabaseAdmin.from('corp_task_mentions').insert(
+        mentioned.map((a) => ({ task_id: taskId, comment_id: data.id, mentioned_admin_id: a.id }))
+      );
+    }
+  } catch (e) {
+    console.error('task mention parse failed (continuing):', e);
+  }
+
   return NextResponse.json({ comment: data });
 }
