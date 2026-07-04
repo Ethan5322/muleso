@@ -1,8 +1,96 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Loader2, Plus, Trash2, Flag, CalendarDays, User, Building2, CheckCircle2 } from 'lucide-react';
+import { Loader2, Plus, Trash2, Flag, CalendarDays, User, Building2, CheckCircle2, MessageSquare, Send } from 'lucide-react';
 import { TASK_STATUS, TASK_PRIORITY, type CorpTask } from '@/lib/corp/constants';
+
+interface TaskComment {
+  id: string;
+  task_id: string;
+  author_id: string | null;
+  body: string;
+  created_at: string;
+}
+
+function TaskComments({ taskId }: { taskId: string }) {
+  const [comments, setComments] = useState<TaskComment[]>([]);
+  const [nameById, setNameById] = useState<Record<string, string>>({});
+  const [me, setMe] = useState('');
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+
+  const load = useCallback(async () => {
+    try {
+      const r = await fetch(`/corporate/api/tasks/comments?task_id=${taskId}`);
+      if (r.ok) {
+        const d = await r.json();
+        setComments(d.comments ?? []);
+        setNameById(d.nameById ?? {});
+        setMe(d.me ?? '');
+      }
+    } catch {
+      /* ignore */
+    } finally {
+      setLoading(false);
+    }
+  }, [taskId]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const send = async () => {
+    if (!input.trim()) return;
+    setSending(true);
+    const r = await fetch('/corporate/api/tasks/comments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task_id: taskId, body: input }),
+    });
+    if (r.ok) {
+      setInput('');
+      await load();
+    }
+    setSending(false);
+  };
+
+  return (
+    <div className="mt-3 pt-3 border-t border-[#1A2640]">
+      {loading ? (
+        <p className="text-[11px] text-[#6E7A91] flex items-center gap-1"><Loader2 className="animate-spin" size={11} /> Loading…</p>
+      ) : (
+        <div className="space-y-2 mb-2 max-h-56 overflow-y-auto">
+          {comments.length === 0 ? (
+            <p className="text-[11px] text-[#6E7A91]">No notes yet. Add the first progress note.</p>
+          ) : (
+            comments.map((c) => (
+              <div key={c.id} className={`text-xs rounded-lg px-2.5 py-1.5 ${c.author_id === me ? 'bg-[#00C8FF]/5 border border-[#00C8FF]/20' : 'bg-[#0D1528] border border-[#1A2640]'}`}>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-[#D4DAEA]">{c.author_id ? (nameById[c.author_id] || 'Admin') : 'Admin'}</span>
+                  <span className="text-[10px] text-[#5A6B88]">{new Date(c.created_at).toLocaleString()}</span>
+                </div>
+                <p className="text-[#A8B2D0] mt-0.5 whitespace-pre-wrap">{c.body}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+      <div className="flex items-center gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), send())}
+          placeholder="Add a progress note…"
+          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#00C8FF]"
+        />
+        <button type="button" onClick={send} disabled={sending || !input.trim()} className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50">
+          {sending ? <Loader2 className="animate-spin" size={13} /> : <Send size={13} />}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 interface Dept { id: number; name: string }
 interface RosterAdmin { id: string; display_name: string; department_id: number | null }
@@ -39,6 +127,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
   const [filter, setFilter] = useState('active');
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [openComments, setOpenComments] = useState<string | null>(null);
 
   // create form
   const [showForm, setShowForm] = useState(false);
@@ -263,6 +352,13 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
                       {s.label}
                     </button>
                   ))}
+                  <button
+                    type="button"
+                    onClick={() => setOpenComments((v) => (v === t.id ? null : t.id))}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-semibold inline-flex items-center gap-1 border ${openComments === t.id ? 'bg-[#7B2FFF]/15 text-[#a78bfa] border-[#7B2FFF]/40' : 'text-[#A8B2D0] hover:text-white border-[#1A2640]'}`}
+                  >
+                    <MessageSquare size={11} /> Notes
+                  </button>
                   {data.isSuper && (
                     <select
                       value={t.assignee_id || ''}
@@ -275,6 +371,8 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
                     </select>
                   )}
                 </div>
+
+                {openComments === t.id && <TaskComments taskId={t.id} />}
               </div>
             );
           })}
