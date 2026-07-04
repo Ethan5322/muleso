@@ -41,27 +41,21 @@ const INK: RGB = [10, 15, 30];
 const CARD: RGB = [13, 21, 40];
 const MUTED: RGB = [130, 145, 175];
 
-/** Rasterize the official SVG logo to a PNG data URL for embedding in the PDF. */
+/** Load the official transparent logo icon as a PNG data URL for the PDF. */
 async function loadLogoPng(): Promise<string | null> {
   try {
-    const res = await fetch('/mulesoo-logo-new.svg');
-    if (!res.ok) return null;
-    let svg = await res.text();
-    // ensure an intrinsic size so the browser renders it into the canvas
-    if (!/\bwidth=/.test(svg)) svg = svg.replace('<svg ', '<svg width="256" height="256" ');
-    const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     await new Promise<void>((resolve, reject) => {
       img.onload = () => resolve();
       img.onerror = reject;
-      img.src = url;
+      img.src = '/mulesoo-logo-icon.png';
     });
     const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
+    canvas.width = img.naturalWidth || 400;
+    canvas.height = img.naturalHeight || 400;
     const ctx = canvas.getContext('2d');
-    ctx?.drawImage(img, 0, 0, 256, 256);
-    URL.revokeObjectURL(url);
+    ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
     return canvas.toDataURL('image/png');
   } catch {
     return null;
@@ -98,8 +92,8 @@ export async function generateIdCard(data: IdCardData): Promise<void> {
   let textX = 4;
   if (logoPng) {
     try {
-      doc.addImage(logoPng, 'PNG', 2.5, 1, 9, 9);
-      textX = 12.5;
+      doc.addImage(logoPng, 'PNG', 2, 0.6, 10, 10);
+      textX = 13;
     } catch {
       /* fall back to wordmark-only */
     }

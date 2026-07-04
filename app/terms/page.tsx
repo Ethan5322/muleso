@@ -147,9 +147,12 @@ export default function TermsPage() {
               icon: '💰',
               title: '1. Payment & Deposit',
               content: [
-                '50% deposit required to start work',
-                'Remaining 50% due before final delivery',
-                'No refunds once work has begun',
+                '50% deposit required to secure your booking',
+                'The deposit is credited in full toward your total project fee',
+                'Remaining 50% due on delivery — you only pay the other half on completion',
+                'Proceed & receive the service: the deposit forms part of your fee (never lost)',
+                'Cancel after paying: the deposit is non-refundable and forfeited',
+                'Pay by card or Instant EFT via Paystack, or bank transfer (EFT)',
               ],
             },
             {

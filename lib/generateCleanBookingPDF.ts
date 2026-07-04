@@ -18,6 +18,10 @@ interface BookingData {
   clientID?: string;
   clientIDType?: 'national_id' | 'passport' | '';
   verificationCode?: string;
+  /** Deposit (50%) amount in ZAR to secure the booking. */
+  deposit?: number;
+  /** 'paid' once the deposit is confirmed, otherwise 'pending'. */
+  paymentStatus?: 'paid' | 'pending';
 }
 
 // Brand palette (matches website CSS variables)
@@ -26,6 +30,28 @@ const PURPLE: [number, number, number] = [123, 47, 255];
 const GOLD: [number, number, number] = [232, 184, 75];
 const INK: [number, number, number] = [20, 28, 46];
 const MUTED: [number, number, number] = [110, 122, 145];
+const GREEN: [number, number, number] = [0, 160, 85];
+const AMBER: [number, number, number] = [200, 138, 20];
+
+/** Load a PNG asset as a data URL + natural size (for aspect-correct placement). */
+async function loadLogoImage(src: string): Promise<{ dataUrl: string; w: number; h: number } | null> {
+  try {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = reject;
+      img.src = src;
+    });
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext('2d')?.drawImage(img, 0, 0);
+    return { dataUrl: canvas.toDataURL('image/png'), w: img.naturalWidth, h: img.naturalHeight };
+  } catch {
+    return null;
+  }
+}
 
 export const generateCleanBookingPDF = async (bookingData: BookingData): Promise<void> => {
   try {
@@ -38,6 +64,9 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     const centerX = pageWidth / 2;
 
     const verificationCode = bookingData.verificationCode || generateVerificationCode();
+
+    // Load the transparent brand logo (falls back to a text wordmark if missing)
+    const logo = await loadLogoImage('/mulesoo-logo-transparent.png');
 
     // Pre-generate the company QR code (encodes the company site + booking ref for traceability)
     let qrDataUrl = '';
@@ -65,15 +94,25 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     doc.setFillColor(...GOLD);
     doc.rect(0, 3, pageWidth, 0.8, 'F');
 
-    // LEFT: brand wordmark
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(22);
-    doc.setTextColor(...BLUE);
-    doc.text('MULESOO', margin, headerTop + 7);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(...MUTED);
-    doc.text('D I G I T A L   S E R V I C E S', margin, headerTop + 12);
+    // LEFT: brand logo (transparent PNG) with a small tagline, or text fallback
+    if (logo) {
+      const lw = 46;
+      const lh = (lw * logo.h) / logo.w;
+      doc.addImage(logo.dataUrl, 'PNG', margin, headerTop - 1, lw, lh);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(...MUTED);
+      doc.text('D I G I T A L   S E R V I C E S', margin + 1, headerTop - 1 + lh + 3.5);
+    } else {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(22);
+      doc.setTextColor(...BLUE);
+      doc.text('MULESOO', margin, headerTop + 7);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(...MUTED);
+      doc.text('D I G I T A L   S E R V I C E S', margin, headerTop + 12);
+    }
 
     // CENTER: company QR code + caption (centered horizontally, clear of side blocks)
     if (qrDataUrl) {
@@ -213,6 +252,45 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     yPos += specBoxH + 9;
 
     // ============================================================
+    // PAYMENT & DEPOSIT
+    // ============================================================
+    const isPaid = bookingData.paymentStatus === 'paid';
+    const depositAmount = bookingData.deposit && bookingData.deposit > 0 ? bookingData.deposit : null;
+    const statusColor = isPaid ? GREEN : AMBER;
+    const statusLabel = isPaid ? 'PAID' : 'PENDING';
+
+    sectionHeading('PAYMENT & DEPOSIT', GOLD);
+    const payBoxH = 25;
+    doc.setFillColor(255, 251, 240);
+    doc.setDrawColor(...GOLD);
+    doc.setLineWidth(0.4);
+    doc.roundedRect(margin, yPos, contentWidth, payBoxH, 1.5, 1.5, 'FD');
+    let pr = yPos + 6;
+    field('Deposit (50%):', depositAmount ? `R ${depositAmount.toLocaleString('en-ZA')}` : 'To be confirmed', col1X, pr, 30);
+
+    // Status pill (right-aligned)
+    const pillW = 30;
+    const pillX = pageWidth - margin - pillW - 3;
+    doc.setFillColor(...statusColor);
+    doc.roundedRect(pillX, pr - 4.4, pillW, 6.5, 3.25, 3.25, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(255, 255, 255);
+    doc.text(statusLabel, pillX + pillW / 2, pr, { align: 'center' });
+
+    pr += 7;
+    field('Balance:', 'Remaining 50% due on delivery', col1X, pr, 30);
+    pr += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(...MUTED);
+    const payNote = isPaid
+      ? 'Deposit received — thank you. It is credited in full toward your total project fee.'
+      : 'Pay the 50% deposit to secure your booking. It is credited in full toward your total project fee.';
+    doc.text(doc.splitTextToSize(payNote, contentWidth - 6), col1X, pr);
+    yPos += payBoxH + 9;
+
+    // ============================================================
     // VERIFICATION CODE
     // ============================================================
     doc.setFillColor(255, 251, 240);
@@ -290,11 +368,12 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
 
     addSection('2. PAYMENT TERMS & SCHEDULE', [
       '2.1 A 50% deposit is required to commence work. This secures your timeline and allows resources to be allocated.',
-      '2.2 The remaining 50% is due upon project completion, before final delivery of all files and access.',
-      '2.3 Accepted payment methods: Bank transfer (EFT), card via Stripe, and PayFast.',
-      '2.4 All pricing is in South African Rands (ZAR) unless otherwise agreed in writing.',
-      '2.5 Ownership and access to the completed project transfer only after payment is received in full.',
-      '2.6 Late payments overdue by more than 7 days accrue 2% interest per month.',
+      '2.2 The 50% deposit is credited in full toward the total project fee. Upon delivery of the completed service, the client pays only the remaining 50% balance.',
+      '2.3 The remaining 50% is due upon project completion, before final delivery of all files and access.',
+      '2.4 Accepted payment methods: card and Instant EFT via Paystack, and direct bank transfer (EFT).',
+      '2.5 All pricing is in South African Rands (ZAR) unless otherwise agreed in writing.',
+      '2.6 Ownership and access to the completed project transfer only after payment is received in full.',
+      '2.7 Late payments overdue by more than 7 days accrue 2% interest per month.',
     ]);
 
     addSection('3. PROJECT TIMELINE & DELIVERY', [
@@ -344,11 +423,12 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
       '9.3 Total liability is limited to the amount paid by the client for the project.',
     ]);
 
-    addSection('10. CANCELLATION & REFUNDS', [
-      '10.1 Cancellation before work commences: full refund of deposit.',
-      '10.2 Cancellation during development: deposit is forfeited; completed work is billed pro-rata.',
-      '10.3 Cancellation after 75% completion: the full project fee is payable.',
-      '10.4 No refunds are issued for dissatisfaction where work meets the agreed specifications.',
+    addSection('10. CANCELLATION & REFUND POLICY', [
+      '10.1 The 50% deposit secures the client\'s booking, timeline, and allocated resources, and is credited in full toward the total project fee.',
+      '10.2 Where the client proceeds with the booking and the service is delivered as specified, the deposit is applied to the final balance — the client pays only the remaining 50%. In this sense the deposit is never lost: it forms part of the fee for the service received.',
+      '10.3 If the client cancels the booking after the deposit has been paid, the deposit is non-refundable and is forfeited in full, to compensate for the reserved time, capacity, and resources already committed to the project.',
+      '10.4 Where cancellation occurs once work has progressed beyond the value of the deposit, any completed work is billed pro-rata in addition to the forfeited deposit.',
+      '10.5 No refunds are issued for dissatisfaction where the delivered work meets the agreed specifications.',
     ]);
 
     addSection('11. DISPUTE RESOLUTION', [

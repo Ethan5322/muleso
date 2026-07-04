@@ -744,7 +744,11 @@ export default function ChatbotWidget() {
   const generatePDF = async () => {
     try {
       toast.loading('📄 Generating PDF...');
-      await generateCleanBookingPDF(bookingData);
+      await generateCleanBookingPDF({
+        ...bookingData,
+        deposit: getServiceDeposit(bookingData.service),
+        paymentStatus: paymentStatus === 'paid' ? 'paid' : 'pending',
+      });
       toast.dismiss();
       toast.success('✅ PDF downloaded successfully!');
     } catch (error) {

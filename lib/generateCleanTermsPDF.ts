@@ -84,9 +84,11 @@ export const generateCleanTermsPDF = async () => {
   doc.setTextColor(30, 30, 30);
 
   const section1 = [
-    'A 50% deposit is REQUIRED to start work.',
-    'Balance 50% due before final delivery.',
-    'No refunds once work begins.',
+    'A 50% deposit is REQUIRED to start work; it is credited in full toward your total project fee.',
+    'Balance (remaining 50%) due before final delivery — so you only pay the other half on completion.',
+    'If you proceed and receive the service, the deposit forms part of your fee (never lost).',
+    'If you cancel after paying the deposit, the deposit is non-refundable and is forfeited.',
+    'Card & Instant EFT via Paystack, or direct bank transfer (EFT).',
   ];
 
   section1.forEach((text) => {
