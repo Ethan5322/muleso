@@ -157,9 +157,15 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
   const load = useCallback(async () => {
     try {
       const r = await fetch('/corporate/api/tasks');
-      if (r.ok) setData(await r.json());
+      if (r.ok) {
+        setData(await r.json());
+        setErr(null);
+      } else {
+        const d = await r.json().catch(() => ({}));
+        setErr(d.error || `Could not load work (HTTP ${r.status}).`);
+      }
     } catch {
-      /* ignore */
+      setErr('Network error loading work.');
     } finally {
       setLoading(false);
     }
@@ -246,7 +252,17 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
   if (loading) {
     return <p className="text-[#7A8BA8] text-sm flex items-center gap-2"><Loader2 className="animate-spin" size={15} /> Loading work…</p>;
   }
-  if (!data) return <p className="text-[#7A8BA8] text-sm">Could not load the work board.</p>;
+  if (!data) {
+    return (
+      <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-6 text-sm">
+        <p className="text-[#FF5C7C] font-semibold mb-1">Could not load the work board.</p>
+        <p className="text-[#A8B2D0]">{err || 'The corporate service did not respond.'}</p>
+        <button type="button" onClick={() => { setLoading(true); load(); }} className="mt-3 px-3 py-1.5 rounded-lg bg-[#00C8FF] text-black text-xs font-semibold">
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   const assigneesForDept = data.roster.filter((a) => !fDept || a.department_id === Number(fDept));
 

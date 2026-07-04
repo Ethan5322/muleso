@@ -68,15 +68,10 @@ export interface MsgIdentity {
  */
 export async function getMessagingIdentity(req: NextRequest): Promise<MsgIdentity | null> {
   if (isAdminRequest(req)) {
-    const { data } = await supabaseAdmin
-      .from('corp_department_admins')
-      .select('id, department_id')
-      .eq('is_super_admin', true)
-      .order('created_at', { ascending: true })
-      .limit(1)
-      .maybeSingle();
-    if (data) return { adminId: data.id, departmentId: data.department_id, isSuper: true, isVisitor: false };
-    return null; // super admin not seeded yet
+    // The verified owner (admin_session cookie) is the highest authority. Make
+    // them self-sufficient: if no super-admin corp row exists yet, provision one
+    // so tasks/messaging/reports never silently fail for the owner.
+    return await ensureMainAdminIdentity();
   }
   const ctx = await getCorpContext();
   if (!ctx) return null;
@@ -86,6 +81,88 @@ export async function getMessagingIdentity(req: NextRequest): Promise<MsgIdentit
     isSuper: ctx.admin.is_super_admin,
     isVisitor: ctx.admin.is_visitor,
   };
+}
+
+/** Find an existing auth user id by email (listUsers is paginated). */
+async function findAuthUserByEmail(email: string): Promise<string | null> {
+  const target = email.toLowerCase();
+  for (let page = 1; page <= 10; page++) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
+    if (error || !data?.users?.length) break;
+    const u = data.users.find((x) => (x.email || '').toLowerCase() === target);
+    if (u) return u.id;
+    if (data.users.length < 200) break;
+  }
+  return null;
+}
+
+/**
+ * Resolve (and if necessary CREATE) the main admin's super-admin corp row.
+ * corp_department_admins.id references auth.users(id), so we back it with an
+ * auth user for ADMIN_EMAIL (reused if it already exists). Idempotent: only
+ * provisions when no super-admin row is present.
+ */
+export async function ensureMainAdminIdentity(): Promise<MsgIdentity | null> {
+  const { data: existing } = await supabaseAdmin
+    .from('corp_department_admins')
+    .select('id, department_id')
+    .eq('is_super_admin', true)
+    .order('created_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (existing) return { adminId: existing.id, departmentId: existing.department_id, isSuper: true, isVisitor: false };
+
+  const email = (process.env.ADMIN_EMAIL || 'owner@mulesoo.app').toLowerCase();
+  try {
+    let userId = await findAuthUserByEmail(email);
+    if (!userId) {
+      const password = `${globalThis.crypto.randomUUID()}Aa9!`;
+      const { data: created, error } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { display_name: 'Main Admin' },
+      });
+      if (error || !created?.user) {
+        console.error('[corp] could not provision main-admin auth user:', error?.message);
+        return null;
+      }
+      userId = created.user.id;
+    }
+
+    let staff_number: string | null = null;
+    try {
+      const { data: staff } = await supabaseAdmin.rpc('corp_next_staff');
+      staff_number = (staff as string) || null;
+    } catch {
+      /* staff sequence optional */
+    }
+
+    const { data: row, error: rowErr } = await supabaseAdmin
+      .from('corp_department_admins')
+      .upsert(
+        {
+          id: userId,
+          display_name: 'Main Admin',
+          email,
+          is_super_admin: true,
+          status: 'active',
+          department_name: 'Executive',
+          staff_number,
+        },
+        { onConflict: 'id' }
+      )
+      .select('id, department_id')
+      .single();
+    if (rowErr) {
+      console.error('[corp] could not provision main-admin corp row:', rowErr.message);
+      return null;
+    }
+    return { adminId: row.id, departmentId: row.department_id, isSuper: true, isVisitor: false };
+  } catch (e) {
+    console.error('[corp] ensureMainAdminIdentity failed:', e);
+    return null;
+  }
 }
 
 /** Server-side capability gate (second layer beyond RLS). */
