@@ -41,16 +41,19 @@ const NAV_SECTIONS: NavSection[] = [
     items: [{ label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true }],
   },
   {
+    title: 'Sales & Leads',
+    items: [{ label: 'Leads', href: '/admin/leads', icon: Inbox }],
+  },
+  {
     title: 'Operations',
     items: [
-      { label: 'Leads', href: '/admin/leads', icon: Inbox },
       { label: 'Bookings', href: '/admin/bookings', icon: BookOpen },
       { label: 'Visitors', href: '/admin/visitors', icon: Users },
       { label: 'QR Scans', href: '/admin/qr-scans', icon: QrCode },
     ],
   },
   {
-    title: 'Content',
+    title: 'Site Management',
     items: [
       { label: 'Portfolio', href: '/admin/portfolio', icon: ImageIcon },
       { label: 'Pages', href: '/admin/pages', icon: FileText },
@@ -60,7 +63,7 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
-    title: 'Team',
+    title: 'Corporate Team',
     items: [
       { label: 'Team Admins', href: '/admin/team', icon: Building2 },
       { label: 'Departments', href: '/admin/departments', icon: Network },

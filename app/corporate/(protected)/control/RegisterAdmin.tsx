@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import FaceCapture, { type FaceCaptureResult } from '@/components/corp/FaceCapture';
 import { imageToIdData } from '@/lib/faceClient';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
@@ -20,6 +20,9 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
   const [password, setPassword] = useState('');
   const [deptId, setDeptId] = useState('');
   const [deptName, setDeptName] = useState('');
+  const [departments, setDepartments] = useState<{ id: number; name: string }[]>([]);
+  const [newDept, setNewDept] = useState(''); // inline create
+  const [addingDept, setAddingDept] = useState(false);
   const [caps, setCaps] = useState<string[]>(CAPABILITIES.map((c) => c.key));
   const [roleTitle, setRoleTitle] = useState('');
   const [isVisitor, setIsVisitor] = useState(false);
@@ -33,6 +36,43 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
 
   // The photo actually used on the ID (from live capture or gallery upload).
   const idPhoto = photoMode === 'capture' ? face?.photo ?? null : uploadedPhoto;
+
+  const loadDepartments = useCallback(async () => {
+    try {
+      const r = await fetch('/corporate/api/departments');
+      if (r.ok) setDepartments(((await r.json()).departments ?? []).map((d: { id: number; name: string }) => ({ id: d.id, name: d.name })));
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    if (open) loadDepartments();
+  }, [open, loadDepartments]);
+
+  // Pick a department from the list — fills both the id and the name.
+  const pickDept = (id: string) => {
+    setDeptId(id);
+    setDeptName(departments.find((d) => String(d.id) === id)?.name ?? '');
+  };
+
+  // Create a new department inline, then select it.
+  const createDept = async () => {
+    if (!newDept.trim()) return;
+    setAddingDept(true);
+    const r = await fetch('/corporate/api/departments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newDept.trim() }),
+    });
+    if (r.ok) {
+      const { department } = await r.json();
+      await loadDepartments();
+      if (department) { setDeptId(String(department.id)); setDeptName(department.name); }
+      setNewDept('');
+    }
+    setAddingDept(false);
+  };
 
   const handleFile = (file: File | undefined) => {
     if (!file) return;
@@ -52,7 +92,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
     setCaps((prev) => (prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k]));
 
   const reset = () => {
-    setName(''); setEmail(''); setPassword(''); setDeptId(''); setDeptName('');
+    setName(''); setEmail(''); setPassword(''); setDeptId(''); setDeptName(''); setNewDept('');
     setCaps(CAPABILITIES.map((c) => c.key)); setRoleTitle(''); setIsVisitor(false); setExpiresAt('');
     setFace(null); setPhotoMode('capture'); setUploadedPhoto(null); setResult(null); setError(null);
   };
@@ -193,9 +233,35 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                 </button>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Field label="Dept #" value={deptId} onChange={setDeptId} />
-              <Field label="Department name" value={deptName} onChange={setDeptName} />
+            <div>
+              <label className="block text-xs font-semibold text-[#A8B2D0] mb-1">Department</label>
+              <select
+                value={deptId}
+                onChange={(e) => pickDept(e.target.value)}
+                title="Assign to a department"
+                className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+              >
+                <option value="">Select a department…</option>
+                {departments.map((d) => (
+                  <option key={d.id} value={d.id}>{d.name}</option>
+                ))}
+              </select>
+              <div className="flex gap-2 mt-2">
+                <input
+                  value={newDept}
+                  onChange={(e) => setNewDept(e.target.value)}
+                  placeholder="…or add a new department"
+                  className="flex-1 px-3 py-1.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-xs text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                />
+                <button
+                  type="button"
+                  onClick={createDept}
+                  disabled={addingDept || !newDept.trim()}
+                  className="px-3 rounded-lg border border-[#1A2640] text-xs text-[#00C8FF] disabled:opacity-50"
+                >
+                  {addingDept ? '…' : 'Add'}
+                </button>
+              </div>
             </div>
 
             {/* Job role / responsibility */}
