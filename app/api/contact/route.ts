@@ -49,6 +49,14 @@ export async function POST(req: NextRequest) {
       console.error('Lead save failed (continuing):', e);
     }
 
+    // Auto-create a Sales follow-up task for the corporate team (best-effort).
+    try {
+      const { autoTaskFromLead } = await import('@/lib/corp/autoTask');
+      await autoTaskFromLead({ name, email, service, budget, details });
+    } catch (e) {
+      console.error('Lead auto-task failed (continuing):', e);
+    }
+
     // Alert the owner instantly (WhatsApp + Telegram) — don't block the response.
     try {
       const { sendLeadNotification } = await import('@/lib/sendWhatsAppMessage');

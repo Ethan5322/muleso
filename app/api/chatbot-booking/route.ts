@@ -73,6 +73,20 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Auto-create an onboarding task for the Operations/Support department (best-effort).
+    try {
+      const { autoTaskFromBooking } = await import('@/lib/corp/autoTask');
+      await autoTaskFromBooking({
+        name: fullName,
+        service,
+        timeline,
+        reference: verificationCode,
+        phone: phoneNumber,
+      });
+    } catch (e) {
+      console.error('Booking auto-task failed (continuing):', e);
+    }
+
     console.log('Chatbot booking received:', {
       fullName,
       email,
