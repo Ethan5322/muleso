@@ -117,9 +117,22 @@ export async function POST(req: NextRequest) {
       // Don't fail the entire request if WhatsApp fails
     }
 
-    // Send admin notification
+    // Send admin notification (full professional record)
     try {
-      await sendAdminNotification(fullName, service, verificationCode, budget || 'Not specified');
+      await sendAdminNotification(fullName, service, verificationCode, budget || 'Not specified', {
+        email,
+        phone: phoneNumber,
+        company,
+        country: nationality,
+        usageType,
+        timeline,
+        contactMethod,
+        projectDescription: projectDetails,
+        bookingReference: verificationCode,
+        clientID,
+        clientIDType,
+        paymentStatus: 'pending',
+      });
       console.log('✅ Admin notification sent');
     } catch (error) {
       console.error('⚠️ Failed to send admin notification:', error);

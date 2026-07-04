@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { sendDepositPaidNotification } from '@/lib/sendWhatsAppMessage';
 
 /**
  * Verifies a Paystack transaction server-side and marks the booking as paid.
@@ -60,18 +61,36 @@ export async function POST(req: NextRequest) {
         status: 'Paid',
       };
 
-      let updated = false;
+      let updatedRow: any = null;
       if (bookingId) {
-        const { error } = await supabaseAdmin.from('bookings').update(patch).eq('id', bookingId);
-        updated = !error;
+        const { data, error } = await supabaseAdmin.from('bookings').update(patch).eq('id', bookingId).select().maybeSingle();
         if (error) console.error('paystack/verify: update by id failed:', error.message);
+        else updatedRow = data;
       }
-      if (!updated && bookingReference) {
-        const { error } = await supabaseAdmin
+      if (!updatedRow && bookingReference) {
+        const { data, error } = await supabaseAdmin
           .from('bookings')
           .update(patch)
-          .eq('verification_code', bookingReference);
+          .eq('verification_code', bookingReference)
+          .select()
+          .maybeSingle();
         if (error) console.error('paystack/verify: update by reference failed:', error.message);
+        else updatedRow = data;
+      }
+
+      // Alert the owner that the deposit has landed (best-effort).
+      try {
+        await sendDepositPaidNotification({
+          clientName: updatedRow?.name,
+          service: updatedRow?.service,
+          amount: amountPaid,
+          bookingReference: updatedRow?.verification_code || bookingReference,
+          verificationCode: updatedRow?.verification_code || bookingReference,
+          phone: updatedRow?.phone,
+          email: updatedRow?.email,
+        });
+      } catch (notifyErr: any) {
+        console.error('paystack/verify: owner alert failed (continuing):', notifyErr?.message);
       }
     } catch (dbErr: any) {
       console.error('paystack/verify: DB update threw (continuing):', dbErr?.message);

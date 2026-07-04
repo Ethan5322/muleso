@@ -173,26 +173,127 @@ Thank you for choosing MULESOO! We're excited to build something amazing with yo
 }
 
 /**
- * Send verification confirmation to admin
+ * Alert the owner (WhatsApp + Telegram) about a new booking — with the FULL
+ * client + project record, professionally formatted.
  */
 export async function sendAdminNotification(
   clientName: string,
   service: string,
   verificationCode: string,
-  budget: string
+  budget: string,
+  details?: {
+    email?: string;
+    phone?: string;
+    company?: string;
+    country?: string;
+    usageType?: string;
+    timeline?: string;
+    contactMethod?: string;
+    projectDescription?: string;
+    bookingReference?: string;
+    clientID?: string;
+    clientIDType?: string;
+    deposit?: number;
+    paymentStatus?: 'paid' | 'pending' | string;
+  }
 ): Promise<WhatsAppResult> {
-  const message = `🔔 New Booking Alert
+  const dash = '—';
+  const receivedAt = new Date().toLocaleString('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
-Client: ${clientName}
-Service: ${service}
-Budget: ${budget}
+  const idLine =
+    details?.clientID
+      ? `\n${details.clientIDType === 'passport' ? 'Passport' : 'National ID'}: ${details.clientID}`
+      : '';
+
+  const paid = details?.paymentStatus === 'paid';
+  const depositLine = details?.deposit
+    ? `R ${Number(details.deposit).toLocaleString('en-ZA')}`
+    : 'To be confirmed';
+
+  const message = `🔔 *NEW BOOKING RECEIVED — MuleSoo*
+
+A new client has just booked through the website. Full details below.
+
+👤 *CLIENT*
+Name: ${clientName || dash}
+Company: ${details?.company || dash}
+Email: ${details?.email || dash}
+Phone: ${details?.phone || dash}
+Country: ${details?.country || dash}
+Client Type: ${details?.usageType || dash}${idLine}
+
+🧩 *PROJECT*
+Service: ${service || dash}
+Budget: ${budget || dash}
+Timeline: ${details?.timeline || dash}
+Preferred Contact: ${details?.contactMethod || dash}
+
+📝 *PROJECT BRIEF*
+${details?.projectDescription || 'No description provided'}
+
+💳 *PAYMENT*
+Deposit (50%): ${depositLine}
+Status: ${paid ? 'PAID ✅' : 'PENDING ⏳'}
+
+🔖 *REFERENCE*
+Booking Ref: ${details?.bookingReference || dash}
 Verification Code: ${verificationCode}
 
-Check admin panel for details.`;
+📅 Received: ${receivedAt} (SAST)
+
+➡️ *ACTION:* Reply to the client within 2 hours. Full record in Admin → Bookings.`;
 
   const result = await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
   await sendTelegramMessage(message);
   return result;
+}
+
+/**
+ * Alert the owner (WhatsApp + Telegram) the moment a client's deposit is paid.
+ */
+export async function sendDepositPaidNotification(details: {
+  clientName?: string;
+  service?: string;
+  amount?: number;
+  bookingReference?: string;
+  verificationCode?: string;
+  phone?: string;
+  email?: string;
+}): Promise<void> {
+  const dash = '—';
+  const paidAt = new Date().toLocaleString('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const message = `💰 *DEPOSIT PAID — MuleSoo*
+
+A client's deposit has just been received via Paystack.
+
+👤 Client: ${details.clientName || dash}
+🧩 Service: ${details.service || dash}
+💳 Amount: ${details.amount ? `R ${Number(details.amount).toLocaleString('en-ZA')}` : dash}
+📞 Phone: ${details.phone || dash}
+✉️ Email: ${details.email || dash}
+🔖 Booking Ref: ${details.bookingReference || dash}
+🔑 Verification Code: ${details.verificationCode || dash}
+📅 Paid: ${paidAt} (SAST)
+
+The booking is now secured. View it in Admin → Bookings.`;
+
+  await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  await sendTelegramMessage(message);
 }
 
 /**
