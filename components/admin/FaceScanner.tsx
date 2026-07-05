@@ -32,7 +32,8 @@ export default function FaceScanner({
   const busyRef = useRef(busy);
   busyRef.current = busy;
 
-  const TARGET = mode === 'multi' ? Math.max(6, steps.length) : 5;
+  // Login needs just a few good frames to decide fast; enrol captures more.
+  const TARGET = mode === 'multi' ? Math.max(6, steps.length) : 3;
 
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);

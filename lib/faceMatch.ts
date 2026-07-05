@@ -13,11 +13,17 @@ import { supabaseAdmin } from './supabaseAdmin';
 export const FACE_DESCRIPTOR_LENGTH = 128;
 
 export function getThreshold(): number {
-  // Stricter default (0.46) to cut false accepts. Same-person distances are
-  // typically < 0.4; different people > 0.6.
-  const t = parseFloat(process.env.ADMIN_FACE_THRESHOLD || '0.46');
-  return Number.isFinite(t) ? t : 0.46;
+  // Tolerant-but-safe default (0.5). Same-person distances are typically < 0.4;
+  // different people > 0.6. 0.5 leaves head-room for appearance changes (beard,
+  // haircut, lighting) while still rejecting other people — and face is only one
+  // factor (password + 2FA remain). Tune with ADMIN_FACE_THRESHOLD.
+  const t = parseFloat(process.env.ADMIN_FACE_THRESHOLD || '0.5');
+  return Number.isFinite(t) ? t : 0.5;
 }
+
+// How many reference samples to keep. Adaptive login samples are added over
+// time so the template tracks the person's CURRENT appearance.
+export const ADAPTIVE_CAP = 40;
 
 export function getEnvReference(): number[] | null {
   const raw = process.env.ADMIN_FACE_DESCRIPTOR;
@@ -95,9 +101,36 @@ export function robustDistance(input: number[], refs: number[][], k = 3): number
   let sum = 0;
   for (let i = 0; i < take; i++) sum += dists[i];
   const meanClosest = sum / take;
-  // Also require closeness to the centroid, so a random face far from the
-  // person's average is rejected even if it happens to be near one sample.
+  // Keep a light centroid guard so a random face far from the person's average
+  // is still rejected — but weight it lower so a genuine appearance change
+  // (which drifts from the old-look centroid) isn't over-penalised.
   const centroid = meanDescriptor(refs)!;
   const cd = euclideanDistance(input, centroid);
-  return Math.max(meanClosest, cd * 0.9);
+  return Math.max(meanClosest, cd * 0.62);
+}
+
+/**
+ * Adaptive learning: after a confident login, remember the new face sample so
+ * the template keeps up with the person's current look. Keeps only the newest
+ * ADAPTIVE_CAP samples so it tracks recent appearance and stays bounded.
+ */
+export async function addAdaptiveSample(descriptor: number[]): Promise<void> {
+  if (!Array.isArray(descriptor) || descriptor.length !== FACE_DESCRIPTOR_LENGTH) return;
+  try {
+    await supabaseAdmin.from('admin_face_descriptors').insert({
+      label: 'adaptive',
+      descriptor: descriptor.map((n) => Number(Number(n).toFixed(5))),
+    });
+    // Prune oldest beyond the cap (best-effort; needs a created_at column).
+    const { data } = await supabaseAdmin
+      .from('admin_face_descriptors')
+      .select('id, created_at')
+      .order('created_at', { ascending: false });
+    if (data && data.length > ADAPTIVE_CAP) {
+      const stale = data.slice(ADAPTIVE_CAP).map((r: { id: unknown }) => r.id);
+      if (stale.length) await supabaseAdmin.from('admin_face_descriptors').delete().in('id', stale);
+    }
+  } catch (e) {
+    console.error('adaptive face sample failed (non-fatal):', e);
+  }
 }

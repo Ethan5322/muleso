@@ -3,6 +3,7 @@ import {
   getAllReferences,
   getThreshold,
   robustDistance,
+  addAdaptiveSample,
   FACE_DESCRIPTOR_LENGTH,
 } from '@/lib/faceMatch';
 
@@ -52,6 +53,21 @@ export async function POST(request: NextRequest) {
         { success: false, error: 'Face not recognized. Please try again or use password login.' },
         { status: 401 }
       );
+    }
+
+    // Adaptive learning: remember the clearest frame of this successful login so
+    // the template tracks the person's current appearance over time. Best-effort.
+    try {
+      const bestFrame = valid.reduce(
+        (best, f) => {
+          const d = robustDistance(f, references);
+          return d < best.d ? { d, f } : best;
+        },
+        { d: Infinity, f: valid[0] }
+      ).f;
+      await addAdaptiveSample(bestFrame);
+    } catch {
+      /* non-fatal */
     }
 
     // Match — issue the admin session cookie (same shape middleware expects)
