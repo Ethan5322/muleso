@@ -9,25 +9,34 @@
 export async function getRecaptchaToken(action: string = 'login'): Promise<string> {
   return new Promise((resolve, reject) => {
     // @ts-ignore
-    if (!window.grecaptcha) {
+    if (typeof window === 'undefined' || !window.grecaptcha) {
       reject(new Error('reCAPTCHA not loaded'));
       return;
     }
 
-    // @ts-ignore
-    window.grecaptcha.ready(() => {
+    // Hard timeout: if grecaptcha.ready/execute never settles (invalid site
+    // key, unregistered domain, blocked script), we must NOT hang the caller.
+    let settled = false;
+    const finish = (fn: (v: any) => void, value: any) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      fn(value);
+    };
+    const timer = setTimeout(() => finish(reject, new Error('reCAPTCHA timed out')), 4000);
+
+    try {
       // @ts-ignore
-      window.grecaptcha
-        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
-          action,
-        })
-        .then((token: string) => {
-          resolve(token);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
+      window.grecaptcha.ready(() => {
+        // @ts-ignore
+        window.grecaptcha
+          .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action })
+          .then((token: string) => finish(resolve, token))
+          .catch((error: any) => finish(reject, error));
+      });
+    } catch (error) {
+      finish(reject, error);
+    }
   });
 }
 

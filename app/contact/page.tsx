@@ -47,16 +47,27 @@ export default function ContactPage() {
     setError(null);
 
     try {
+      // reCAPTCHA is optional protection — never let it hang the submit.
       let recaptchaToken = '';
       if (RECAPTCHA_SITE_KEY) {
-        recaptchaToken = await getRecaptchaToken('contact').catch(() => '');
+        recaptchaToken = await Promise.race([
+          getRecaptchaToken('contact').catch(() => ''),
+          new Promise<string>((resolve) => setTimeout(() => resolve(''), 3500)),
+        ]);
       }
+
+      // Abort the request if the server takes too long, so the button can
+      // never spin forever.
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
 
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, recaptchaToken }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
 
       const data = await response.json().catch(() => ({}));
 
@@ -95,12 +106,13 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-card p-8 text-center border border-[var(--accent-green)]"
               >
-                <div className="text-6xl mb-4 text-[var(--accent-green)]">✓</div>
+                <div className="text-6xl mb-4 text-[var(--accent-green)]">🎉</div>
                 <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-4">
-                  Thank you, {formData.name}!
+                  Congratulations!
                 </h2>
                 <p className="text-[var(--text-secondary)] mb-2">
-                  We have received your enquiry and will reply to <strong>{formData.email}</strong> within 2 hours.
+                  You&apos;ve successfully sent your request to our team.
+                  We&apos;ll contact you within <strong className="text-[var(--accent-green)]">2 hours</strong>.
                 </p>
                 <p className="text-sm text-[var(--text-secondary)]">
                   In the meantime, feel free to explore our services or check out our portfolio.
