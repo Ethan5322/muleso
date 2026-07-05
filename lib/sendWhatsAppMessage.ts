@@ -297,20 +297,50 @@ The booking is now secured. View it in Admin → Bookings.`;
 }
 
 /**
- * Alert the owner (WhatsApp + Telegram) about a new lead / contact enquiry.
+ * Alert the owner (WhatsApp + Telegram) about a new lead / contact enquiry —
+ * with the full enquiry details, professionally formatted (like a booking).
  */
 export async function sendLeadNotification(
   name: string,
   service: string,
-  email: string
+  email: string,
+  details?: {
+    company?: string;
+    budget?: string;
+    projectDetails?: string;
+    source?: string;
+  }
 ): Promise<void> {
-  const message = `🔔 New Lead / Enquiry
+  const dash = '—';
+  const receivedAt = new Date().toLocaleString('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
-Name: ${name}
-Service: ${service || 'Not specified'}
-Email: ${email || 'Not provided'}
+  const message = `🔔 *NEW ENQUIRY — MuleSoo*
 
-Check the admin panel → Leads.`;
+A new enquiry just came in through the website contact form.
+
+👤 *CONTACT*
+Name: ${name || dash}
+Email: ${email || dash}
+Company: ${details?.company || dash}
+
+🧩 *ENQUIRY*
+Service: ${service || dash}
+Budget: ${details?.budget || dash}
+Heard about us: ${details?.source || dash}
+
+📝 *MESSAGE*
+${details?.projectDetails || 'No message provided'}
+
+📅 Received: ${receivedAt} (SAST)
+
+➡️ *ACTION:* Reply within 2 hours. Full record in Admin → Leads.`;
 
   await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
   await sendTelegramMessage(message);

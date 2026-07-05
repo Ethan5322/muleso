@@ -24,17 +24,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 });
     }
 
-    // Optional bot check (only enforced when reCAPTCHA is configured)
+    // Optional bot check (only enforced when reCAPTCHA is configured).
+    // Fail-OPEN: if verification errors out (misconfig, network), never lose a
+    // genuine enquiry — only reject on a clear low-score bot signal.
     if (process.env.RECAPTCHA_SECRET_KEY && recaptchaToken) {
-      const result = await verifyRecaptchaToken(recaptchaToken);
-      if (!result.success || result.score < 0.3) {
-        return NextResponse.json({ error: 'Verification failed. Please try again.' }, { status: 400 });
+      try {
+        const result = await verifyRecaptchaToken(recaptchaToken);
+        if (result.success && result.score < 0.3) {
+          return NextResponse.json({ error: 'Verification failed. Please try again.' }, { status: 400 });
+        }
+      } catch (e) {
+        console.error('reCAPTCHA check errored (continuing):', e);
       }
     }
 
-    // Store the lead (best-effort — never block the user if this fails)
+    // Store the lead — check Supabase's returned error (it does NOT throw), so
+    // a schema problem is logged loudly instead of silently dropping the lead.
     try {
-      await supabaseAdmin.from('leads').insert({
+      const { error: insertError } = await supabaseAdmin.from('leads').insert({
         name,
         email,
         company: company || null,
@@ -45,8 +52,11 @@ export async function POST(req: NextRequest) {
         status: 'New',
         created_at: new Date().toISOString(),
       });
+      if (insertError) {
+        console.error('Lead insert error (continuing to alert owner):', insertError.message, insertError.details || '');
+      }
     } catch (e) {
-      console.error('Lead save failed (continuing):', e);
+      console.error('Lead save threw (continuing):', e);
     }
 
     // Auto-create a Sales follow-up task for the corporate team (best-effort).
@@ -60,7 +70,12 @@ export async function POST(req: NextRequest) {
     // Alert the owner instantly (WhatsApp + Telegram) — don't block the response.
     try {
       const { sendLeadNotification } = await import('@/lib/sendWhatsAppMessage');
-      await sendLeadNotification(name, service, email);
+      await sendLeadNotification(name, service, email, {
+        company,
+        budget,
+        projectDetails: details,
+        source,
+      });
     } catch (e) {
       console.error('Lead alert failed (continuing):', e);
     }
@@ -81,20 +96,20 @@ export async function POST(req: NextRequest) {
           <p style="margin-top:12px"><b>Details:</b><br/>${escapeHtml(details).replace(/\n/g, '<br/>')}</p>
         </div>`;
 
-      const { error } = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: ADMIN_EMAIL,
-        replyTo: email,
-        subject: `New enquiry: ${name} — ${service}`,
-        html,
-      });
-
-      if (error) {
-        console.error('Resend error:', error);
-        return NextResponse.json(
-          { error: 'We could not send your enquiry right now. Please WhatsApp us instead.' },
-          { status: 502 }
-        );
+      // Email is a bonus channel — the lead is already saved + the owner
+      // already alerted on WhatsApp, so an email failure must NOT fail the
+      // request (that would tell the client it didn't go through when it did).
+      try {
+        const { error } = await resend.emails.send({
+          from: 'onboarding@resend.dev',
+          to: ADMIN_EMAIL,
+          replyTo: email,
+          subject: `New enquiry: ${name} — ${service}`,
+          html,
+        });
+        if (error) console.error('Resend error (lead already saved + alerted):', error);
+      } catch (e) {
+        console.error('Resend threw (lead already saved + alerted):', e);
       }
     } else {
       // No email provider configured — log so the lead isn't silently dropped
