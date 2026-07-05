@@ -1,88 +1,49 @@
 import { MetadataRoute } from 'next';
+import { AUTOMATIONS } from '@/lib/aiAutomations';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+  const now = new Date();
 
-  const routes = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/services/website-design`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/chatbot`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/logo-design`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/pdf-guides`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/qr-codes`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/email-setup`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/custom-apps`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/portfolio`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/store`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
+  // Core marketing pages
+  const core: MetadataRoute.Sitemap = [
+    { url: baseUrl, changeFrequency: 'weekly', priority: 1 },
+    { url: `${baseUrl}/services`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/ai-automation`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/portfolio`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/store`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/contact`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/contact/qr-code`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${baseUrl}/terms`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 
-  return routes;
+  // Individual service pages
+  const serviceSlugs = [
+    'website-design',
+    'chatbot',
+    'logo-design',
+    'pdf-guides',
+    'qr-codes',
+    'email-setup',
+    'custom-apps',
+  ];
+  const services: MetadataRoute.Sitemap = serviceSlugs.map((s) => ({
+    url: `${baseUrl}/services/${s}`,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  // Every AI automation system — 200 long-tail landing pages
+  const automations: MetadataRoute.Sitemap = AUTOMATIONS.map((a) => ({
+    url: `${baseUrl}/ai-automation/${a.slug}`,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...core, ...services, ...automations].map((entry) => ({
+    ...entry,
+    lastModified: now,
+  }));
 }
