@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Old standalone QR pages now live under Contact
+  async redirects() {
+    return [
+      { source: '/qr-code', destination: '/contact/qr-code', permanent: true },
+      { source: '/qr-download', destination: '/contact/qr-code', permanent: true },
+    ];
+  },
   // Optimize headers for SEO and performance
   async headers() {
     return [

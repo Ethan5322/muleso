@@ -42,10 +42,10 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
   }, [pathname]);
 
   useEffect(() => {
-    // Track QR scans on /qr-code route
+    // Track QR scans on the QR code page
     const trackQRScan = async () => {
       try {
-        if (pathname === '/qr-code') {
+        if (pathname === '/contact/qr-code') {
           await supabase.from('qr_scans').insert({
             source: document.referrer || 'direct',
           });

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Mail, MessageCircle, MapPin } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, QrCode, ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import { getRecaptchaToken } from '@/lib/captcha';
 import { useSiteSettings } from '@/lib/useSiteSettings';
@@ -329,6 +330,21 @@ export default function ContactPage() {
                 </p>
               </div>
             </div>
+
+            {/* QR code sub-page link */}
+            <Link
+              href="/contact/qr-code"
+              className="mt-6 glass-card p-5 rounded-2xl border border-[var(--border)] hover:border-[var(--accent-blue)] transition-colors flex items-center gap-4 group"
+            >
+              <div className="w-11 h-11 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center flex-shrink-0">
+                <QrCode className="text-[var(--accent-blue)]" size={22} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-[var(--text-primary)]">Our QR Code</p>
+                <p className="text-xs text-[var(--text-secondary)]">Scan or download to visit MuleSoo anywhere</p>
+              </div>
+              <ArrowRight className="text-[var(--text-secondary)] group-hover:text-[var(--accent-blue)] transition-colors flex-shrink-0" size={18} />
+            </Link>
           </motion.div>
         </div>
       </div>
