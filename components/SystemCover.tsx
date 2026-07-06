@@ -58,7 +58,7 @@ export default function SystemCover({
         MULE<tspan fill={a.accent}>●</tspan>SOO
       </text>
       <text x="70" y="120" fontFamily="Sora, sans-serif" fontSize="16" fontWeight="700" letterSpacing="4" fill={a.accent}>
-        DONE-FOR-YOU SYSTEM
+        AUTO PILOT SYSTEM
       </text>
 
       {/* Brand name (big) */}
@@ -87,6 +87,10 @@ export default function SystemCover({
         <circle cx="20" cy="17" r="4" fill="#FF5C7C" />
         <circle cx="36" cy="17" r="4" fill="#E8B84B" />
         <circle cx="52" cy="17" r="4" fill="#00FF88" />
+        {/* autopilot ON pill */}
+        <rect x="196" y="8" width="82" height="18" rx="9" fill="#00FF88" fillOpacity="0.18" stroke="#00FF88" strokeOpacity="0.5" />
+        <circle cx="208" cy="17" r="3.5" fill="#00FF88" />
+        <text x="217" y="21" fontFamily="Sora, sans-serif" fontSize="10" fontWeight="700" fill="#00FF88">AUTOPILOT</text>
         {/* stat tiles */}
         <rect x="18" y="52" width="120" height="60" rx="8" fill="#13203D" stroke={a.accent} strokeOpacity="0.3" />
         <rect x="152" y="52" width="120" height="60" rx="8" fill="#13203D" stroke={a.accent} strokeOpacity="0.3" />

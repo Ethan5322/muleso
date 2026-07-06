@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * Designed SVG cover for the store's AI automation picks. Brand gradient with a
- * chat/bot + connected-nodes motif so each automation looks like a real product.
+ * Store cover for an AI automation — a big emoji that represents the system,
+ * on a branded gradient, with the "AI AUTOMATION" label, name and category.
  */
 
 type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
@@ -31,10 +31,12 @@ function wrap(title: string, max = 15): string[] {
 export default function AutomationCover({
   name,
   category,
+  emoji,
   accent = 'blue',
 }: {
   name: string;
   category: string;
+  emoji: string;
   accent?: AccentKey;
 }) {
   const a = ACCENTS[accent];
@@ -51,6 +53,10 @@ export default function AutomationCover({
         <pattern id={`agrid-${id}`} width="34" height="34" patternUnits="userSpaceOnUse">
           <path d="M34 0 L0 0 0 34" fill="none" stroke="#ffffff" strokeOpacity="0.05" strokeWidth="1" />
         </pattern>
+        <radialGradient id={`aglow-${id}`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={a.accent} stopOpacity="0.55" />
+          <stop offset="100%" stopColor={a.accent} stopOpacity="0" />
+        </radialGradient>
       </defs>
 
       <rect width="1200" height="480" fill="#0A0F1E" />
@@ -67,7 +73,7 @@ export default function AutomationCover({
 
       {/* Name (up to 3 lines) */}
       {lines.map((line, i) => (
-        <text key={i} x="70" y={190 + i * 52} fontFamily="Sora, sans-serif" fontSize="46" fontWeight="800" fill="#ffffff">
+        <text key={i} x="70" y={200 + i * 50} fontFamily="Sora, sans-serif" fontSize="44" fontWeight="800" fill="#ffffff">
           {line}
         </text>
       ))}
@@ -78,24 +84,12 @@ export default function AutomationCover({
         {category}
       </text>
 
-      {/* Chat bubble + nodes motif (right) */}
-      <g transform="translate(858,120)">
-        {/* connected nodes */}
-        <line x1="60" y1="40" x2="200" y2="20" stroke={a.accent} strokeOpacity="0.5" strokeWidth="2" />
-        <line x1="60" y1="40" x2="150" y2="150" stroke={a.accent} strokeOpacity="0.5" strokeWidth="2" />
-        <line x1="200" y1="20" x2="250" y2="120" stroke={a.accent} strokeOpacity="0.5" strokeWidth="2" />
-        <circle cx="200" cy="20" r="10" fill={a.accent} />
-        <circle cx="250" cy="120" r="8" fill={a.accent} fillOpacity="0.8" />
-        <circle cx="150" cy="150" r="8" fill={a.accent} fillOpacity="0.8" />
-        {/* chat bubble */}
-        <rect x="10" y="30" width="230" height="150" rx="20" fill="#0D1528" stroke={a.accent} strokeOpacity="0.6" strokeWidth="2" />
-        <path d="M40 180 L40 210 L75 180 Z" fill="#0D1528" stroke={a.accent} strokeOpacity="0.6" strokeWidth="2" />
-        <circle cx="45" cy="70" r="9" fill={a.accent} />
-        <rect x="65" y="63" width="150" height="12" rx="6" fill="#ffffff" fillOpacity="0.5" />
-        <rect x="30" y="100" width="180" height="10" rx="5" fill="#ffffff" fillOpacity="0.25" />
-        <rect x="30" y="122" width="140" height="10" rx="5" fill="#ffffff" fillOpacity="0.25" />
-        <rect x="30" y="148" width="90" height="18" rx="6" fill={a.accent} fillOpacity="0.85" />
-      </g>
+      {/* Big representative emoji (right) */}
+      <circle cx="980" cy="240" r="200" fill={`url(#aglow-${id})`} />
+      <circle cx="980" cy="240" r="128" fill="#0D1528" stroke={a.accent} strokeOpacity="0.5" strokeWidth="3" />
+      <text x="980" y="240" textAnchor="middle" dominantBaseline="central" fontSize="150">
+        {emoji}
+      </text>
     </svg>
   );
 }

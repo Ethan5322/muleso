@@ -9,6 +9,7 @@ export interface AutomationPick {
   slug: string; // matches /ai-automation/[slug]
   name: string;
   category: string; // department
+  emoji: string; // represents the system on its cover
   desc: string;
   fromPrice: number; // setup, ZAR
   monthly: number; // monthly, ZAR
@@ -18,6 +19,7 @@ export interface AutomationPick {
 export const AUTOMATION_PICKS: AutomationPick[] = [
   {
     slug: 'hotel-booking-system',
+    emoji: '🏨',
     name: 'AI Hotel Booking System',
     category: 'Booking & Hospitality',
     desc: 'Guests ask about rooms, check availability, book and get confirmations — automatically, 24/7.',
@@ -27,6 +29,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'doctor-appointment-booking',
+    emoji: '🩺',
     name: 'AI Doctor Appointment Booking',
     category: 'Healthcare & Wellness',
     desc: 'Schedules consultations, collects patient details and sends reminders that cut no-shows.',
@@ -36,6 +39,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'salon-booking-system',
+    emoji: '💇',
     name: 'AI Salon Booking System',
     category: 'Beauty, Fitness & Lifestyle',
     desc: 'Books salon services, upsells add-ons and sends reminders so chairs stay full.',
@@ -45,6 +49,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'restaurant-reservation-system',
+    emoji: '🍽️',
     name: 'AI Restaurant Reservation System',
     category: 'Food, Restaurants & Catering',
     desc: 'Takes table reservations, manages the waitlist and answers menu questions instantly.',
@@ -54,6 +59,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'real-estate-lead-bot',
+    emoji: '🏡',
     name: 'AI Real Estate Lead Bot',
     category: 'Real Estate & Property',
     desc: 'Captures buyer/renter leads, qualifies serious ones and follows up fast — before competitors do.',
@@ -63,6 +69,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'law-firm-intake-system',
+    emoji: '⚖️',
     name: 'AI Law Firm Intake System',
     category: 'Legal, Finance & Professional',
     desc: 'Collects case details, screens clients and books consultations — professional intake on autopilot.',
@@ -72,6 +79,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'tutoring-booking-system',
+    emoji: '🎓',
     name: 'AI Tutoring Booking System',
     category: 'Education & Training',
     desc: 'Schedules tutoring sessions, handles rescheduling and keeps students and parents updated.',
@@ -81,6 +89,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'cleaning-booking-system',
+    emoji: '🧹',
     name: 'AI Cleaning Booking System',
     category: 'Home Services & Local',
     desc: 'Books home and office cleaning jobs, confirms details and sends reminders automatically.',
@@ -90,6 +99,7 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
   },
   {
     slug: 'invoice-reminder-system',
+    emoji: '🧾',
     name: 'AI Invoice Reminder System',
     category: 'Logistics, Sales & Operations',
     desc: 'Chases unpaid invoices with polite, automatic reminders so you get paid faster.',

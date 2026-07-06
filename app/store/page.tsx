@@ -8,10 +8,13 @@ import PageHero from '@/components/PageHero';
 import StoreCover from '@/components/StoreCover';
 import SystemCover from '@/components/SystemCover';
 import AutomationCover from '@/components/AutomationCover';
+import StoreDetailModal, { type StoreDetailItem } from '@/components/StoreDetailModal';
 import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
 import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
 import { AUTOMATION_PICKS, AUTOMATION_FEATURES, type AutomationPick } from '@/lib/storeAutomations';
 import { useChatbot } from '@/context/ChatbotContext';
+
+type Plan = 'full' | 'monthly';
 
 export default function StorePage() {
   const { openChatbot } = useChatbot();
@@ -20,22 +23,42 @@ export default function StorePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Systems are custom builds — booking them opens the chatbot (deposit flow).
-  const bookSystem = (s: SystemProduct) => {
+  // Rich "exaggerated detail" modal for systems + automations.
+  const [detail, setDetail] = useState<{ item: StoreDetailItem; book: (plan: Plan) => void } | null>(null);
+
+  const priceLine = (fromPrice: number, monthly: number, plan: Plan) =>
+    plan === 'monthly'
+      ? `R${monthly.toLocaleString('en-ZA')}/month (subscription)`
+      : `From R${fromPrice.toLocaleString('en-ZA')} (pay in full)`;
+
+  // Systems are custom builds — booking opens the chatbot with the chosen plan.
+  const bookSystem = (s: SystemProduct, plan: Plan) => {
     openChatbot({
       service: systemDisplayName(s),
-      price: `From R${s.fromPrice.toLocaleString('en-ZA')} + R${s.monthly.toLocaleString('en-ZA')}/mo`,
-      details: `I'd like to build ${systemDisplayName(s)} (${s.category}). ${s.description}`,
+      price: priceLine(s.fromPrice, s.monthly, plan),
+      details: `I'd like to build ${systemDisplayName(s)} (${s.category}) — ${plan === 'monthly' ? 'Monthly subscription' : 'Full payment'}. ${s.description}`,
     });
   };
 
-  const bookAutomation = (a: AutomationPick) => {
+  const bookAutomation = (a: AutomationPick, plan: Plan) => {
     openChatbot({
       service: a.name,
-      price: `From R${a.fromPrice.toLocaleString('en-ZA')} + R${a.monthly.toLocaleString('en-ZA')}/mo`,
-      details: `I'd like the ${a.name} (${a.category}). ${a.desc}`,
+      price: priceLine(a.fromPrice, a.monthly, plan),
+      details: `I'd like the ${a.name} (${a.category}) — ${plan === 'monthly' ? 'Monthly subscription' : 'Full payment'}. ${a.desc}`,
     });
   };
+
+  const openSystemDetail = (s: SystemProduct) =>
+    setDetail({
+      item: { title: systemDisplayName(s), category: s.category, description: s.description, features: s.features, fromPrice: s.fromPrice, monthly: s.monthly, accent: s.accent, kind: 'system' },
+      book: (plan) => { setDetail(null); bookSystem(s, plan); },
+    });
+
+  const openAutomationDetail = (a: AutomationPick) =>
+    setDetail({
+      item: { title: a.name, category: a.category, description: a.desc, features: AUTOMATION_FEATURES, fromPrice: a.fromPrice, monthly: a.monthly, accent: a.accent, kind: 'automation' },
+      book: (plan) => { setDetail(null); bookAutomation(a, plan); },
+    });
 
   const startBuy = (product: StoreProduct) => {
     setPending(product);
@@ -83,6 +106,14 @@ export default function StorePage() {
             <ShieldCheck size={16} className="text-[var(--accent-green)]" />
             Secure card &amp; EFT payment via Paystack • Instant download after purchase
           </span>
+        </div>
+
+        <div className="text-center mb-10">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-gold)] mb-2">📘 Department 1</p>
+          <h2 className="text-3xl sm:text-4xl font-bold font-sora gold-text mb-3">Digital Guides</h2>
+          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
+            Battle-tested guides you can buy and download instantly — delivered to your email with a password only you can use.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
@@ -161,10 +192,11 @@ export default function StorePage() {
         {/* Done-for-you systems */}
         <div className="mb-16">
           <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Done-For-You Systems</h2>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-blue)] mb-2">🛫 Department 2</p>
+            <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Auto Pilot Systems</h2>
             <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Proven, ready-to-brand platforms we build for your business. Pick one, book it, and we tailor it to you —
-              starting with a deposit, the rest on delivery.
+              Proven, ready-to-brand platforms that run your business on autopilot. Pay in full, or subscribe monthly —
+              pick one, and we tailor it to you.
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -212,10 +244,10 @@ export default function StorePage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => bookSystem(s)}
+                      onClick={() => openSystemDetail(s)}
                       className="w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform"
                     >
-                      Book This System
+                      View &amp; Book →
                     </button>
                   </div>
                 </div>
@@ -227,10 +259,11 @@ export default function StorePage() {
         {/* Essential AI automations */}
         <div className="mb-16">
           <div className="text-center mb-10">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-blue)] mb-2">🤖 Department 3</p>
             <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Essential AI Automations</h2>
             <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
               The most-in-demand AI system from every industry — affordable to start, working for you 24/7.
-              Book one and we tailor it to your business.
+              Pay in full or subscribe monthly; we tailor it to your business.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -245,7 +278,7 @@ export default function StorePage() {
               >
                 <div className="relative w-full h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
-                    <AutomationCover name={a.name} category={a.category} accent={a.accent} />
+                    <AutomationCover name={a.name} category={a.category} emoji={a.emoji} accent={a.accent} />
                   </div>
                 </div>
 
@@ -271,10 +304,10 @@ export default function StorePage() {
                     <div className="flex gap-2">
                       <button
                         type="button"
-                        onClick={() => bookAutomation(a)}
+                        onClick={() => openAutomationDetail(a)}
                         className="flex-1 py-2.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform text-sm"
                       >
-                        Book It
+                        View &amp; Book
                       </button>
                       <Link
                         href={`/ai-automation/${a.slug}`}
@@ -310,6 +343,9 @@ export default function StorePage() {
           </p>
         </motion.div>
       </div>
+
+      {/* Exaggerated detail → two ways to buy */}
+      {detail && <StoreDetailModal item={detail.item} onBook={detail.book} onClose={() => setDetail(null)} />}
 
       {/* Email capture → Paystack checkout */}
       {pending && (
