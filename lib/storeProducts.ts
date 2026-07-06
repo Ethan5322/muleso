@@ -38,7 +38,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     description: 'Go from zero to launching professional, high-converting websites clients happily pay for.',
     features: ['Design that converts', 'Modern tools', 'Client-ready builds', 'Launch checklist'],
     accent: 'blue',
-    available: false,
+    available: true,
   },
   {
     name: 'Build a Pro Website With Claude Code',
