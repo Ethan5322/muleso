@@ -133,6 +133,69 @@ export default function AutopilotPage() {
           </div>
         </motion.div>
 
+        {/* Live proof — Yoyo Gym */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-24"
+        >
+          <div className="glass-card overflow-hidden grid grid-cols-1 lg:grid-cols-2 border border-[var(--accent-blue)]/40">
+            <div className="relative min-h-[260px] lg:min-h-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/yoyo-gym.jpg"
+                alt="Yoyo Gym — a live Auto Pilot System built by MuleSoo"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)]/70 to-transparent" />
+              <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[var(--accent-green)] text-black">
+                <span className="w-1.5 h-1.5 rounded-full bg-black/70" /> LIVE SYSTEM
+              </span>
+            </div>
+            <div className="p-8 sm:p-10">
+              <p className="text-sm font-bold uppercase tracking-wider text-[var(--accent-blue)] mb-2">See It Live</p>
+              <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-3">
+                Yoyo Gym runs on Auto Pilot
+              </h2>
+              <p className="text-[var(--text-secondary)] mb-5">
+                A real gym we built and run on this exact system — from a QR scan to check-in at the door, with no
+                manual admin in between. This is the Autopilot Loop, live:
+              </p>
+              <ul className="space-y-2 mb-6 text-sm text-[var(--text-secondary)]">
+                {[
+                  'QR → AI join-flow with PAR-Q health screening',
+                  'Live membership tiers + e-signed agreement',
+                  'Paystack recurring billing + failed-payment recovery',
+                  'Digital membership ID + verification code',
+                  'Face-recognition & QR check-in at the door',
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2">
+                    <span className="text-[var(--accent-green)] mt-0.5">✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://yoyogym.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                >
+                  Visit the Live System →
+                </a>
+                <a
+                  href="/portfolio"
+                  className="inline-block px-6 py-3 border border-[var(--border)] text-[var(--text-primary)] font-bold rounded-lg hover:border-[var(--accent-blue)] transition-colors"
+                >
+                  See in Portfolio
+                </a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Who it's for */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

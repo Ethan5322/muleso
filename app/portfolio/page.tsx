@@ -103,7 +103,7 @@ const fallbackProjects: Project[] = [
     description: 'A complete AI-powered gym platform: members join by scanning a QR and chatting to an assistant, pay online, and check in by face — while it automatically bills, fills classes, and wins back lapsing members.',
     image: 'yoyo-gym.jpg',
     result: 'Runs the gym on autopilot',
-    tech: ['React', 'Supabase', 'Paystack', 'Face Recognition'],
+    tech: ['Auto Pilot System', 'React', 'Supabase', 'Paystack', 'Face Recognition'],
     theme: 'green',
     site: 'https://yoyogym.vercel.app',
     purpose:
