@@ -6,13 +6,26 @@ import { motion } from 'framer-motion';
 import { Loader2, ShieldCheck, X, Mail } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import StoreCover from '@/components/StoreCover';
+import SystemCover from '@/components/SystemCover';
 import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
+import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
+import { useChatbot } from '@/context/ChatbotContext';
 
 export default function StorePage() {
+  const { openChatbot } = useChatbot();
   const [pending, setPending] = useState<StoreProduct | null>(null);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Systems are custom builds — booking them opens the chatbot (deposit flow).
+  const bookSystem = (s: SystemProduct) => {
+    openChatbot({
+      service: systemDisplayName(s),
+      price: `From R${s.fromPrice.toLocaleString('en-ZA')}`,
+      details: `I'd like to build ${systemDisplayName(s)} (${s.category}). ${s.description}`,
+    });
+  };
 
   const startBuy = (product: StoreProduct) => {
     setPending(product);
@@ -133,6 +146,71 @@ export default function StorePage() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Done-for-you systems */}
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Done-For-You Systems</h2>
+            <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
+              Proven, ready-to-brand platforms we build for your business. Pick one, book it, and we tailor it to you —
+              starting with a deposit, the rest on delivery.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {SYSTEM_PRODUCTS.map((s, i) => (
+              <motion.div
+                key={s.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: (i % 2) * 0.08 }}
+                viewport={{ once: true }}
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+              >
+                <div className="relative w-full h-52 overflow-hidden">
+                  <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                    <SystemCover brand={s.brand} tagline={s.tagline} category={s.category} accent={s.accent} />
+                  </div>
+                  {s.enterprise && (
+                    <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-blue)] to-[#7DE0FF] shadow-lg">
+                      ★ ENTERPRISE
+                    </span>
+                  )}
+                </div>
+
+                <div className="p-8 flex flex-col flex-1">
+                  <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                    {systemDisplayName(s)}
+                  </h3>
+                  <p className="text-[var(--text-secondary)] mb-4">{s.description}</p>
+
+                  <div className="flex gap-2 flex-wrap mb-6">
+                    {s.features.map((f) => (
+                      <span
+                        key={f}
+                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--accent-blue)]/50 transition-colors"
+                      >
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className="text-3xl font-bold font-sora gradient-text">From R{s.fromPrice.toLocaleString('en-ZA')}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => bookSystem(s)}
+                      className="w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform"
+                    >
+                      Book This System
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         <motion.div
