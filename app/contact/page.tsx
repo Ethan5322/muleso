@@ -26,6 +26,18 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Pre-fill the enquiry when arriving from a service page (?service=Name).
+  useEffect(() => {
+    const svc = new URLSearchParams(window.location.search).get('service');
+    if (svc) {
+      setFormData((p) => ({
+        ...p,
+        service: p.service || 'other',
+        details: p.details || `I'm interested in your ${svc} service.\n\nHere's what I need:\n`,
+      }));
+    }
+  }, []);
+
   // Load reCAPTCHA v3 script once (only if configured)
   useEffect(() => {
     if (!RECAPTCHA_SITE_KEY) return;

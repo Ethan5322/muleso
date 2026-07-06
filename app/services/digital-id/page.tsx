@@ -220,26 +220,17 @@ export default function DigitalIdPage() {
           viewport={{ once: true }}
           className="glass-card p-12 text-center border border-[var(--accent-blue)]"
         >
-          <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Give Your Institution a Digital ID System</h2>
+          <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Build Your Next Project?</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
-            Tell us who you need to identify and how, and we&apos;ll build a branded ID + verification system around it.
+            Let&apos;s create something amazing together. Start with a free consultation — tell us who you need to
+            identify and how, and we&apos;ll build a branded ID + verification system around it.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/contact"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
-            >
-              Get a Free Quote →
-            </a>
-            <a
-              href="https://wa.me/27688529333"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
-            >
-              💬 WhatsApp: +27 68 852 9333
-            </a>
-          </div>
+          <a
+            href="/contact?service=Digital%20ID%20Service"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+          >
+            Get Started →
+          </a>
         </motion.div>
       </div>
     </div>

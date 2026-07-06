@@ -129,24 +129,17 @@ export default function CustomAppsPage() {
           viewport={{ once: true }}
           className="glass-card p-12 text-center border border-[var(--accent-blue)]"
         >
-          <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Let&apos;s Build Your App</h2>
+          <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Build Your Next Project?</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
-            Tell us what you need and we&apos;ll turn it into a professional, scalable application.
+            Let&apos;s create something amazing together. Start with a free consultation — tell us exactly what you need
+            and we&apos;ll turn it into a professional, scalable application.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="mailto:mulukenendashaw68@gmail.com"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
-            >
-              📧 Email: mulukenendashaw68@gmail.com
-            </a>
-            <a
-              href="https://wa.me/27688529333"
-              className="inline-block px-8 py-4 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform"
-            >
-              💬 WhatsApp: +27 68 852 9333
-            </a>
-          </div>
+          <a
+            href="/contact?service=Custom%20Apps%20Building"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+          >
+            Get Started →
+          </a>
         </motion.div>
       </div>
     </div>
