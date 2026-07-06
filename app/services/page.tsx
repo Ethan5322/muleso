@@ -23,6 +23,7 @@ const FALLBACK_SERVICES: Service[] = [
   { title: 'QR Code Design', href: '/services/qr-codes', description: 'Custom branded QR codes with built-in tracking.', features: ['Custom Design', 'Analytics', 'Dynamic Links', 'Multiple Formats', 'Lifetime Support'], icon: '📱', price: 'From R300' },
   { title: 'Custom Email Setup', href: '/services/email-setup', description: 'Professional @yourdomain.com email for instant credibility.', features: ['Domain Setup', 'Email Configuration', 'Security', 'Backups', 'Technical Support'], icon: '📧', price: 'From R400' },
   { title: 'Custom Apps Building', href: '/services/custom-apps', description: 'We build bespoke web & mobile applications tailored to your exact business workflow.', features: ['Web & Mobile Apps', 'Custom Dashboards', 'API & Database Integration', 'Scalable Architecture', 'Ongoing Maintenance'], icon: '📲', price: 'Custom quote' },
+  { title: 'Digital ID Service', href: '/services/digital-id', description: 'Branded digital ID cards with a unique QR & verification number — scan to instantly reveal the holder’s details.', features: ['Unique QR + Verification Number', 'Scan-to-Verify Any Camera', 'Barcode for Hardware Scanners', 'Face / PIN Security Add-ons', 'For Any Institution'], icon: '🪪', price: 'Custom quote' },
 ];
 
 export default function ServicesPage() {

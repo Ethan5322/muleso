@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'qr-codes',
     'email-setup',
     'custom-apps',
+    'digital-id',
   ];
   const services: MetadataRoute.Sitemap = serviceSlugs.map((s) => ({
     url: `${baseUrl}/services/${s}`,
