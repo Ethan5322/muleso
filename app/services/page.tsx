@@ -24,6 +24,7 @@ const FALLBACK_SERVICES: Service[] = [
   { title: 'Custom Email Setup', href: '/services/email-setup', description: 'Professional @yourdomain.com email for instant credibility.', features: ['Domain Setup', 'Email Configuration', 'Security', 'Backups', 'Technical Support'], icon: '📧', price: 'From R400' },
   { title: 'Custom Apps Building', href: '/services/custom-apps', description: 'We build bespoke web & mobile applications tailored to your exact business workflow.', features: ['Web & Mobile Apps', 'Custom Dashboards', 'API & Database Integration', 'Scalable Architecture', 'Ongoing Maintenance'], icon: '📲', price: 'Custom quote' },
   { title: 'Digital ID Service', href: '/services/digital-id', description: 'Branded digital ID cards with a unique QR & verification number — scan to instantly reveal the holder’s details.', features: ['Unique QR + Verification Number', 'Scan-to-Verify Any Camera', 'Barcode for Hardware Scanners', 'Face / PIN Security Add-ons', 'For Any Institution'], icon: '🪪', price: 'Custom quote' },
+  { title: 'Auto Pilot System', href: '/services/autopilot', description: 'One complete system that runs your whole small institution — bookings, payments, members, reminders & reports, automatically.', features: ['Runs Your Whole Operation 24/7', 'AI Bookings + Paystack Payments', 'Digital IDs & QR Check-in', 'WhatsApp/SMS Reminders', 'Live Admin Dashboard'], icon: '🛫', price: 'Custom quote' },
 ];
 
 export default function ServicesPage() {

@@ -29,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'email-setup',
     'custom-apps',
     'digital-id',
+    'autopilot',
   ];
   const services: MetadataRoute.Sitemap = serviceSlugs.map((s) => ({
     url: `${baseUrl}/services/${s}`,
