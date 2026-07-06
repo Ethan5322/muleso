@@ -1,57 +1,112 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Loader2, Download, XCircle } from 'lucide-react';
 
 export default function SuccessPage() {
+  const [state, setState] = useState<'verifying' | 'done' | 'error'>('verifying');
+  const [message, setMessage] = useState('Confirming your payment…');
+  const [productName, setProductName] = useState('');
+  const [downloadUrl, setDownloadUrl] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get('reference') || params.get('trxref') || '';
+    const product = params.get('product') || '';
+
+    if (!reference) {
+      setState('error');
+      setMessage('No payment reference found. If money left your account, contact us on WhatsApp.');
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/store/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reference, product }),
+        });
+        const data = await res.json();
+        if (cancelled) return;
+        if (res.ok && data.success) {
+          setState('done');
+          setProductName(data.product?.name || 'your guide');
+          const slug = data.product?.slug || product;
+          if (slug) {
+            setDownloadUrl(`/api/store/download?reference=${encodeURIComponent(reference)}&product=${encodeURIComponent(slug)}`);
+          }
+        } else {
+          setState('error');
+          setMessage(data.error || 'We could not verify your payment. Please contact us on WhatsApp.');
+        }
+      } catch {
+        if (!cancelled) {
+          setState('error');
+          setMessage('Payment verification failed. If money left your account, contact us on WhatsApp.');
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-20">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="text-center max-w-2xl mx-auto"
-      >
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-7xl mb-8"
-        >
-          ✅
-        </motion.div>
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="text-center max-w-2xl mx-auto">
+        {state === 'verifying' && (
+          <>
+            <Loader2 size={72} className="text-[var(--accent-gold)] animate-spin mx-auto mb-8" />
+            <h1 className="text-3xl font-bold font-sora mb-2">{message}</h1>
+            <p className="text-[var(--text-secondary)]">This only takes a moment.</p>
+          </>
+        )}
 
-        <h1 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">
-          Payment Confirmed! 🎉
-        </h1>
+        {state === 'done' && (
+          <>
+            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 0.6, delay: 0.2 }} className="text-7xl mb-8">
+              ✅
+            </motion.div>
+            <h1 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">Payment Confirmed! 🎉</h1>
+            <p className="text-xl text-[var(--text-secondary)] mb-2">
+              Thank you for buying <strong className="text-[var(--text-primary)]">{productName}</strong>.
+            </p>
+            <p className="text-[var(--text-secondary)] mb-8">Download it below — a copy is also on its way to your email.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {downloadUrl && (
+                <a
+                  href={downloadUrl}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] text-black font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+                >
+                  <Download size={18} /> Download Your Guide
+                </a>
+              )}
+              <Link href="/store" className="px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors">
+                Explore More Guides
+              </Link>
+            </div>
+          </>
+        )}
 
-        <p className="text-xl text-[var(--text-secondary)] mb-4">
-          Thank you for your purchase! Your PDF has been sent to your email.
-        </p>
-
-        <p className="text-[var(--text-secondary)] mb-8">
-          You&apos;ll also receive a copy in your email within 5 minutes. Check your spam folder just in case.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="https://wa.me/27688529333?text=Hi%20MuleSoo%2C%20I%20just%20completed%20a%20purchase%20%E2%80%94%20please%20send%20my%20download%20link."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#fff] text-[#000] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
-          >
-            Get My Download
-          </a>
-          <Link
-            href="/store"
-            className="px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors"
-          >
-            Explore More Guides
-          </Link>
-        </div>
-
-        <p className="text-[var(--text-secondary)] text-sm mt-8">
-          Questions? <Link href="/contact" className="text-[var(--accent-blue)] hover:underline">Contact us</Link>
-        </p>
+        {state === 'error' && (
+          <>
+            <XCircle size={72} className="text-red-400 mx-auto mb-6" />
+            <h1 className="text-3xl font-bold font-sora mb-3">We couldn&apos;t confirm your payment</h1>
+            <p className="text-[var(--text-secondary)] mb-8">{message}</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="https://wa.me/27688529333" target="_blank" rel="noopener noreferrer" className="px-8 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform">
+                Contact on WhatsApp
+              </a>
+              <Link href="/store" className="px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold rounded-lg hover:bg-[var(--glow-blue)] transition-colors">
+                Back to Store
+              </Link>
+            </div>
+          </>
+        )}
       </motion.div>
     </div>
   );

@@ -347,6 +347,41 @@ ${details?.projectDetails || 'No message provided'}
 }
 
 /**
+ * Alert the owner (WhatsApp + Telegram) when a store product is purchased.
+ */
+export async function sendPurchaseNotification(details: {
+  productName?: string;
+  amount?: number;
+  buyerEmail?: string;
+  reference?: string;
+}): Promise<void> {
+  const dash = '—';
+  const paidAt = new Date().toLocaleString('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const message = `🛒 *NEW STORE PURCHASE — MuleSoo*
+
+A guide has just been bought and paid via Paystack.
+
+📘 Product: ${details.productName || dash}
+💳 Amount: ${details.amount ? `R ${Number(details.amount).toLocaleString('en-ZA')}` : dash}
+✉️ Buyer: ${details.buyerEmail || dash}
+🔖 Reference: ${details.reference || dash}
+📅 Paid: ${paidAt} (SAST)
+
+The buyer can download it now; a copy has been made available on the confirmation page.`;
+
+  await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  await sendTelegramMessage(message);
+}
+
+/**
  * Send project completion verification request
  */
 export async function sendVerificationRequest(
