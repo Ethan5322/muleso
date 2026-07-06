@@ -7,8 +7,10 @@ import { Loader2, ShieldCheck, X, Mail } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import StoreCover from '@/components/StoreCover';
 import SystemCover from '@/components/SystemCover';
+import AutomationCover from '@/components/AutomationCover';
 import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
 import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
+import { AUTOMATION_PICKS, AUTOMATION_FEATURES, type AutomationPick } from '@/lib/storeAutomations';
 import { useChatbot } from '@/context/ChatbotContext';
 
 export default function StorePage() {
@@ -22,8 +24,16 @@ export default function StorePage() {
   const bookSystem = (s: SystemProduct) => {
     openChatbot({
       service: systemDisplayName(s),
-      price: `From R${s.fromPrice.toLocaleString('en-ZA')}`,
+      price: `From R${s.fromPrice.toLocaleString('en-ZA')} + R${s.monthly.toLocaleString('en-ZA')}/mo`,
       details: `I'd like to build ${systemDisplayName(s)} (${s.category}). ${s.description}`,
+    });
+  };
+
+  const bookAutomation = (a: AutomationPick) => {
+    openChatbot({
+      service: a.name,
+      price: `From R${a.fromPrice.toLocaleString('en-ZA')} + R${a.monthly.toLocaleString('en-ZA')}/mo`,
+      details: `I'd like the ${a.name} (${a.category}). ${a.desc}`,
     });
   };
 
@@ -196,8 +206,9 @@ export default function StorePage() {
                   </div>
 
                   <div className="mt-auto">
-                    <div className="flex items-baseline gap-2 mb-4">
+                    <div className="flex items-baseline gap-2 mb-4 flex-wrap">
                       <span className="text-3xl font-bold font-sora gradient-text">From R{s.fromPrice.toLocaleString('en-ZA')}</span>
+                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ R{s.monthly.toLocaleString('en-ZA')}/mo</span>
                     </div>
                     <button
                       type="button"
@@ -210,6 +221,77 @@ export default function StorePage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+
+        {/* Essential AI automations */}
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Essential AI Automations</h2>
+            <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
+              The most-in-demand AI system from every industry — affordable to start, working for you 24/7.
+              Book one and we tailor it to your business.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {AUTOMATION_PICKS.map((a, i) => (
+              <motion.div
+                key={a.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+                viewport={{ once: true }}
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+              >
+                <div className="relative w-full h-40 overflow-hidden">
+                  <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                    <AutomationCover name={a.name} category={a.category} accent={a.accent} />
+                  </div>
+                </div>
+
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                    {a.name}
+                  </h3>
+                  <p className="text-[var(--text-secondary)] text-sm mb-4">{a.desc}</p>
+
+                  <div className="flex gap-1.5 flex-wrap mb-5">
+                    {AUTOMATION_FEATURES.map((f) => (
+                      <span key={f} className="text-[11px] px-2 py-0.5 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded">
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-auto">
+                    <div className="flex items-baseline gap-2 mb-4 flex-wrap">
+                      <span className="text-2xl font-bold font-sora gradient-text">From R{a.fromPrice.toLocaleString('en-ZA')}</span>
+                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ R{a.monthly.toLocaleString('en-ZA')}/mo</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => bookAutomation(a)}
+                        className="flex-1 py-2.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform text-sm"
+                      >
+                        Book It
+                      </button>
+                      <Link
+                        href={`/ai-automation/${a.slug}`}
+                        className="px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors text-sm font-semibold flex items-center"
+                      >
+                        Details
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/ai-automation" className="text-[var(--accent-blue)] hover:underline font-semibold">
+              See all 200 AI automation systems →
+            </Link>
           </div>
         </div>
 
