@@ -49,7 +49,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     description: 'Use AI to build stunning, professional websites in days, not weeks — step by step.',
     features: ['Project setup', 'Master prompts', 'Animations', 'Deploy & SEO'],
     accent: 'gold',
-    available: false,
+    available: true,
   },
   {
     name: 'Claude Code MCP Master Guide',
@@ -60,7 +60,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     description: 'Supercharge Claude Code with MCP — connect tools, data and automations like a pro.',
     features: ['What MCP is', 'Setup & servers', 'Real workflows', 'Advanced tips'],
     accent: 'green',
-    available: false,
+    available: true,
   },
   {
     name: 'Publish Your Website on GitHub',
@@ -71,7 +71,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     description: 'Get your website online, properly, in under 30 minutes — the clean, professional way.',
     features: ['Git basics', 'Repos & pages', 'Custom domain', 'Go live'],
     accent: 'blue',
-    available: false,
+    available: true,
   },
   {
     name: 'The MuleSoo Growth Playbook',
@@ -82,7 +82,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     description: 'The full marketing & sales master guide: positioning, offers, lead channels, scripts and a 30-day plan.',
     features: ['Positioning & offers', '7 lead channels', 'Sales scripts', '30-day plan'],
     accent: 'gold',
-    available: false,
+    available: true,
   },
 ];
 
