@@ -12,6 +12,9 @@ export async function POST(req: NextRequest) {
 
     const product = findProductBySlug(String(slug || ''));
     if (!product) return NextResponse.json({ error: 'Unknown product' }, { status: 400 });
+    if (!product.available) {
+      return NextResponse.json({ error: 'This guide is coming soon.' }, { status: 400 });
+    }
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email))) {
       return NextResponse.json({ error: 'A valid email is required for delivery.' }, { status: 400 });

@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findProductBySlug } from '@/lib/storeProducts';
 import { sendPurchaseNotification } from '@/lib/sendWhatsAppMessage';
+import { generateBuyerGuide, emailGuideToBuyer } from '@/lib/guides/deliver';
+
+export const runtime = 'nodejs';
 
 /**
- * Verifies a store payment with Paystack, then alerts the owner. Returns the
- * product so the confirmation page can offer the download.
+ * Verifies a store payment with Paystack, generates the buyer's personalised
+ * (watermarked + password-locked) guide, emails it to them, and alerts the
+ * owner. Returns the password so the confirmation page can show it too.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -26,12 +30,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const product =
-      findProductBySlug(String(slug || '')) || findProductBySlug(String(pj.data?.metadata?.product_slug || ''));
+    const resolvedSlug = String(slug || pj.data?.metadata?.product_slug || '');
+    const product = findProductBySlug(resolvedSlug);
     const amountPaid = (pj.data.amount || 0) / 100;
-    const buyerEmail = pj.data.customer?.email;
+    const buyerEmail = pj.data.customer?.email || '';
 
-    // Alert the owner (best-effort — never fail the buyer's confirmation).
+    // Alert the owner (best-effort).
     try {
       await sendPurchaseNotification({
         productName: product?.name || pj.data?.metadata?.product_name,
@@ -43,9 +47,22 @@ export async function POST(req: NextRequest) {
       console.error('store/verify: owner alert failed (continuing):', e);
     }
 
+    // Generate + email the buyer's personalised copy (best-effort).
+    let password: string | null = null;
+    try {
+      const item = generateBuyerGuide(resolvedSlug, reference, buyerEmail || 'buyer');
+      if (item) {
+        password = item.password;
+        if (buyerEmail) await emailGuideToBuyer(buyerEmail, item);
+      }
+    } catch (e) {
+      console.error('store/verify: guide generation/email failed (continuing):', e);
+    }
+
     return NextResponse.json({
       success: true,
       amount: amountPaid,
+      password,
       product: product ? { name: product.name, slug: product.slug } : null,
     });
   } catch (error) {

@@ -112,13 +112,23 @@ export default function StorePage() {
                     <span className="text-3xl font-bold font-sora gold-text">R{product.price}</span>
                     <span className="text-xs text-[var(--text-secondary)]">once-off</span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => startBuy(product)}
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform"
-                  >
-                    Buy Now
-                  </button>
+                  {product.available ? (
+                    <button
+                      type="button"
+                      onClick={() => startBuy(product)}
+                      className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform"
+                    >
+                      Buy Now
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="w-full py-3 border border-[var(--border)] text-[var(--text-secondary)] font-bold rounded-lg cursor-not-allowed"
+                    >
+                      Coming Soon
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>

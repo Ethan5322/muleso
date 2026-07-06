@@ -10,6 +10,7 @@ export default function SuccessPage() {
   const [message, setMessage] = useState('Confirming your payment…');
   const [productName, setProductName] = useState('');
   const [downloadUrl, setDownloadUrl] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -35,6 +36,7 @@ export default function SuccessPage() {
         if (res.ok && data.success) {
           setState('done');
           setProductName(data.product?.name || 'your guide');
+          if (data.password) setPassword(data.password);
           const slug = data.product?.slug || product;
           if (slug) {
             setDownloadUrl(`/api/store/download?reference=${encodeURIComponent(reference)}&product=${encodeURIComponent(slug)}`);
@@ -75,7 +77,17 @@ export default function SuccessPage() {
             <p className="text-xl text-[var(--text-secondary)] mb-2">
               Thank you for buying <strong className="text-[var(--text-primary)]">{productName}</strong>.
             </p>
-            <p className="text-[var(--text-secondary)] mb-8">Download it below — a copy is also on its way to your email.</p>
+            <p className="text-[var(--text-secondary)] mb-6">Download it below — a copy is also on its way to your email.</p>
+
+            {password && (
+              <div className="max-w-md mx-auto mb-8 rounded-xl border border-[var(--accent-gold)]/50 bg-[var(--bg-card)] p-4">
+                <p className="text-xs text-[var(--text-secondary)] mb-1">🔒 Your PDF opens with this password:</p>
+                <p className="text-2xl font-bold font-sora gold-text tracking-widest">{password}</p>
+                <p className="text-[11px] text-[var(--text-secondary)] mt-1">
+                  It&apos;s also in your email. Your copy is watermarked to you — please don&apos;t share it.
+                </p>
+              </div>
+            )}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {downloadUrl && (
                 <a
