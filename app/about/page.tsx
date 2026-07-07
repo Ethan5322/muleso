@@ -6,20 +6,22 @@ import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import { useSiteSettings } from '@/lib/useSiteSettings';
+import { parseTeam, type TeamAccent } from '@/lib/siteSettings';
 
-// The team behind MuleSoo. Photos are set from the admin panel (Site Content →
-// Team Photos); empty = an elegant initials placeholder.
-const TEAM = [
-  { name: 'Daniel Okonkwo', role: 'Vice President', photoKey: 'team_vp_photo', accent: 'var(--accent-blue)' },
-  { name: 'Amara Dube', role: 'Social Media Manager', photoKey: 'team_social_photo', accent: 'var(--accent-purple)' },
-  { name: 'Liam Petersen', role: 'Sales Manager', photoKey: 'team_sales_photo', accent: 'var(--accent-green)' },
-] as const;
+// The team is fully editable from the admin panel (Site Content → Team).
+const ACCENT: Record<TeamAccent, string> = {
+  blue: 'var(--accent-blue)',
+  purple: 'var(--accent-purple)',
+  green: 'var(--accent-green)',
+  gold: 'var(--accent-gold)',
+};
 
 const initials = (name: string) =>
   name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 
 export default function AboutPage() {
   const settings = useSiteSettings();
+  const team = parseTeam(settings.team_members);
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,9 +37,9 @@ export default function AboutPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20 items-center"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24 items-center"
         >
-          <div className="flex flex-col items-center lg:items-start">
+          <div className="flex flex-col items-center lg:items-start lg:sticky lg:top-24">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -122,33 +124,31 @@ export default function AboutPage() {
           <p className="text-center text-[var(--text-secondary)] mb-12 max-w-2xl mx-auto">
             MuleSoo is built and run by a team — real people behind every project, not a one-person show.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {TEAM.map((m) => {
-              const photo = settings[m.photoKey];
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {team.map((m, i) => {
+              const color = ACCENT[m.accent] || 'var(--accent-blue)';
               return (
-                <div key={m.name} className="glass-card p-6 text-center hover:border-[var(--accent-blue)] transition-all">
-                  <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden mb-4 border-2" style={{ borderColor: m.accent }}>
-                    {photo ? (
+                <div key={`${m.name}-${i}`} className="glass-card p-6 flex flex-col items-center text-center hover:border-[var(--accent-blue)] transition-all">
+                  <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border-2 shrink-0" style={{ borderColor: color }}>
+                    {m.photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={photo} alt={m.name} className="w-full h-full object-cover" />
+                      <img src={m.photo} alt={m.name} className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-[var(--bg-card)]">
-                        <User size={22} className="text-[var(--text-secondary)]/50" />
-                        <span className="text-2xl font-bold font-sora" style={{ color: m.accent }}>
+                        <User size={20} className="text-[var(--text-secondary)]/50" />
+                        <span className="text-2xl font-bold font-sora" style={{ color }}>
                           {initials(m.name)}
                         </span>
                       </div>
                     )}
                   </div>
-                  <h3 className="text-xl font-bold font-sora text-[var(--text-primary)]">{m.name}</h3>
-                  <p className="text-sm font-semibold" style={{ color: m.accent }}>{m.role}</p>
+                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)]">{m.name}</h3>
+                  <p className="text-sm font-semibold mb-3" style={{ color }}>{m.role}</p>
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{m.bio}</p>
                 </div>
               );
             })}
           </div>
-          <p className="text-center text-xs text-[var(--text-secondary)] mt-8">
-            📸 Team photos are added by the owner from the admin panel.
-          </p>
         </motion.div>
 
         {/* Mission */}

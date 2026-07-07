@@ -25,10 +25,59 @@ export interface SiteSettings {
   stat3_label: string;
   stat4_value: string;
   stat4_label: string;
-  // Team photos (data URLs, set from the admin panel — empty = placeholder)
-  team_vp_photo: string;
-  team_social_photo: string;
-  team_sales_photo: string;
+  // Team — a JSON array of members, fully editable from the admin panel.
+  team_members: string;
+}
+
+export type TeamAccent = 'blue' | 'purple' | 'green' | 'gold';
+export interface TeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  photo: string; // data URL, empty = initials placeholder
+  accent: TeamAccent;
+}
+
+export const DEFAULT_TEAM: TeamMember[] = [
+  {
+    name: 'Daniel Okonkwo',
+    role: 'Vice President',
+    bio: 'Daniel keeps MuleSoo moving — overseeing delivery, quality and the day-to-day so every project ships on time and to a world-class standard.',
+    photo: '',
+    accent: 'blue',
+  },
+  {
+    name: 'Amara Dube',
+    role: 'Social Media Manager',
+    bio: 'Amara runs our social presence and content, telling the MuleSoo story and keeping our community engaged across every platform.',
+    photo: '',
+    accent: 'purple',
+  },
+  {
+    name: 'Liam Petersen',
+    role: 'Sales Manager',
+    bio: 'Liam leads sales and client relationships — understanding exactly what each business needs and matching them to the right solution.',
+    photo: '',
+    accent: 'green',
+  },
+  {
+    name: 'Yonas Tadesse',
+    role: 'Operations Lead',
+    bio: 'Yonas leads operations and client success, making sure every build runs smoothly from first kickoff call to final handover.',
+    photo: '',
+    accent: 'gold',
+  },
+];
+
+/** Safely read the team array from a settings JSON string. */
+export function parseTeam(json: string | undefined): TeamMember[] {
+  if (!json) return DEFAULT_TEAM;
+  try {
+    const arr = JSON.parse(json);
+    return Array.isArray(arr) && arr.length ? (arr as TeamMember[]) : DEFAULT_TEAM;
+  } catch {
+    return DEFAULT_TEAM;
+  }
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -51,9 +100,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   stat3_label: 'Years Experience',
   stat4_value: '24/7',
   stat4_label: 'Support Available',
-  team_vp_photo: '',
-  team_social_photo: '',
-  team_sales_photo: '',
+  team_members: '',
 };
 
 export const SETTINGS_FIELDS = Object.keys(DEFAULT_SETTINGS) as (keyof SiteSettings)[];
