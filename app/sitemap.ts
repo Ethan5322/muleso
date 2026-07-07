@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const serviceSlugs = [
     'website-design',
     'chatbot',
+    'design-widget',
     'logo-design',
     'pdf-guides',
     'qr-codes',
