@@ -46,3 +46,11 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Local source files / saved pages accidentally in repo root — not part of the app
+/*.pdf
+/*.jpeg
+/*.jpg
+/WhatsApp.html
+/WhatsApp_files/
+"/id .pdf"
