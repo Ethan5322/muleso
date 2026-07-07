@@ -38,15 +38,15 @@ export default function AboutPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 mb-24 items-center"
+          className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 lg:gap-14 mt-10 mb-24 items-center"
         >
-          <div className="flex flex-col items-center lg:items-start lg:sticky lg:top-24">
+          <div className="flex flex-col items-center lg:sticky lg:top-24">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="w-full max-w-[280px]"
+              className="w-full max-w-[300px]"
             >
               <div className="relative w-full rounded-2xl overflow-hidden border-2 border-[var(--accent-gold)] glow-gold shadow-2xl mb-5"
                 style={{
@@ -70,18 +70,23 @@ export default function AboutPage() {
             </motion.div>
           </div>
 
-          <div className="space-y-6">
-            <h2 className="text-4xl font-bold font-sora text-[var(--text-primary)]">Hi, I&apos;m Ena Muluken.</h2>
+          <div className="space-y-5">
+            <p className="text-sm font-sora font-bold text-[var(--accent-blue)] uppercase tracking-wide">Meet the Founder</p>
+            <h2 className="text-4xl font-bold font-sora text-[var(--text-primary)] -mt-2">Hi, I&apos;m Ena Muluken.</h2>
+            <p className="text-[var(--text-secondary)] leading-relaxed text-lg">
+              I founded <span className="text-[var(--text-primary)] font-semibold">MuleSoo Digital Services</span> to give
+              African businesses the same world-class websites, AI chatbots and automation the biggest brands use — built
+              by a team that understands both the <span className="text-[var(--accent-gold)]">culture</span> and the{' '}
+              <span className="text-[var(--accent-blue)]">code</span>.
+            </p>
             <p className="text-[var(--text-secondary)] leading-relaxed">
-              I&apos;m an entrepreneur and digital builder based in Pretoria, South Africa. I run MuleSoo Digital
-              Services alongside Habesha Celebration Events — a full-service Ethiopian wedding planning company. I
-              build websites, chatbots, automation systems, and educational content because I believe every African
-              business deserves world-class digital tools.
+              Based in Pretoria, South Africa, I also run Habesha Celebration Events and share what we learn on YouTube.
+              Every day, our team turns ambitious ideas into digital products that win.
             </p>
 
             <div>
               <p className="text-sm font-sora font-bold text-[var(--accent-gold)] uppercase mb-3">
-                What I&apos;m currently building:
+                What we&apos;re currently building:
               </p>
               <div className="flex flex-wrap gap-3">
                 {['MuleSoo.com 🛠️', 'Habesha Events 🎊', 'YouTube AI Channel 🎥'].map((item) => (
