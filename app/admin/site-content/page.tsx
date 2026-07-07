@@ -50,14 +50,35 @@ export default function SiteContentPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Accept any gallery photo: auto center-crop to a square, resize + compress,
+  // so it always fits the frame perfectly and stays small enough to store.
   const onPhoto = (key: keyof SiteSettings, file?: File) => {
     if (!file) return;
-    if (file.size > 2_000_000) {
-      toast.error('Please use an image under 2MB.');
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please choose an image file.');
       return;
     }
     const reader = new FileReader();
-    reader.onload = () => setForm((f) => ({ ...f, [key]: String(reader.result) }));
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const SIZE = 512; // square output
+        const canvas = document.createElement('canvas');
+        canvas.width = SIZE;
+        canvas.height = SIZE;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        // center-crop the largest square from the photo
+        const side = Math.min(img.width, img.height);
+        const sx = (img.width - side) / 2;
+        const sy = (img.height - side) / 2;
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, SIZE, SIZE);
+        setForm((f) => ({ ...f, [key]: canvas.toDataURL('image/jpeg', 0.85) }));
+        toast.success('Photo ready — click Save to publish.');
+      };
+      img.onerror = () => toast.error('Could not read that image. Try another.');
+      img.src = String(reader.result);
+    };
     reader.readAsDataURL(file);
   };
 
