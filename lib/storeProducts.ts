@@ -7,6 +7,7 @@ export type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
 export interface StoreProduct {
   name: string;
   slug: string;
+  emoji: string;
   price: number; // ZAR
   pages: string;
   difficulty: string;
@@ -21,6 +22,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
   {
     name: 'Make Money With AI Chatbots',
     slug: 'make-money-ai-chatbots',
+    emoji: '🤖',
     price: 299,
     pages: '30+',
     difficulty: 'Beginner-Friendly',
@@ -32,6 +34,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
   {
     name: 'Beginner to Pro: Websites That Sell',
     slug: 'beginner-to-pro-website',
+    emoji: '🚀',
     price: 249,
     pages: '40+',
     difficulty: 'Beginner-Friendly',
@@ -43,6 +46,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
   {
     name: 'Build a Pro Website With Claude Code',
     slug: 'build-pro-website-claude-code',
+    emoji: '💻',
     price: 249,
     pages: '35+',
     difficulty: 'Beginner-Friendly',
@@ -54,6 +58,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
   {
     name: 'Claude Code MCP Master Guide',
     slug: 'claude-code-mcp-master',
+    emoji: '🔌',
     price: 199,
     pages: '28+',
     difficulty: 'Intermediate',
@@ -65,6 +70,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
   {
     name: 'Publish Your Website on GitHub',
     slug: 'github-website-publishing',
+    emoji: '🐙',
     price: 149,
     pages: '24+',
     difficulty: 'Beginner-Friendly',
@@ -76,6 +82,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
   {
     name: 'The MuleSoo Growth Playbook',
     slug: 'mulesoo-growth-playbook',
+    emoji: '📈',
     price: 349,
     pages: '42',
     difficulty: 'All levels',

@@ -3,16 +3,30 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { User } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+import { useSiteSettings } from '@/lib/useSiteSettings';
+
+// The team behind MuleSoo. Photos are set from the admin panel (Site Content →
+// Team Photos); empty = an elegant initials placeholder.
+const TEAM = [
+  { name: 'Daniel Okonkwo', role: 'Vice President', photoKey: 'team_vp_photo', accent: 'var(--accent-blue)' },
+  { name: 'Amara Dube', role: 'Social Media Manager', photoKey: 'team_social_photo', accent: 'var(--accent-purple)' },
+  { name: 'Liam Petersen', role: 'Sales Manager', photoKey: 'team_sales_photo', accent: 'var(--accent-green)' },
+] as const;
+
+const initials = (name: string) =>
+  name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 
 export default function AboutPage() {
+  const settings = useSiteSettings();
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero */}
         <PageHero
-          title="The Builder Behind MuleSoo"
-          subtitle="One entrepreneur. Multiple ventures. One mission: bring world-class tech to African businesses."
+          title="The Team Behind MuleSoo"
+          subtitle="Not one person — a team of builders, marketers and closers on one mission: bring world-class tech to African businesses."
         />
 
         {/* Founder Section */}
@@ -94,6 +108,47 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
+        </motion.div>
+
+        {/* Meet the Team */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <h2 className="text-4xl font-bold font-sora text-center mb-3 gradient-text">Meet the Team</h2>
+          <p className="text-center text-[var(--text-secondary)] mb-12 max-w-2xl mx-auto">
+            MuleSoo is built and run by a team — real people behind every project, not a one-person show.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {TEAM.map((m) => {
+              const photo = settings[m.photoKey];
+              return (
+                <div key={m.name} className="glass-card p-6 text-center hover:border-[var(--accent-blue)] transition-all">
+                  <div className="w-32 h-32 mx-auto rounded-2xl overflow-hidden mb-4 border-2" style={{ borderColor: m.accent }}>
+                    {photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={photo} alt={m.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-[var(--bg-card)]">
+                        <User size={22} className="text-[var(--text-secondary)]/50" />
+                        <span className="text-2xl font-bold font-sora" style={{ color: m.accent }}>
+                          {initials(m.name)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-bold font-sora text-[var(--text-primary)]">{m.name}</h3>
+                  <p className="text-sm font-semibold" style={{ color: m.accent }}>{m.role}</p>
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-center text-xs text-[var(--text-secondary)] mt-8">
+            📸 Team photos are added by the owner from the admin panel.
+          </p>
         </motion.div>
 
         {/* Mission */}

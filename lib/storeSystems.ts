@@ -7,6 +7,7 @@ import type { AccentKey } from './storeProducts';
 
 export interface SystemProduct {
   slug: string;
+  emoji: string;
   brand: string; // elegant product name
   tagline: string; // what it is
   category: string;
@@ -21,6 +22,7 @@ export interface SystemProduct {
 export const SYSTEM_PRODUCTS: SystemProduct[] = [
   {
     slug: 'apex-gym-platform',
+    emoji: '🏋️',
     brand: 'Apex',
     tagline: 'AI Gym & Membership Platform',
     category: 'Gym Platform',
@@ -32,6 +34,7 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
   },
   {
     slug: 'feast-catering-suite',
+    emoji: '🍽️',
     brand: 'Feast',
     tagline: 'Catering & Events Booking Suite',
     category: 'Catering',
@@ -43,6 +46,7 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
   },
   {
     slug: 'lumiere-events-platform',
+    emoji: '🎉',
     brand: 'Lumière',
     tagline: 'Events Booking & Deposit Platform',
     category: 'Events',
@@ -54,6 +58,7 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
   },
   {
     slug: 'aperture-studio-site',
+    emoji: '📸',
     brand: 'Aperture',
     tagline: 'Studio & Booking Website',
     category: 'Photography',
@@ -65,6 +70,7 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
   },
   {
     slug: 'celebra-events-website',
+    emoji: '💐',
     brand: 'Celebra',
     tagline: 'Event Planning Website',
     category: 'Website',
@@ -76,6 +82,7 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
   },
   {
     slug: 'concierge-ai-assistant',
+    emoji: '💬',
     brand: 'Concierge',
     tagline: '24/7 AI Booking Assistant',
     category: 'AI Chatbot',
@@ -87,6 +94,7 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
   },
   {
     slug: 'vitalis-clinic-system',
+    emoji: '🏥',
     brand: 'Vitalis',
     tagline: 'AI Clinic & Patient System',
     category: 'Healthcare · Enterprise',

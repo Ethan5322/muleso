@@ -1,8 +1,9 @@
 'use client';
 
 /**
- * Store cover for an AI automation — a big emoji that represents the system,
- * on a branded gradient, with the "AI AUTOMATION" label, name and category.
+ * Unified store cover: a big representative emoji on a branded gradient, with a
+ * type label (DIGITAL GUIDE / AUTO PILOT SYSTEM / AI AUTOMATION), the item name
+ * and a category chip. Clean, attractive, and consistent across the store.
  */
 
 type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
@@ -14,7 +15,7 @@ const ACCENTS: Record<AccentKey, { from: string; to: string; accent: string }> =
   green: { from: '#00FF88', to: '#0A3A5F', accent: '#00FF88' },
 };
 
-function wrap(title: string, max = 15): string[] {
+function wrap(title: string, max = 16): string[] {
   const words = title.replace(/^AI\s+/, '').split(' ');
   const lines: string[] = [];
   let cur = '';
@@ -28,66 +29,70 @@ function wrap(title: string, max = 15): string[] {
   return lines.slice(0, 3);
 }
 
-export default function AutomationCover({
-  name,
-  category,
+export default function EmojiCover({
   emoji,
+  title,
+  label,
+  category,
   accent = 'blue',
 }: {
-  name: string;
-  category: string;
   emoji: string;
+  title: string;
+  label: string;
+  category?: string;
   accent?: AccentKey;
 }) {
   const a = ACCENTS[accent];
-  const id = name.replace(/[^a-zA-Z0-9]/g, '');
-  const lines = wrap(name);
+  const id = (label + title).replace(/[^a-zA-Z0-9]/g, '');
+  const lines = wrap(title);
 
   return (
-    <svg viewBox="0 0 1200 480" className="w-full h-full" preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${name} — ${category}`}>
+    <svg viewBox="0 0 1200 480" className="w-full h-full" preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${title}`}>
       <defs>
-        <linearGradient id={`abg-${id}`} x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id={`ebg-${id}`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor={a.from} stopOpacity="0.42" />
           <stop offset="100%" stopColor={a.to} stopOpacity="0.97" />
         </linearGradient>
-        <pattern id={`agrid-${id}`} width="34" height="34" patternUnits="userSpaceOnUse">
+        <pattern id={`egrid-${id}`} width="34" height="34" patternUnits="userSpaceOnUse">
           <path d="M34 0 L0 0 0 34" fill="none" stroke="#ffffff" strokeOpacity="0.05" strokeWidth="1" />
         </pattern>
-        <radialGradient id={`aglow-${id}`} cx="50%" cy="50%" r="50%">
+        <radialGradient id={`eglow-${id}`} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor={a.accent} stopOpacity="0.55" />
           <stop offset="100%" stopColor={a.accent} stopOpacity="0" />
         </radialGradient>
       </defs>
 
       <rect width="1200" height="480" fill="#0A0F1E" />
-      <rect width="1200" height="480" fill={`url(#abg-${id})`} />
-      <rect width="1200" height="480" fill={`url(#agrid-${id})`} />
+      <rect width="1200" height="480" fill={`url(#ebg-${id})`} />
+      <rect width="1200" height="480" fill={`url(#egrid-${id})`} />
       <rect x="0" y="0" width="14" height="480" fill={a.accent} />
 
       <text x="70" y="86" fontFamily="Sora, sans-serif" fontSize="26" fontWeight="700" fill="#ffffff">
         MULE<tspan fill={a.accent}>●</tspan>SOO
       </text>
       <text x="70" y="120" fontFamily="Sora, sans-serif" fontSize="16" fontWeight="700" letterSpacing="4" fill={a.accent}>
-        AI AUTOMATION
+        {label}
       </text>
 
-      {/* Name (up to 3 lines) */}
       {lines.map((line, i) => (
         <text key={i} x="70" y={200 + i * 50} fontFamily="Sora, sans-serif" fontSize="44" fontWeight="800" fill="#ffffff">
           {line}
         </text>
       ))}
 
-      {/* Category chip */}
-      <rect x="70" y="392" width={70 + category.length * 11} height="44" rx="22" fill="#000000" fillOpacity="0.3" stroke={a.accent} strokeOpacity="0.6" />
-      <text x={105 + (category.length * 11) / 2} y="420" textAnchor="middle" fontFamily="Sora, sans-serif" fontSize="19" fontWeight="600" fill="#ffffff">
-        {category}
-      </text>
+      {category && (
+        <>
+          <rect x="70" y="392" width={70 + category.length * 11} height="44" rx="22" fill="#000000" fillOpacity="0.3" stroke={a.accent} strokeOpacity="0.6" />
+          <text x={105 + (category.length * 11) / 2} y="420" textAnchor="middle" fontFamily="Sora, sans-serif" fontSize="19" fontWeight="600" fill="#ffffff">
+            {category}
+          </text>
+        </>
+      )}
 
       {/* Big representative emoji (right) */}
-      <circle cx="980" cy="240" r="200" fill={`url(#aglow-${id})`} />
-      <circle cx="980" cy="240" r="128" fill="#0D1528" stroke={a.accent} strokeOpacity="0.5" strokeWidth="3" />
-      <text x="980" y="240" textAnchor="middle" dominantBaseline="central" fontSize="150">
+      <circle cx="980" cy="240" r="200" fill={`url(#eglow-${id})`} />
+      <circle cx="980" cy="240" r="132" fill="#0D1528" stroke={a.accent} strokeOpacity="0.5" strokeWidth="3" />
+      <text x="980" y="240" textAnchor="middle" dominantBaseline="central" fontSize="155">
         {emoji}
       </text>
     </svg>

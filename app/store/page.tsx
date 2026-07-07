@@ -5,9 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Loader2, ShieldCheck, X, Mail } from 'lucide-react';
 import PageHero from '@/components/PageHero';
-import StoreCover from '@/components/StoreCover';
-import SystemCover from '@/components/SystemCover';
-import AutomationCover from '@/components/AutomationCover';
+import EmojiCover from '@/components/EmojiCover';
 import StoreDetailModal, { type StoreDetailItem } from '@/components/StoreDetailModal';
 import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
 import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
@@ -130,7 +128,7 @@ export default function StorePage() {
 
               <div className="relative w-full h-52 overflow-hidden">
                 <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
-                  <StoreCover title={product.name} pages={product.pages} difficulty={product.difficulty} accent={product.accent} />
+                  <EmojiCover emoji={product.emoji} title={product.name} label="DIGITAL GUIDE" category={`${product.pages} pages`} accent={product.accent} />
                 </div>
                 {i === 0 && (
                   <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg">
@@ -211,7 +209,7 @@ export default function StorePage() {
               >
                 <div className="relative w-full h-52 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
-                    <SystemCover brand={s.brand} tagline={s.tagline} category={s.category} accent={s.accent} />
+                    <EmojiCover emoji={s.emoji} title={systemDisplayName(s)} label="AUTO PILOT SYSTEM" category={s.category} accent={s.accent} />
                   </div>
                   {s.enterprise && (
                     <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-blue)] to-[#7DE0FF] shadow-lg">
@@ -278,7 +276,7 @@ export default function StorePage() {
               >
                 <div className="relative w-full h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
-                    <AutomationCover name={a.name} category={a.category} emoji={a.emoji} accent={a.accent} />
+                    <EmojiCover emoji={a.emoji} title={a.name} label="AI AUTOMATION" category={a.category} accent={a.accent} />
                   </div>
                 </div>
 

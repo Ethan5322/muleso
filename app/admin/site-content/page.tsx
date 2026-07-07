@@ -31,6 +31,12 @@ const FIELDS: Field[] = [
 
 const GROUPS = ['Business Info', 'Homepage', 'Homepage Stats'];
 
+const TEAM_PHOTOS: { key: keyof SiteSettings; label: string }[] = [
+  { key: 'team_vp_photo', label: 'Vice President' },
+  { key: 'team_social_photo', label: 'Social Media Manager' },
+  { key: 'team_sales_photo', label: 'Sales Manager' },
+];
+
 export default function SiteContentPage() {
   const [form, setForm] = useState<SiteSettings>(DEFAULT_SETTINGS);
   const [loading, setLoading] = useState(true);
@@ -43,6 +49,17 @@ export default function SiteContentPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  const onPhoto = (key: keyof SiteSettings, file?: File) => {
+    if (!file) return;
+    if (file.size > 2_000_000) {
+      toast.error('Please use an image under 2MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setForm((f) => ({ ...f, [key]: String(reader.result) }));
+    reader.readAsDataURL(file);
+  };
 
   const save = async () => {
     setSaving(true);
@@ -96,6 +113,39 @@ export default function SiteContentPage() {
               </div>
             </div>
           ))}
+
+          {/* Team photos */}
+          <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-2xl p-6">
+            <h3 className="text-lg font-bold text-white mb-1">Team Photos</h3>
+            <p className="text-xs text-[#7A8BA8] mb-4">Shown on the About page. Square photos work best — under 2MB. Save to publish.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {TEAM_PHOTOS.map((t) => (
+                <div key={t.key} className="text-center">
+                  <div className="w-24 h-24 mx-auto rounded-xl overflow-hidden border border-[#1E3A5F] bg-[#1A2332] flex items-center justify-center mb-2">
+                    {form[t.key] ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={form[t.key]} alt={t.label} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[#7A8BA8] text-[11px]">No photo</span>
+                    )}
+                  </div>
+                  <p className="text-sm font-semibold text-[#00C8FF] mb-2">{t.label}</p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    aria-label={`${t.label} photo`}
+                    onChange={(e) => onPhoto(t.key, e.target.files?.[0])}
+                    className="block w-full text-[11px] text-[#7A8BA8] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-[#00C8FF]/15 file:text-[#00C8FF] file:text-xs file:font-semibold"
+                  />
+                  {form[t.key] && (
+                    <button type="button" onClick={() => setForm((f) => ({ ...f, [t.key]: '' }))} className="text-[11px] text-red-400 mt-1.5 hover:underline">
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
           <button
             type="button"

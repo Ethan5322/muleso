@@ -25,6 +25,10 @@ export interface SiteSettings {
   stat3_label: string;
   stat4_value: string;
   stat4_label: string;
+  // Team photos (data URLs, set from the admin panel — empty = placeholder)
+  team_vp_photo: string;
+  team_social_photo: string;
+  team_sales_photo: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -47,6 +51,9 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   stat3_label: 'Years Experience',
   stat4_value: '24/7',
   stat4_label: 'Support Available',
+  team_vp_photo: '',
+  team_social_photo: '',
+  team_sales_photo: '',
 };
 
 export const SETTINGS_FIELDS = Object.keys(DEFAULT_SETTINGS) as (keyof SiteSettings)[];
