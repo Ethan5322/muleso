@@ -149,7 +149,7 @@ Reference: ${bookingDetails?.bookingReference || 'N/A'}
 
 ---NEXT STEPS---
 1. Review your booking details above
-2. Ethan will contact you within 2 hours
+2. Ena Muluken will contact you within 2 hours
 3. Download your PDF agreement from your email
 4. We will confirm project start date
 

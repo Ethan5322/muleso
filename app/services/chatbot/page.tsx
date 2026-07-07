@@ -81,7 +81,7 @@ export default function ChatbotPage() {
           <div className="mb-8 space-y-4">
             <div>
               <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-2">
-                Contact Ethan Directly for Custom Pricing
+                Contact Ena Muluken Directly for Custom Pricing
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a

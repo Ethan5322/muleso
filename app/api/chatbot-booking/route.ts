@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        message: 'Booking received! Check your WhatsApp for confirmation. Ethan will contact you within 2 hours.',
+        message: 'Booking received! Check your WhatsApp for confirmation. Ena Muluken will contact you within 2 hours.',
         verificationCode: verificationCode,
         bookingId,
         booking: {

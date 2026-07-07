@@ -4,13 +4,20 @@ import { motion } from 'framer-motion';
 
 export default function PageHero({
   title,
-  subtitle
+  subtitle,
+  compact = false,
 }: {
   title: string;
   subtitle: string;
+  /** Tighter hero (no 60vh min-height) — for content-heavy pages like About. */
+  compact?: boolean;
 }) {
   return (
-    <section className="min-h-[60vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 relative pt-20">
+    <section
+      className={`flex items-center justify-center px-4 sm:px-6 lg:px-8 relative ${
+        compact ? 'pt-24 pb-4' : 'min-h-[60vh] pt-20'
+      }`}
+    >
       <div className="max-w-5xl mx-auto w-full text-center">
         <motion.div
           className="space-y-6"

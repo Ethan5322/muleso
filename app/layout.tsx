@@ -149,7 +149,7 @@ export default function RootLayout({
               founders: [
                 {
                   "@type": "Person",
-                  name: "Ethan",
+                  name: "Ena Muluken",
                 }
               ],
               contactPoint: {

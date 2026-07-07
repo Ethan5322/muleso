@@ -191,7 +191,7 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
   const noticeLines = doc.splitTextToSize(
-    '✓ Ethan will review your request within 2 hours on business days\n✓ You will receive a WhatsApp or email with pricing and next steps\n✓ A 50% deposit is required to begin work',
+    '✓ Ena Muluken will review your request within 2 hours on business days\n✓ You will receive a WhatsApp or email with pricing and next steps\n✓ A 50% deposit is required to begin work',
     contentWidth - 6
   );
 

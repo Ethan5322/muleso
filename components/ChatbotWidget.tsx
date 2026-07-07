@@ -266,7 +266,7 @@ export default function ChatbotWidget() {
   const handlePayDeposit = async () => {
     const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
     if (!publicKey) {
-      toast.error('Online payment is not set up yet. Ethan will send you a payment link.');
+      toast.error('Online payment is not set up yet. Ena Muluken will send you a payment link.');
       return;
     }
     const deposit = getServiceDeposit(bookingData.service);
@@ -1099,7 +1099,7 @@ export default function ChatbotWidget() {
                     <div className="bg-[var(--glow-blue)] border border-[var(--accent-blue)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
                       <p className="font-semibold">✅ Booking Confirmed!</p>
                       <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
-                      <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ethan will contact you within 2 hours</p>
+                      <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ena Muluken will contact you within 2 hours</p>
                     </div>
 
                     {/* Deposit Payment */}

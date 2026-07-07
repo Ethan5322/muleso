@@ -98,7 +98,7 @@ export default function WebsiteDesignPage() {
           <div className="mb-8 space-y-4">
             <div>
               <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-4">
-                Contact Ethan Directly for Custom Pricing
+                Contact Ena Muluken Directly for Custom Pricing
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
@@ -172,7 +172,7 @@ export default function WebsiteDesignPage() {
             <StartBookingButton text="🚀 Book Your Website Now" size="lg" />
           </div>
           <p className="text-sm text-[var(--text-secondary)] mt-4">
-            Chat with Ethan directly — get a quote in minutes!
+            Chat with Ena Muluken directly — get a quote in minutes!
           </p>
         </motion.div>
       </div>

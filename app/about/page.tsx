@@ -27,6 +27,7 @@ export default function AboutPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero */}
         <PageHero
+          compact
           title="The Team Behind MuleSoo"
           subtitle="Not one person — a team of builders, marketers and closers on one mission: bring world-class tech to African businesses."
         />
@@ -37,7 +38,7 @@ export default function AboutPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24 items-center"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10 mb-24 items-center"
         >
           <div className="flex flex-col items-center lg:items-start lg:sticky lg:top-24">
             <motion.div
@@ -45,16 +46,16 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="w-full max-w-sm"
+              className="w-full max-w-[280px]"
             >
-              <div className="relative w-full rounded-2xl overflow-hidden border-2 border-[var(--accent-gold)] glow-gold shadow-2xl mb-6"
+              <div className="relative w-full rounded-2xl overflow-hidden border-2 border-[var(--accent-gold)] glow-gold shadow-2xl mb-5"
                 style={{
-                  aspectRatio: '3/4',
+                  aspectRatio: '4/5',
                   boxShadow: '0 0 40px rgba(232, 184, 75, 0.3), 0 0 80px rgba(232, 184, 75, 0.15)'
                 }}>
                 <Image
                   src="/CEO.jpg"
-                  alt="Ethan - Founder and CEO of MuleSoo"
+                  alt="Ena Muluken - Founder and CEO of MuleSoo"
                   fill
                   className="object-cover"
                   priority
@@ -62,7 +63,7 @@ export default function AboutPage() {
                 />
               </div>
               <div className="text-center">
-                <h3 className="text-2xl font-bold font-sora text-[var(--accent-gold)] mb-1">Ethan</h3>
+                <h3 className="text-2xl font-bold font-sora text-[var(--accent-gold)] mb-1">Ena Muluken</h3>
                 <p className="text-lg font-sora text-[var(--text-primary)] font-bold">Founder and CEO</p>
                 <p className="text-sm text-[var(--text-secondary)] mt-2">MuleSoo Digital Services</p>
               </div>
@@ -70,7 +71,7 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold font-sora text-[var(--text-primary)]">Hi, I&apos;m Ethan.</h2>
+            <h2 className="text-4xl font-bold font-sora text-[var(--text-primary)]">Hi, I&apos;m Ena Muluken.</h2>
             <p className="text-[var(--text-secondary)] leading-relaxed">
               I&apos;m an entrepreneur and digital builder based in Pretoria, South Africa. I run MuleSoo Digital
               Services alongside Habesha Celebration Events — a full-service Ethiopian wedding planning company. I
@@ -163,7 +164,7 @@ export default function AboutPage() {
             &quot;Africa doesn&apos;t need cheaper versions of Western tech. It needs builders who understand the
             culture AND the code.&quot;
           </p>
-          <p className="text-[var(--text-secondary)]">— Ethan, Founder of MuleSoo</p>
+          <p className="text-[var(--text-secondary)]">— Ena Muluken, Founder of MuleSoo</p>
         </motion.div>
 
         {/* Values */}
