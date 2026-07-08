@@ -5,6 +5,22 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Bot, ArrowRight, Zap } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+import JsonLd from '@/components/JsonLd';
+import FaqSection, { type Faq } from '@/components/FaqSection';
+
+const SITE = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+const priceNum = (p: string) => {
+  const n = parseInt((p || '').replace(/[^0-9]/g, ''), 10);
+  return Number.isFinite(n) && n > 0 ? n : null;
+};
+
+const SERVICE_FAQS: Faq[] = [
+  { q: 'How much does a professional website cost in South Africa?', a: 'MuleSoo websites start from R3,500. Business sites (more pages, animations, an AI chatbot) start from R7,500, and larger enterprise builds are quoted on scope.' },
+  { q: 'What services does MuleSoo offer?', a: 'Website design, AI chatbots, website support/sales widgets, AI automation (200 systems across 9 industries), complete Auto Pilot business systems, Digital ID systems, logo design, QR codes, custom email setup and custom web/mobile apps.' },
+  { q: 'Do you build AI chatbots and automation?', a: 'Yes. Our AI chatbots start from R2,500 and answer customers 24/7 on your website and WhatsApp, capture leads, book appointments and take deposits. Full AI automation systems start from R5,000.' },
+  { q: 'Where is MuleSoo based and do you work remotely?', a: 'MuleSoo is based in Pretoria, South Africa, and serves businesses across South Africa and Africa, working remotely worldwide.' },
+  { q: 'How do I get a quote?', a: 'Message us on WhatsApp at +27 68 852 9333 or fill in the free quote form on our contact page. We usually reply within 2 hours.' },
+];
 
 interface Service {
   title: string;
@@ -51,8 +67,33 @@ export default function ServicesPage() {
       .catch(() => {});
   }, []);
 
+  const serviceLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: [
+      { title: 'AI Automation', href: '/ai-automation', description: '200 AI systems across 9 industries, custom-built to your workflow.', price: 'From R5,000' },
+      ...services,
+    ].map((s, i) => {
+      const price = priceNum((s as { price?: string }).price || '');
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Service',
+          name: s.title,
+          description: (s as { description?: string }).description || '',
+          url: `${SITE}${s.href}`,
+          provider: { '@type': 'Organization', name: 'MuleSoo Digital Services', url: SITE },
+          areaServed: 'South Africa',
+          ...(price ? { offers: { '@type': 'Offer', price: String(price), priceCurrency: 'ZAR' } } : {}),
+        },
+      };
+    }),
+  };
+
   return (
     <div className="min-h-screen">
+      <JsonLd data={serviceLd} />
       <PageHero
         title="Our Services"
         subtitle="Complete digital solutions to build and grow your business"
@@ -135,6 +176,10 @@ export default function ServicesPage() {
             ))}
           </div>
         </div>
+      </section>
+
+      <section className="px-4 sm:px-6 lg:px-8 pb-10">
+        <FaqSection title="Services — FAQ" items={SERVICE_FAQS} />
       </section>
     </div>
   );

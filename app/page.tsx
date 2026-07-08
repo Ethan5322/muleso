@@ -6,6 +6,16 @@ import { motion, useInView, useAnimation } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { Globe, Bot, Palette, FileText, QrCode, Mail, Star, Search, Layers, Code2, Rocket, MessageCircle, AppWindow, CreditCard, CheckCircle, Gauge, ShieldCheck, Clock, Zap, Check, X } from 'lucide-react';
 import { useSiteSettings } from '@/lib/useSiteSettings';
+import FaqSection, { type Faq } from '@/components/FaqSection';
+
+const HOME_FAQS: Faq[] = [
+  { q: 'What does MuleSoo Digital Services do?', a: 'MuleSoo is a digital and AI agency in Pretoria, South Africa. We build professional websites, AI chatbots, whole-business Auto Pilot systems, AI automations, digital ID systems, logos, QR codes and custom apps for businesses across South Africa and Africa.' },
+  { q: 'How much does a website cost?', a: 'Websites start from R3,500, business sites from R7,500, and enterprise builds are quoted on scope. AI chatbots start from R2,500 and full AI automation systems from R5,000.' },
+  { q: 'How long does a project take?', a: 'Most websites and systems launch within about three weeks, depending on scope. We work fast and keep you updated throughout.' },
+  { q: 'Do I own what you build?', a: 'Yes. After full payment, the complete source code, data and product are 100% yours — with no per-transaction commissions.' },
+  { q: 'Where are you based and do you work remotely?', a: 'We are based in Pretoria, South Africa, and work with clients across South Africa and Africa, remotely worldwide.' },
+  { q: 'How do I get started?', a: 'Message us on WhatsApp at +27 68 852 9333 or use the contact form for a free quote. We usually reply within 2 hours.' },
+];
 
 const StatCounter = ({ value, label }: { value: string; label: string }) => {
   const ref = useRef(null);
@@ -771,6 +781,11 @@ export default function Home() {
             What do you want us to build for you? →
           </Link>
         </motion.div>
+      </section>
+
+      {/* FAQ — visible + FAQPage schema (helps Google & AI answer engines) */}
+      <section className="py-10 px-4 sm:px-6 lg:px-8">
+        <FaqSection items={HOME_FAQS} />
       </section>
 
       {/* SECTION 7 - FINAL CTA */}

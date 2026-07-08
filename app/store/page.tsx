@@ -7,6 +7,7 @@ import { Loader2, ShieldCheck, X, Mail } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import EmojiCover from '@/components/EmojiCover';
 import StoreDetailModal, { type StoreDetailItem } from '@/components/StoreDetailModal';
+import JsonLd from '@/components/JsonLd';
 import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
 import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
 import { AUTOMATION_PICKS, AUTOMATION_FEATURES, type AutomationPick } from '@/lib/storeAutomations';
@@ -91,8 +92,30 @@ export default function StorePage() {
     }
   };
 
+  const productLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: STORE_PRODUCTS.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Product',
+        name: p.name,
+        description: p.description,
+        brand: { '@type': 'Brand', name: 'MuleSoo' },
+        offers: {
+          '@type': 'Offer',
+          price: String(p.price),
+          priceCurrency: 'ZAR',
+          availability: p.available ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+        },
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen py-20">
+      <JsonLd data={productLd} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
           title="Digital Products & Guides"
