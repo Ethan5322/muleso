@@ -33,7 +33,7 @@ export default function ContactPage() {
       setFormData((p) => ({
         ...p,
         service: p.service || 'other',
-        details: p.details || `I'm interested in your ${svc} service.\n\nHere's what I need:\n`,
+        details: p.details || `Hi MuleSoo, I'd like to book a free consultation about ${svc}.\n\nHere's what I have in mind:\n`,
       }));
     }
   }, []);

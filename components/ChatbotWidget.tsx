@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, ArrowUp, ArrowLeft, ArrowRight, Download, CheckCircle, Clock, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
 import { generateCleanBookingPDF } from '@/lib/generateCleanBookingPDF';
 import { validateClientID } from '@/lib/validateClientID';
@@ -157,7 +157,6 @@ const validateName = (name: string): boolean => {
 };
 
 export default function ChatbotWidget() {
-  const pathname = usePathname();
   const router = useRouter();
   const { isOpen, setIsOpen, openChatbot, presetBooking, consumePreset } = useChatbot();
   const presetHandled = useRef(false);
@@ -331,11 +330,10 @@ export default function ChatbotWidget() {
   };
 
   useEffect(() => {
+    // Track window size for the confetti overlay. The widget stays closed until
+    // the client taps it — it must never auto-open on any page.
     setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-    if (pathname === '/contact') {
-      openChatbot();
-    }
-  }, [pathname, openChatbot]);
+  }, []);
 
   // When opened with a preset (e.g. "Buy this AI system"), skip service selection:
   // pre-fill the service + project details and jump straight into the booking flow.
