@@ -4,11 +4,10 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Gauge, TrendingUp, MessageCircle, ExternalLink, Globe } from 'lucide-react';
+import { X, Check, Gauge, TrendingUp, ExternalLink, Globe } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import PortfolioCover from '@/components/PortfolioCover';
 import { supabase } from '@/lib/supabase';
-import { useSiteSettings } from '@/lib/useSiteSettings';
 
 type ThemeKey = 'blue' | 'gold' | 'green' | 'dark' | 'purple' | 'rose';
 
@@ -326,7 +325,6 @@ const rankOf = (name: string): number => {
 };
 
 export default function PortfolioPage() {
-  const settings = useSiteSettings();
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
   const [selected, setSelected] = useState<Project | null>(null);
 
@@ -569,19 +567,12 @@ export default function PortfolioPage() {
                 {/* CTA */}
                 <div className="border-t border-[var(--border)] pt-5">
                   <p className="text-center text-[var(--text-primary)] font-semibold mb-4">Want a project like this for your business?</p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Link href="/contact" className="flex-1 text-center px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform">
-                      Book a Free Consultation
-                    </Link>
-                    <a
-                      href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(`Hi MuleSoo, I saw the "${selected.name}" project in your portfolio and I'd like something similar for my business.`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform"
-                    >
-                      <MessageCircle size={18} /> Chat on WhatsApp
-                    </a>
-                  </div>
+                  <Link
+                    href={`/contact?service=${encodeURIComponent(`a project like "${selected.name}"`)}`}
+                    className="block w-full text-center px-6 py-3.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform"
+                  >
+                    Book a Free Consultation →
+                  </Link>
                 </div>
               </div>
             </motion.div>
