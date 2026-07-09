@@ -34,6 +34,7 @@ export default function ControlPanel() {
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [nameById, setNameById] = useState<Record<string, string>>({});
   const [dmMeta, setDmMeta] = useState<DmMeta[]>([]);
+  const [me, setMe] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -48,6 +49,7 @@ export default function ControlPanel() {
     setLogs(l.logs ?? []);
     setNameById({ ...(l.nameById ?? {}), ...(d.nameById ?? {}) });
     setDmMeta(d.items ?? []);
+    setMe(a.me ?? null);
     setLoading(false);
   }, []);
 
@@ -117,16 +119,22 @@ export default function ControlPanel() {
     }
   };
 
-  const deleteAdmin = async (adminId: string, name: string) => {
-    if (!confirm(`Permanently delete ${name}? This removes their account and all their data.`)) return;
+  const deleteAdmin = async (adminId: string, name: string, force = false) => {
+    const msg = force
+      ? `FORCE DELETE "${name}"?\n\nThis account is flagged as a super-admin. It will be permanently removed with all its data. Only do this for a wrong/test account.`
+      : `Permanently delete ${name}? This removes their account and all their data.`;
+    if (!confirm(msg)) return;
     setBusy(`del:${adminId}`);
     const res = await fetch('/corporate/api/admin-delete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ department_admin_id: adminId }),
+      body: JSON.stringify({ department_admin_id: adminId, force }),
     });
     if (res.ok) toast.success(`${name} deleted`);
-    else toast.error('Could not delete — please try again.');
+    else {
+      const e = await res.json().catch(() => ({}));
+      toast.error(e.error || 'Could not delete — please try again.');
+    }
     await load();
     setBusy(null);
   };
@@ -140,6 +148,7 @@ export default function ControlPanel() {
   }
 
   const deptAdmins = admins.filter((a) => !a.is_super_admin);
+  const superAdmins = admins.filter((a) => a.is_super_admin && a.id !== me);
 
   return (
     <div className="space-y-8">
@@ -274,6 +283,41 @@ export default function ControlPanel() {
           </table>
         </div>
       </section>
+
+      {/* Super-admin accounts — force-delete for wrong/test accounts */}
+      {superAdmins.length > 0 && (
+        <section className="bg-[#0A0F1E] border border-[#E8B84B]/40 rounded-xl">
+          <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
+            <ShieldCheck size={16} className="text-[#E8B84B]" />
+            <h2 className="font-semibold font-sora text-sm">Super-admin accounts</h2>
+          </div>
+          <div className="p-5 space-y-2">
+            <p className="text-xs text-[#6E7A91] mb-1">
+              These accounts are flagged as super-admin (no capability limits). If one was created by mistake — e.g. a
+              test account — you can force-delete it here.
+            </p>
+            {superAdmins.map((a) => (
+              <div key={a.id} className="flex items-center justify-between gap-3 bg-[#111a30] rounded-lg px-3 py-2.5">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#F0F2FA] flex items-center gap-2">
+                    {a.display_name || 'Unnamed'}
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#00C8FF]/15 text-[#00C8FF] uppercase tracking-wide">Super</span>
+                  </p>
+                  <p className="text-xs text-[#6E7A91] truncate">{a.role_title || a.department_name || `Dept ${a.department_id ?? ''}`}</p>
+                </div>
+                <button
+                  type="button"
+                  disabled={busy === `del:${a.id}`}
+                  onClick={() => deleteAdmin(a.id, a.display_name || 'this admin', true)}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-red-400 hover:text-red-300 border border-red-500/40 rounded-lg px-2.5 py-1.5 disabled:opacity-40 shrink-0"
+                >
+                  {busy === `del:${a.id}` ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />} Force delete
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Audit log */}
       <section className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl">

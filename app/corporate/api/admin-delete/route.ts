@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { actorId, error } = await requireManager(req);
   if (error) return error;
 
-  const { department_admin_id } = await req.json();
+  const { department_admin_id, force } = await req.json();
   if (!department_admin_id) {
     return NextResponse.json({ error: 'missing admin id' }, { status: 400 });
   }
@@ -17,20 +17,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'You cannot delete your own account.' }, { status: 400 });
   }
 
-  // Never delete another super admin through this route.
+  // Normally never delete a super admin — unless the manager explicitly forces
+  // it (e.g. cleaning up a test account mistakenly flagged as super-admin).
   const { data: target } = await supabaseAdmin
     .from('corp_department_admins')
     .select('is_super_admin, display_name')
     .eq('id', department_admin_id)
     .maybeSingle();
-  if (target?.is_super_admin) {
+  if (target?.is_super_admin && !force) {
     return NextResponse.json({ error: 'Cannot delete a super admin.' }, { status: 400 });
   }
 
-  // 1) Remove ALL corporate data first — the roster row cascades to secrets,
-  //    capabilities, direct messages, channel messages, reactions and mentions
-  //    (every corp_ FK is ON DELETE CASCADE). This is the source of truth for
-  //    "shows in Team", so deleting it guarantees they disappear everywhere.
+  // 0) Clear audit-log references first. That FK is NOT ON DELETE CASCADE, so it
+  //    would otherwise block the delete.
+  try {
+    await supabaseAdmin.from('corp_admin_audit_log').delete().eq('target_admin_id', department_admin_id);
+    await supabaseAdmin.from('corp_admin_audit_log').delete().eq('actor_id', department_admin_id);
+  } catch (e) {
+    console.error('audit-log cleanup before delete failed (continuing):', e);
+  }
+
+  // 1) Remove ALL corporate data — the roster row cascades to secrets,
+  //    capabilities, direct messages, channel messages, reactions and mentions.
+  //    This is the source of truth for "shows in Team".
   const { error: rowErr } = await supabaseAdmin
     .from('corp_department_admins')
     .delete()
