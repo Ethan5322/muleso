@@ -142,17 +142,22 @@ async function png(svg, file) {
   const back = await png(cardBack(qr), 'business-card-back.png');
   const ban = await png(banner(qr), 'banner.png');
 
+  // Embed print-quality JPEGs in the PDFs (visually identical, ~30x smaller
+  // than jsPDF's PNG handling).
+  const jpg = async (buf) => 'data:image/jpeg;base64,' + (await sharp(buf).jpeg({ quality: 92 }).toBuffer()).toString('base64');
+  const [frontJ, backJ, banJ] = await Promise.all([jpg(front), jpg(back), jpg(ban)]);
+
   // PDF — business card at exact ATM/CR80 size (85.6 × 54 mm), front + back
   const card = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 54] });
-  card.addImage('data:image/png;base64,' + front.toString('base64'), 'PNG', 0, 0, 85.6, 54);
+  card.addImage(frontJ, 'JPEG', 0, 0, 85.6, 54);
   card.addPage([85.6, 54], 'landscape');
-  card.addImage('data:image/png;base64,' + back.toString('base64'), 'PNG', 0, 0, 85.6, 54);
+  card.addImage(backJ, 'JPEG', 0, 0, 85.6, 54);
   fs.writeFileSync(path.join(OUT, 'MuleSoo-Business-Card.pdf'), Buffer.from(card.output('arraybuffer')));
   console.log('MuleSoo-Business-Card.pdf'.padEnd(28), 'front+back @ 85.6x54mm');
 
   // PDF — banner (300 × 100 mm print page)
   const bp = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [300, 100] });
-  bp.addImage('data:image/png;base64,' + ban.toString('base64'), 'PNG', 0, 0, 300, 100);
+  bp.addImage(banJ, 'JPEG', 0, 0, 300, 100);
   fs.writeFileSync(path.join(OUT, 'MuleSoo-Banner.pdf'), Buffer.from(bp.output('arraybuffer')));
   console.log('MuleSoo-Banner.pdf'.padEnd(28), '300x100mm');
   console.log('\nAll files in marketing/brand-kit/');
