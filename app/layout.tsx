@@ -5,7 +5,7 @@ import { ChatbotProvider } from "@/context/ChatbotContext";
 import { AdminProvider } from "@/context/AdminContext";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const SITE_URL = process.env.NEXT_PUBLIC_URL || "https://mulesoo.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_URL || "https://mulesoo.com";
 
 export const metadata: Metadata = {
   title: {
@@ -103,10 +103,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "@id": "https://mulesoo.vercel.app",
+              "@id": "https://mulesoo.com",
               name: "MuleSoo Digital Services",
-              url: "https://mulesoo.vercel.app",
-              logo: "https://mulesoo.vercel.app/mulesoo-logo.png",
+              url: "https://mulesoo.com",
+              logo: "https://mulesoo.com/mulesoo-logo.png",
               description: "Professional web design, AI chatbots, logos, and digital solutions for South African businesses.",
               address: {
                 "@type": "PostalAddress",
@@ -117,7 +117,7 @@ export default function RootLayout({
                 addressCountry: "ZA",
               },
               telephone: "+27688529333",
-              email: "mulukenendashaw68@gmail.com",
+              email: "hello@mulesoo.com",
               areaServed: {
                 "@type": "Country",
                 name: "South Africa",
@@ -142,8 +142,8 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "MuleSoo Digital Services",
-              url: "https://mulesoo.vercel.app",
-              logo: "https://mulesoo.vercel.app/mulesoo-logo.png",
+              url: "https://mulesoo.com",
+              logo: "https://mulesoo.com/mulesoo-logo.png",
               description: "Award-winning digital agency providing web design, AI chatbots, and custom digital solutions.",
               foundingDate: "2022",
               founders: [
@@ -156,7 +156,7 @@ export default function RootLayout({
                 "@type": "ContactPoint",
                 contactType: "Customer Service",
                 telephone: "+27688529333",
-                email: "mulukenendashaw68@gmail.com",
+                email: "hello@mulesoo.com",
               },
             }),
           }}
@@ -174,19 +174,19 @@ export default function RootLayout({
                   "@type": "ListItem",
                   position: 1,
                   name: "Home",
-                  item: "https://mulesoo.vercel.app",
+                  item: "https://mulesoo.com",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "Services",
-                  item: "https://mulesoo.vercel.app/services",
+                  item: "https://mulesoo.com/services",
                 },
                 {
                   "@type": "ListItem",
                   position: 3,
                   name: "Portfolio",
-                  item: "https://mulesoo.vercel.app/portfolio",
+                  item: "https://mulesoo.com/portfolio",
                 },
               ],
             }),
@@ -200,14 +200,14 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              url: "https://mulesoo.vercel.app",
+              url: "https://mulesoo.com",
               name: "MuleSoo Digital Services",
               description: "Professional web design and digital solutions",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://mulesoo.vercel.app/search?q={search_term_string}",
+                  urlTemplate: "https://mulesoo.com/search?q={search_term_string}",
                 },
                 "query-input": "required name=search_term_string",
               },

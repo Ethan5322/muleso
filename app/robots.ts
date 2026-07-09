@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.com';
 
 const DISALLOW = ['/api/', '/admin/', '/corporate/', '/staff-access', '/verify', '/qr-download', '/.next/', '/static/'];
 

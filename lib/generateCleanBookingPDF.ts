@@ -73,7 +73,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     try {
       qrDataUrl = await new Promise<string>((resolve, reject) => {
         QRCode.toDataURL(
-          `https://mulesoo.vercel.app/?ref=${encodeURIComponent(bookingData.bookingReference || '')}`,
+          `https://mulesoo.com/?ref=${encodeURIComponent(bookingData.bookingReference || '')}`,
           { width: 600, margin: 0, color: { dark: '#0A0F1E', light: '#FFFFFF' } },
           (error, url) => (error ? reject(error) : resolve(url))
         );
@@ -130,8 +130,8 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     const rightX = pageWidth - margin;
     doc.text('Pretoria, South Africa', rightX, headerTop + 3, { align: 'right' });
     doc.text('+27 68 852 9333', rightX, headerTop + 7.5, { align: 'right' });
-    doc.text('mulukenendashaw68@gmail.com', rightX, headerTop + 12, { align: 'right' });
-    doc.text('mulesoo.vercel.app', rightX, headerTop + 16.5, { align: 'right' });
+    doc.text('hello@mulesoo.com', rightX, headerTop + 12, { align: 'right' });
+    doc.text('www.mulesoo.com', rightX, headerTop + 16.5, { align: 'right' });
 
     // Divider below header
     let yPos = headerTop + qrSize + 7;

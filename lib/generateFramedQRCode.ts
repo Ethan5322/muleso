@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
  * Returns a canvas element that can be downloaded
  */
 export const generateFramedQRCode = async (
-  url: string = 'https://mulesoo.vercel.app',
+  url: string = 'https://mulesoo.com',
   size: number = 800
 ): Promise<string> => {
   try {
@@ -90,7 +90,7 @@ export const generateFramedQRCode = async (
     ctx.fillStyle = '#E8B84B';
     ctx.font = 'bold 20px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('mulesoo.vercel.app', frameWidth / 2, frameHeight - 15);
+    ctx.fillText('www.mulesoo.com', frameWidth / 2, frameHeight - 15);
 
     // Return canvas as data URL with high quality
     return canvas.toDataURL('image/png', 1.0);
@@ -104,7 +104,7 @@ export const generateFramedQRCode = async (
  * Generate ultra-clean, highly scannable QR code (minimal frame version)
  */
 export const generateCleanQRCode = async (
-  url: string = 'https://mulesoo.vercel.app',
+  url: string = 'https://mulesoo.com',
   size: number = 600
 ): Promise<string> => {
   try {
@@ -171,7 +171,7 @@ export const generateCleanQRCode = async (
  */
 export const downloadFramedQRCode = async (filename: string = 'MuleSoo_QRCode.png') => {
   try {
-    const dataUrl = await generateFramedQRCode('https://mulesoo.vercel.app', 800);
+    const dataUrl = await generateFramedQRCode('https://mulesoo.com', 800);
 
     // Create download link
     const link = document.createElement('a');
@@ -193,7 +193,7 @@ export const downloadFramedQRCode = async (filename: string = 'MuleSoo_QRCode.pn
  */
 export const downloadCleanQRCode = async (filename: string = 'MuleSoo_QRCode_Clean.png') => {
   try {
-    const dataUrl = await generateCleanQRCode('https://mulesoo.vercel.app', 600);
+    const dataUrl = await generateCleanQRCode('https://mulesoo.com', 600);
 
     const link = document.createElement('a');
     link.href = dataUrl;
@@ -214,7 +214,7 @@ export const downloadCleanQRCode = async (filename: string = 'MuleSoo_QRCode_Cle
  */
 export const generateQRCodePDF = async () => {
   try {
-    const dataUrl = await generateFramedQRCode('https://mulesoo.vercel.app', 800);
+    const dataUrl = await generateFramedQRCode('https://mulesoo.com', 800);
 
     const doc = new jsPDF({
       orientation: 'portrait',
@@ -250,7 +250,7 @@ export const generateQRCodePDF = async () => {
     // Add footer
     doc.setFontSize(10);
     doc.setTextColor(100, 100, 100);
-    doc.text('Scan for more information • mulesoo.vercel.app', pageWidth / 2, pageHeight - 10, {
+    doc.text('Scan for more information • www.mulesoo.com', pageWidth / 2, pageHeight - 10, {
       align: 'center',
     });
 

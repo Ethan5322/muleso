@@ -8,7 +8,7 @@ import PageHero from '@/components/PageHero';
 import JsonLd from '@/components/JsonLd';
 import FaqSection, { type Faq } from '@/components/FaqSection';
 
-const SITE = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+const SITE = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.com';
 const priceNum = (p: string) => {
   const n = parseInt((p || '').replace(/[^0-9]/g, ''), 10);
   return Number.isFinite(n) && n > 0 ? n : null;

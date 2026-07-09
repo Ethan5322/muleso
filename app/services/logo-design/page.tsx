@@ -116,10 +116,10 @@ export default function LogoDesignPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:mulukenendashaw68@gmail.com"
+              href="mailto:hello@mulesoo.com"
               className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
-              📧 Email: mulukenendashaw68@gmail.com
+              📧 Email: hello@mulesoo.com
             </a>
             <a
               href="https://wa.me/27688529333"

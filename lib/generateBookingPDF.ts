@@ -18,7 +18,7 @@ export async function generateBookingConfirmationPDF(booking: BookingData) {
   const doc = new jsPDF();
 
   // Generate QR code
-  const qrCodeDataUrl = await QRCode.toDataURL('https://mulesoo.vercel.app', {
+  const qrCodeDataUrl = await QRCode.toDataURL('https://mulesoo.com', {
     errorCorrectionLevel: 'H',
     width: 200,
     margin: 2,
@@ -127,7 +127,7 @@ export async function generateBookingConfirmationPDF(booking: BookingData) {
   doc.text('Thank you for choosing MuleSoo Digital Services', 105, 280, { align: 'center' });
 
   doc.setTextColor(...[122, 139, 168] as [number, number, number]);
-  doc.text('Pretoria, South Africa | hello@mulesoo.com | www.mulesoo.vercel.app', 105, 287, { align: 'center' });
+  doc.text('Pretoria, South Africa | hello@mulesoo.com | www.www.mulesoo.com', 105, 287, { align: 'center' });
 
   // Save PDF
   doc.save(`booking-confirmation-${booking.bookingId}.pdf`);
@@ -138,7 +138,7 @@ export async function generateTermsAndConditionsPDF() {
   const doc = new jsPDF();
 
   // Generate QR code
-  const qrCodeDataUrl = await QRCode.toDataURL('https://mulesoo.vercel.app', {
+  const qrCodeDataUrl = await QRCode.toDataURL('https://mulesoo.com', {
     errorCorrectionLevel: 'H',
     width: 150,
     margin: 2,
@@ -206,7 +206,7 @@ export async function generateTermsAndConditionsPDF() {
   doc.setTextColor(...gold);
   doc.text('MuleSoo Digital Services', 105, 280, { align: 'center' });
   doc.setTextColor(...[122, 139, 168] as [number, number, number]);
-  doc.text('hello@mulesoo.com | www.mulesoo.vercel.app', 105, 287, { align: 'center' });
+  doc.text('hello@mulesoo.com | www.www.mulesoo.com', 105, 287, { align: 'center' });
 
   doc.save('terms-and-conditions.pdf');
 }

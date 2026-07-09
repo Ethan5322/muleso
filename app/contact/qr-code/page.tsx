@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Copy, Check, Building2, CreditCard, FileText, Share2 } from 'lucide-react';
 import QRCodeFrame from '@/components/QRCodeFrame';
 
-const WEBSITE_URL = 'https://mulesoo.vercel.app';
+const WEBSITE_URL = 'https://mulesoo.com';
 
 const USE_CASES = [
   { icon: Building2, title: 'Office & Reception', desc: 'Frame it at your front desk so visitors reach you instantly.' },

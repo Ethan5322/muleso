@@ -4,7 +4,7 @@ import { verifyRecaptchaToken } from '@/lib/captcha';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@mulesoo.com';
 
 export async function POST(req: NextRequest) {
   try {
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     if (resend) {
       const html = `
         <div style="font-family:Arial,sans-serif;color:#0A0F1E">
-          <h2 style="color:#00C8FF">New enquiry from mulesoo.vercel.app</h2>
+          <h2 style="color:#00C8FF">New enquiry from www.mulesoo.com</h2>
           <table style="border-collapse:collapse">
             <tr><td style="padding:4px 12px"><b>Name</b></td><td style="padding:4px 12px">${escapeHtml(name)}</td></tr>
             <tr><td style="padding:4px 12px"><b>Email</b></td><td style="padding:4px 12px">${escapeHtml(email)}</td></tr>

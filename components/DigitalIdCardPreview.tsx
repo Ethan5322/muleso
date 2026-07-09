@@ -37,7 +37,7 @@ export default function DigitalIdCardPreview({
     (async () => {
       try {
         const QRCode = (await import('qrcode')).default;
-        const url = await QRCode.toDataURL(`https://mulesoo.vercel.app/verify?id=${code}`, {
+        const url = await QRCode.toDataURL(`https://mulesoo.com/verify?id=${code}`, {
           width: 320,
           margin: 0,
           color: { dark: '#0A0F1E', light: '#FFFFFF' },

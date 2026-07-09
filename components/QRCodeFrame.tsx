@@ -12,7 +12,7 @@ interface QRCodeFrameProps {
 }
 
 export default function QRCodeFrame({
-  url = 'https://mulesoo.vercel.app',
+  url = 'https://mulesoo.com',
   size = 250,
   showDownload = true,
   frameStyle = 'notebook',

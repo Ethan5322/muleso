@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { AUTOMATIONS } from '@/lib/aiAutomations';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.com';
   const now = new Date();
 
   // Core marketing pages

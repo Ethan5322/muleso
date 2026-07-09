@@ -210,7 +210,7 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.text('📧 Email:', margin, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(80, 80, 80);
-  doc.text('mulukenendashaw68@gmail.com', margin + 25, yPos);
+  doc.text('hello@mulesoo.com', margin + 25, yPos);
 
   yPos += 6;
   doc.setFont('helvetica', 'bold');

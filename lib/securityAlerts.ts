@@ -2,7 +2,7 @@ import { supabase } from './supabase';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com'; // Change to your admin email
+const ADMIN_EMAIL = 'hello@mulesoo.com'; // Change to your admin email
 
 interface SecurityAlert {
   alert_type: 'SUSPICIOUS_LOGIN' | 'FAILED_2FA' | 'ACCOUNT_LOCKED' | 'PASSWORD_CHANGED' | 'NEW_DEVICE';
@@ -107,7 +107,7 @@ function getAlertMessage(alert: SecurityAlert): string {
             </ul>
           </div>
 
-          <a href="https://mulesoo.vercel.app/admin/login" class="action-button">Go to Admin Panel</a>
+          <a href="https://mulesoo.com/admin/login" class="action-button">Go to Admin Panel</a>
 
           <div class="footer">
             <p>© 2025 MuleSoo Digital Services. All rights reserved.</p>

@@ -154,9 +154,9 @@ Reference: ${bookingDetails?.bookingReference || 'N/A'}
 4. We will confirm project start date
 
 ---NEED HELP?---
-Email: mulukenendashaw68@gmail.com
+Email: hello@mulesoo.com
 WhatsApp: +27 68 852 9333
-Website: https://mulesoo.vercel.app
+Website: https://mulesoo.com
 
 Thank you for choosing MULESOO! We're excited to build something amazing with you!`;
 

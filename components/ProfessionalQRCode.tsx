@@ -110,7 +110,7 @@ export default function ProfessionalQRCode({
           <div class="card">
             <div class="logo">MULESOO</div>
             <img src="${qrImage}" class="qr" />
-            <div class="website">mulesoo.vercel.app</div>
+            <div class="website">www.mulesoo.com</div>
             <div class="tagline">AI-Powered Digital Solutions</div>
           </div>
         </body>
@@ -185,7 +185,7 @@ export default function ProfessionalQRCode({
                 <p className="text-2xl font-bold font-sora bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] bg-clip-text text-transparent">
                   Scan to Visit MuleSoo
                 </p>
-                <p className="text-xs text-[#00BFFF]">mulesoo.vercel.app</p>
+                <p className="text-xs text-[#00BFFF]">www.mulesoo.com</p>
               </div>
             </div>
 
@@ -342,7 +342,7 @@ export default function ProfessionalQRCode({
                     }}
                   />
                   <div style={{ fontSize: '11px', color: '#00BFFF', letterSpacing: '1px' }}>
-                    mulesoo.vercel.app
+                    www.mulesoo.com
                   </div>
                   <div style={{ fontSize: '8px', color: '#888' }}>
                     AI-Powered Digital Solutions

@@ -37,7 +37,7 @@ export const generateCleanTermsPDF = async () => {
   try {
     const qrDataUrl = await new Promise<string>((resolve, reject) => {
       QRCode.toDataURL(
-        'https://mulesoo.vercel.app/terms',
+        'https://mulesoo.com/terms',
         { width: 1200, margin: 0 },
         (error, dataUrl) => {
           if (error) reject(error);
@@ -257,7 +257,7 @@ export const generateCleanTermsPDF = async () => {
   doc.setFontSize(6);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 100, 100);
-  doc.text('MuleSoo Digital Services | Pretoria | mulukenendashaw68@gmail.com | +27 68 852 9333', pageWidth / 2, footerY, {
+  doc.text('MuleSoo Digital Services | Pretoria | hello@mulesoo.com | +27 68 852 9333', pageWidth / 2, footerY, {
     align: 'center',
   });
 

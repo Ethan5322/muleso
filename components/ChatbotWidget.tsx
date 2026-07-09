@@ -1195,7 +1195,7 @@ export default function ChatbotWidget() {
                   {/* Professional QR Code Section */}
                   <div className="px-2 pb-6">
                     <ProfessionalQRCode
-                      url="https://mulesoo.vercel.app"
+                      url="https://mulesoo.com"
                       title="🎯 Scan to Visit MuleSoo"
                       description="Frame this QR code in your office or business space"
                       bookingReference={bookingData.bookingReference}

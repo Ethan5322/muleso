@@ -3,7 +3,7 @@
 
 export const dynamic = 'force-static';
 
-const SITE = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.vercel.app';
+const SITE = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.com';
 
 const CONTENT = `# MuleSoo Digital Services
 

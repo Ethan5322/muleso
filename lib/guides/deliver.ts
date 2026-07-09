@@ -3,7 +3,7 @@ import { buildGuide } from './buildGuide';
 import { getGuide } from './registry';
 import { findProductBySlug } from '../storeProducts';
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@mulesoo.com';
 
 /** A short, deterministic open-password derived from the payment reference. */
 export function derivePassword(reference: string): string {

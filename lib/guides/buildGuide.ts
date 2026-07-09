@@ -130,7 +130,7 @@ export function buildGuide(guide: Guide, opts: BuildOptions = {}): Uint8Array {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   setText(MUTED);
-  doc.text('Pretoria, South Africa  ·  mulesoo.vercel.app', M, H - 18);
+  doc.text('Pretoria, South Africa  ·  www.mulesoo.com', M, H - 18);
 
   // ── CONTENT PAGES ──────────────────────────────────────────────
   const ensure = (need: number) => {

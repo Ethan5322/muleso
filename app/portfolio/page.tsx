@@ -40,7 +40,7 @@ const fallbackProjects: Project[] = [
     result: 'You are looking at it',
     tech: ['Next.js', 'Supabase', 'Stripe', 'AI'],
     theme: 'blue',
-    site: 'https://mulesoo.vercel.app',
+    site: 'https://mulesoo.com',
     purpose:
       'This very website is our proof of work: a premium, animated platform with a real business engine behind it. An AI assistant books clients and generates a professional PDF agreement, an online store takes card payments, and a complete admin panel lets us run everything — leads, bookings, content, services, testimonials and payments — from one place, secured with a password, email 2FA, and even face-recognition login.',
     capabilities: [

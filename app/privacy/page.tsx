@@ -67,7 +67,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-4">7. Contact Us</h2>
             <p>
               For questions about this Privacy Policy, please contact us at:<br/>
-              📧 Email: mulukenendashaw68@gmail.com<br/>
+              📧 Email: hello@mulesoo.com<br/>
               💬 WhatsApp: +27 68 852 9333<br/>
               📍 Pretoria, South Africa
             </p>

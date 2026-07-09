@@ -11,7 +11,10 @@ import QRCode from 'qrcode';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
+// 2FA identity. MUST stay in lockstep with the server's ADMIN_EMAIL env var.
+// To switch inboxes, set BOTH NEXT_PUBLIC_ADMIN_EMAIL and ADMIN_EMAIL in Vercel
+// to the same address and redeploy once — they then flip together atomically.
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 const MAX_ATTEMPTS = 5;
 const MAX_2FA_ATTEMPTS = 3;
 const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
@@ -546,7 +549,7 @@ export default function AdminLogin() {
                   className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
                 />
                 <p className="text-[#00C8FF]/60 text-xs mt-2">
-                  Check your email (mulukenendashaw68@gmail.com) for the code. It expires in 10 minutes.
+                  Check your email ({ADMIN_EMAIL}) for the code. It expires in 10 minutes.
                 </p>
               </div>
 

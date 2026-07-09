@@ -6,7 +6,8 @@ import { Download, RefreshCw, ShieldCheck } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { getAllAuditLogs, downloadAuditLogsCSV, AuditLogEntry } from '@/lib/auditLog';
 
-const ADMIN_EMAIL = 'mulukenendashaw68@gmail.com';
+// Mirrors the server's ADMIN_EMAIL env var (see app/admin/login/page.tsx).
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 
 export default function AdminSettingsPage() {
   const [logs, setLogs] = useState<AuditLogEntry[]>([]);

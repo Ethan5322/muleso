@@ -218,7 +218,7 @@ async function renderIdCardCanvas(data: IdCardData): Promise<HTMLCanvasElement> 
   text(data.verification_code, dx, 42);
 
   // ============ ZONE 3: QR ============
-  const qrUrl = `https://mulesoo.vercel.app/staff-access?token=${encodeURIComponent(data.qr_token)}`;
+  const qrUrl = `https://mulesoo.com/staff-access?token=${encodeURIComponent(data.qr_token)}`;
   try {
     const qrDataUrl = await QRCode.toDataURL(qrUrl, { width: 300, margin: 0, color: { dark: '#0A0F1E', light: '#FFFFFF' } });
     const qrImg = await loadImg(qrDataUrl);
@@ -259,7 +259,7 @@ async function renderIdCardCanvas(data: IdCardData): Promise<HTMLCanvasElement> 
   // ---- Footer ----
   setFont('normal', 4);
   ctx.fillStyle = rgb(MUTED);
-  text('Property of MuleSoo Digital Services · mulesoo.vercel.app', W_MM / 2, H_MM - 1.6, 'center');
+  text('Property of MuleSoo Digital Services · www.mulesoo.com', W_MM / 2, H_MM - 1.6, 'center');
 
   return canvas;
 }

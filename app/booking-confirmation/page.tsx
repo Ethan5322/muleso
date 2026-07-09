@@ -84,7 +84,7 @@ function BookingConfirmationContent() {
 
           <div className="flex justify-center mb-8">
             <QRCodeFrame
-              url="https://mulesoo.vercel.app"
+              url="https://mulesoo.com"
               frameStyle="notebook"
               size={250}
               showDownload={false}
