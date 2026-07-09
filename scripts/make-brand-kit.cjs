@@ -3,7 +3,7 @@
    exported as high-quality PNG + PDF.
 
    Run: node scripts/make-brand-kit.cjs
-   Out: marketing/brand-kit/
+   Out: marketing/MuleSoo-Brand-Kit/{Business-Card,Banner}/
 */
 const sharp = require('sharp');
 const fs = require('fs');
@@ -11,8 +11,11 @@ const path = require('path');
 const QRCode = require('qrcode');
 const { jsPDF } = require('jspdf');
 
-const OUT = path.join(process.cwd(), 'marketing', 'brand-kit');
-fs.mkdirSync(OUT, { recursive: true });
+const KIT = path.join(process.cwd(), 'marketing', 'MuleSoo-Brand-Kit');
+const CARD_DIR = path.join(KIT, 'Business-Card');
+const BAN_DIR = path.join(KIT, 'Banner');
+fs.mkdirSync(CARD_DIR, { recursive: true });
+fs.mkdirSync(BAN_DIR, { recursive: true });
 
 // CR80 card @600dpi
 const CW = 2022, CH = 1276;
@@ -128,9 +131,9 @@ function banner(qr) {
 }
 
 // ── render helpers ─────────────────────────────────────────────
-async function png(svg, file) {
+async function png(svg, dir, file) {
   const buf = await sharp(Buffer.from(svg), { density: 96 }).png({ compressionLevel: 9 }).toBuffer();
-  fs.writeFileSync(path.join(OUT, file), buf);
+  fs.writeFileSync(path.join(dir, file), buf);
   console.log(file.padEnd(28), (buf.length / 1024).toFixed(0) + ' KB');
   return buf;
 }
@@ -138,9 +141,9 @@ async function png(svg, file) {
 (async () => {
   const qr = await QRCode.toDataURL('https://mulesoo.com', { width: 900, margin: 0, color: { dark: INK, light: '#FFFFFF' } });
 
-  const front = await png(cardFront(), 'business-card-front.png');
-  const back = await png(cardBack(qr), 'business-card-back.png');
-  const ban = await png(banner(qr), 'banner.png');
+  const front = await png(cardFront(), CARD_DIR, 'MuleSoo-Business-Card-Front.png');
+  const back = await png(cardBack(qr), CARD_DIR, 'MuleSoo-Business-Card-Back.png');
+  const ban = await png(banner(qr), BAN_DIR, 'MuleSoo-Banner.png');
 
   // Embed print-quality JPEGs in the PDFs (visually identical, ~30x smaller
   // than jsPDF's PNG handling).
@@ -152,13 +155,13 @@ async function png(svg, file) {
   card.addImage(frontJ, 'JPEG', 0, 0, 85.6, 54);
   card.addPage([85.6, 54], 'landscape');
   card.addImage(backJ, 'JPEG', 0, 0, 85.6, 54);
-  fs.writeFileSync(path.join(OUT, 'MuleSoo-Business-Card.pdf'), Buffer.from(card.output('arraybuffer')));
+  fs.writeFileSync(path.join(CARD_DIR, 'MuleSoo-Business-Card.pdf'), Buffer.from(card.output('arraybuffer')));
   console.log('MuleSoo-Business-Card.pdf'.padEnd(28), 'front+back @ 85.6x54mm');
 
   // PDF — banner (300 × 100 mm print page)
   const bp = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [300, 100] });
   bp.addImage(banJ, 'JPEG', 0, 0, 300, 100);
-  fs.writeFileSync(path.join(OUT, 'MuleSoo-Banner.pdf'), Buffer.from(bp.output('arraybuffer')));
+  fs.writeFileSync(path.join(BAN_DIR, 'MuleSoo-Banner.pdf'), Buffer.from(bp.output('arraybuffer')));
   console.log('MuleSoo-Banner.pdf'.padEnd(28), '300x100mm');
-  console.log('\nAll files in marketing/brand-kit/');
+  console.log('\nAll files in marketing/MuleSoo-Brand-Kit/');
 })().catch((e) => { console.error(e); process.exit(1); });
