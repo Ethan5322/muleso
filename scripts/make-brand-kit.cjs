@@ -1,167 +1,399 @@
-/* MuleSoo brand kit — corporate business card (ATM/CR80 size) + banner.
-   Designs are SVG (full vector control), rendered by sharp at print DPI,
-   exported as high-quality PNG + PDF.
-
-   Run: node scripts/make-brand-kit.cjs
-   Out: marketing/MuleSoo-Brand-Kit/{Business-Card,Banner}/
-*/
-const sharp = require('sharp');
+/* MuleSoo brand kit — corporate business card (ATM/CR80) + banner.
+ *
+ * Rendered in headless Chrome so the real brand faces (Sora, DM Sans) are used.
+ * The old sharp/librsvg pipeline silently fell back to Segoe UI, which is most
+ * of why the output looked like a template.
+ *
+ * Design rules held here:
+ *   - Asymmetric, left-anchored composition. No centred stacks.
+ *   - One accent (gold). Blue lives in the logo mark, nowhere else.
+ *   - No full-bleed gradient bars, no decorative circles, no service lists.
+ *   - Depth comes from the background, not from ornament.
+ *
+ * Print:  3mm bleed + 4mm safe zone. PDFs carry crop marks in a 5mm slug and
+ *         use CMYK-reachable inks (the neon #00C8FF is far out of gamut and
+ *         would print as a muddy cyan, so type/rules use a deeper blue).
+ *
+ * Run: node scripts/make-brand-kit.cjs
+ * Out: marketing/MuleSoo-Brand-Kit/{Business-Card,Banner}/
+ */
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
 const QRCode = require('qrcode');
 const { jsPDF } = require('jspdf');
+const puppeteer = require('puppeteer-core');
 
-const KIT = path.join(process.cwd(), 'marketing', 'MuleSoo-Brand-Kit');
+// ── paths ───────────────────────────────────────────────────────────────────
+const ROOT = process.cwd();
+const KIT = path.join(ROOT, 'marketing', 'MuleSoo-Brand-Kit');
 const CARD_DIR = path.join(KIT, 'Business-Card');
 const BAN_DIR = path.join(KIT, 'Banner');
+const FONT_DIR = path.join(ROOT, 'assets', 'fonts');
 fs.mkdirSync(CARD_DIR, { recursive: true });
 fs.mkdirSync(BAN_DIR, { recursive: true });
 
-// CR80 card @600dpi
-const CW = 2022, CH = 1276;
-// Banner 3:1
-const BW = 2400, BH = 800;
+// ── geometry ────────────────────────────────────────────────────────────────
+const CARD_DPI = 600;
+const BAN_DPI = 300;
+const mmToPx = (mm, dpi) => Math.round((mm * dpi) / 25.4);
 
-const FONT = `Segoe UI, Arial, Helvetica, sans-serif`;
-const INK = '#0A0F1E', CARD = '#0D1528', BLUE = '#00C8FF', PURPLE = '#7B2FFF', GOLD = '#E8B84B';
-const TXT = '#F0F2FA', MUT = '#A8B2D0';
+const BLEED_MM = 3;
+const SAFE_MM = 4; // no text within this of the trim line
+const SLUG_MM = 5; // white margin in the PDF that carries the crop marks
 
-const logoB64 = fs.readFileSync('public/mulesoo-logo-transparent.png').toString('base64');
-const LOGO = `data:image/png;base64,${logoB64}`;
-const logoIconB64 = fs.readFileSync('public/mulesoo-logo-icon.png').toString('base64');
-const ICON = `data:image/png;base64,${logoIconB64}`;
+const CARD_TRIM = { w: 85.6, h: 54 };
+const BAN_TRIM = { w: 300, h: 100 };
 
-const defs = (id) => `
-  <defs>
-    <linearGradient id="bg${id}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${INK}"/><stop offset="1" stop-color="#101A33"/>
-    </linearGradient>
-    <linearGradient id="bar${id}" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="${BLUE}"/><stop offset="1" stop-color="${PURPLE}"/>
-    </linearGradient>
-    <radialGradient id="glowB${id}"><stop offset="0" stop-color="${BLUE}" stop-opacity="0.16"/><stop offset="1" stop-color="${BLUE}" stop-opacity="0"/></radialGradient>
-    <radialGradient id="glowP${id}"><stop offset="0" stop-color="${PURPLE}" stop-opacity="0.16"/><stop offset="1" stop-color="${PURPLE}" stop-opacity="0"/></radialGradient>
-    <pattern id="grid${id}" width="60" height="60" patternUnits="userSpaceOnUse">
-      <path d="M60 0 L0 0 0 60" fill="none" stroke="#ffffff" stroke-opacity="0.035" stroke-width="1.4"/>
-    </pattern>
-  </defs>`;
+// ── ink ─────────────────────────────────────────────────────────────────────
+// Screen brand colours, pulled to values that survive a CMYK conversion.
+const INK = '#0B1220'; // deep navy field (rich black on press)
+const INK_DEEP = '#070C16';
+const INK_LIFT = '#0E1830';
+const GOLD = '#E8B84B';
+const GOLD_DIM = 'rgba(232,184,75,0.42)';
+const BLUE_PRINT = '#2AA7DE'; // #00C8FF is out of CMYK gamut; this is not
+const TEXT = '#EDEFF5';
+const MUTED = '#95A0BC';
 
-// ── CARD FRONT ─────────────────────────────────────────────────
-function cardFront() {
-  return `<svg width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}" xmlns="http://www.w3.org/2000/svg">
-  ${defs('f')}
-  <rect width="${CW}" height="${CH}" fill="url(#bgf)"/>
-  <rect width="${CW}" height="${CH}" fill="url(#gridf)"/>
-  <circle cx="1780" cy="1080" r="620" fill="url(#glowPf)"/>
-  <circle cx="240" cy="140" r="520" fill="url(#glowBf)"/>
-  <circle cx="1795" cy="245" r="150" fill="none" stroke="${BLUE}" stroke-opacity="0.35" stroke-width="3"/>
-  <circle cx="1795" cy="245" r="205" fill="none" stroke="${GOLD}" stroke-opacity="0.30" stroke-width="3"/>
-  <rect width="${CW}" height="22" fill="url(#barf)"/>
-  <rect y="22" width="${CW}" height="7" fill="${GOLD}"/>
-  <rect y="${CH - 16}" width="${CW}" height="16" fill="url(#barf)"/>
+// ── assets ──────────────────────────────────────────────────────────────────
+const b64 = (p) => fs.readFileSync(p).toString('base64');
+const LOGO = `data:image/png;base64,${b64('public/mulesoo-logo-transparent.png')}`; // 1000×216
+const ICON = `data:image/png;base64,${b64('public/mulesoo-logo-icon.png')}`; // 400×400
+const LOGO_RATIO = 216 / 1000;
 
-  <image href="${LOGO}" x="${(CW - 1160) / 2}" y="330" width="1160" height="${Math.round(1160 * 216 / 1000)}"/>
-  <text x="${CW / 2}" y="712" text-anchor="middle" font-family="${FONT}" font-size="56" font-weight="600" letter-spacing="18" fill="${GOLD}">D I G I T A L&#160;&#160;S E R V I C E S</text>
-  <text x="${CW / 2}" y="836" text-anchor="middle" font-family="${FONT}" font-size="54" fill="${MUT}">Websites&#160;&#160;·&#160;&#160;AI Chatbots&#160;&#160;·&#160;&#160;Auto Pilot Systems</text>
-  <rect x="${CW / 2 - 260}" y="906" width="520" height="4" fill="${GOLD}" opacity="0.85"/>
-  <text x="${CW / 2}" y="1030" text-anchor="middle" font-family="${FONT}" font-size="64" font-weight="700" fill="${BLUE}">www.mulesoo.com</text>
-  <text x="${CW / 2}" y="1130" text-anchor="middle" font-family="${FONT}" font-size="44" fill="${MUT}">Pretoria, South Africa</text>
-</svg>`;
+const FONTS = [
+  ['Sora', 400, 'sora-latin-400-normal.woff2'],
+  ['Sora', 600, 'sora-latin-600-normal.woff2'],
+  ['Sora', 700, 'sora-latin-700-normal.woff2'],
+  ['Sora', 800, 'sora-latin-800-normal.woff2'],
+  ['DM Sans', 400, 'dm-sans-latin-400-normal.woff2'],
+  ['DM Sans', 500, 'dm-sans-latin-500-normal.woff2'],
+  ['DM Sans', 700, 'dm-sans-latin-700-normal.woff2'],
+];
+
+function fontFaces() {
+  return FONTS.map(([family, weight, file]) => {
+    const p = path.join(FONT_DIR, file);
+    if (!fs.existsSync(p)) throw new Error(`Missing font ${file}. See assets/fonts/README.md`);
+    return `@font-face{font-family:'${family}';font-weight:${weight};font-style:normal;font-display:block;
+      src:url(data:font/woff2;base64,${b64(p)}) format('woff2');}`;
+  }).join('\n');
 }
 
-// ── CARD BACK ──────────────────────────────────────────────────
-function cardBack(qr) {
-  const row = (y, color, label) => `
-    <circle cx="158" cy="${y - 16}" r="11" fill="${color}"/>
-    <text x="205" y="${y}" font-family="${FONT}" font-size="56" fill="${TXT}">${label}</text>`;
-  return `<svg width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}" xmlns="http://www.w3.org/2000/svg">
-  ${defs('b')}
-  <rect width="${CW}" height="${CH}" fill="url(#bgb)"/>
-  <rect width="${CW}" height="${CH}" fill="url(#gridb)"/>
-  <circle cx="300" cy="1120" r="560" fill="url(#glowBb)"/>
-  <rect width="${CW}" height="22" fill="url(#barb)"/>
-  <rect y="22" width="${CW}" height="7" fill="${GOLD}"/>
-  <rect y="${CH - 16}" width="${CW}" height="16" fill="url(#barb)"/>
-
-  <image href="${ICON}" x="132" y="118" width="150" height="150"/>
-  <text x="316" y="196" font-family="${FONT}" font-size="76" font-weight="800" fill="${TXT}">MULE<tspan fill="${GOLD}">●</tspan>SOO</text>
-  <text x="318" y="252" font-family="${FONT}" font-size="38" letter-spacing="14" fill="${BLUE}">DIGITAL SERVICES</text>
-
-  <text x="140" y="470" font-family="${FONT}" font-size="92" font-weight="800" fill="${TXT}">Ena Muluken</text>
-  <text x="140" y="556" font-family="${FONT}" font-size="54" font-weight="600" fill="${BLUE}">Founder &amp; CEO</text>
-  <rect x="140" y="606" width="470" height="4" fill="${GOLD}" opacity="0.9"/>
-
-  ${row(740, BLUE, '+27 68 852 9333')}
-  ${row(852, PURPLE, 'hello@mulesoo.com')}
-  ${row(964, GOLD, 'www.mulesoo.com')}
-  ${row(1076, '#00FF88', 'Pretoria, South Africa')}
-
-  <rect x="1352" y="332" width="540" height="540" rx="34" fill="#ffffff"/>
-  <image href="${qr}" x="1388" y="368" width="468" height="468"/>
-  <text x="1622" y="948" text-anchor="middle" font-family="${FONT}" font-size="44" font-weight="700" letter-spacing="8" fill="${GOLD}">SCAN TO VISIT</text>
-  <text x="1622" y="1010" text-anchor="middle" font-family="${FONT}" font-size="38" fill="${MUT}">mulesoo.com</text>
-</svg>`;
+/** Shared page chrome. `dpi` lets each artboard size itself in millimetres. */
+function shell(dpi, wPx, hPx, body, extraCss = '') {
+  const u = (mm) => `${mmToPx(mm, dpi)}px`;
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+${fontFaces()}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:${wPx}px;height:${hPx}px;}
+body{
+  font-family:'DM Sans',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+  color:${TEXT};
+  position:relative;
+  overflow:hidden;
+  /* Depth without ornament: a soft directional field, one cool lift, one warm
+     lift, a fine engraved texture, and a vignette to seat the edges. */
+  background:
+    radial-gradient(120% 90% at 8% 4%, rgba(42,167,222,0.13), transparent 58%),
+    radial-gradient(90% 80% at 96% 98%, rgba(232,184,75,0.07), transparent 62%),
+    linear-gradient(158deg, ${INK_LIFT} 0%, ${INK} 48%, ${INK_DEEP} 100%);
+}
+/* engraved silk: hairlines at a print-visible pitch, almost subliminal */
+body::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(-38deg,
+    rgba(255,255,255,0.020) 0 1px, transparent 1px ${u(0.62)});
+}
+/* vignette seats the artwork so the dark field doesn't read as flat black */
+body::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 78% 74% at 50% 46%, transparent 52%, rgba(0,0,0,0.34) 100%);
+}
+.safe{position:absolute;inset:${u(BLEED_MM + SAFE_MM)};z-index:2;display:flex;}
+.rule{background:${GOLD};border-radius:${u(0.2)};}
+/* Sora's latin subset carries no U+2022, so the wordmark dot is drawn, not set. */
+.dot{display:inline-block;border-radius:50%;background:${GOLD};vertical-align:middle;}
+${extraCss}
+</style></head><body>${body}</body></html>`;
 }
 
-// ── BANNER ─────────────────────────────────────────────────────
-function banner(qr) {
-  return `<svg width="${BW}" height="${BH}" viewBox="0 0 ${BW} ${BH}" xmlns="http://www.w3.org/2000/svg">
-  ${defs('n')}
-  <rect width="${BW}" height="${BH}" fill="url(#bgn)"/>
-  <rect width="${BW}" height="${BH}" fill="url(#gridn)"/>
-  <circle cx="2200" cy="120" r="560" fill="url(#glowPn)"/>
-  <circle cx="180" cy="700" r="520" fill="url(#glowBn)"/>
-  <circle cx="1620" cy="400" r="330" fill="none" stroke="${BLUE}" stroke-opacity="0.12" stroke-width="2.5"/>
-  <circle cx="1620" cy="400" r="390" fill="none" stroke="${GOLD}" stroke-opacity="0.10" stroke-width="2.5"/>
-  <rect width="${BW}" height="14" fill="url(#barn)"/>
-  <rect y="14" width="${BW}" height="5" fill="${GOLD}"/>
-  <rect y="${BH - 12}" width="${BW}" height="12" fill="url(#barn)"/>
+// ── card front: the mark, air, one hairline ─────────────────────────────────
+function cardFront(dpi) {
+  const w = mmToPx(CARD_TRIM.w + BLEED_MM * 2, dpi);
+  const h = mmToPx(CARD_TRIM.h + BLEED_MM * 2, dpi);
+  const u = (mm) => `${mmToPx(mm, dpi)}px`;
+  const logoW = 44;
 
-  <image href="${LOGO}" x="120" y="120" width="820" height="${Math.round(820 * 216 / 1000)}"/>
-  <text x="128" y="404" font-family="${FONT}" font-size="66" font-weight="800" fill="${TXT}">World-Class Websites, AI Chatbots</text>
-  <text x="128" y="490" font-family="${FONT}" font-size="66" font-weight="800" fill="${TXT}">&amp; Auto Pilot Systems</text>
-  <rect x="128" y="530" width="430" height="5" fill="${GOLD}" opacity="0.9"/>
-  <text x="128" y="614" font-family="${FONT}" font-size="44" fill="${MUT}">Built in Pretoria — serving businesses across Africa</text>
-  <text x="128" y="706" font-family="${FONT}" font-size="47" font-weight="700" fill="${BLUE}">www.mulesoo.com&#160;&#160;&#160;·&#160;&#160;&#160;hello@mulesoo.com&#160;&#160;&#160;·&#160;&#160;&#160;+27 68 852 9333</text>
-
-  <rect x="1908" y="182" width="436" height="436" rx="30" fill="#ffffff"/>
-  <image href="${qr}" x="1938" y="212" width="376" height="376"/>
-  <text x="2126" y="682" text-anchor="middle" font-family="${FONT}" font-size="40" font-weight="700" letter-spacing="7" fill="${GOLD}">SCAN TO START</text>
-</svg>`;
+  const body = `
+  <div class="safe" style="flex-direction:column;justify-content:center;align-items:flex-start;">
+    <img src="${LOGO}" style="width:${u(logoW)};height:${u(logoW * LOGO_RATIO)};display:block;"/>
+    <div class="rule" style="width:${u(11)};height:${u(0.4)};margin:${u(5.6)} 0 ${u(3.4)} ${u(0.8)};"></div>
+    <div style="font-family:'DM Sans';font-weight:500;font-size:${u(2.5)};
+                letter-spacing:${u(0.38)};text-transform:uppercase;color:${MUTED};
+                padding-left:${u(0.8)};">Digital&nbsp;Services</div>
+  </div>`;
+  return { html: shell(dpi, w, h, body), w, h };
 }
 
-// ── render helpers ─────────────────────────────────────────────
-async function png(svg, dir, file) {
-  const buf = await sharp(Buffer.from(svg), { density: 96 }).png({ compressionLevel: 9 }).toBuffer();
-  fs.writeFileSync(path.join(dir, file), buf);
-  console.log(file.padEnd(28), (buf.length / 1024).toFixed(0) + ' KB');
+// ── card back: name, contact, QR ────────────────────────────────────────────
+function cardBack(dpi, qr) {
+  const w = mmToPx(CARD_TRIM.w + BLEED_MM * 2, dpi);
+  const h = mmToPx(CARD_TRIM.h + BLEED_MM * 2, dpi);
+  const u = (mm) => `${mmToPx(mm, dpi)}px`;
+
+  // One uniform gold tick per line — not four different colours.
+  const line = (t, strong = false) => `
+    <div style="display:flex;align-items:center;gap:${u(2.2)};">
+      <span style="width:${u(1.5)};height:${u(0.3)};background:${GOLD_DIM};flex:none;"></span>
+      <span style="font-family:'DM Sans';font-weight:${strong ? 500 : 400};
+                   font-size:${u(2.5)};color:${strong ? TEXT : MUTED};
+                   white-space:nowrap;">${t}</span>
+    </div>`;
+
+  const body = `
+  <div class="safe" style="align-items:stretch;justify-content:space-between;">
+    <div style="display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;gap:${u(2.2)};">
+        <img src="${ICON}" style="width:${u(6.8)};height:${u(6.8)};display:block;"/>
+        <div>
+          <div style="font-family:'Sora';font-weight:800;font-size:${u(3.8)};
+                      letter-spacing:${u(0.06)};line-height:1;color:${TEXT};">MULE<span
+                      class="dot" style="width:${u(0.72)};height:${u(0.72)};
+                      margin:0 ${u(0.85)} ${u(0.5)} ${u(0.85)};"></span>SOO</div>
+          <div style="font-family:'DM Sans';font-weight:500;font-size:${u(1.5)};
+                      letter-spacing:${u(0.34)};text-transform:uppercase;
+                      color:${BLUE_PRINT};margin-top:${u(1.0)};">Digital&nbsp;Services</div>
+        </div>
+      </div>
+
+      <div style="margin-top:${u(5.6)};">
+        <div style="font-family:'Sora';font-weight:700;font-size:${u(4.6)};
+                    letter-spacing:${u(-0.05)};line-height:1.05;color:${TEXT};">Ena Muluken</div>
+        <div style="font-family:'DM Sans';font-weight:500;font-size:${u(2.15)};
+                    letter-spacing:${u(0.38)};text-transform:uppercase;color:${GOLD};
+                    margin-top:${u(1.7)};">Founder &amp; CEO</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:${u(1.9)};margin-top:${u(4.6)};">
+        ${line('+27 68 852 9333', true)}
+        ${line('hello@mulesoo.com', true)}
+        ${line('www.mulesoo.com')}
+        ${line('Pretoria, South Africa')}
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div style="background:#ffffff;padding:${u(2.0)};border-radius:${u(1.3)};">
+        <img src="${qr}" style="width:${u(17.5)};height:${u(17.5)};display:block;"/>
+      </div>
+      <div style="font-family:'DM Sans';font-weight:500;font-size:${u(1.5)};
+                  letter-spacing:${u(0.34)};text-transform:uppercase;color:${MUTED};
+                  margin-top:${u(2.2)};">Scan to visit</div>
+    </div>
+  </div>`;
+  return { html: shell(dpi, w, h, body), w, h };
+}
+
+// ── banner ──────────────────────────────────────────────────────────────────
+function banner(dpi, qr) {
+  const w = mmToPx(BAN_TRIM.w + BLEED_MM * 2, dpi);
+  const h = mmToPx(BAN_TRIM.h + BLEED_MM * 2, dpi);
+  const u = (mm) => `${mmToPx(mm, dpi)}px`;
+
+  const dot = `<span class="dot" style="width:${u(0.7)};height:${u(0.7)};
+    opacity:0.5;margin:0 ${u(3.4)};"></span>`;
+
+  const body = `
+  <div class="safe" style="align-items:center;justify-content:flex-start;">
+    <div style="display:flex;flex-direction:column;justify-content:center;flex:none;">
+      <img src="${LOGO}" style="width:${u(76)};height:${u(76 * LOGO_RATIO)};display:block;
+                                margin-bottom:${u(7.6)};"/>
+      <div style="font-family:'Sora';font-weight:700;font-size:${u(8.4)};line-height:1.2;
+                  letter-spacing:${u(-0.09)};color:${TEXT};">
+        World-Class Websites, AI Chatbots<br/>&amp; Auto Pilot Systems
+      </div>
+      <div class="rule" style="width:${u(20)};height:${u(0.6)};margin:${u(5.8)} 0 ${u(5.0)} 0;"></div>
+      <div style="font-family:'DM Sans';font-weight:400;font-size:${u(4.3)};color:${MUTED};
+                  margin-bottom:${u(4.2)};">Built in Pretoria — serving businesses across Africa</div>
+      <div style="font-family:'DM Sans';font-weight:500;font-size:${u(4.1)};color:${TEXT};
+                  display:flex;align-items:center;">
+        www.mulesoo.com${dot}hello@mulesoo.com${dot}+27 68 852 9333
+      </div>
+    </div>
+
+    <!-- The 3:1 ratio leaves a void between the columns; a hairline gives the
+         eye a reason for it instead of letting it read as unfinished. -->
+    <div style="flex:1;display:flex;justify-content:center;align-self:stretch;align-items:center;">
+      <div style="width:${u(0.3)};height:66%;background:linear-gradient(180deg,
+        transparent, rgba(232,184,75,0.30) 22%, rgba(232,184,75,0.30) 78%, transparent);"></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;flex:none;">
+      <div style="background:#ffffff;padding:${u(3.0)};border-radius:${u(2.0)};">
+        <img src="${qr}" style="width:${u(34)};height:${u(34)};display:block;"/>
+      </div>
+      <div style="font-family:'DM Sans';font-weight:500;font-size:${u(2.9)};
+                  letter-spacing:${u(0.62)};text-transform:uppercase;color:${MUTED};
+                  margin-top:${u(3.4)};">Scan to start</div>
+    </div>
+  </div>`;
+  return { html: shell(dpi, w, h, body), w, h };
+}
+
+// ── chrome ──────────────────────────────────────────────────────────────────
+function findChrome() {
+  const candidates = [
+    process.env.PUPPETEER_EXECUTABLE_PATH,
+    process.env.CHROME_PATH,
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+    '/usr/bin/google-chrome',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  ].filter(Boolean);
+  const hit = candidates.find((p) => fs.existsSync(p));
+  if (!hit) throw new Error('No Chrome found. Set CHROME_PATH to a Chrome/Edge executable.');
+  return hit;
+}
+
+/**
+ * Anything that pokes outside `.safe` risks being sheared off by the guillotine,
+ * which cuts to a tolerance of about a millimetre. Catch it here rather than on
+ * a thousand printed cards.
+ */
+async function assertInsideSafeZone(page, label) {
+  const escapees = await page.evaluate(() => {
+    const safe = document.querySelector('.safe');
+    if (!safe) return [];
+    const box = safe.getBoundingClientRect();
+    const out = [];
+    for (const el of safe.querySelectorAll('*')) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      const dx = Math.max(box.left - r.left, r.right - box.right);
+      const dy = Math.max(box.top - r.top, r.bottom - box.bottom);
+      if (dx > 1 || dy > 1) {
+        out.push({ tag: el.tagName.toLowerCase(), text: (el.textContent || '').trim().slice(0, 28), dx: Math.round(dx), dy: Math.round(dy) });
+      }
+    }
+    return out;
+  });
+  if (escapees.length) {
+    for (const e of escapees) console.error(`  ✗ ${label}: <${e.tag}> "${e.text}" overflows safe zone by ${Math.max(e.dx, 0)}×${Math.max(e.dy, 0)}px`);
+    throw new Error(`${label}: content escapes the safe zone`);
+  }
+}
+
+async function shoot(browser, { html, w, h }, label) {
+  const page = await browser.newPage();
+  await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+  await page.setContent(html, { waitUntil: 'load' });
+  await page.evaluate(() => document.fonts.ready); // never screenshot mid-swap
+  await assertInsideSafeZone(page, label);
+  const buf = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: w, height: h } });
+  await page.close();
   return buf;
 }
 
+// ── output ──────────────────────────────────────────────────────────────────
+/** Strip the bleed so the PNG is exactly the finished, trimmed artwork. */
+async function trimmed(buf, dpi, trim) {
+  const b = mmToPx(BLEED_MM, dpi);
+  return sharp(buf)
+    .extract({ left: b, top: b, width: mmToPx(trim.w, dpi), height: mmToPx(trim.h, dpi) })
+    .png({ compressionLevel: 9 })
+    .toBuffer();
+}
+
+const jpeg = async (buf) =>
+  'data:image/jpeg;base64,' + (await sharp(buf).jpeg({ quality: 94, chromaSubsampling: '4:4:4' }).toBuffer()).toString('base64');
+
+/** Crop marks sit in the slug, offset by the bleed so they never touch artwork. */
+function cropMarks(pdf, trim) {
+  const L = 4; // mark length (mm)
+  const x1 = SLUG_MM + BLEED_MM;
+  const y1 = SLUG_MM + BLEED_MM;
+  const x2 = x1 + trim.w;
+  const y2 = y1 + trim.h;
+  pdf.setDrawColor(0);
+  pdf.setLineWidth(0.12);
+  for (const [x, sx] of [[x1, -1], [x2, 1]]) {
+    for (const [y, sy] of [[y1, -1], [y2, 1]]) {
+      pdf.line(x + sx * BLEED_MM, y, x + sx * (BLEED_MM + L), y); // horizontal
+      pdf.line(x, y + sy * BLEED_MM, x, y + sy * (BLEED_MM + L)); // vertical
+    }
+  }
+}
+
+function slugLabel(pdf, pageW, pageH, text) {
+  pdf.setFontSize(4.4);
+  pdf.setTextColor(120);
+  pdf.text(text, pageW / 2, pageH - 1.7, { align: 'center' });
+}
+
+async function printPdf(pages, trim, outFile, label) {
+  const pageW = trim.w + (BLEED_MM + SLUG_MM) * 2;
+  const pageH = trim.h + (BLEED_MM + SLUG_MM) * 2;
+  const artW = trim.w + BLEED_MM * 2;
+  const artH = trim.h + BLEED_MM * 2;
+
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [pageW, pageH] });
+  for (let i = 0; i < pages.length; i++) {
+    if (i > 0) pdf.addPage([pageW, pageH], 'landscape');
+    pdf.addImage(await jpeg(pages[i]), 'JPEG', SLUG_MM, SLUG_MM, artW, artH);
+    cropMarks(pdf, trim);
+    slugLabel(pdf, pageW, pageH, label);
+  }
+  fs.writeFileSync(outFile, Buffer.from(pdf.output('arraybuffer')));
+  const kb = (fs.statSync(outFile).size / 1024).toFixed(0);
+  console.log(`${path.basename(outFile).padEnd(30)} ${kb} KB   ${pages.length}pp @ ${pageW}×${pageH}mm`);
+}
+
+async function writePng(buf, dir, file) {
+  fs.writeFileSync(path.join(dir, file), buf);
+  const m = await sharp(buf).metadata();
+  console.log(`${file.padEnd(30)} ${(buf.length / 1024).toFixed(0)} KB   ${m.width}×${m.height}`);
+}
+
+// ── go ──────────────────────────────────────────────────────────────────────
 (async () => {
-  const qr = await QRCode.toDataURL('https://mulesoo.com', { width: 900, margin: 0, color: { dark: INK, light: '#FFFFFF' } });
+  // margin:2 keeps a quiet zone even before the white panel padding.
+  const qr = await QRCode.toDataURL('https://mulesoo.com', {
+    width: 1200,
+    margin: 2,
+    errorCorrectionLevel: 'M',
+    color: { dark: INK, light: '#FFFFFF' },
+  });
 
-  const front = await png(cardFront(), CARD_DIR, 'MuleSoo-Business-Card-Front.png');
-  const back = await png(cardBack(qr), CARD_DIR, 'MuleSoo-Business-Card-Back.png');
-  const ban = await png(banner(qr), BAN_DIR, 'MuleSoo-Banner.png');
+  const browser = await puppeteer.launch({
+    executablePath: findChrome(),
+    headless: 'new',
+    args: ['--font-render-hinting=none', '--disable-lcd-text', '--force-color-profile=srgb'],
+  });
 
-  // Embed print-quality JPEGs in the PDFs (visually identical, ~30x smaller
-  // than jsPDF's PNG handling).
-  const jpg = async (buf) => 'data:image/jpeg;base64,' + (await sharp(buf).jpeg({ quality: 92 }).toBuffer()).toString('base64');
-  const [frontJ, backJ, banJ] = await Promise.all([jpg(front), jpg(back), jpg(ban)]);
+  try {
+    const frontArt = await shoot(browser, cardFront(CARD_DPI), 'card front');
+    const backArt = await shoot(browser, cardBack(CARD_DPI, qr), 'card back');
+    const banArt = await shoot(browser, banner(BAN_DPI, qr), 'banner');
 
-  // PDF — business card at exact ATM/CR80 size (85.6 × 54 mm), front + back
-  const card = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 54] });
-  card.addImage(frontJ, 'JPEG', 0, 0, 85.6, 54);
-  card.addPage([85.6, 54], 'landscape');
-  card.addImage(backJ, 'JPEG', 0, 0, 85.6, 54);
-  fs.writeFileSync(path.join(CARD_DIR, 'MuleSoo-Business-Card.pdf'), Buffer.from(card.output('arraybuffer')));
-  console.log('MuleSoo-Business-Card.pdf'.padEnd(28), 'front+back @ 85.6x54mm');
+    await writePng(await trimmed(frontArt, CARD_DPI, CARD_TRIM), CARD_DIR, 'MuleSoo-Business-Card-Front.png');
+    await writePng(await trimmed(backArt, CARD_DPI, CARD_TRIM), CARD_DIR, 'MuleSoo-Business-Card-Back.png');
+    await writePng(await trimmed(banArt, BAN_DPI, BAN_TRIM), BAN_DIR, 'MuleSoo-Banner.png');
 
-  // PDF — banner (300 × 100 mm print page)
-  const bp = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [300, 100] });
-  bp.addImage(banJ, 'JPEG', 0, 0, 300, 100);
-  fs.writeFileSync(path.join(BAN_DIR, 'MuleSoo-Banner.pdf'), Buffer.from(bp.output('arraybuffer')));
-  console.log('MuleSoo-Banner.pdf'.padEnd(28), '300x100mm');
+    await printPdf([frontArt, backArt], CARD_TRIM, path.join(CARD_DIR, 'MuleSoo-Business-Card.pdf'),
+      'MuleSoo Business Card — 85.6×54mm trim · 3mm bleed · crop marks');
+    await printPdf([banArt], BAN_TRIM, path.join(BAN_DIR, 'MuleSoo-Banner.pdf'),
+      'MuleSoo Banner — 300×100mm trim · 3mm bleed · crop marks');
+  } finally {
+    await browser.close();
+  }
+
   console.log('\nAll files in marketing/MuleSoo-Brand-Kit/');
-})().catch((e) => { console.error(e); process.exit(1); });
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
