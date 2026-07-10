@@ -1,3 +1,12 @@
+import { pageMetadata } from '@/lib/seo';
+
+export const metadata = pageMetadata({
+  title: 'Privacy Policy',
+  description:
+    'How MuleSoo Digital Services collects, uses and protects your personal information, in line with South Africa’s POPIA.',
+  path: '/privacy',
+});
+
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">

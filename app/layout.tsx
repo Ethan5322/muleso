@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
 import ClientWrapper from "@/components/ClientWrapper";
+import { sameAsUrls } from "@/lib/socials";
 import { ChatbotProvider } from "@/context/ChatbotContext";
 import { AdminProvider } from "@/context/AdminContext";
 
@@ -29,9 +30,10 @@ export const metadata: Metadata = {
     'affordable website design',
   ],
   metadataBase: new URL(SITE_URL),
-  alternates: {
-    canonical: SITE_URL,
-  },
+  // NO `alternates.canonical` here. Next.js inherits layout metadata into every
+  // child page, so a canonical set at the root made all 220 sitemap URLs claim
+  // to be the homepage and Google dropped them from the index. Each page now
+  // declares its own via lib/seo.ts → pageMetadata().
   openGraph: {
     title: "MuleSoo Digital Services | Professional Websites & AI Solutions",
     description: "World-class websites, AI chatbots, and digital solutions for South African businesses. Fast delivery. Premium quality.",
@@ -124,12 +126,9 @@ export default function RootLayout({
               },
               priceRange: "R300 - R15000",
               serviceType: ["Web Design", "AI Chatbots", "Logo Design", "QR Code Design", "Email Setup", "PDF Guides"],
-              sameAs: [
-                "https://www.linkedin.com/company/mulesoo",
-                "https://twitter.com/mulesoodigital",
-                "https://www.instagram.com/mulesoodigital",
-                "https://www.youtube.com/c/mulesoodigital",
-              ],
+              // Only profiles that actually exist. This previously claimed four
+              // accounts that 404, under two different handles.
+              ...(sameAsUrls().length ? { sameAs: sameAsUrls() } : {}),
             }),
           }}
         />
