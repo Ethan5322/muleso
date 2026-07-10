@@ -24,6 +24,10 @@ const QRCode = require('qrcode');
 const { jsPDF } = require('jspdf');
 const puppeteer = require('puppeteer-core');
 
+// One handle across every platform, the card, the banner and the site.
+// Kept in sync with lib/socials.ts — that file is the source of truth.
+const HANDLE = 'mulesoo';
+
 // ── paths ───────────────────────────────────────────────────────────────────
 const ROOT = process.cwd();
 const KIT = path.join(ROOT, 'marketing', 'MuleSoo-Brand-Kit');
@@ -182,7 +186,7 @@ function cardBack(dpi, qr) {
         ${line('+27 68 852 9333', true)}
         ${line('hello@mulesoo.com', true)}
         ${line('www.mulesoo.com')}
-        ${line('Pretoria, South Africa')}
+        ${line(`Pretoria, South Africa&nbsp;&nbsp;·&nbsp;&nbsp;@${HANDLE}`)}
       </div>
     </div>
 
@@ -221,7 +225,8 @@ function banner(dpi, qr) {
                   margin-bottom:${u(4.2)};">Built in Pretoria — serving businesses across Africa</div>
       <div style="font-family:'DM Sans';font-weight:500;font-size:${u(4.1)};color:${TEXT};
                   display:flex;align-items:center;">
-        www.mulesoo.com${dot}hello@mulesoo.com${dot}+27 68 852 9333
+        www.mulesoo.com${dot}hello@mulesoo.com${dot}+27 68 852 9333${dot}<span
+          style="color:${GOLD};">@${HANDLE}</span>
       </div>
     </div>
 
