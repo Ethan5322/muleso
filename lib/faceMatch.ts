@@ -25,6 +25,18 @@ export function getThreshold(): number {
 // time so the template tracks the person's CURRENT appearance.
 export const ADAPTIVE_CAP = 40;
 
+/**
+ * Adaptive learning only ingests frames that matched *comfortably*, not ones
+ * that merely scraped past the threshold. A borderline frame is exactly the kind
+ * that drifts the template — repeat that a few dozen times and the enrolled
+ * identity walks away from the real face, which both weakens security and makes
+ * legitimate logins flaky. Ingest at 70% of the accept distance.
+ */
+export const ADAPTIVE_INGEST_RATIO = 0.7;
+
+/** Bound the work a single unauthenticated request can force us to do. */
+export const MAX_LOGIN_FRAMES = 8;
+
 export function getEnvReference(): number[] | null {
   const raw = process.env.ADMIN_FACE_DESCRIPTOR;
   if (!raw) return null;

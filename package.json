@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "node scripts/copy-face-models.cjs",
     "build": "next build",
+    "prebuild": "node scripts/copy-face-models.cjs",
+    "postinstall": "node scripts/copy-face-models.cjs",
     "start": "next start",
     "lint": "eslint"
   },

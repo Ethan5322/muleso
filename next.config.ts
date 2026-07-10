@@ -21,17 +21,33 @@ const nextConfig: NextConfig = {
   // Optimize headers for SEO and performance
   async headers() {
     return [
+      // Never cache authenticated surfaces or API responses.
+      {
+        source: '/admin/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+        ],
+      },
+      // Face-api model weights (6.7MB, content never changes for a given
+      // face-api version). These MUST be cacheable — a site-wide no-store meant
+      // re-downloading the 6.2MB recognition net on every page load.
+      {
+        source: '/models/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      // Security headers for everything. Cache-Control is deliberately absent so
+      // Next.js' own per-route caching applies to public pages.
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-store, must-revalidate',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',

@@ -1,11 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import {
   getAllReferences,
   getThreshold,
   robustDistance,
   addAdaptiveSample,
   FACE_DESCRIPTOR_LENGTH,
+  ADAPTIVE_INGEST_RATIO,
+  MAX_LOGIN_FRAMES,
 } from '@/lib/faceMatch';
+import { isIPLocked, recordFailedAttempt, resetRateLimit } from '@/lib/rateLimit';
 
 const median = (arr: number[]) => {
   const s = [...arr].sort((a, b) => a - b);
@@ -13,12 +16,34 @@ const median = (arr: number[]) => {
   return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
 };
 
+function clientIp(request: NextRequest): string {
+  const fwd = request.headers.get('x-forwarded-for');
+  if (fwd) return fwd.split(',')[0].trim();
+  return request.headers.get('x-real-ip') || 'unknown';
+}
+
 /**
- * Face login: the phone sends a 128-float face descriptor; the server
- * compares it to the enrolled reference and, on a match, issues the same
- * admin_session cookie that the password+2FA flow uses.
+ * Face login: the phone sends 128-float face descriptors; the server compares
+ * them to the enrolled reference and, on a match, issues the same admin_session
+ * cookie that the password+2FA flow uses.
+ *
+ * A biometric endpoint with unlimited attempts is a brute-force oracle, so every
+ * failure is rate-limited by IP exactly like the password login.
  */
 export async function POST(request: NextRequest) {
+  const ip = clientIp(request);
+
+  const locked = isIPLocked(ip);
+  if (locked.locked) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: `Too many failed attempts. Try again in ${Math.ceil(locked.remainingSeconds / 60)} minute(s), or use password login.`,
+      },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await request.json();
     // Accept a single descriptor (legacy) or an array of frame descriptors (robust).
@@ -27,7 +52,11 @@ export async function POST(request: NextRequest) {
       : Array.isArray(body?.descriptor)
         ? [body.descriptor]
         : [];
-    const valid = frames.filter((d) => Array.isArray(d) && d.length === FACE_DESCRIPTOR_LENGTH).map((d) => d.map(Number));
+    const valid = frames
+      .slice(0, MAX_LOGIN_FRAMES)
+      .filter((d) => Array.isArray(d) && d.length === FACE_DESCRIPTOR_LENGTH)
+      .map((d) => d.map(Number))
+      .filter((d) => d.every((n) => Number.isFinite(n)));
 
     if (valid.length === 0) {
       return NextResponse.json({ success: false, error: 'Invalid face data' }, { status: 400 });
@@ -49,26 +78,19 @@ export async function POST(request: NextRequest) {
     const enoughFrames = passing >= Math.ceil(valid.length / 2);
 
     if (distance > threshold || !enoughFrames) {
+      const fail = recordFailedAttempt(ip);
       return NextResponse.json(
-        { success: false, error: 'Face not recognized. Please try again or use password login.' },
-        { status: 401 }
+        {
+          success: false,
+          error: fail.locked
+            ? 'Too many failed attempts. Face login is temporarily locked — use password login.'
+            : 'Face not recognized. Please try again or use password login.',
+        },
+        { status: fail.locked ? 429 : 401 }
       );
     }
 
-    // Adaptive learning: remember the clearest frame of this successful login so
-    // the template tracks the person's current appearance over time. Best-effort.
-    try {
-      const bestFrame = valid.reduce(
-        (best, f) => {
-          const d = robustDistance(f, references);
-          return d < best.d ? { d, f } : best;
-        },
-        { d: Infinity, f: valid[0] }
-      ).f;
-      await addAdaptiveSample(bestFrame);
-    } catch {
-      /* non-fatal */
-    }
+    resetRateLimit(ip);
 
     // Match — issue the admin session cookie (same shape middleware expects)
     const session = {
@@ -88,6 +110,24 @@ export async function POST(request: NextRequest) {
       maxAge: 24 * 60 * 60,
       path: '/',
     });
+
+    // Adaptive learning runs AFTER the response flushes — the user is no longer
+    // waiting on an insert + select + prune round-trip to Supabase.
+    //
+    // Only a comfortably-matching frame is ingested. Frames that merely scraped
+    // under the threshold would drift the template toward whatever produced them.
+    const bestIdx = dists.reduce((best, d, i) => (d < dists[best] ? i : best), 0);
+    if (dists[bestIdx] <= threshold * ADAPTIVE_INGEST_RATIO) {
+      const bestFrame = valid[bestIdx];
+      after(async () => {
+        try {
+          await addAdaptiveSample(bestFrame);
+        } catch (e) {
+          console.error('adaptive face sample failed (non-fatal):', e);
+        }
+      });
+    }
+
     return response;
   } catch (error) {
     console.error('Face login error:', error);
