@@ -93,7 +93,7 @@ export const beginnerToProWebsite: Guide = {
         {
           heading: 'A home page that flows',
           body: [
-            'A reliable structure: Hero (promise + CTA) → Proof (reviews/logos) → What you offer → How it works → Why choose us → Final CTA. Follow this and you are ahead of most sites online.',
+            'A reliable structure: Hero (promise + CTA) » Proof (reviews/logos) » What you offer » How it works » Why choose us » Final CTA. Follow this and you are ahead of most sites online.',
           ],
         },
       ],

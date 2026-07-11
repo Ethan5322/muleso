@@ -37,11 +37,63 @@ const BODY: [number, number, number] = [55, 62, 80];
 const MUTED: [number, number, number] = [120, 132, 155];
 
 /**
+ * jsPDF's built-in fonts are WinAnsi (CP1252). A character outside that set
+ * does not error — it silently prints as a WRONG glyph in the sold PDF ('✓'
+ * came out as an apostrophe, '→' as garbage). Map the usual suspects to safe
+ * equivalents and drop anything else, so a future content edit can never ship
+ * mojibake to a paying customer.
+ */
+const CP1252_EXTRA = new Set('€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ'.split(''));
+const WINANSI_MAP: Record<string, string> = {
+  '→': '»',
+  '⇒': '»',
+  '←': '«',
+  '✓': '-',
+  '✔': '-',
+  '✗': 'x',
+  '✘': 'x',
+  '★': '*',
+  '☆': '*',
+  '−': '-', // minus sign U+2212
+  '≈': '~',
+};
+export function winAnsiSafe(s: string): string {
+  let out = '';
+  for (const c of s) {
+    if (c.codePointAt(0)! <= 0xff || CP1252_EXTRA.has(c)) out += c;
+    else out += WINANSI_MAP[c] ?? '';
+  }
+  return out;
+}
+
+/** Sanitize every string the guide will draw, in one place. */
+function safeGuide(g: Guide): Guide {
+  return {
+    ...g,
+    title: winAnsiSafe(g.title),
+    subtitle: winAnsiSafe(g.subtitle),
+    tagline: g.tagline ? winAnsiSafe(g.tagline) : g.tagline,
+    chapters: g.chapters.map((ch) => ({
+      title: winAnsiSafe(ch.title),
+      intro: ch.intro ? winAnsiSafe(ch.intro) : ch.intro,
+      sections: ch.sections.map((s) => ({
+        heading: s.heading ? winAnsiSafe(s.heading) : s.heading,
+        body: s.body?.map(winAnsiSafe),
+        bullets: s.bullets?.map(winAnsiSafe),
+        steps: s.steps?.map(winAnsiSafe),
+        callout: s.callout ? winAnsiSafe(s.callout) : s.callout,
+      })),
+    })),
+  };
+}
+
+/**
  * Render a professional, book-style guide PDF. Optionally password-protect it
  * and stamp a per-buyer watermark on every page (for sale protection).
  * Returns the PDF as a Uint8Array (works server-side).
  */
-export function buildGuide(guide: Guide, opts: BuildOptions = {}): Uint8Array {
+export function buildGuide(rawGuide: Guide, opts: BuildOptions = {}): Uint8Array {
+  const guide = safeGuide(rawGuide);
   const accent = guide.accent || BLUE;
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -217,11 +269,17 @@ export function buildGuide(guide: Guide, opts: BuildOptions = {}): Uint8Array {
       });
       (sec.bullets || []).forEach((b) => {
         ensure(5.4);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(10.5);
-        setText([0, 160, 90]);
-        doc.text('✓', M, y);
+        // The check is DRAWN, not typeset: '✓' (U+2713) is outside WinAnsi and
+        // jsPDF printed it as an apostrophe in every sold guide. Vector strokes
+        // keep the green checkmark exactly as designed on any viewer.
+        doc.setDrawColor(0, 160, 90);
+        doc.setLineWidth(0.5);
+        doc.setLineCap('round');
+        doc.line(M + 0.1, y - 1.3, M + 1.0, y - 0.4);
+        doc.line(M + 1.0, y - 0.4, M + 2.7, y - 2.9);
+        doc.setLineCap('butt');
         doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10.5);
         setText(BODY);
         doc.splitTextToSize(b, CW - 7).forEach((ln: string, idx: number) => {
           if (idx > 0) ensure(4.6);

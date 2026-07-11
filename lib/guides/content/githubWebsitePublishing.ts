@@ -66,7 +66,7 @@ export const githubWebsitePublishing: Guide = {
           heading: 'Your first upload',
           steps: [
             'Open your website folder in VS Code',
-            'Initialise Git (Source Control panel → Initialise)',
+            'Initialise Git (Source Control panel » Initialise)',
             'Stage all files, write a message, and commit',
             'Connect the remote (your repo link)',
             'Push — your files now live on GitHub',
@@ -86,7 +86,7 @@ export const githubWebsitePublishing: Guide = {
         {
           heading: 'Option A — GitHub Pages (static sites)',
           steps: [
-            'In the repo, open Settings → Pages',
+            'In the repo, open Settings » Pages',
             'Choose your main branch as the source',
             'Wait a minute — GitHub gives you a live link',
             'Your site is now online, free, with HTTPS',
