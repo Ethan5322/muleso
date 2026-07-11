@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import { stampAgencyCredit } from '../brand/agencyCredit';
 
 // ── Book content model ───────────────────────────────────────────
 export interface GuideSection {
@@ -276,10 +277,21 @@ export function buildGuide(guide: Guide, opts: BuildOptions = {}): Uint8Array {
     doc.setDrawColor(228, 233, 244);
     doc.setLineWidth(0.3);
     doc.line(M, H - 14, W - M, H - 14);
+
+    // Agency credit lockup replaces the plain "MuleSoo Digital Services" line.
+    // Narrower than the default so it cannot reach the centred watermark: it
+    // spans M → M+30mm, the watermark is centred on W/2 (≈105mm).
+    const GUIDE_CREDIT_W = 30;
+    stampAgencyCredit(doc, {
+      onDark: false,
+      align: 'left',
+      widthMm: GUIDE_CREDIT_W,
+      marginMm: M,
+    });
+
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     setText(MUTED);
-    doc.text('MuleSoo Digital Services', M, H - 9.5);
     doc.text(`${p - 1}`, W - M, H - 9.5, { align: 'right' });
     if (opts.watermark) {
       doc.setFontSize(7);

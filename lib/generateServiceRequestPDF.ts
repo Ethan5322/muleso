@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { stampAgencyCredit, creditBandTop, assertClearOfCredit } from './brand/agencyCredit';
 
 interface BookingData {
   fullName: string;
@@ -166,10 +167,27 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.setFontSize(8);
   doc.setTextColor(30, 30, 30);
   const briefText = bookingData.projectDetails || 'No details provided';
-  const wrappedBrief = doc.splitTextToSize(briefText, contentWidth - 10);
-  if (wrappedBrief.length > 0) {
-    doc.text(wrappedBrief[0], margin + 35, serviceStartY + 24);
+  // The brief starts at margin+35, so it must be wrapped to the width that is
+  // actually left inside the box — wrapping to the full content width and then
+  // drawing it 35mm in pushed long briefs off the right edge of the page. Only
+  // the first line was drawn, so the rest vanished silently too.
+  const briefX = margin + 35;
+  const briefWidth = margin + contentWidth - briefX - 5;
+  const briefLineH = 3.6;
+  // The brief baseline starts at serviceStartY+24; the box bottom is at
+  // serviceStartY+(serviceBoxHeight-5) because serviceStartY is already inset
+  // 5mm. Fit only the lines that clear the border, then ellipsize.
+  const briefBottom = serviceStartY + (serviceBoxHeight - 5) - 2; // 2mm padding
+  const briefMaxLines = Math.max(1, Math.floor((briefBottom - (serviceStartY + 24)) / briefLineH) + 1);
+  const wrappedBrief = doc.splitTextToSize(briefText, briefWidth) as string[];
+  const shownBrief = wrappedBrief.slice(0, briefMaxLines);
+  if (wrappedBrief.length > briefMaxLines && shownBrief.length) {
+    shownBrief[shownBrief.length - 1] =
+      shownBrief[shownBrief.length - 1].replace(/\s+\S*$/, '') + ' …';
   }
+  shownBrief.forEach((line, i) => {
+    doc.text(line, briefX, serviceStartY + 24 + i * briefLineH);
+  });
 
   yPos += serviceBoxHeight + 8;
 
@@ -190,8 +208,15 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(30, 30, 30);
+  // jsPDF's built-in fonts are WinAnsi — '✓' and emoji are not in that encoding
+  // and render as mojibake ("Ø=Üç"). Use a hyphen bullet, which is.
   const noticeLines = doc.splitTextToSize(
-    '✓ Ena Muluken will review your request within 2 hours on business days\n✓ You will receive a WhatsApp or email with pricing and next steps\n✓ A 50% deposit is required to begin work',
+    // Company voice, not a person's name — a client is contracting MuleSoo, not
+    // an individual, and naming staff in a contract document reads as a one-man
+    // shop rather than an agency.
+    '-  Our team will review your request within 2 hours on business days\n' +
+      '-  You will receive a WhatsApp or email with pricing and next steps\n' +
+      '-  A 50% deposit is required to begin work',
     contentWidth - 6
   );
 
@@ -207,7 +232,8 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
-  doc.text('📧 Email:', margin, yPos);
+  // No emoji: jsPDF's WinAnsi encoding turned 📧 / 📱 into "Ø=Üç" / "Ø=Üñ".
+  doc.text('Email:', margin, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(80, 80, 80);
   doc.text('hello@mulesoo.com', margin + 25, yPos);
@@ -215,20 +241,27 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   yPos += 6;
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 200, 255);
-  doc.text('📱 WhatsApp:', margin, yPos);
+  doc.text('WhatsApp:', margin, yPos);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(80, 80, 80);
   doc.text('+27 68 852 9333', margin + 35, yPos);
 
-  // FOOTER
-  const footerY = doc.internal.pageSize.getHeight() - 12;
+  // FOOTER — agency credit lockup (logo + wordmark + contact, in the brand
+  // typefaces). Nothing above may run into the reserved band; the rule is drawn
+  // clear of it, and the lockup sits below the rule.
+  assertClearOfCredit(doc, yPos, 'service-request body');
+
+  const bandTop = creditBandTop(doc);
+  doc.setDrawColor(210, 214, 224);
+  doc.setLineWidth(0.2);
+  doc.line(margin, bandTop, pageWidth - margin, bandTop);
+
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(128, 128, 128);
-  doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
-  doc.text('MuleSoo Digital Services | Pretoria, South Africa | www.mulesoo.com', pageWidth / 2, footerY, {
-    align: 'center',
-  });
+  doc.text('Pretoria, South Africa', margin, bandTop + 6);
+
+  stampAgencyCredit(doc, { onDark: false, align: 'right', marginMm: margin });
 
   const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
   const filename = `MuleSoo_ServiceRequest_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;

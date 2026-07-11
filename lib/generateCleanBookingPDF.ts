@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
+import { stampAgencyCredit, creditBandTop } from './brand/agencyCredit';
 
 interface BookingData {
   fullName: string;
@@ -475,17 +476,31 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     // ============================================================
     // PROFESSIONAL FOOTER + PAGE NUMBERS (all pages)
     // ============================================================
+    // Every page carries the agency credit lockup — logo, wordmark and contact
+    // in the brand typefaces, transparent so it composites over the page rather
+    // than boxing out whatever sits beneath.
     const totalPages = doc.getNumberOfPages();
     for (let p = 1; p <= totalPages; p++) {
       doc.setPage(p);
+      const bandTop = creditBandTop(doc);
+
       doc.setDrawColor(225, 232, 245);
       doc.setLineWidth(0.3);
-      doc.line(margin, pageHeight - 11, pageWidth - margin, pageHeight - 11);
+      doc.line(margin, bandTop, pageWidth - margin, bandTop);
+
+      // Lockup occupies the left of the band; the page number sits far right,
+      // clear of it. The old "MuleSoo Digital Services | …" line is gone — the
+      // lockup states it, and repeating it would be noise.
+      const { y: lockY, h: lockH } = stampAgencyCredit(doc, {
+        onDark: false,
+        align: 'left',
+        marginMm: margin,
+      });
+
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(...MUTED);
-      doc.text('MuleSoo Digital Services  |  Professional Web, App & AI Solutions  |  Pretoria, South Africa', margin, pageHeight - 6.5);
-      doc.text(`Page ${p} of ${totalPages}`, rightX, pageHeight - 6.5, { align: 'right' });
+      doc.text(`Page ${p} of ${totalPages}`, rightX, lockY + lockH / 2 + 1, { align: 'right' });
     }
 
     const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');

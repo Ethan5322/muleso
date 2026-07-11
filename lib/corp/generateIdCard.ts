@@ -1,6 +1,7 @@
 'use client';
 
 import jsPDF from 'jspdf';
+import { creditImage, CREDIT_COMPACT_ASPECT } from '../brand/agencyCredit';
 import QRCode from 'qrcode';
 import JsBarcode from 'jsbarcode';
 
@@ -256,10 +257,26 @@ async function renderIdCardCanvas(data: IdCardData): Promise<HTMLCanvasElement> 
     }
   }
 
-  // ---- Footer ----
-  setFont('normal', 4);
-  ctx.fillStyle = rgb(MUTED);
-  text('Property of MuleSoo Digital Services · www.mulesoo.com', W_MM / 2, H_MM - 1.6, 'center');
+  // ---- Footer: agency credit lockup ----
+  // The card is dark, so the light-ink one-line variant. Width is chosen so the
+  // lockup's height fits the strip left BELOW the barcode (which ends at 49.2mm)
+  // and above the card edge — it can never ride over the barcode or the photo.
+  const BARCODE_BOTTOM_MM = 49.4;
+  const availH = H_MM - BARCODE_BOTTOM_MM - 1.2; // leave 1.2mm at the trim edge
+  const creditH = Math.min(availH, 3.6);
+  const creditW = creditH * CREDIT_COMPACT_ASPECT;
+  const creditX = (W_MM - creditW) / 2;
+  const creditY = H_MM - 1.2 - creditH;
+
+  try {
+    const credit = await loadImg(creditImage(true, true));
+    ctx.drawImage(credit, mm(creditX), mm(creditY), mm(creditW), mm(creditH));
+  } catch {
+    // Never lose the attribution if the image fails — fall back to plain text.
+    setFont('normal', 4);
+    ctx.fillStyle = rgb(MUTED);
+    text('Designed & built by MuleSoo Digital Services · mulesoo.com', W_MM / 2, H_MM - 1.6, 'center');
+  }
 
   return canvas;
 }
