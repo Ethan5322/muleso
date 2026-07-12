@@ -20,6 +20,8 @@ import {
   CREDIT_ON_LIGHT_PNG,
   CREDIT_COMPACT_ON_DARK_PNG,
   CREDIT_COMPACT_ON_LIGHT_PNG,
+  CREDIT_STAMP_ON_DARK_PNG,
+  CREDIT_STAMP_ON_LIGHT_PNG,
 } from './creditAssets';
 
 /** Native aspect of the stacked lockup (width ÷ height). Fixed by the generator. */
@@ -28,8 +30,16 @@ export const CREDIT_ASPECT = 4.25;
 /** Native aspect of the one-line lockup, for tight card footers. */
 export const CREDIT_COMPACT_ASPECT = 11.923;
 
+/**
+ * Native aspect of the QR stamp — the stacked lockup plus a scan-me QR that
+ * opens mulesoo.com. Print it at 60mm wide or more, or the QR (the right-hand
+ * ~16% of the artwork) lands under 10mm and phones stop reading it.
+ */
+export const CREDIT_STAMP_ASPECT = 5.583;
+
 /** Pick the right artwork for the background and the space available. */
-export function creditImage(onDark: boolean, compact = false): string {
+export function creditImage(onDark: boolean, compact = false, qr = false): string {
+  if (qr) return onDark ? CREDIT_STAMP_ON_DARK_PNG : CREDIT_STAMP_ON_LIGHT_PNG;
   if (compact) return onDark ? CREDIT_COMPACT_ON_DARK_PNG : CREDIT_COMPACT_ON_LIGHT_PNG;
   return onDark ? CREDIT_ON_DARK_PNG : CREDIT_ON_LIGHT_PNG;
 }
@@ -58,6 +68,12 @@ export interface CreditOptions {
    * on the corporate ID card. This is the house style for a client PDF footer.
    */
   compact?: boolean;
+  /**
+   * The "MuleSoo credit stamp": the stacked lockup plus a scan-me QR that
+   * opens mulesoo.com. Wins over `compact`. Defaults to 66mm wide so the QR
+   * prints at ~10.5mm and stays phone-scannable — don't go below 60mm.
+   */
+  qr?: boolean;
 }
 
 /** Y coordinate above which page content must stop, to stay clear of the credit. */
@@ -70,11 +86,12 @@ export function creditBandTop(doc: jsPDF): number {
  * Returns the rectangle it occupied, so callers can assert nothing collides.
  */
 export function stampAgencyCredit(doc: jsPDF, opts: CreditOptions = {}) {
-  const { onDark = false, align = 'right', marginMm = 14, compact = false } = opts;
+  const { onDark = false, align = 'right', marginMm = 14, compact = false, qr = false } = opts;
 
-  const aspect = compact ? CREDIT_COMPACT_ASPECT : CREDIT_ASPECT;
-  // The one-liner is a much wider shape, so it wants a wider default footprint.
-  const widthMm = opts.widthMm ?? (compact ? 82 : CREDIT_WIDTH_MM);
+  const aspect = qr ? CREDIT_STAMP_ASPECT : compact ? CREDIT_COMPACT_ASPECT : CREDIT_ASPECT;
+  // The one-liner is a much wider shape, so it wants a wider default footprint;
+  // the QR stamp must keep its code at ~10mm to stay scannable.
+  const widthMm = opts.widthMm ?? (qr ? 66 : compact ? 82 : CREDIT_WIDTH_MM);
 
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
@@ -90,7 +107,7 @@ export function stampAgencyCredit(doc: jsPDF, opts: CreditOptions = {}) {
 
   // PNG with alpha — it composites onto whatever is beneath rather than
   // punching an opaque box over the artwork.
-  doc.addImage(creditImage(onDark, compact), 'PNG', x, y, w, h, undefined, 'FAST');
+  doc.addImage(creditImage(onDark, compact, qr), 'PNG', x, y, w, h, undefined, 'FAST');
 
   return { x, y, w, h };
 }

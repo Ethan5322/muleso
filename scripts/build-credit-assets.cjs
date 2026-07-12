@@ -26,6 +26,8 @@ const dark = read('mulesoo-credit-on-dark.png');
 const light = read('mulesoo-credit-on-light.png');
 const compactDark = read('mulesoo-credit-compact-on-dark.png');
 const compactLight = read('mulesoo-credit-compact-on-light.png');
+const stampDark = read('mulesoo-credit-stamp-on-dark.png');
+const stampLight = read('mulesoo-credit-stamp-on-light.png');
 
 fs.writeFileSync(
   OUT,
@@ -49,6 +51,14 @@ export const CREDIT_COMPACT_ON_DARK_PNG =
 /** One-line lockup, dark ink — for a light ID card footer. Aspect 11.92. */
 export const CREDIT_COMPACT_ON_LIGHT_PNG =
   '${compactLight}';
+
+/** Stacked lockup + scan-me QR to mulesoo.com, light ink. Aspect 5.58. Print ≥60mm wide. */
+export const CREDIT_STAMP_ON_DARK_PNG =
+  '${stampDark}';
+
+/** Stacked lockup + scan-me QR to mulesoo.com, dark ink. Aspect 5.58. Print ≥60mm wide. */
+export const CREDIT_STAMP_ON_LIGHT_PNG =
+  '${stampLight}';
 `
 );
 

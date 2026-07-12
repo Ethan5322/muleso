@@ -26,6 +26,7 @@
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer-core');
+const QRCode = require('qrcode');
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, 'public', 'brand');
@@ -141,6 +142,69 @@ body{display:flex;align-items:center;gap:12px;font-family:'DM Sans',sans-serif;
 </body></html>`;
 }
 
+// ── QR stamp variant ────────────────────────────────────────────────────────
+// The stacked lockup plus a scannable QR to mulesoo.com — the "MuleSoo credit
+// stamp". The QR lives in a white rounded tile so it scans on dark and light
+// pages alike. Print at ≥60mm wide so the QR lands at ≥10mm; the compact
+// one-liner is too short to ever host a scannable code, hence this layout.
+const SW = 536;
+const SH = 96;
+
+function stamp(onDark, qrDataUrl) {
+  const primary = onDark ? '#FFFFFF' : '#0B1220';
+  const muted = onDark ? 'rgba(233,237,245,0.62)' : 'rgba(11,18,32,0.55)';
+  const contact = onDark ? 'rgba(233,237,245,0.82)' : 'rgba(11,18,32,0.72)';
+  const divider = onDark ? 'rgba(232,184,75,0.42)' : 'rgba(232,184,75,0.62)';
+
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+${fontFaces()}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:${SW}px;height:${SH}px;background:transparent;}
+body{
+  display:flex;align-items:center;gap:18px;
+  font-family:'DM Sans',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+}
+.logo{width:70px;height:70px;flex:none;display:block;}
+.bar{width:1.5px;height:62px;background:${divider};flex:none;border-radius:1px;}
+.kicker{
+  font-family:'DM Sans';font-weight:500;font-size:10px;letter-spacing:2.4px;
+  text-transform:uppercase;color:${muted};line-height:1;
+}
+.wordmark{
+  font-family:'Sora';font-weight:800;font-size:25px;letter-spacing:0.6px;
+  color:${primary};line-height:1;margin-top:7px;white-space:nowrap;
+}
+.dot{
+  display:inline-block;width:4.5px;height:4.5px;border-radius:50%;
+  background:${GOLD};vertical-align:middle;margin:0 3px 4px 3px;
+}
+.contact{
+  font-family:'DM Sans';font-weight:400;font-size:12px;letter-spacing:0.1px;
+  color:${contact};line-height:1;margin-top:9px;white-space:nowrap;
+}
+.sep{color:${divider};padding:0 6px;}
+.qrtile{
+  flex:none;width:88px;height:88px;background:#FFFFFF;border-radius:8px;
+  border:1.5px solid ${divider};
+  display:flex;align-items:center;justify-content:center;
+}
+.qrtile img{width:76px;height:76px;display:block;}
+</style></head><body>
+  <img class="logo" src="${LOGO_ICON}"/>
+  <div class="bar"></div>
+  <div style="flex:1;">
+    <div class="kicker">Designed &amp; Built By</div>
+    <div class="wordmark">MULE<span class="dot"></span>SOO<span
+      style="font-family:'DM Sans';font-weight:500;font-size:10px;letter-spacing:1.7px;
+             color:${muted};margin-left:10px;vertical-align:2px;">DIGITAL SERVICES</span></div>
+    <div class="contact">mulesoo.com<span class="sep">|</span>hello@mulesoo.com</div>
+  </div>
+  <div class="qrtile"><img src="${qrDataUrl}"/></div>
+</body></html>`;
+}
+
 function findChrome() {
   const c = [
     process.env.PUPPETEER_EXECUTABLE_PATH,
@@ -187,11 +251,21 @@ async function assertNoOverflow(page, label, w, h) {
   });
 
   try {
+    // High-res QR (crisp at SCALE 4), quiet zone provided by the white tile.
+    const qrDataUrl = await QRCode.toDataURL('https://mulesoo.com', {
+      errorCorrectionLevel: 'M',
+      margin: 1,
+      width: 76 * SCALE,
+      color: { dark: '#0B1220', light: '#FFFFFF' },
+    });
+
     const jobs = [
       ['mulesoo-credit-on-dark', lockup(true), W, H],
       ['mulesoo-credit-on-light', lockup(false), W, H],
       ['mulesoo-credit-compact-on-dark', compact(true), CW, CH],
       ['mulesoo-credit-compact-on-light', compact(false), CW, CH],
+      ['mulesoo-credit-stamp-on-dark', stamp(true, qrDataUrl), SW, SH],
+      ['mulesoo-credit-stamp-on-light', stamp(false, qrDataUrl), SW, SH],
     ];
 
     for (const [name, html, w, h] of jobs) {
@@ -218,6 +292,7 @@ async function assertNoOverflow(page, label, w, h) {
       {
         stacked: { width: W, height: H, aspect: +(W / H).toFixed(4) },
         compact: { width: CW, height: CH, aspect: +(CW / CH).toFixed(4) },
+        stamp: { width: SW, height: SH, aspect: +(SW / SH).toFixed(4) },
         scale: SCALE,
       },
       null,
