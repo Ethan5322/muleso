@@ -2,12 +2,19 @@
 // One unified walk() drives BOTH the measure pass (to compute the table of
 // contents / page numbers) and the draw pass, so numbering always matches.
 import { jsPDF } from 'jspdf';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import blocks from './content.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// The agency-credit lockup (one-line, dark ink), stamped bottom-centre of
+// every content page — the house arrangement on all MuleSoo PDFs.
+const CREDIT = `data:image/png;base64,${readFileSync(
+  join(__dirname, '..', '..', 'public', 'brand', 'mulesoo-credit-compact-on-light.png')
+).toString('base64')}`;
+const CREDIT_ASPECT = 11.923;
 
 const C = {
   bg: [5, 8, 16], card: [13, 21, 40], blue: [0, 200, 255], purple: [123, 47, 255],
@@ -37,8 +44,12 @@ let OFFSET = 0; // printed-number offset (cover + toc pages), set after measurin
 
 function footer(n) {
   setDraw(C.line); doc.setLineWidth(0.5); doc.line(ML, PH - MB + 20, PW - MR, PH - MB + 20);
+  // Lockup centred below the rule; short title left, page number right, both
+  // horizontally clear of it.
+  const cw = 232, ch = cw / CREDIT_ASPECT;
+  doc.addImage(CREDIT, 'PNG', (PW - cw) / 2, PH - MB + 24, cw, ch, undefined, 'FAST');
   setText(C.soft); doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-  doc.text('MULE•SOO  —  The Growth Playbook', ML, PH - MB + 32);
+  doc.text('The Growth Playbook', ML, PH - MB + 32);
   doc.text(String(n), PW - MR, PH - MB + 32, { align: 'right' });
 }
 
