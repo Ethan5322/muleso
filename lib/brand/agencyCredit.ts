@@ -53,6 +53,11 @@ export interface CreditOptions {
   widthMm?: number;
   /** Page side margin (mm) used for left/right alignment. */
   marginMm?: number;
+  /**
+   * Use the one-line lockup instead of the stacked one — the exact arrangement
+   * on the corporate ID card. This is the house style for a client PDF footer.
+   */
+  compact?: boolean;
 }
 
 /** Y coordinate above which page content must stop, to stay clear of the credit. */
@@ -65,13 +70,17 @@ export function creditBandTop(doc: jsPDF): number {
  * Returns the rectangle it occupied, so callers can assert nothing collides.
  */
 export function stampAgencyCredit(doc: jsPDF, opts: CreditOptions = {}) {
-  const { onDark = false, align = 'right', widthMm = CREDIT_WIDTH_MM, marginMm = 14 } = opts;
+  const { onDark = false, align = 'right', marginMm = 14, compact = false } = opts;
+
+  const aspect = compact ? CREDIT_COMPACT_ASPECT : CREDIT_ASPECT;
+  // The one-liner is a much wider shape, so it wants a wider default footprint.
+  const widthMm = opts.widthMm ?? (compact ? 82 : CREDIT_WIDTH_MM);
 
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
 
   const w = widthMm;
-  const h = w / CREDIT_ASPECT; // never distort the mark
+  const h = w / aspect; // never distort the mark
   const y = pageH - CREDIT_BOTTOM_MARGIN_MM - h;
 
   let x: number;
@@ -81,7 +90,7 @@ export function stampAgencyCredit(doc: jsPDF, opts: CreditOptions = {}) {
 
   // PNG with alpha — it composites onto whatever is beneath rather than
   // punching an opaque box over the artwork.
-  doc.addImage(onDark ? CREDIT_ON_DARK_PNG : CREDIT_ON_LIGHT_PNG, 'PNG', x, y, w, h, undefined, 'FAST');
+  doc.addImage(creditImage(onDark, compact), 'PNG', x, y, w, h, undefined, 'FAST');
 
   return { x, y, w, h };
 }

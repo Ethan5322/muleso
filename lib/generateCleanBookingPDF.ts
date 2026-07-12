@@ -488,13 +488,14 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
       doc.setLineWidth(0.3);
       doc.line(margin, bandTop, pageWidth - margin, bandTop);
 
-      // Lockup occupies the left of the band; the page number sits far right,
-      // clear of it. The old "MuleSoo Digital Services | …" line is gone — the
-      // lockup states it, and repeating it would be noise.
+      // The one-line lockup, centred — the exact arrangement on the corporate ID
+      // card, now the house style across our client PDFs. The page number sits
+      // far right, clear of it. The old "MuleSoo Digital Services | …" line is
+      // gone — the lockup states it, and repeating it would be noise.
       const { y: lockY, h: lockH } = stampAgencyCredit(doc, {
         onDark: false,
-        align: 'left',
-        marginMm: margin,
+        align: 'center',
+        compact: true,
       });
 
       doc.setFont('helvetica', 'normal');

@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
+import { stampAgencyCredit } from './brand/agencyCredit';
 
 export const generateCleanTermsPDF = async () => {
   const doc = new jsPDF({
@@ -9,7 +10,6 @@ export const generateCleanTermsPDF = async () => {
   });
 
   const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 12;
   const contentWidth = pageWidth - 2 * margin;
 
@@ -248,18 +248,22 @@ export const generateCleanTermsPDF = async () => {
   doc.line(margin + 40, yPos, pageWidth - margin, yPos);
   doc.text('Date', margin + 40, yPos + 2);
 
-  // FOOTER
-  const footerY = pageHeight - 8;
-  doc.setDrawColor(200, 200, 200);
-  doc.setLineWidth(0.3);
-  doc.line(margin, footerY - 2, pageWidth - margin, footerY - 2);
+  // FOOTER — the agency credit, arranged exactly as it is on the corporate ID
+  // card: the one-line lockup, centred at the foot of the page, in MuleSoo's own
+  // typefaces. It carries mulesoo.com; the contact line above it adds the phone,
+  // which a contract is exactly the place to want.
+  const credit = stampAgencyCredit(doc, { onDark: false, align: 'center', compact: true });
 
   doc.setFontSize(6);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(100, 100, 100);
-  doc.text('MuleSoo Digital Services | Pretoria | hello@mulesoo.com | +27 68 852 9333', pageWidth / 2, footerY, {
+  doc.text('Pretoria, South Africa  |  hello@mulesoo.com  |  +27 68 852 9333', pageWidth / 2, credit.y - 2, {
     align: 'center',
   });
+
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.3);
+  doc.line(margin, credit.y - 6, pageWidth - margin, credit.y - 6);
 
   const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
   const filename = `MuleSoo_Terms_and_Conditions_${date}.pdf`;

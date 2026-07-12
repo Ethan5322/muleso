@@ -334,17 +334,18 @@ export function buildGuide(rawGuide: Guide, opts: BuildOptions = {}): Uint8Array
     doc.setPage(p);
     doc.setDrawColor(228, 233, 244);
     doc.setLineWidth(0.3);
-    doc.line(M, H - 14, W - M, H - 14);
+    doc.line(M, H - 15, W - M, H - 15);
 
-    // Agency credit lockup replaces the plain "MuleSoo Digital Services" line.
-    // Narrower than the default so it cannot reach the centred watermark: it
-    // spans M → M+30mm, the watermark is centred on W/2 (≈105mm).
-    const GUIDE_CREDIT_W = 30;
+    // The one-line lockup, centred — the exact arrangement on the corporate ID
+    // card, the house style on every client PDF. Sized to sit inside the strip
+    // between the divider (H-15) and the 10mm bottom margin, so the licence
+    // line can live at the left edge without ever reaching it.
+    const GUIDE_CREDIT_W = 46; // h ≈ 3.9mm → top at H-13.9, clear of the divider
     stampAgencyCredit(doc, {
       onDark: false,
-      align: 'left',
+      align: 'center',
+      compact: true,
       widthMm: GUIDE_CREDIT_W,
-      marginMm: M,
     });
 
     doc.setFont('helvetica', 'normal');
@@ -352,9 +353,11 @@ export function buildGuide(rawGuide: Guide, opts: BuildOptions = {}): Uint8Array
     setText(MUTED);
     doc.text(`${p - 1}`, W - M, H - 9.5, { align: 'right' });
     if (opts.watermark) {
+      // Centred BELOW the lockup (the same stack the Terms footer uses) so a
+      // long buyer name can never run into the centred credit.
       doc.setFontSize(7);
       setText([170, 180, 198]);
-      doc.text(`Licensed to ${opts.watermark} — not for redistribution`, W / 2, H - 9.5, { align: 'center' });
+      doc.text(`Licensed to ${opts.watermark} — not for redistribution`, W / 2, H - 6, { align: 'center' });
       // faint diagonal ownership stamp
       doc.setTextColor(232, 236, 244);
       doc.setFontSize(30);

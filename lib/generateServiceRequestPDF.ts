@@ -261,7 +261,8 @@ export const generateServiceRequestPDF = (bookingData: BookingData) => {
   doc.setTextColor(128, 128, 128);
   doc.text('Pretoria, South Africa', margin, bandTop + 6);
 
-  stampAgencyCredit(doc, { onDark: false, align: 'right', marginMm: margin });
+  // One-line lockup, centred — the ID-card arrangement, as on every client PDF.
+  stampAgencyCredit(doc, { onDark: false, align: 'center', compact: true });
 
   const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
   const filename = `MuleSoo_ServiceRequest_${bookingData.fullName.replace(/\s+/g, '_')}_${date}.pdf`;
