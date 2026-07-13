@@ -50,6 +50,17 @@ function compose(pillar, platform, occurrence, dayNum) {
     [hook, body] = pool[idx];
   }
 
+  // የሌላ ሰው ንግግር መሆኑ በግልጽ መጠቀስ አለበት። A quoted opinion left bare reads as
+  // MuleSoo's own view — the exact opposite of what a myth-busting post means.
+  // The lead-in stays on the SAME line as the quote, so the image headline
+  // (which takes the first line) carries the attribution with it.
+  if (pillar === 'MYTH') {
+    hook = `ብዙ ጊዜ የሚባል ነገር፦ ${hook}`;
+    body = `እውነታው፦ ${body}`;
+  } else if (/^[«"“]/.test(hook)) {
+    hook = `የሰማነው፦ ${hook}`;
+  }
+
   const cta = CTAS[(dayNum + PLATFORMS.findIndex((p) => p.key === platform.key)) % CTAS.length];
   const tags = [...TAGS.core, ...TAGS.extra].slice(0, platform.tags).join(' ');
 

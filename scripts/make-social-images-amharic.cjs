@@ -83,15 +83,32 @@ const PROOF_IMAGE_HOOK = 'እውነተኛ ስራ። እውነተኛ ውጤት።
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+/**
+ * የተጠቀሰ ንግግር ብቻውን ሲቀር የ MuleSoo አስተያየት ይመስላል። A quotation set alone in
+ * large type reads as the poster's own opinion, so every quoted line carries a
+ * label above it naming whose words these are, and the «ብዙ ጊዜ የሚባል ነገር፦»
+ * lead-in is lifted out of the headline so the quote stays the visual.
+ */
 function hookOf(rec) {
   let line = (rec.post_text || '').split(/\n/).map((l) => l.trim()).find((l) => l.length > 0) || '';
   if (line.includes('[') || !line) line = PROOF_IMAGE_HOOK;
   line = line.replace(/#\S+/g, '').replace(/https?:\/\/\S+/g, '').trim();
+
+  let attrib = null;
+  const lead = line.match(/^(.*?[፦:])\s*(["“«].*)$/);
+  if (rec.pillar === 'MYTH') {
+    attrib = 'ሰዎች የሚሉት';
+    if (lead) line = lead[2];
+  } else if (/^["“«]/.test(line) || lead) {
+    attrib = 'የሰማነው';
+    if (lead) line = lead[2];
+  }
+
   if (line.length > 120) {
     const cut = line.slice(0, 120);
     line = cut.slice(0, Math.max(cut.lastIndexOf('። '), cut.lastIndexOf(' '))) + '…';
   }
-  return line;
+  return { line, attrib };
 }
 
 // Ethiopic glyphs run wider and taller than Latin — sizes step down earlier.
@@ -102,13 +119,12 @@ function fontSize(len) {
   return 42;
 }
 
-const MONTHS_AM = ['ጃንዋሪ','ፌብሩዋሪ','ማርች','ኤፕሪል','ሜይ','ጁን','ጁላይ','ኦገስት','ሴፕቴምበር','ኦክቶበር','ኖቬምበር','ዲሴምበር'];
+// ቀን በምስሉ ላይ አይጻፍም — ልጥፉ በማንኛውም ቀን መለጠፍ አለበት። The calendar lives in the
+// folder and file names, not in the artwork.
 
 function cardHtml(day) {
   const p = PILLAR[day.pillar] || PILLAR.EDUCATE;
-  const hook = hookOf(day);
-  const [y, m, d] = day.date.split('-');
-  const dateLabel = `${MONTHS_AM[Number(m) - 1]} ${Number(d)}፣ ${y}`;
+  const { line: hook, attrib } = hookOf(day);
 
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 ${fontFaces()}
@@ -131,12 +147,14 @@ body{
 .top{display:flex;justify-content:space-between;align-items:center;position:relative;}
 .wordmark{font-family:'Sora';font-weight:800;font-size:26px;letter-spacing:2px;}
 .wordmark .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#E8B84B;margin:0 4px 3px;}
-.date{font-family:'Noto Ethiopic','DM Sans';font-weight:500;font-size:20px;color:#A8B2D0;}
 .chip{margin-top:84px;align-self:flex-start;position:relative;
   font-family:'Noto Ethiopic','Sora';font-weight:600;font-size:21px;
   color:${p.color};border:2px solid ${p.color}66;background:${p.color}14;
   border-radius:99px;padding:12px 30px;}
-.hook{flex:1;display:flex;align-items:center;position:relative;}
+.hook{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;}
+.attrib{font-family:'Noto Ethiopic','Sora';font-weight:600;font-size:22px;
+  color:#A8B2D0;margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.attrib::after{content:'';height:1px;width:70px;background:#A8B2D0;opacity:0.45;}
 .hook h1{font-family:'Sora','Noto Ethiopic';font-weight:800;font-size:${fontSize(hook.length)}px;line-height:1.38;
   max-width:900px;}
 .rule{height:3px;width:170px;border-radius:2px;position:relative;
@@ -149,10 +167,12 @@ body{
   <div class="grid"></div>
   <div class="top">
     <div class="wordmark">MULE<span class="dot"></span>SOO</div>
-    <div class="date">ቀን ${esc(day.day_number)} · ${esc(dateLabel)}</div>
   </div>
   <div class="chip">${esc(p.label)}</div>
-  <div class="hook"><h1>${esc(hook)}</h1></div>
+  <div class="hook">
+    ${attrib ? `<div class="attrib">${esc(attrib)}</div>` : ''}
+    <h1>${esc(hook)}</h1>
+  </div>
   <div class="rule"></div>
   <div class="stamp">
     <img src="${STAMP}"/>

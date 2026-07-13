@@ -137,6 +137,26 @@ body{font-family:'DM Sans','Noto Ethiopic',sans-serif;color:#0B1220;font-size:9.
 </body></html>`;
 }
 
+/**
+ * Write over a path a viewer or OneDrive may be holding open. Retry, and if the
+ * file is genuinely locked, park the new build beside it rather than aborting
+ * the whole year's build half-way through.
+ */
+function writePdf(file, buf, locked) {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      fs.writeFileSync(file, buf);
+      return true;
+    } catch (e) {
+      if (e.code !== 'EBUSY' && e.code !== 'EPERM') throw e;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 400);
+    }
+  }
+  fs.writeFileSync(file.replace(/\.pdf$/, '.NEW.pdf'), buf);
+  locked.push(path.basename(file));
+  return false;
+}
+
 function findChrome() {
   const c = [
     process.env.PUPPETEER_EXECUTABLE_PATH,
@@ -174,6 +194,7 @@ function findChrome() {
     args: ['--font-render-hinting=none', '--force-color-profile=srgb'],
   });
 
+  const locked = [];
   try {
     for (const [ym, days] of [...byMonth.entries()].sort()) {
       days.sort((a, b) => a.date.localeCompare(b.date));
@@ -185,8 +206,7 @@ function findChrome() {
       await page.evaluate(() => document.fonts.ready);
 
       const file = path.join(OUT, `MuleSoo-Amharic-Posts-${ym}-${MONTHS_EN[mIdx]}.pdf`);
-      await page.pdf({
-        path: file,
+      const buf = await page.pdf({
         format: 'A4',
         printBackground: true,
         margin: { top: '14mm', bottom: '16mm', left: '13mm', right: '13mm' },
@@ -200,14 +220,20 @@ function findChrome() {
       });
       await page.close();
 
-      const kb = (fs.statSync(file).size / 1024).toFixed(0);
-      console.log(`  ${path.basename(file).padEnd(44)} ${String(days.length).padStart(2)} days  ${kb.padStart(5)} KB`);
+      const ok = writePdf(file, buf, locked);
+      const kb = (buf.length / 1024).toFixed(0);
+      console.log(`  ${path.basename(file).padEnd(44)} ${String(days.length).padStart(2)} days  ${kb.padStart(5)} KB${ok ? '' : '   LOCKED → wrote .NEW.pdf'}`);
     }
   } finally {
     await browser.close();
   }
 
   console.log(`\n  written to marketing/Social-Calendar-Amharic/PDF/`);
+  if (locked.length) {
+    console.log(`\n  ${locked.length} file(s) were open and could not be replaced:`);
+    for (const f of locked) console.log(`    ${f}`);
+    console.log(`  Close them and re-run; the fresh build is beside each as *.NEW.pdf.`);
+  }
 })().catch((e) => {
   console.error(e.message);
   process.exit(1);

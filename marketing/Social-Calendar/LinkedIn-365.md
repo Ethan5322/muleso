@@ -51,9 +51,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 4 — 2026-01-04 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We are too small for automation."
+A myth we hear constantly: "We are too small for automation."
 
-Small is exactly when your time is most expensive, because it is all you have.
+Truth: Small is exactly when your time is most expensive, because it is all you have.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -139,9 +139,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 11 — 2026-01-11 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We will fix the website after we get customers."
+A myth we hear constantly: "We will fix the website after we get customers."
 
-The website is how you get the customers. You have the order backwards.
+Truth: The website is how you get the customers. You have the order backwards.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -227,9 +227,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 18 — 2026-01-18 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "AI writes our content now."
+A myth we hear constantly: "AI writes our content now."
 
-And your readers can tell. Use it to think, not to speak.
+Truth: And your readers can tell. Use it to think, not to speak.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -315,9 +315,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 25 — 2026-01-25 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "SEO is a scam."
+A myth we hear constantly: "SEO is a scam."
 
-Half the industry, yes. The other half is: fast pages, real content, and telling Google your pages exist.
+Truth: Half the industry, yes. The other half is: fast pages, real content, and telling Google your pages exist.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -403,9 +403,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 32 — 2026-02-01 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Just boost the post."
+A myth we hear constantly: "Just boost the post."
 
-Boosting a post that points at a broken site is paying to lose faster.
+Truth: Boosting a post that points at a broken site is paying to lose faster.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -491,9 +491,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 39 — 2026-02-08 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Nobody scans QR codes."
+A myth we hear constantly: "Nobody scans QR codes."
 
-Every restaurant menu in the country disagrees.
+Truth: Every restaurant menu in the country disagrees.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -579,9 +579,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 46 — 2026-02-15 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "AI will replace my staff."
+A myth we hear constantly: "AI will replace my staff."
 
-It will replace the parts of their day they hate. That is different, and better.
+Truth: It will replace the parts of their day they hate. That is different, and better.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -667,9 +667,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 53 — 2026-02-22 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We do not need a logo, we need sales."
+A myth we hear constantly: "We do not need a logo, we need sales."
 
-The logo is not the point. Being memorable at the moment of decision is.
+Truth: The logo is not the point. Being memorable at the moment of decision is.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -755,9 +755,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 60 — 2026-03-01 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Dark mode is a feature."
+A myth we hear constantly: "Dark mode is a feature."
 
-It is a preference. Your broken checkout is a feature request.
+Truth: It is a preference. Your broken checkout is a feature request.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -843,9 +843,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 67 — 2026-03-08 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "A good website costs six figures."
+A myth we hear constantly: "A good website costs six figures."
 
-It does not. It costs clarity about what the site is for. We start at R3,500.
+Truth: It does not. It costs clarity about what the site is for. We start at R3,500.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -931,9 +931,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 74 — 2026-03-15 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Chatbots annoy customers."
+A myth we hear constantly: "Chatbots annoy customers."
 
-Bad ones do. So do phone queues, and you still have one of those.
+Truth: Bad ones do. So do phone queues, and you still have one of those.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1019,9 +1019,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 81 — 2026-03-22 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We need to be on every platform."
+A myth we hear constantly: "We need to be on every platform."
 
-You need to be excellent on one. Pick where your buyers already are.
+Truth: You need to be excellent on one. Pick where your buyers already are.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1107,9 +1107,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 88 — 2026-03-29 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Cheap now, redo it later."
+A myth we hear constantly: "Cheap now, redo it later."
 
-Later costs the original price plus the rebuild plus the lost year.
+Truth: Later costs the original price plus the rebuild plus the lost year.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1195,9 +1195,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 95 — 2026-04-05 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Design is subjective."
+A myth we hear constantly: "Design is subjective."
 
-Taste is subjective. Conversion is measurable.
+Truth: Taste is subjective. Conversion is measurable.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1283,9 +1283,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 102 — 2026-04-12 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "More pages means better SEO."
+A myth we hear constantly: "More pages means better SEO."
 
-Two hundred thin pages rank worse than ten good ones.
+Truth: Two hundred thin pages rank worse than ten good ones.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1371,9 +1371,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 109 — 2026-04-19 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Our industry is different."
+A myth we hear constantly: "Our industry is different."
 
-Your industry has a booking form, an invoice, and a customer who wants an answer. Same as everyone.
+Truth: Your industry has a booking form, an invoice, and a customer who wants an answer. Same as everyone.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1459,9 +1459,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 116 — 2026-04-26 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "I will do the website myself, later."
+A myth we hear constantly: "I will do the website myself, later."
 
-"Later" is doing a lot of work in that sentence.
+Truth: "Later" is doing a lot of work in that sentence.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1547,9 +1547,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 123 — 2026-05-03 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "A template is the same as custom."
+A myth we hear constantly: "A template is the same as custom."
 
-Until you need it to do the one thing your business actually does.
+Truth: Until you need it to do the one thing your business actually does.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1635,9 +1635,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 130 — 2026-05-10 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Analytics is spying on customers."
+A myth we hear constantly: "Analytics is spying on customers."
 
-Knowing which page loses people is not surveillance. It is basic hygiene.
+Truth: Knowing which page loses people is not surveillance. It is basic hygiene.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1723,9 +1723,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 137 — 2026-05-17 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Nobody in South Africa buys online."
+A myth we hear constantly: "Nobody in South Africa buys online."
 
-Your customers are already buying online. Just not from you.
+Truth: Your customers are already buying online. Just not from you.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1811,9 +1811,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 144 — 2026-05-24 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Our customers are not online."
+A myth we hear constantly: "Our customers are not online."
 
-They are on WhatsApp right now. That is online.
+Truth: They are on WhatsApp right now. That is online.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1899,9 +1899,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 151 — 2026-05-31 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We will launch when it is perfect."
+A myth we hear constantly: "We will launch when it is perfect."
 
-You will launch when a competitor forces you to, and it still will not be perfect.
+Truth: You will launch when a competitor forces you to, and it still will not be perfect.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -1987,9 +1987,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 158 — 2026-06-07 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We are too small for automation."
+A myth we hear constantly: "We are too small for automation."
 
-Small is exactly when your time is most expensive, because it is all you have.
+Truth: Small is exactly when your time is most expensive, because it is all you have.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2075,9 +2075,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 165 — 2026-06-14 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We will fix the website after we get customers."
+A myth we hear constantly: "We will fix the website after we get customers."
 
-The website is how you get the customers. You have the order backwards.
+Truth: The website is how you get the customers. You have the order backwards.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2163,9 +2163,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 172 — 2026-06-21 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "AI writes our content now."
+A myth we hear constantly: "AI writes our content now."
 
-And your readers can tell. Use it to think, not to speak.
+Truth: And your readers can tell. Use it to think, not to speak.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2251,9 +2251,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 179 — 2026-06-28 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "SEO is a scam."
+A myth we hear constantly: "SEO is a scam."
 
-Half the industry, yes. The other half is: fast pages, real content, and telling Google your pages exist.
+Truth: Half the industry, yes. The other half is: fast pages, real content, and telling Google your pages exist.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2339,9 +2339,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 186 — 2026-07-05 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Just boost the post."
+A myth we hear constantly: "Just boost the post."
 
-Boosting a post that points at a broken site is paying to lose faster.
+Truth: Boosting a post that points at a broken site is paying to lose faster.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2427,9 +2427,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 193 — 2026-07-12 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Nobody scans QR codes."
+A myth we hear constantly: "Nobody scans QR codes."
 
-Every restaurant menu in the country disagrees.
+Truth: Every restaurant menu in the country disagrees.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2515,9 +2515,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 200 — 2026-07-19 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "AI will replace my staff."
+A myth we hear constantly: "AI will replace my staff."
 
-It will replace the parts of their day they hate. That is different, and better.
+Truth: It will replace the parts of their day they hate. That is different, and better.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2603,9 +2603,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 207 — 2026-07-26 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We do not need a logo, we need sales."
+A myth we hear constantly: "We do not need a logo, we need sales."
 
-The logo is not the point. Being memorable at the moment of decision is.
+Truth: The logo is not the point. Being memorable at the moment of decision is.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2691,9 +2691,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 214 — 2026-08-02 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Dark mode is a feature."
+A myth we hear constantly: "Dark mode is a feature."
 
-It is a preference. Your broken checkout is a feature request.
+Truth: It is a preference. Your broken checkout is a feature request.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2779,9 +2779,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 221 — 2026-08-09 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "A good website costs six figures."
+A myth we hear constantly: "A good website costs six figures."
 
-It does not. It costs clarity about what the site is for. We start at R3,500.
+Truth: It does not. It costs clarity about what the site is for. We start at R3,500.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2867,9 +2867,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 228 — 2026-08-16 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Chatbots annoy customers."
+A myth we hear constantly: "Chatbots annoy customers."
 
-Bad ones do. So do phone queues, and you still have one of those.
+Truth: Bad ones do. So do phone queues, and you still have one of those.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -2955,9 +2955,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 235 — 2026-08-23 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We need to be on every platform."
+A myth we hear constantly: "We need to be on every platform."
 
-You need to be excellent on one. Pick where your buyers already are.
+Truth: You need to be excellent on one. Pick where your buyers already are.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3043,9 +3043,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 242 — 2026-08-30 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Cheap now, redo it later."
+A myth we hear constantly: "Cheap now, redo it later."
 
-Later costs the original price plus the rebuild plus the lost year.
+Truth: Later costs the original price plus the rebuild plus the lost year.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3131,9 +3131,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 249 — 2026-09-06 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Design is subjective."
+A myth we hear constantly: "Design is subjective."
 
-Taste is subjective. Conversion is measurable.
+Truth: Taste is subjective. Conversion is measurable.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3219,9 +3219,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 256 — 2026-09-13 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "More pages means better SEO."
+A myth we hear constantly: "More pages means better SEO."
 
-Two hundred thin pages rank worse than ten good ones.
+Truth: Two hundred thin pages rank worse than ten good ones.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3307,9 +3307,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 263 — 2026-09-20 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Our industry is different."
+A myth we hear constantly: "Our industry is different."
 
-Your industry has a booking form, an invoice, and a customer who wants an answer. Same as everyone.
+Truth: Your industry has a booking form, an invoice, and a customer who wants an answer. Same as everyone.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3395,9 +3395,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 270 — 2026-09-27 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "I will do the website myself, later."
+A myth we hear constantly: "I will do the website myself, later."
 
-"Later" is doing a lot of work in that sentence.
+Truth: "Later" is doing a lot of work in that sentence.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3483,9 +3483,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 277 — 2026-10-04 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "A template is the same as custom."
+A myth we hear constantly: "A template is the same as custom."
 
-Until you need it to do the one thing your business actually does.
+Truth: Until you need it to do the one thing your business actually does.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3571,9 +3571,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 284 — 2026-10-11 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Analytics is spying on customers."
+A myth we hear constantly: "Analytics is spying on customers."
 
-Knowing which page loses people is not surveillance. It is basic hygiene.
+Truth: Knowing which page loses people is not surveillance. It is basic hygiene.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3659,9 +3659,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 291 — 2026-10-18 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Nobody in South Africa buys online."
+A myth we hear constantly: "Nobody in South Africa buys online."
 
-Your customers are already buying online. Just not from you.
+Truth: Your customers are already buying online. Just not from you.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3747,9 +3747,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 298 — 2026-10-25 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Our customers are not online."
+A myth we hear constantly: "Our customers are not online."
 
-They are on WhatsApp right now. That is online.
+Truth: They are on WhatsApp right now. That is online.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3835,9 +3835,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 305 — 2026-11-01 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We will launch when it is perfect."
+A myth we hear constantly: "We will launch when it is perfect."
 
-You will launch when a competitor forces you to, and it still will not be perfect.
+Truth: You will launch when a competitor forces you to, and it still will not be perfect.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -3923,9 +3923,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 312 — 2026-11-08 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We are too small for automation."
+A myth we hear constantly: "We are too small for automation."
 
-Small is exactly when your time is most expensive, because it is all you have.
+Truth: Small is exactly when your time is most expensive, because it is all you have.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4011,9 +4011,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 319 — 2026-11-15 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We will fix the website after we get customers."
+A myth we hear constantly: "We will fix the website after we get customers."
 
-The website is how you get the customers. You have the order backwards.
+Truth: The website is how you get the customers. You have the order backwards.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4099,9 +4099,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 326 — 2026-11-22 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "AI writes our content now."
+A myth we hear constantly: "AI writes our content now."
 
-And your readers can tell. Use it to think, not to speak.
+Truth: And your readers can tell. Use it to think, not to speak.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4187,9 +4187,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 333 — 2026-11-29 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "SEO is a scam."
+A myth we hear constantly: "SEO is a scam."
 
-Half the industry, yes. The other half is: fast pages, real content, and telling Google your pages exist.
+Truth: Half the industry, yes. The other half is: fast pages, real content, and telling Google your pages exist.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4275,9 +4275,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 340 — 2026-12-06 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Just boost the post."
+A myth we hear constantly: "Just boost the post."
 
-Boosting a post that points at a broken site is paying to lose faster.
+Truth: Boosting a post that points at a broken site is paying to lose faster.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4363,9 +4363,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 347 — 2026-12-13 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "Nobody scans QR codes."
+A myth we hear constantly: "Nobody scans QR codes."
 
-Every restaurant menu in the country disagrees.
+Truth: Every restaurant menu in the country disagrees.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4451,9 +4451,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 354 — 2026-12-20 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "AI will replace my staff."
+A myth we hear constantly: "AI will replace my staff."
 
-It will replace the parts of their day they hate. That is different, and better.
+Truth: It will replace the parts of their day they hate. That is different, and better.
 
 Disagree? Genuinely interested — the comments are open.
 
@@ -4539,9 +4539,9 @@ Happy to walk anyone through how it works. No pitch.
 ### Day 361 — 2026-12-27 (Sun) · MYTH
 
 ```
-A myth I hear constantly: "We do not need a logo, we need sales."
+A myth we hear constantly: "We do not need a logo, we need sales."
 
-The logo is not the point. Being memorable at the moment of decision is.
+Truth: The logo is not the point. Being memorable at the moment of decision is.
 
 Disagree? Genuinely interested — the comments are open.
 

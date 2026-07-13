@@ -83,16 +83,36 @@ const FALLBACK_HOOK = {
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-/** First strong line of the post, trimmed for a card. */
+/**
+ * First strong line of the post, split into an optional attribution label and
+ * the headline itself.
+ *
+ * A quotation set alone in 72px type is read as the poster's own opinion — so
+ * "We are too small for automation" would look like MuleSoo's view rather than
+ * the myth the post exists to demolish. Any quoted line therefore carries a
+ * visible label above it saying whose words these are, and the "Myth:" style
+ * lead-in is lifted out of the headline so the quote itself stays the visual.
+ */
 function hookOf(rec) {
   let line = (rec.post_text || '').split(/\n/).map((l) => l.trim()).find((l) => l.length > 0) || '';
   if (line.includes('[') || !line) line = FALLBACK_HOOK[rec.pillar] || 'World-class digital, built in Pretoria.';
   line = line.replace(/#\S+/g, '').replace(/https?:\/\/\S+/g, '').trim();
+
+  let attrib = null;
+  // Lift a lead-in ("A myth we hear constantly:", "Myth:") off the front of a quote.
+  const lead = line.match(/^(.*?:)\s*(["“«].*)$/);
+  if (rec.pillar === 'MYTH') {
+    attrib = 'WHAT PEOPLE SAY';
+    if (lead) line = lead[2];
+  } else if (/^["“«]/.test(line)) {
+    attrib = 'OVERHEARD';
+  }
+
   if (line.length > 150) {
     const cut = line.slice(0, 150);
     line = cut.slice(0, Math.max(cut.lastIndexOf('. '), cut.lastIndexOf(' '))) + '…';
   }
-  return line;
+  return { line, attrib };
 }
 
 function fontSize(len) {
@@ -102,13 +122,12 @@ function fontSize(len) {
   return 44;
 }
 
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+// No date is printed on the card: the post must be usable on any day. The
+// calendar lives in the folder and file names, not in the artwork.
 
 function cardHtml(day) {
   const p = PILLAR[day.pillar] || PILLAR.EDUCATE;
-  const hook = hookOf(day);
-  const [y, m, d] = day.date.split('-');
-  const dateLabel = `${Number(d)} ${MONTHS[Number(m) - 1]} ${y}`;
+  const { line: hook, attrib } = hookOf(day);
 
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 ${fontFaces()}
@@ -131,12 +150,15 @@ body{
 .top{display:flex;justify-content:space-between;align-items:center;position:relative;}
 .wordmark{font-family:'Sora';font-weight:800;font-size:26px;letter-spacing:2px;}
 .wordmark .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#E8B84B;margin:0 4px 3px;}
-.date{font-weight:500;font-size:20px;letter-spacing:2px;color:#A8B2D0;}
 .chip{margin-top:84px;align-self:flex-start;position:relative;
   font-family:'Sora';font-weight:600;font-size:19px;letter-spacing:4px;
   color:${p.color};border:2px solid ${p.color}66;background:${p.color}14;
   border-radius:99px;padding:12px 28px;}
-.hook{flex:1;display:flex;align-items:center;position:relative;}
+.hook{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;}
+.attrib{font-family:'Sora';font-weight:600;font-size:20px;letter-spacing:4px;
+  color:#A8B2D0;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:14px;}
+.attrib::after{content:'';height:1px;width:70px;background:#A8B2D0;opacity:0.45;}
 .hook h1{font-family:'Sora';font-weight:800;font-size:${fontSize(hook.length)}px;line-height:1.22;
   letter-spacing:0.2px;max-width:880px;}
 .rule{height:3px;width:170px;border-radius:2px;position:relative;
@@ -150,10 +172,12 @@ body{
   <div class="grid"></div>
   <div class="top">
     <div class="wordmark">MULE<span class="dot"></span>SOO</div>
-    <div class="date">DAY ${esc(day.day_number)} · ${esc(dateLabel)}</div>
   </div>
   <div class="chip">${esc(p.label)}</div>
-  <div class="hook"><h1>${esc(hook)}</h1></div>
+  <div class="hook">
+    ${attrib ? `<div class="attrib">${esc(attrib)}</div>` : ''}
+    <h1>${esc(hook)}</h1>
+  </div>
   <div class="rule"></div>
   <div class="stamp">
     <img src="${STAMP}"/>

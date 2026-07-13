@@ -300,11 +300,14 @@ function compose(pillar, platform, i) {
       return `${frame.hook}\n\n${line}\n\n${svc.name}: ${svc.outcome}.\n\n${cta}`;
     }
     case 'MYTH': {
+      // The myth is somebody ELSE's line. Every variant must attribute it out
+      // loud — a bare quote standing alone reads as MuleSoo's own opinion,
+      // which is the opposite of the post's point. Company voice: "we", not "I".
       const [myth, truth] = pick(MYTHS, i);
       if (platform.key === 'tiktok') return `Myth: ${myth}\n\nTruth: ${truth}`;
-      if (platform.key === 'x') return `${myth}\n\n${truth}`;
+      if (platform.key === 'x') return `Myth: ${myth}\n\nTruth: ${truth}`;
       if (platform.key === 'linkedin')
-        return `A myth I hear constantly: ${myth}\n\n${truth}\n\nDisagree? Genuinely interested — the comments are open.`;
+        return `A myth we hear constantly: ${myth}\n\nTruth: ${truth}\n\nDisagree? Genuinely interested — the comments are open.`;
       return `❌ Myth: ${myth}\n\n✅ Truth: ${truth}`;
     }
     case 'BEHIND': {
