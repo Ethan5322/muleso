@@ -51,6 +51,8 @@ BOXLINE   = HexColor("#AEB7C8")   # checkbox outline
 PAGE_BG   = HexColor("#FCFDFF")
 BAND_BG   = HexColor("#F2F5FB")
 WATER     = HexColor("#EEF1F7")
+FIELD_BG  = HexColor("#EEF4FF")   # fillable form-field background
+WHITE     = HexColor("#FFFFFF")
 
 # ----------------------------------------------------------------------------
 # Geometry
@@ -243,6 +245,12 @@ class Guide:
         self.page = 0
         self.y = TOP
         self.section = ""
+        self.fld = 0            # unique form-field counter
+        # ask viewers to render field appearances (typed text / ticks)
+        try:
+            self.c.acroForm.needAppearances = "true"
+        except Exception:
+            pass
 
     # ---- page furniture ----
     def _page_bg(self):
@@ -395,18 +403,23 @@ class Guide:
 
     def _checkbox(self, x, y, label, maxw):
         c = self.c
-        s = 9.5
-        c.setStrokeColor(BOXLINE)
-        c.setLineWidth(1.1)
-        c.roundRect(x, y, s, s, 1.6, stroke=1, fill=0)
+        s = 11
+        # interactive checkbox — ticks when the client clicks it
+        self.fld += 1
+        c.acroForm.checkbox(
+            name=f"cb{self.fld}", x=x, y=y - 1, size=s,
+            buttonStyle="check", shape="square", borderStyle="solid",
+            borderColor=BOXLINE, fillColor=FIELD_BG, textColor=BLUE_DEEP,
+            borderWidth=1, forceBorder=True,
+            tooltip=label if isinstance(label, str) else "")
         c.setFont("Sans", 10)
         c.setFillColor(INK)
         txt = label
-        while stringWidth(txt, "Sans", 10) > maxw - (s + 8) and len(txt) > 4:
+        while stringWidth(txt, "Sans", 10) > maxw - (s + 9) and len(txt) > 4:
             txt = txt[:-2]
         if txt != label:
             txt = txt.rstrip() + "…"
-        c.drawString(x + s + 7, y + 1, txt)
+        c.drawString(x + s + 8, y + 1, txt)
 
     def bullet(self, text, mark="✓", mcolor=GREEN):
         for i, ln in enumerate(wrap(text, "Sans", 10.3, CW - 18)):
@@ -428,14 +441,20 @@ class Guide:
             self.c.setFont("Sans-Ital", 9)
             self.c.setFillColor(FAINT)
             self.c.drawString(LM, self.y, label)
-            self.y -= 13
-        for _ in range(n):
-            self.space(gap)
-            self.c.setStrokeColor(LINE)
-            self.c.setLineWidth(0.9)
-            self.c.line(LM, self.y, PW - RM, self.y)
-            self.y -= gap
-        self.y -= 4
+            self.y -= 14
+        h = n * gap
+        self.space(h + 8)
+        top = self.y + 4
+        bottom = top - h
+        # interactive text box — client clicks and types directly here
+        self.fld += 1
+        self.c.acroForm.textfield(
+            name=f"tx{self.fld}", x=LM, y=bottom, width=CW, height=h,
+            fontName="Helvetica", fontSize=10.5,
+            borderColor=LINE, fillColor=FIELD_BG, textColor=INK,
+            borderWidth=0.8, borderStyle="solid", forceBorder=True,
+            fieldFlags="multiline" if n > 1 else "")
+        self.y = bottom - 8
 
     def note_box(self, title, body_lines, accent=BLUE_DEEP):
         # estimate height
@@ -536,12 +555,19 @@ class Guide:
         c.setFont("Sans", 9)
         c.setFillColor(FAINT)
         c.drawCentredString(PW / 2, by + 6, "PREPARED FOR")
-        c.setFont("Sans-Bold", 13)
-        c.setFillColor(HexColor("#F0F2FA"))
-        c.drawCentredString(PW / 2, by - 12, "________________________________")
+        # fillable company-name field
+        fw = 300
+        self.fld += 1
+        c.acroForm.textfield(
+            name=f"tx{self.fld}", x=PW / 2 - fw / 2, y=by - 20, width=fw, height=20,
+            fontName="Helvetica", fontSize=12,
+            borderColor=GOLD, fillColor=HexColor("#16223E"),
+            textColor=HexColor("#F0F2FA"), borderWidth=0.8,
+            borderStyle="underlined", forceBorder=True,
+            tooltip="Type your company name")
         c.setFont("Sans-Ital", 8.5)
         c.setFillColor(FAINT)
-        c.drawCentredString(PW / 2, by - 26, "(your company name)")
+        c.drawCentredString(PW / 2, by - 30, "(click and type your company name)")
 
         # footer tagline
         c.setFont("Serif-Ital", 12)
@@ -636,10 +662,10 @@ def build(path):
            "about a question, leave it blank and we’ll help you decide together.")
     g.para("There are two easy ways to use this document:", font="Sans-Bold", size=11, color=INK)
 
-    g.note_box("Option A — Fill it in by hand (or on your computer)",
-               ["1.  Print this PDF, or type into it on your computer.",
-                "2.  Go through each section, tick the boxes, and write your answers on the lines.",
-                "3.  Send the completed guide back to MuleSoo. That’s it — we take it from there."],
+    g.note_box("Option A — Fill it in right on your computer (no printing needed)",
+               ["1.  Open this PDF in any free reader (Adobe Acrobat Reader, or your browser).",
+                "2.  Click any box to tick it ✓, and click any shaded space to type your answer.",
+                "3.  Save the PDF, then email it back to MuleSoo. That’s it — we take it from there."],
                accent=BLUE_DEEP)
     g.note_box("Option B — Let an AI tool interview you (fastest)",
                ["1.  Upload this PDF to any AI assistant (ChatGPT, Claude, Gemini, Copilot, etc.).",
@@ -859,21 +885,24 @@ def build(path):
     # instruction box
     instr = [
         "You are my website planning assistant. I have uploaded the “MuleSoo Corporate",
-        "Website Master Guide.” Please do the following:",
+        "Website Master Guide.” I am not technical, so please guide me gently.",
         "",
         "1.  Read the whole guide and use ONLY its sections and questions as your script.",
-        "2.  Ask me the questions ONE AT A TIME, in plain, simple language. Wait for my",
-        "     answer before moving to the next question. If I seem unsure, briefly explain",
-        "     the question and suggest a sensible option.",
-        "3.  Go section by section (About Your Business → Goals → Customers → Pages →",
+        "2.  Ask me the questions STRICTLY ONE AT A TIME. Never send a long list. Wait",
+        "     for my answer before you ask the next question.",
+        "3.  Before each question, add ONE simple sentence that explains what it means and",
+        "     WHY it matters, plus a short real-world example or two sensible options I can",
+        "     just pick from. Keep it friendly and jargon-free.",
+        "4.  If my answer is unclear or missing, kindly explain further and suggest a good",
+        "     default — never make me feel stuck.",
+        "5.  Go section by section (About Your Business → Goals → Customers → Pages →",
         "     Look & Feel → Features → Content → Practical → Timeline & Budget).",
-        "4.  When we finish, compile all my answers into a clear, professional",
-        "     “Website Requirements Document” that keeps a corporate tone, organised under",
-        "     the same headings, restating each of my answers one by one.",
-        "5.  Then give it to me as a downloadable PDF so I can send it to MuleSoo",
-        "     Digital Services to build my website.",
+        "6.  When we finish, compile all my answers into a clear, professional",
+        "     “Website Requirements Document” in corporate tone, under the same headings,",
+        "     restating each of my answers one by one.",
+        "7.  Then give it to me as a downloadable PDF to send to MuleSoo Digital Services.",
         "",
-        "Start now by greeting me and asking the very first question.",
+        "Start now: greet me, explain how this will work in one line, then ask question 1.",
     ]
     # draw the code-style box
     box_h = 20 + len(instr) * 13 + 14
