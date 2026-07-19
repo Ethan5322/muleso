@@ -11,6 +11,13 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.lib.utils import ImageReader
+
+# Real MuleSoo logo mark (tightly-trimmed, transparent background)
+LOGO_PATH = "c:/Users/mule/OneDrive/Desktop/mulesoo/public/mulesoo-logo-icon-trim.png"
+_LOGO = ImageReader(LOGO_PATH)
+_LOGO_W, _LOGO_H = _LOGO.getSize()          # 400 x 254
+_LOGO_ASPECT = _LOGO_W / _LOGO_H
 
 # ----------------------------------------------------------------------------
 # Fonts
@@ -165,36 +172,62 @@ def circular_text(c, cx, cy, radius, text, font, size, color,
         ang += direction * step / 2.0
 
 
-def stamp(c, cx, cy, r, ring_color, text_color, accent, alpha=1.0):
-    """Circular corporate seal/stamp."""
+def _seal_diamond(c, cx, cy, s, color):
+    c.saveState()
+    c.setFillColor(color)
+    c.translate(cx, cy)
+    c.rotate(45)
+    c.rect(-s, -s, 2 * s, 2 * s, stroke=0, fill=1)
+    c.restoreState()
+
+
+def credit_seal(c, cx, cy, r, dark=False, alpha=1.0, logo=True):
+    """Corporate 'Designed & built by MuleSoo' credit seal with the real logo.
+
+    Rings, text band and centred logo are laid out so the circular text never
+    touches either ring. Two palettes: `dark` for dark backgrounds (gold ring,
+    warm ivory text), otherwise a deep gold/navy palette for light pages.
+    """
+    if dark:
+        ring, txt, acc = GOLD, HexColor("#EFE6C9"), GOLD
+    else:
+        ring, txt, acc = GOLD_DEEP, HexColor("#243049"), GOLD_DEEP
+
     c.saveState()
     if alpha < 1.0:
         c.setFillAlpha(alpha)
         c.setStrokeAlpha(alpha)
-    c.setStrokeColor(ring_color)
-    c.setLineWidth(r * 0.045)
-    c.circle(cx, cy, r, stroke=1, fill=0)
-    c.setLineWidth(r * 0.018)
-    c.circle(cx, cy, r * 0.80, stroke=1, fill=0)
-    circular_text(c, cx, cy, r * 0.90, "MULESOO  DIGITAL  SERVICES",
-                  "Sans-Bold", r * 0.13, text_color,
-                  center_angle=90, clockwise=True, letter_gap=1.15)
-    circular_text(c, cx, cy, r * 0.90, "PRETORIA  •  SOUTH  AFRICA",
-                  "Sans-Bold", r * 0.115, text_color,
-                  center_angle=270, clockwise=False, letter_gap=1.15)
-    # side dots
+
+    # --- rings ---
+    c.setStrokeColor(ring)
+    c.setLineWidth(max(0.5, r * 0.050))
+    c.circle(cx, cy, r, stroke=1, fill=0)                 # bold outer
+    c.setLineWidth(max(0.3, r * 0.012))
+    c.circle(cx, cy, r * 0.92, stroke=1, fill=0)          # hairline inner-of-outer
+    c.setLineWidth(max(0.3, r * 0.016))
+    c.circle(cx, cy, r * 0.58, stroke=1, fill=0)          # ring around the logo
+
+    # --- circular text (sits in the clear band 0.58r .. 0.92r) ---
+    tr = r * 0.75
+    circular_text(c, cx, cy, tr, "DESIGNED  &  BUILT  BY  MULESOO",
+                  "Sans-Bold", r * 0.108, txt,
+                  center_angle=90, clockwise=True, letter_gap=1.06)
+    circular_text(c, cx, cy, tr, "DIGITAL  SERVICES  ·  MULESOO.COM",
+                  "Sans", r * 0.098, txt,
+                  center_angle=270, clockwise=False, letter_gap=1.06)
+
+    # --- side separators ---
     for a in (0, 180):
         ar = math.radians(a)
-        c.setFillColor(accent)
-        c.circle(cx + r * 0.90 * math.cos(ar), cy + r * 0.90 * math.sin(ar),
-                 r * 0.03, stroke=0, fill=1)
-    emblem(c, cx, cy + r * 0.14, r * 0.34, accent, lw=r * 0.035)
-    c.setFont("Sans-Bold", r * 0.15)
-    c.setFillColor(text_color)
-    c.drawCentredString(cx, cy - r * 0.34, "EST. 2025")
-    c.setFont("Serif-Ital", r * 0.13)
-    c.setFillColor(accent)
-    c.drawCentredString(cx, cy - r * 0.52, "Certified Build")
+        _seal_diamond(c, cx + tr * math.cos(ar), cy + tr * math.sin(ar),
+                      r * 0.035, acc)
+
+    # --- centred real logo (transparent) ---
+    if logo:
+        lw = r * 0.92
+        lh = lw / _LOGO_ASPECT
+        c.drawImage(_LOGO, cx - lw / 2, cy - lh / 2, lw, lh,
+                    mask="auto", preserveAspectRatio=True)
     c.restoreState()
 
 
@@ -226,8 +259,6 @@ class Guide:
         c.setFont("Sans", 20)
         c.drawCentredString(0, 4, "DIGITAL  SERVICES")
         c.restoreState()
-        # faint watermark stamp
-        stamp(c, PW - 96, 150, 66, WATER, WATER, WATER, alpha=1.0)
 
     def _header(self):
         c = self.c
@@ -245,18 +276,21 @@ class Guide:
 
     def _footer(self):
         c = self.c
+        seal_cx, seal_cy, seal_r = PW - RM - 27, 41, 27
+        # rule stops short of the seal, which breaks the line (corporate look)
         c.setStrokeColor(LINE)
         c.setLineWidth(0.8)
-        c.line(LM, 52, PW - RM, 52)
+        c.line(LM, 52, seal_cx - seal_r - 10, 52)
         c.setFont("Sans", 8)
         c.setFillColor(MUTED)
-        c.drawString(LM, 40, "MuleSoo Digital Services  •  Corporate Website Master Guide")
-        c.drawRightString(PW - RM, 40, "mulesoo.com")
-        # centre stamp mark
-        stamp(c, PW / 2, 44, 9, GOLD_DEEP, GOLD_DEEP, GOLD_DEEP)
+        c.drawString(LM, 40, "MuleSoo Digital Services  ·  Corporate Website Master Guide")
+        c.setFont("Sans", 7.5)
+        c.drawString(LM, 28, "mulesoo.com")
         c.setFont("Sans-Bold", 8)
         c.setFillColor(MUTED)
-        c.drawCentredString(PW / 2, 22, str(self.page))
+        c.drawString(LM + 60, 28, f"Page {self.page}")
+        # per-page corporate credit seal (real logo)
+        credit_seal(c, seal_cx, seal_cy, seal_r, dark=False)
 
     def new_page(self, section=None):
         if section is not None:
@@ -491,7 +525,7 @@ class Guide:
             c.drawCentredString(PW / 2, PH - 420 - i * 16, ln)
 
         # big central seal
-        stamp(c, PW / 2, 300, 92, GOLD, HexColor("#EDE3C4"), BLUE)
+        credit_seal(c, PW / 2, 300, 92, dark=True)
 
         # prepared-for band
         by = 150
@@ -572,7 +606,7 @@ class Guide:
             c.drawRightString(cx0 + cardw - 28, iy, val)
             iy -= 30
 
-        stamp(c, PW / 2, 190, 66, GOLD, HexColor("#EDE3C4"), BLUE)
+        credit_seal(c, PW / 2, 190, 66, dark=True)
         c.setFont("Sans", 9)
         c.setFillColor(FAINT)
         c.drawCentredString(PW / 2, 74, "© 2025 MuleSoo Digital Services. All rights reserved.")
