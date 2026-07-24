@@ -1,0 +1,48 @@
+name: SEO validation
+
+# Two gates that keep the Search Console errors from coming back:
+#   1. metadata  — static check on every push/PR: no public page may ship
+#                  without a title/description/canonical. Fast, no build, no
+#                  secrets required.
+#   2. sitemap   — checks the LIVE production sitemap for redirects/404s after
+#                  a deploy and once a day. Runs against the deployed URL so it
+#                  needs no build secrets in CI.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '0 6 * * *' # daily 06:00 UTC — catch links that rot in production
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Base URL to validate the sitemap against'
+        required: false
+        default: 'https://mulesoo.com'
+
+jobs:
+  metadata:
+    name: Metadata & canonical guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Every public page must have metadata
+        run: node scripts/check-seo-meta.mjs
+
+  sitemap:
+    name: Live sitemap (no redirects / 404s)
+    # Don't block PRs from forks on the live site; run on push, schedule, manual.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate production sitemap URLs
+        run: node scripts/validate-sitemap.mjs "${{ github.event.inputs.base_url || 'https://mulesoo.com' }}"

@@ -6,10 +6,12 @@
     "dev": "next dev",
     "predev": "node scripts/copy-face-models.cjs",
     "build": "next build",
-    "prebuild": "node scripts/copy-face-models.cjs",
+    "prebuild": "node scripts/copy-face-models.cjs && node scripts/check-seo-meta.mjs",
     "postinstall": "node scripts/copy-face-models.cjs",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seo:meta": "node scripts/check-seo-meta.mjs",
+    "seo:sitemap": "node scripts/validate-sitemap.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, notFound } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -22,16 +22,11 @@ export default function AutomationDetailPage() {
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const automation = slug ? findAutomation(slug) : undefined;
 
+  // Unknown slugs are already served a real 404 by `dynamicParams = false` in
+  // layout.tsx; this returns the proper not-found response as a safety net
+  // instead of rendering a soft-404 (HTTP 200) page.
   if (!automation) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center py-20">
-        <h1 className="text-3xl font-bold font-sora gradient-text mb-4">Automation not found</h1>
-        <p className="text-[var(--text-secondary)] mb-8">This system may have moved or been renamed.</p>
-        <Link href="/ai-automation" className="px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg">
-          ← Back to the AI Automation Library
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const d = getDetail(automation.name);
