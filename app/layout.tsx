@@ -217,15 +217,13 @@ export default function RootLayout({
           }}
         />
 
-        {/* Preload critical fonts */}
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap"
-          as="style"
-        />
-
-        {/* DNS Prefetch for external resources */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        {/* Fonts load via @import in globals.css (render-blocking). Until that
+            moves to next/font, preconnect to BOTH the stylesheet host and the
+            font-file host (gstatic) so the .woff2 fetch starts as early as
+            possible — the cheapest LCP win on mobile. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
       <body className="bg-[var(--bg-primary)] text-[var(--text-primary)] overflow-x-hidden">
