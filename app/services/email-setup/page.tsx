@@ -9,8 +9,10 @@ export default function EmailSetupPage() {
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
+          eyebrow="Business Email · Pretoria · South Africa"
           title="Professional Email Setup"
-          subtitle="Your own @yourdomain.com email for instant credibility and professional communication."
+          subtitle="Your own @yourdomain.com email for instant credibility. Full setup, migration and support for South African businesses — handled from Pretoria."
+          trust="Setup, migration & support included"
         />
 
         {/* Why Professional Email Matters */}

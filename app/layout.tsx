@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'MuleSoo | World-Class Websites & AI Solutions - Pretoria, South Africa',
   },
   description:
-    'MuleSoo builds professional websites, AI chatbots, logos, QR codes, and digital solutions for businesses across South Africa. Based in Pretoria. Fast delivery. Premium quality. Free consultation.',
+    'Websites, AI chatbots, QR codes & automation for South African businesses — built in Pretoria. Fast delivery, premium quality. Get a free consultation today.',
   keywords: [
     'web design Pretoria',
     'website design South Africa',
@@ -120,12 +120,21 @@ export default function RootLayout({
               },
               telephone: "+27688529333",
               email: "hello@mulesoo.com",
-              areaServed: {
-                "@type": "Country",
-                name: "South Africa",
+              // Pretoria city centre — a geo point lets Google place the business
+              // on the map for "near me" / local-intent searches.
+              geo: {
+                "@type": "GeoCoordinates",
+                latitude: -25.7479,
+                longitude: 28.2293,
               },
+              areaServed: [
+                { "@type": "Country", name: "South Africa" },
+                { "@type": "City", name: "Pretoria" },
+                { "@type": "City", name: "Johannesburg" },
+                { "@type": "AdministrativeArea", name: "Gauteng" },
+              ],
               priceRange: "R300 - R15000",
-              serviceType: ["Web Design", "AI Chatbots", "Logo Design", "QR Code Design", "Email Setup", "PDF Guides"],
+              serviceType: ["Web Design", "AI Chatbots", "Logo Design", "QR Code Design", "Email Setup", "PDF Guides", "AI Automation"],
               // Only profiles that actually exist. This previously claimed four
               // accounts that 404, under two different handles.
               ...(sameAsUrls().length ? { sameAs: sameAsUrls() } : {}),
@@ -192,7 +201,9 @@ export default function RootLayout({
           }}
         />
 
-        {/* WebSite Schema */}
+        {/* WebSite Schema.
+            No SearchAction: the site has no /search results page, so claiming a
+            sitelinks searchbox was a false signal Google would reject on test. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -201,15 +212,7 @@ export default function RootLayout({
               "@type": "WebSite",
               url: "https://mulesoo.com",
               name: "MuleSoo Digital Services",
-              description: "Professional web design and digital solutions",
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: "https://mulesoo.com/search?q={search_term_string}",
-                },
-                "query-input": "required name=search_term_string",
-              },
+              description: "Professional web design, AI chatbots, QR codes and automation for South African businesses",
             }),
           }}
         />

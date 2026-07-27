@@ -60,7 +60,7 @@ export default function AiAutomationLibrary() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--accent-blue)] border border-[var(--accent-blue)]/40 bg-[var(--glow-blue)]"
           >
-            <Bot size={14} /> MuleSoo AI Automation Library
+            <Bot size={14} /> AI Automation · Pretoria, South Africa
           </motion.span>
 
           <motion.h1
@@ -80,7 +80,8 @@ export default function AiAutomationLibrary() {
             transition={{ delay: 0.15 }}
             className="mt-5 max-w-2xl mx-auto text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed"
           >
-            200 ready-to-build AI systems across 9 industries. Each one is engineered to
+            200 ready-to-build AI systems across 9 industries, built in Pretoria for
+            businesses across South Africa. Each one is engineered to
             <span className="text-[var(--text-primary)] font-semibold"> outperform the latest software your industry already uses</span> —
             because you own it, it never sleeps, and it’s built around your exact business.
           </motion.p>

@@ -6,11 +6,26 @@ export default function PageHero({
   title,
   subtitle,
   compact = false,
+  eyebrow,
+  trust,
 }: {
   title: string;
   subtitle: string;
   /** Tighter hero (no 60vh min-height) — for content-heavy pages like About. */
   compact?: boolean;
+  /**
+   * Small line above the H1. Use it to place the location signal
+   * ("Pretoria · Gauteng · South Africa") in the crawlable text near the top
+   * of the page, where mobile-first indexing weighs it most — not just the
+   * footer. It also gives a search snippet a local cue that lifts CTR.
+   */
+  eyebrow?: string;
+  /**
+   * A real trust signal above the fold — completed-project count or named
+   * clients. This is what makes someone click one of two similar-looking
+   * results. Keep it TRUE: named clients are real portfolio work.
+   */
+  trust?: string;
 }) {
   return (
     <section
@@ -25,6 +40,17 @@ export default function PageHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
+          {eyebrow && (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="text-xs md:text-sm font-semibold font-sora tracking-[0.2em] uppercase text-[var(--accent-blue)]"
+            >
+              {eyebrow}
+            </motion.p>
+          )}
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -42,6 +68,18 @@ export default function PageHero({
           >
             {subtitle}
           </motion.p>
+
+          {trust && (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] border border-[var(--border)] rounded-full px-4 py-2 bg-[var(--glow-blue)]"
+            >
+              <span className="text-[var(--accent-green)]">★</span>
+              {trust}
+            </motion.p>
+          )}
         </motion.div>
       </div>
     </section>

@@ -8,8 +8,10 @@ export default function CustomAppsPage() {
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
+          eyebrow="Custom Software · Pretoria · South Africa"
           title="Custom Apps Building"
-          subtitle="We build bespoke web and mobile applications engineered around your exact business workflow — not off-the-shelf templates."
+          subtitle="Bespoke web and mobile applications engineered around your exact business workflow — not off-the-shelf templates. Built in Pretoria for South African businesses."
+          trust="Next.js · Supabase · Stripe — you own the source code"
         />
 
         {/* Why Custom Apps */}

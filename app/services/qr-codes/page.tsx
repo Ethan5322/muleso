@@ -9,9 +9,27 @@ export default function QRCodesPage() {
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
-          title="Custom Branded QR Codes"
-          subtitle="QR codes with your brand, built-in analytics, and complete tracking capabilities."
+          eyebrow="Pretoria · Gauteng · South Africa"
+          title="Custom QR Code Services in South Africa"
+          subtitle="Branded QR code products for menus, packaging, business cards and campaigns — with your logo, your colours, and live scan analytics. Designed and delivered from Pretoria."
+          trust="Trusted by South African brands including Yoyo Gym, Tsedi Catering and Shime Events"
         />
+
+        {/* Intro — carries the target phrases and location in crawlable body copy,
+            not just the meta tags, so the page clearly matches local search intent. */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto text-center text-[var(--text-secondary)] leading-relaxed mb-16"
+        >
+          Looking for custom QR code services in South Africa? MuleSoo designs branded
+          QR code products for restaurants, retailers and events across Pretoria, Gauteng
+          and the rest of the country. Every code carries your logo and colours, links to
+          any destination you choose, and reports exactly who scanned it — and when. Print-ready
+          files, dynamic URLs you can change without reprinting, and delivery in days, not weeks.
+        </motion.p>
 
         {/* What's Included */}
         <motion.div

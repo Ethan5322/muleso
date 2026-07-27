@@ -9,8 +9,10 @@ export default function LogoDesignPage() {
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
+          eyebrow="Logo & Brand Design · Pretoria · South Africa"
           title="Professional Logo Design"
-          subtitle="Custom brand identity that makes your business unforgettable and instantly recognizable."
+          subtitle="Custom brand identity for South African businesses that makes you unforgettable and instantly recognisable. Print-ready files, full ownership — designed in Pretoria."
+          trust="Trusted by Yoyo Gym, Shime Events & Tsedi Catering"
         />
 
         {/* What You Get */}

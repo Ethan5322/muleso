@@ -52,8 +52,10 @@ export default function WebsiteDesignPage() {
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <PageHero
+          eyebrow="Web Design · Pretoria · South Africa"
           title="Websites That Make Your Competition Nervous"
-          subtitle="Custom-built websites that load in under 2 seconds, convert visitors into customers, and rank on Google from day one."
+          subtitle="Custom-built websites for South African businesses that load in under 2 seconds, convert visitors into customers, and rank on Google from day one. Designed in Pretoria."
+          trust="50+ projects delivered · Yoyo Gym, Shime Events & X-Boss Photography"
         />
 
         {/* What You Get */}
