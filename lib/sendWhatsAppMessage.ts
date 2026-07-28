@@ -3,6 +3,8 @@
  * API Documentation: https://www.callmebot.com/blog/free-api-whatsapp-messages/
  */
 
+import { HIDE_PASSWORD_FROM_BUYER } from './maskSecret';
+
 const CALLMEBOT_API_URL = 'https://api.callmebot.com/whatsapp.php';
 const CALLMEBOT_API_KEY = process.env.CALLMEBOT_API_KEY || '7268108';
 const ADMIN_PHONE = process.env.ADMIN_WHATSAPP || '27688529333'; // Owner's WhatsApp number
@@ -354,6 +356,13 @@ export async function sendPurchaseNotification(details: {
   amount?: number;
   buyerEmail?: string;
   reference?: string;
+  /**
+   * The buyer's FULL guide password. This alert is the only place it appears
+   * in full while HIDE_PASSWORD_FROM_BUYER is on — the buyer's own page and
+   * email both show it starred — so the owner can hand it over personally.
+   * Safe here: this message goes to the owner's own WhatsApp and Telegram.
+   */
+  password?: string;
 }): Promise<void> {
   const dash = '—';
   const paidAt = new Date().toLocaleString('en-ZA', {
@@ -365,6 +374,20 @@ export async function sendPurchaseNotification(details: {
     minute: '2-digit',
   });
 
+  // While the buyer only sees a starred password, this alert is how the owner
+  // gets the full one to hand over. Once HIDE_PASSWORD_FROM_BUYER is switched
+  // off the buyer gets it themselves, but it stays here for support.
+  const passwordSection = details.password
+    ? `
+🔑 *FULL PASSWORD:* ${details.password}
+${
+  HIDE_PASSWORD_FROM_BUYER
+    ? 'The buyer only sees it starred. Send them this when you are happy to.'
+    : 'The buyer already has this on their page and in their email.'
+}`
+    : `
+The buyer can download it now; a copy is on the confirmation page.`;
+
   const message = `🛒 *NEW STORE PURCHASE — MuleSoo*
 
 A guide has just been bought and paid via Paystack.
@@ -374,8 +397,7 @@ A guide has just been bought and paid via Paystack.
 ✉️ Buyer: ${details.buyerEmail || dash}
 🔖 Reference: ${details.reference || dash}
 📅 Paid: ${paidAt} (SAST)
-
-The buyer can download it now; a copy has been made available on the confirmation page.`;
+${passwordSection}`;
 
   await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
   await sendTelegramMessage(message);

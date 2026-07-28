@@ -1,4 +1,30 @@
 /**
+ * ┌──────────────────────────────────────────────────────────────────────────┐
+ * │  THE ONE SWITCH.                                                         │
+ * │                                                                          │
+ * │  While Paystack is on TEST keys, anyone can complete a fake payment. So   │
+ * │  the buyer is never shown the full password to their guide — not on the   │
+ * │  confirmation page, not in their email. The full password goes to the     │
+ * │  owner's WhatsApp alert instead, and the owner hands it over personally.  │
+ * │                                                                          │
+ * │  WHEN PAYSTACK GOES LIVE: change `true` to `false` on the line below and  │
+ * │  deploy. That is the whole job. The confirmation page, the buyer's email  │
+ * │  and the wording in both go back to normal together, because all three    │
+ * │  read this one flag. Nothing else to find, nothing else to undo.          │
+ * └──────────────────────────────────────────────────────────────────────────┘
+ */
+export const HIDE_PASSWORD_FROM_BUYER = true;
+
+/**
+ * What the buyer is allowed to see, wherever a password is shown to them.
+ * Use this — never `maskMiddle3` directly — so every buyer-facing surface
+ * flips together.
+ */
+export function buyerPassword(password: string): string {
+  return HIDE_PASSWORD_FROM_BUYER ? maskMiddle3(password) : password;
+}
+
+/**
  * Display-only masking for the guide password shown on the purchase
  * confirmation page.
  *

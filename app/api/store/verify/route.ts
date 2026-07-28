@@ -35,18 +35,6 @@ export async function POST(req: NextRequest) {
     const amountPaid = (pj.data.amount || 0) / 100;
     const buyerEmail = pj.data.customer?.email || '';
 
-    // Alert the owner (best-effort).
-    try {
-      await sendPurchaseNotification({
-        productName: product?.name || pj.data?.metadata?.product_name,
-        amount: amountPaid,
-        buyerEmail,
-        reference,
-      });
-    } catch (e) {
-      console.error('store/verify: owner alert failed (continuing):', e);
-    }
-
     // Generate + email the buyer's personalised copy (best-effort).
     let password: string | null = null;
     try {
@@ -57,6 +45,23 @@ export async function POST(req: NextRequest) {
       }
     } catch (e) {
       console.error('store/verify: guide generation/email failed (continuing):', e);
+    }
+
+    // Alert the owner (best-effort) — AFTER the guide, so the alert can carry
+    // the full password. While HIDE_PASSWORD_FROM_BUYER is on this alert is the
+    // only place it appears unmasked, and the owner passes it to the buyer.
+    // Sending null when no guide was produced keeps the alert honest: no
+    // password was issued, so none is quoted.
+    try {
+      await sendPurchaseNotification({
+        productName: product?.name || pj.data?.metadata?.product_name,
+        amount: amountPaid,
+        buyerEmail,
+        reference,
+        password: password || undefined,
+      });
+    } catch (e) {
+      console.error('store/verify: owner alert failed (continuing):', e);
     }
 
     return NextResponse.json({
