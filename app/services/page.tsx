@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Bot, ArrowRight, Zap } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import JsonLd from '@/components/JsonLd';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import FaqSection, { type Faq } from '@/components/FaqSection';
 
 const SITE = process.env.NEXT_PUBLIC_URL || 'https://mulesoo.com';
@@ -94,6 +95,10 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen">
       <JsonLd data={serviceLd} />
+      {/* Lives on the page, not the layout: app/services/layout.tsx also wraps
+          the ten service pages, which publish their own longer Home › Services ›
+          X trail. Emitting this there would give each of them two trails. */}
+      <PageBreadcrumb name="Services" path="/services" />
       <PageHero
         title="Our Services"
         subtitle="Complete digital solutions to build and grow your business"

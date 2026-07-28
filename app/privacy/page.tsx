@@ -1,3 +1,4 @@
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
@@ -10,6 +11,7 @@ export const metadata = pageMetadata({
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
+      <PageBreadcrumb name="Privacy Policy" path="/privacy" />
       <div className="max-w-4xl mx-auto">
         <h1 className="text-5xl font-bold font-sora gradient-text mb-4">Privacy Policy</h1>
         <p className="text-[var(--text-secondary)] mb-12">Last updated: June 2026</p>

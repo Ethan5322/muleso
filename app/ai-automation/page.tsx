@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Search, ArrowRight, Sparkles, Bot, Zap, ShieldCheck, Clock, TrendingUp } from 'lucide-react';
 import { AUTOMATIONS, CATEGORIES, getDeptMeta, emojiFor } from '@/lib/aiAutomations';
 import AutomationIcon from '@/components/AutomationIcon';
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 
 export default function AiAutomationLibrary() {
   const [query, setQuery] = useState('');
@@ -37,6 +38,9 @@ export default function AiAutomationLibrary() {
 
   return (
     <div className="min-h-screen pb-20">
+      {/* On the page, not the layout: the layout also wraps the 200 detail
+          pages, which publish their own three-level trail. */}
+      <PageBreadcrumb name="AI Automation" path="/ai-automation" />
       {/* ===== CORPORATE COVER ===== */}
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <div className="absolute inset-0 -z-10">

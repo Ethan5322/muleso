@@ -1,3 +1,4 @@
+import PageBreadcrumb from '@/components/PageBreadcrumb';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
@@ -8,5 +9,10 @@ export const metadata = pageMetadata({
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <PageBreadcrumb name="Terms of Service" path="/terms" />
+      {children}
+    </>
+  );
 }

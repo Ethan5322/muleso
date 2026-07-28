@@ -170,36 +170,18 @@ export default function RootLayout({
           }}
         />
 
-        {/* BreadcrumbList Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Home",
-                  item: "https://mulesoo.com",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Services",
-                  item: "https://mulesoo.com/services",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 3,
-                  name: "Portfolio",
-                  item: "https://mulesoo.com/portfolio",
-                },
-              ],
-            }),
-          }}
-        />
+        {/* No BreadcrumbList here.
+
+            A breadcrumb states where THIS page sits. The one that used to live
+            in this layout listed Home › Services › Portfolio and, because the
+            root layout renders on every route, told Google that /about,
+            /contact, /store, every service page and all 200 automation pages
+            each sat at that same third position under Portfolio — a claim that
+            was wrong everywhere except nowhere.
+
+            Trails now come from the page that owns them: PageBreadcrumb on the
+            section layouts, and the deeper Home › Services › X and
+            Home › AI Automation › X in the service and automation layouts. */}
 
         {/* WebSite Schema.
             No SearchAction: the site has no /search results page, so claiming a
