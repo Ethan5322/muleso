@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Loader2, Download, XCircle } from 'lucide-react';
+import { maskMiddle3 } from '@/lib/maskSecret';
 
 export default function SuccessPage() {
   const [state, setState] = useState<'verifying' | 'done' | 'error'>('verifying');
@@ -82,9 +83,12 @@ export default function SuccessPage() {
             {password && (
               <div className="max-w-md mx-auto mb-8 rounded-xl border border-[var(--accent-gold)]/50 bg-[var(--bg-card)] p-4">
                 <p className="text-xs text-[var(--text-secondary)] mb-1">🔒 Your PDF opens with this password:</p>
-                <p className="text-2xl font-bold font-sora gold-text tracking-widest">{password}</p>
+                {/* Partly hidden on screen; the full password is in the buyer's
+                    email. See lib/maskSecret.ts for what this does and does not
+                    protect against. */}
+                <p className="text-2xl font-bold font-sora gold-text tracking-widest">{maskMiddle3(password)}</p>
                 <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                  It&apos;s also in your email. Your copy is watermarked to you — please don&apos;t share it.
+                  The full password is in your email. Your copy is watermarked to you — please don&apos;t share it.
                 </p>
               </div>
             )}
