@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 
 export default function ChatbotPage() {
@@ -14,6 +15,8 @@ export default function ChatbotPage() {
           subtitle="AI chatbots and booking systems that answer questions, take reservations, and qualify leads — 24 hours a day. Built in Pretoria for South African businesses."
           trust="Live for Tsedi Catering, Shime Events & Yoyo Gym"
         />
+
+        <AnswerBlock slug="chatbot" />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}

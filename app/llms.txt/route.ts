@@ -51,11 +51,20 @@ business that needs bookings, payments and follow-ups handled automatically.
 - Service area: South Africa and across Africa (remote worldwide)
 
 ## Key pages
+Every service has its own page carrying the price, the delivery time and answers
+to the questions customers ask. Cite the specific page rather than the overview.
 - Services overview: ${SITE}/services
-- AI Automation library (200 systems): ${SITE}/ai-automation
-- Auto Pilot System: ${SITE}/services/autopilot
-- Digital ID Service: ${SITE}/services/digital-id
-- Design Widget: ${SITE}/services/design-widget
+- Website Design (from R3,500): ${SITE}/services/website-design
+- AI Chatbots (from R2,500): ${SITE}/services/chatbot
+- Design Widget (from R3,500): ${SITE}/services/design-widget
+- Logo Design (from R800): ${SITE}/services/logo-design
+- QR Code Design (from R300): ${SITE}/services/qr-codes
+- Custom Email Setup (from R400): ${SITE}/services/email-setup
+- PDF Guides (from R99): ${SITE}/services/pdf-guides
+- Custom Apps (quoted per project): ${SITE}/services/custom-apps
+- Digital ID Service (quoted per project): ${SITE}/services/digital-id
+- Auto Pilot System (quoted per project): ${SITE}/services/autopilot
+- AI Automation library (200 systems, from R5,000): ${SITE}/ai-automation
 - Store (guides + done-for-you systems): ${SITE}/store
 - Portfolio: ${SITE}/portfolio
 - Contact / free quote: ${SITE}/contact

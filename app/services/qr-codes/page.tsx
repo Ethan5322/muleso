@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 
 export default function QRCodesPage() {
@@ -14,6 +15,8 @@ export default function QRCodesPage() {
           subtitle="Branded QR code products for menus, packaging, business cards and campaigns — with your logo, your colours, and live scan analytics. Designed and delivered from Pretoria."
           trust="Trusted by South African brands including Yoyo Gym, Tsedi Catering and Shime Events"
         />
+
+        <AnswerBlock slug="qr-codes" />
 
         {/* Intro — carries the target phrases and location in crawlable body copy,
             not just the meta tags, so the page clearly matches local search intent. */}

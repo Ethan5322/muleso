@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 
 export default function CustomAppsPage() {
@@ -13,6 +14,8 @@ export default function CustomAppsPage() {
           subtitle="Bespoke web and mobile applications engineered around your exact business workflow — not off-the-shelf templates. Built in Pretoria for South African businesses."
           trust="Next.js · Supabase · Stripe — you own the source code"
         />
+
+        <AnswerBlock slug="custom-apps" />
 
         {/* Why Custom Apps */}
         <motion.div

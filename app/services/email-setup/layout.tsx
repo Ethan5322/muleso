@@ -1,3 +1,5 @@
+import ServiceFaqs from '@/components/ServiceFaqs';
+import ServiceSchema from '@/components/ServiceSchema';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
@@ -9,5 +11,11 @@ export const metadata = pageMetadata({
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <ServiceSchema slug="email-setup" />
+      {children}
+      <ServiceFaqs slug="email-setup" />
+    </>
+  );
 }

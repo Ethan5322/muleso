@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 import DigitalIdCardPreview from '@/components/DigitalIdCardPreview';
 
@@ -12,6 +13,8 @@ export default function DigitalIdPage() {
           title="Digital ID Service"
           subtitle="Professional, verifiable digital ID cards for any institution — each with a unique QR code and verification number linked to the holder's details. Scan it, and their record appears instantly."
         />
+
+        <AnswerBlock slug="digital-id" />
 
         {/* Cover card + intro */}
         <motion.div

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 
 export default function EmailSetupPage() {
@@ -14,6 +15,8 @@ export default function EmailSetupPage() {
           subtitle="Your own @yourdomain.com email for instant credibility. Full setup, migration and support for South African businesses — handled from Pretoria."
           trust="Setup, migration & support included"
         />
+
+        <AnswerBlock slug="email-setup" />
 
         {/* Why Professional Email Matters */}
         <motion.div

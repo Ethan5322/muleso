@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 
 export default function PDFGuidesPage() {
@@ -12,6 +13,8 @@ export default function PDFGuidesPage() {
           title="Expert Knowledge as Digital Products"
           subtitle="Beautifully designed PDF guides packed with practical, actionable insights you can use immediately."
         />
+
+        <AnswerBlock slug="pdf-guides" />
 
         {/* Why PDF Guides */}
         <motion.div

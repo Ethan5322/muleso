@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 
 export default function LogoDesignPage() {
@@ -14,6 +15,8 @@ export default function LogoDesignPage() {
           subtitle="Custom brand identity for South African businesses that makes you unforgettable and instantly recognisable. Print-ready files, full ownership — designed in Pretoria."
           trust="Trusted by Yoyo Gym, Shime Events & Tsedi Catering"
         />
+
+        <AnswerBlock slug="logo-design" />
 
         {/* What You Get */}
         <motion.div

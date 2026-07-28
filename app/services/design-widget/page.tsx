@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 import WidgetPreview from '@/components/WidgetPreview';
 import { useChatbot } from '@/context/ChatbotContext';
@@ -15,6 +16,8 @@ export default function DesignWidgetPage() {
           title="Design Widget"
           subtitle="A beautiful support & sales widget for your website — it greets every visitor, answers instantly, captures leads and books customers, 24/7."
         />
+
+        <AnswerBlock slug="design-widget" />
 
         {/* Cover + hook */}
         <motion.div

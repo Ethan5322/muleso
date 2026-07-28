@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import AnswerBlock from '@/components/AnswerBlock';
 import PageHero from '@/components/PageHero';
 import AutopilotCover from '@/components/AutopilotCover';
 
@@ -12,6 +13,8 @@ export default function AutopilotPage() {
           title="Auto Pilot System"
           subtitle="Your entire small institution — running itself, 24/7. Bookings, payments, members, reminders, records and reports, all connected into one system that works while you sleep."
         />
+
+        <AnswerBlock slug="autopilot" />
 
         {/* Cover + hook */}
         <motion.div
