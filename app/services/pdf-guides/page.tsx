@@ -74,7 +74,7 @@ export default function PDFGuidesPage() {
                 title: 'Chatbot Business Blueprint',
                 pages: '38 pages',
                 level: 'Beginner-Friendly',
-                desc: 'Start your own chatbot agency and land R5,000+ clients. Complete business roadmap included.',
+                desc: 'Start your own chatbot agency and land $300+ clients. Complete business roadmap included.',
                 includes: ['Niche selection', 'Client scripts', 'Pricing strategy', 'API setup', 'Sales scripts'],
               },
               {

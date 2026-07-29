@@ -169,7 +169,7 @@ export const generateCleanTermsPDF = async () => {
   const section4 = [
     '30 days FREE support for bug fixes.',
     'Up to 3 revision rounds included.',
-    'Additional support: R250/hour.',
+    'Additional support: $15/hour.',
   ];
 
   section4.forEach((text) => {

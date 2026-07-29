@@ -12,7 +12,7 @@ function BookingConfirmationContent() {
   const clientName = searchParams.get('name') || 'Client Name';
   const email = searchParams.get('email') || 'client@example.com';
   const service = searchParams.get('service') || 'Website Design';
-  const price = searchParams.get('price') || 'R7,500';
+  const price = searchParams.get('price') || '$449';
 
   const handleDownloadQR = () => {
     const canvas = document.querySelector('canvas');

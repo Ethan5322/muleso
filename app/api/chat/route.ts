@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 function generateResponse(userMessage: string): string {
   if (!userMessage || typeof userMessage !== 'string') {
-    return `I'm Soo, MuleSoo's AI assistant! 👋 I can help you with:\n\n✅ Website Design (R3,500-R15,000+)\n✅ AI Chatbots (R2,500-R8,000+)\n✅ Logo Design (R800-R3,500+)\n✅ QR Codes, Email Setup, PDF Guides\n\nWhat service interests you most?`;
+    return `I'm Soo, MuleSoo's AI assistant! 👋 I can help you with:\n\n✅ Website Design ($199-$899+)\n✅ AI Chatbots ($149-$499+)\n✅ Logo Design ($49-$199+)\n✅ QR Codes, Email Setup, PDF Guides\n\nWhat service interests you most?`;
   }
 
   const msg = userMessage.toLowerCase().trim();
@@ -58,7 +58,7 @@ function generateResponse(userMessage: string): string {
   }
 
   // Default friendly response
-  return `I'm Soo, MuleSoo's AI assistant! 👋 I can help you with:\n\n✅ Website Design (R3,500-R15,000+)\n✅ AI Chatbots (R2,500-R8,000+)\n✅ Logo Design (R800-R3,500+)\n✅ QR Codes, Email Setup, PDF Guides\n✅ Our process & timeline\n✅ Pricing & packages\n\nWhat service interests you most?`;
+  return `I'm Soo, MuleSoo's AI assistant! 👋 I can help you with:\n\n✅ Website Design ($199-$899+)\n✅ AI Chatbots ($149-$499+)\n✅ Logo Design ($49-$199+)\n✅ QR Codes, Email Setup, PDF Guides\n✅ Our process & timeline\n✅ Pricing & packages\n\nWhat service interests you most?`;
 }
 
 export async function POST(req: NextRequest) {

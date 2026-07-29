@@ -11,7 +11,7 @@ import { Plane, CheckCircle2, Calendar, CreditCard, Bell, Users } from 'lucide-r
 export default function AutopilotCover() {
   const stats = [
     { icon: Calendar, label: 'Bookings today', value: '38', color: 'var(--accent-blue)' },
-    { icon: CreditCard, label: 'Payments in', value: 'R 12,400', color: 'var(--accent-green)' },
+    { icon: CreditCard, label: 'Payments in', value: '$ 699', color: 'var(--accent-green)' },
     { icon: Bell, label: 'Reminders sent', value: '126', color: 'var(--accent-gold)' },
     { icon: Users, label: 'New members', value: '14', color: 'var(--accent-purple)' },
   ];

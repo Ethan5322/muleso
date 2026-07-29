@@ -18,7 +18,7 @@ import { SITE_URL } from '@/lib/seo';
  *     as a claim, price and place included, no pronouns pointing at earlier
  *     paragraphs, quotable standing alone.
  *  2. They trust facts they can parse. `price` becomes a schema.org Offer, so
- *     "from R3,500" is a machine-readable number rather than a string in a
+ *     "from $199" is a machine-readable number rather than a string in a
  *     hero image.
  *
  * Everything here is copied from the live pages — prices from the services
@@ -39,7 +39,7 @@ export interface ServiceAeo {
   name: string;
   /** schema.org serviceType — the category, not the brand name. */
   serviceType: string;
-  /** Starting price in ZAR, or null when the work is quoted per project. */
+  /** Starting price in USD, or null when the work is quoted per project. */
   price: number | null;
   /** The question this page should win. */
   question: string;
@@ -56,14 +56,14 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'website-design',
     name: 'Website Design',
     serviceType: 'Web design and development',
-    price: 3500,
+    price: 199,
     question: 'How much does a professional website cost in South Africa?',
     answer:
-      'A professional website from MuleSoo Digital Services starts at R3,500 in South Africa. Most sites launch in two to four weeks and include mobile-responsive design, SEO setup, and 30 days of free support after launch. The client owns the domain and the full source code outright, with no monthly licence fee. MuleSoo builds from Pretoria for clients across South Africa and Africa.',
+      'A professional website from MuleSoo Digital Services starts at $199 in South Africa. Most sites launch in two to four weeks and include mobile-responsive design, SEO setup, and 30 days of free support after launch. The client owns the domain and the full source code outright, with no monthly licence fee. MuleSoo builds from Pretoria for clients across South Africa and Africa.',
     faqs: [
       {
         q: 'How much does a website cost in South Africa?',
-        a: 'MuleSoo websites start at R3,500. The final price depends on the number of pages, whether you need e-commerce or booking functionality, and how much content has to be written or migrated. You get a fixed quote before any work begins, so the number does not move afterwards.',
+        a: 'MuleSoo websites start at $199. The final price depends on the number of pages, whether you need e-commerce or booking functionality, and how much content has to be written or migrated. You get a fixed quote before any work begins, so the number does not move afterwards.',
       },
       {
         q: 'How long does a website take to build?',
@@ -91,10 +91,10 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'chatbot',
     name: 'AI Chatbots',
     serviceType: 'AI chatbot development',
-    price: 2500,
+    price: 149,
     question: 'How much does an AI chatbot cost for a small business?',
     answer:
-      'An AI chatbot from MuleSoo Digital Services starts at R2,500. It answers customer questions on your website and WhatsApp around the clock, captures leads, qualifies enquiries and takes bookings while you sleep. Each bot is trained on your own services, pricing and policies rather than generic templates, and is built in Pretoria for South African businesses.',
+      'An AI chatbot from MuleSoo Digital Services starts at $149. It answers customer questions on your website and WhatsApp around the clock, captures leads, qualifies enquiries and takes bookings while you sleep. Each bot is trained on your own services, pricing and policies rather than generic templates, and is built in Pretoria for South African businesses.',
     faqs: [
       {
         q: 'What does an AI chatbot actually do for my business?',
@@ -102,7 +102,7 @@ export const SERVICE_AEO: ServiceAeo[] = [
       },
       {
         q: 'How much does an AI chatbot cost?',
-        a: 'MuleSoo AI chatbots start at R2,500. The price depends on how many services the bot must understand, whether it needs to take payments or deposits, and whether it connects to WhatsApp as well as your website.',
+        a: 'MuleSoo AI chatbots start at $149. The price depends on how many services the bot must understand, whether it needs to take payments or deposits, and whether it connects to WhatsApp as well as your website.',
       },
       {
         q: 'Can the chatbot work on WhatsApp?',
@@ -122,10 +122,10 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'design-widget',
     name: 'Design Widget',
     serviceType: 'Website support and sales widget',
-    price: 3500,
+    price: 199,
     question: 'What is a website sales and support widget?',
     answer:
-      'A sales and support widget is a chat panel that sits in the corner of your website, greets every visitor, answers questions instantly, captures leads and books customers 24 hours a day. MuleSoo Digital Services builds them from R3,500, styled to match your brand, with a handover to WhatsApp when a human is needed.',
+      'A sales and support widget is a chat panel that sits in the corner of your website, greets every visitor, answers questions instantly, captures leads and books customers 24 hours a day. MuleSoo Digital Services builds them from $199, styled to match your brand, with a handover to WhatsApp when a human is needed.',
     faqs: [
       {
         q: 'How is a widget different from a chatbot?',
@@ -145,7 +145,7 @@ export const SERVICE_AEO: ServiceAeo[] = [
       },
       {
         q: 'How much does the Design Widget cost?',
-        a: 'It starts at R3,500, depending on how much your assistant needs to know and whether it takes payments. ' + CONTACT,
+        a: 'It starts at $199, depending on how much your assistant needs to know and whether it takes payments. ' + CONTACT,
       },
     ],
   },
@@ -153,14 +153,14 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'logo-design',
     name: 'Logo Design',
     serviceType: 'Logo and brand identity design',
-    price: 800,
+    price: 49,
     question: 'How much does a professional logo cost in South Africa?',
     answer:
-      'A custom logo from MuleSoo Digital Services starts at R800 in South Africa. You get original concepts rather than stock marks, unlimited revisions until it is right, every file format needed for print and screen, and full ownership of the finished design. Brand guidelines covering colour and typography are included so the logo is used consistently.',
+      'A custom logo from MuleSoo Digital Services starts at $49 in South Africa. You get original concepts rather than stock marks, unlimited revisions until it is right, every file format needed for print and screen, and full ownership of the finished design. Brand guidelines covering colour and typography are included so the logo is used consistently.',
     faqs: [
       {
         q: 'How much does a logo cost in South Africa?',
-        a: 'MuleSoo logo design starts at R800. That covers original concepts, revisions until you are happy, and all the final file formats. Price rises with the number of concepts and whether you need a full brand guideline document.',
+        a: 'MuleSoo logo design starts at $49. That covers original concepts, revisions until you are happy, and all the final file formats. Price rises with the number of concepts and whether you need a full brand guideline document.',
       },
       {
         q: 'What files do I receive?',
@@ -184,10 +184,10 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'qr-codes',
     name: 'QR Code Design',
     serviceType: 'Branded QR code design',
-    price: 300,
+    price: 19,
     question: 'How much does a custom branded QR code cost?',
     answer:
-      'A custom branded QR code from MuleSoo Digital Services starts at R300. Unlike a free generator, it carries your logo and colours, tracks how many people scan it and where, and uses a dynamic link so you can change the destination later without reprinting anything. Files are supplied print-ready for menus, packaging and signage.',
+      'A custom branded QR code from MuleSoo Digital Services starts at $19. Unlike a free generator, it carries your logo and colours, tracks how many people scan it and where, and uses a dynamic link so you can change the destination later without reprinting anything. Files are supplied print-ready for menus, packaging and signage.',
     faqs: [
       {
         q: 'Why pay for a QR code when generators are free?',
@@ -207,7 +207,7 @@ export const SERVICE_AEO: ServiceAeo[] = [
       },
       {
         q: 'How much does a branded QR code cost?',
-        a: 'Branded QR codes start at R300 with lifetime support on the code. ' + CONTACT,
+        a: 'Branded QR codes start at $19 with lifetime support on the code. ' + CONTACT,
       },
     ],
   },
@@ -215,10 +215,10 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'email-setup',
     name: 'Custom Email Setup',
     serviceType: 'Business email setup',
-    price: 400,
+    price: 25,
     question: 'How do I get a professional email address with my own domain?',
     answer:
-      'MuleSoo Digital Services sets up professional email at your own domain — you@yourbusiness.co.za — from R400. That covers domain configuration, mailbox creation, migration of your existing mail, and the security records that stop your messages landing in spam. Setup is handled from Pretoria for businesses across South Africa.',
+      'MuleSoo Digital Services sets up professional email at your own domain — you@yourbusiness.co.za — from $25. That covers domain configuration, mailbox creation, migration of your existing mail, and the security records that stop your messages landing in spam. Setup is handled from Pretoria for businesses across South Africa.',
     faqs: [
       {
         q: 'Why does a business email address matter?',
@@ -234,7 +234,7 @@ export const SERVICE_AEO: ServiceAeo[] = [
       },
       {
         q: 'How much does business email setup cost?',
-        a: 'Setup starts at R400, which covers domain configuration, mailboxes, migration and security. Your mailbox hosting is billed by the provider separately. ' + CONTACT,
+        a: 'Setup starts at $25, which covers domain configuration, mailboxes, migration and security. Your mailbox hosting is billed by the provider separately. ' + CONTACT,
       },
     ],
   },
@@ -242,10 +242,10 @@ export const SERVICE_AEO: ServiceAeo[] = [
     slug: 'pdf-guides',
     name: 'PDF Guides',
     serviceType: 'Digital product and PDF guide production',
-    price: 99,
+    price: 6,
     question: 'How can I sell my expertise as a digital product?',
     answer:
-      'MuleSoo Digital Services turns expertise into professionally designed PDF guides you can sell online, from R99. Each guide is laid out to a publishable standard, distributed securely so it cannot be freely copied around, and tracked so you can see what sells. Once written, a guide earns without any further work from you.',
+      'MuleSoo Digital Services turns expertise into professionally designed PDF guides you can sell online, from $6. Each guide is laid out to a publishable standard, distributed securely so it cannot be freely copied around, and tracked so you can see what sells. Once written, a guide earns without any further work from you.',
     faqs: [
       {
         q: 'What makes a PDF guide worth paying for?',
@@ -261,7 +261,7 @@ export const SERVICE_AEO: ServiceAeo[] = [
       },
       {
         q: 'How much does a PDF guide cost to produce?',
-        a: 'Guide production starts at R99 depending on length and how much design and structuring the content needs. ' + CONTACT,
+        a: 'Guide production starts at $6 depending on length and how much design and structuring the content needs. ' + CONTACT,
       },
     ],
   },
@@ -397,11 +397,11 @@ export function serviceJsonLd(service: ServiceAeo) {
           offers: {
             '@type': 'Offer',
             price: service.price,
-            priceCurrency: 'ZAR',
+            priceCurrency: 'USD',
             priceSpecification: {
               '@type': 'PriceSpecification',
               price: service.price,
-              priceCurrency: 'ZAR',
+              priceCurrency: 'USD',
               // The prices on site are "from" prices, and minPrice is how
               // schema.org says so. Publishing it as a flat price would be a
               // quotable claim that the quote then contradicts.

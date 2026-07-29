@@ -41,7 +41,7 @@ export default function AutomationDetailPage() {
     openChatbot({
       service: mode === 'custom' ? `${title} (custom build)` : title,
       details: `${mode === 'custom' ? 'Custom build request' : 'Buy'}: ${title} — ${automation.desc}`,
-      price: mode === 'custom' ? 'a custom quote' : 'R5,000',
+      price: mode === 'custom' ? 'a custom quote' : '$299',
     });
 
   // related systems from the same department

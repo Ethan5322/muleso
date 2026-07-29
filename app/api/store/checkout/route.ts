@@ -36,7 +36,11 @@ export async function POST(req: NextRequest) {
       headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email,
-        amount: Math.round(product.price * 100),
+        // The storefront prices in USD, but Paystack still settles this account
+        // in ZAR — so the charge stays on priceZAR. Switching both of these to
+        // the USD figure requires USD to be enabled on the Paystack account
+        // first; flipping it before then makes every initialize call fail.
+        amount: Math.round(product.priceZAR * 100),
         currency: 'ZAR',
         reference: `MULE-STORE-${Date.now()}`,
         callback_url: callbackUrl,

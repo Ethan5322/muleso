@@ -169,7 +169,7 @@ export default function ServicesManager() {
               </div>
               <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Description" rows={2} className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF] resize-none" />
               <div className="grid grid-cols-2 gap-3">
-                <input value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} placeholder="Price (e.g. From R3,500)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
+                <input value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} placeholder="Price (e.g. From $199)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
                 <input value={editing.href} onChange={(e) => setEditing({ ...editing, href: e.target.value })} placeholder="Link (e.g. /services/chatbot)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
               </div>
               <div>

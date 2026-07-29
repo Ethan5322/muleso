@@ -126,7 +126,7 @@ export default function StoreDetailModal({
                 <span className="block text-xs opacity-90">Deposit now, balance on delivery — you own it outright</span>
               </span>
               <span className="text-right shrink-0">
-                <span className="block text-lg font-bold font-sora">From R{item.fromPrice.toLocaleString('en-ZA')}</span>
+                <span className="block text-lg font-bold font-sora">From ${item.fromPrice.toLocaleString('en-US')}</span>
               </span>
             </button>
 
@@ -141,7 +141,7 @@ export default function StoreDetailModal({
                 <span className="block text-xs text-[var(--text-secondary)]">Spread the cost — low monthly, cancel anytime</span>
               </span>
               <span className="text-right shrink-0">
-                <span className="block text-lg font-bold font-sora text-[var(--accent-green)]">R{item.monthly.toLocaleString('en-ZA')}/mo</span>
+                <span className="block text-lg font-bold font-sora text-[var(--accent-green)]">${item.monthly.toLocaleString('en-US')}/mo</span>
               </span>
             </button>
 

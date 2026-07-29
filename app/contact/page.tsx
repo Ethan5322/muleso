@@ -208,10 +208,10 @@ export default function ContactPage() {
                       className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
                     >
                       <option value="">Select budget</option>
-                      <option value="under-2k">Under R2,000</option>
-                      <option value="2k-5k">R2,000 to R5,000</option>
-                      <option value="5k-10k">R5,000 to R10,000</option>
-                      <option value="10k-plus">R10,000+</option>
+                      <option value="under-100">Under $100</option>
+                      <option value="100-300">$100 to $300</option>
+                      <option value="300-600">$300 to $600</option>
+                      <option value="600-plus">$600+</option>
                       <option value="unsure">Not sure yet</option>
                     </select>
                   </div>

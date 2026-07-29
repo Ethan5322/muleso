@@ -27,8 +27,8 @@ export default function StorePage() {
 
   const priceLine = (fromPrice: number, monthly: number, plan: Plan) =>
     plan === 'monthly'
-      ? `R${monthly.toLocaleString('en-ZA')}/month (subscription)`
-      : `From R${fromPrice.toLocaleString('en-ZA')} (pay in full)`;
+      ? `$${monthly.toLocaleString('en-US')}/month (subscription)`
+      : `From $${fromPrice.toLocaleString('en-US')} (pay in full)`;
 
   // Systems are custom builds — booking opens the chatbot with the chosen plan.
   const bookSystem = (s: SystemProduct, plan: Plan) => {
@@ -105,8 +105,8 @@ export default function StorePage() {
         brand: { '@type': 'Brand', name: 'MuleSoo' },
         offers: {
           '@type': 'Offer',
-          price: String(p.price),
-          priceCurrency: 'ZAR',
+          price: String(p.priceUSD),
+          priceCurrency: 'USD',
           availability: p.available ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
         },
       },
@@ -184,7 +184,7 @@ export default function StorePage() {
 
                 <div className="mt-auto">
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-3xl font-bold font-sora gold-text">R{product.price}</span>
+                    <span className="text-3xl font-bold font-sora gold-text">${product.priceUSD}</span>
                     <span className="text-xs text-[var(--text-secondary)]">once-off</span>
                   </div>
                   {product.available ? (
@@ -260,8 +260,8 @@ export default function StorePage() {
 
                   <div className="mt-auto">
                     <div className="flex items-baseline gap-2 mb-4 flex-wrap">
-                      <span className="text-3xl font-bold font-sora gradient-text">From R{s.fromPrice.toLocaleString('en-ZA')}</span>
-                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ R{s.monthly.toLocaleString('en-ZA')}/mo</span>
+                      <span className="text-3xl font-bold font-sora gradient-text">From ${s.fromPrice.toLocaleString('en-US')}</span>
+                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ ${s.monthly.toLocaleString('en-US')}/mo</span>
                     </div>
                     <button
                       type="button"
@@ -319,8 +319,8 @@ export default function StorePage() {
 
                   <div className="mt-auto">
                     <div className="flex items-baseline gap-2 mb-4 flex-wrap">
-                      <span className="text-2xl font-bold font-sora gradient-text">From R{a.fromPrice.toLocaleString('en-ZA')}</span>
-                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ R{a.monthly.toLocaleString('en-ZA')}/mo</span>
+                      <span className="text-2xl font-bold font-sora gradient-text">From ${a.fromPrice.toLocaleString('en-US')}</span>
+                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ ${a.monthly.toLocaleString('en-US')}/mo</span>
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -376,7 +376,7 @@ export default function StorePage() {
               <div>
                 <h3 className="text-xl font-bold font-sora text-[var(--text-primary)]">Buy {pending.name}</h3>
                 <p className="text-sm text-[var(--text-secondary)] mt-1">
-                  <span className="gold-text font-bold">R{pending.price}</span> once-off — instant download after payment.
+                  <span className="gold-text font-bold">${pending.priceUSD}</span> once-off — instant download after payment.
                 </p>
               </div>
               <button type="button" onClick={() => !loading && setPending(null)} className="text-[var(--text-secondary)] hover:text-white" aria-label="Close">
@@ -407,9 +407,15 @@ export default function StorePage() {
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-60"
             >
-              {loading ? <><Loader2 size={18} className="animate-spin" /> Opening payment…</> : `Pay R${pending.price} securely →`}
+              {loading ? <><Loader2 size={18} className="animate-spin" /> Opening payment…</> : `Pay $${pending.priceUSD} securely →`}
             </button>
-            <p className="text-[11px] text-[var(--text-secondary)] text-center mt-3 inline-flex items-center gap-1 justify-center w-full">
+            {/* Prices are shown in USD but the Paystack account settles in ZAR, so
+                the hosted checkout will quote rands. Saying so here keeps that from
+                reading as a pricing error mid-payment. */}
+            <p className="text-[11px] text-[var(--text-secondary)] text-center mt-3">
+              Billed as R{pending.priceZAR} at checkout (our processor settles in ZAR).
+            </p>
+            <p className="text-[11px] text-[var(--text-secondary)] text-center mt-1.5 inline-flex items-center gap-1 justify-center w-full">
               <ShieldCheck size={12} className="text-[var(--accent-green)]" /> Secured by Paystack • Card &amp; Instant EFT
             </p>
           </div>

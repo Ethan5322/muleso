@@ -25,14 +25,14 @@ function demoFor(name: string): Line[] {
   if (has('quote')) {
     return [
       { from: 'user', text: 'Hi, how much would this cost?' },
-      { from: 'bot', text: 'Based on your details, your estimate is R2,450. 🧾' },
+      { from: 'bot', text: 'Based on your details, your estimate is $149. 🧾' },
       { from: 'bot', text: 'Want me to lock it in and book you a slot?' },
     ];
   }
   if (has('payment', 'invoice', 'order', 'takeaway', 'pre-order', 'deposit')) {
     return [
       { from: 'user', text: 'I’d like to place an order please.' },
-      { from: 'bot', text: 'Perfect — that comes to R320. Here’s your secure payment link 🔒' },
+      { from: 'bot', text: 'Perfect — that comes to $19. Here’s your secure payment link 🔒' },
       { from: 'bot', text: '✓ Payment received. Your order is confirmed! 🎉' },
     ];
   }

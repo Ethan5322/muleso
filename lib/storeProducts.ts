@@ -8,7 +8,13 @@ export interface StoreProduct {
   name: string;
   slug: string;
   emoji: string;
-  price: number; // ZAR
+  /**
+   * What the buyer is charged. Paystack still settles in ZAR, so this stays the
+   * authoritative amount for checkout — never show it to the buyer.
+   */
+  priceZAR: number;
+  /** What the storefront displays. USD is the official currency of the site. */
+  priceUSD: number;
   pages: string;
   difficulty: string;
   description: string;
@@ -23,10 +29,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     name: 'Make Money With AI Chatbots',
     slug: 'make-money-ai-chatbots',
     emoji: '🤖',
-    price: 299,
+    priceZAR: 299,
+    priceUSD: 19,
     pages: '30+',
     difficulty: 'Beginner-Friendly',
-    description: 'Start a chatbot business and land R5,000+ clients — even if you can’t code. The exact playbook we use.',
+    description: 'Start a chatbot business and land $300+ clients — even if you can’t code. The exact playbook we use.',
     features: ['Pick a profitable niche', 'Build without coding', 'Pricing & retainers', 'Find & close clients', '90-day plan'],
     accent: 'purple',
     available: true,
@@ -35,7 +42,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     name: 'Beginner to Pro: Websites That Sell',
     slug: 'beginner-to-pro-website',
     emoji: '🚀',
-    price: 249,
+    priceZAR: 249,
+    priceUSD: 15,
     pages: '40+',
     difficulty: 'Beginner-Friendly',
     description: 'Go from zero to launching professional, high-converting websites clients happily pay for.',
@@ -47,7 +55,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     name: 'Build a Pro Website With Claude Code',
     slug: 'build-pro-website-claude-code',
     emoji: '💻',
-    price: 249,
+    priceZAR: 249,
+    priceUSD: 15,
     pages: '35+',
     difficulty: 'Beginner-Friendly',
     description: 'Use AI to build stunning, professional websites in days, not weeks — step by step.',
@@ -59,7 +68,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     name: 'Claude Code MCP Master Guide',
     slug: 'claude-code-mcp-master',
     emoji: '🔌',
-    price: 199,
+    priceZAR: 199,
+    priceUSD: 12,
     pages: '28+',
     difficulty: 'Intermediate',
     description: 'Supercharge Claude Code with MCP — connect tools, data and automations like a pro.',
@@ -71,7 +81,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     name: 'Publish Your Website on GitHub',
     slug: 'github-website-publishing',
     emoji: '🐙',
-    price: 149,
+    priceZAR: 149,
+    priceUSD: 9,
     pages: '24+',
     difficulty: 'Beginner-Friendly',
     description: 'Get your website online, properly, in under 30 minutes — the clean, professional way.',
@@ -83,7 +94,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     name: 'The MuleSoo Growth Playbook',
     slug: 'mulesoo-growth-playbook',
     emoji: '📈',
-    price: 349,
+    priceZAR: 349,
+    priceUSD: 21,
     pages: '42',
     difficulty: 'All levels',
     description: 'The full marketing & sales master guide: positioning, offers, lead channels, scripts and a 30-day plan.',

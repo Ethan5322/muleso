@@ -133,7 +133,7 @@ export default function RootLayout({
                 { "@type": "City", name: "Johannesburg" },
                 { "@type": "AdministrativeArea", name: "Gauteng" },
               ],
-              priceRange: "R300 - R15000",
+              priceRange: "$19 - $899",
               serviceType: ["Web Design", "AI Chatbots", "Logo Design", "QR Code Design", "Email Setup", "PDF Guides", "AI Automation"],
               // Only profiles that actually exist. This previously claimed four
               // accounts that 404, under two different handles.

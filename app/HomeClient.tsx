@@ -10,7 +10,7 @@ import FaqSection, { type Faq } from '@/components/FaqSection';
 
 const HOME_FAQS: Faq[] = [
   { q: 'What does MuleSoo Digital Services do?', a: 'MuleSoo is a digital and AI agency in Pretoria, South Africa. We build professional websites, AI chatbots, whole-business Auto Pilot systems, AI automations, digital ID systems, logos, QR codes and custom apps for businesses across South Africa and Africa.' },
-  { q: 'How much does a website cost?', a: 'Websites start from R3,500, business sites from R7,500, and enterprise builds are quoted on scope. AI chatbots start from R2,500 and full AI automation systems from R5,000.' },
+  { q: 'How much does a website cost?', a: 'Websites start from $199, business sites from $449, and enterprise builds are quoted on scope. AI chatbots start from $149 and full AI automation systems from $299.' },
   { q: 'How long does a project take?', a: 'Most websites and systems launch within about three weeks, depending on scope. We work fast and keep you updated throughout.' },
   { q: 'Do I own what you build?', a: 'Yes. After full payment, the complete source code, data and product are 100% yours — with no per-transaction commissions.' },
   { q: 'Where are you based and do you work remotely?', a: 'We are based in Pretoria, South Africa, and work with clients across South Africa and Africa, remotely worldwide.' },

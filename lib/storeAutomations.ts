@@ -3,7 +3,7 @@ import type { AccentKey } from './storeProducts';
 // The most-demanded AI automation from each of the 9 departments, surfaced in
 // the store. Like the systems, these are booked through the chatbot widget
 // (deposit via Paystack) — they're built for the client, not downloaded.
-// Prices reflect 2026 South-African market rates for AI booking/chatbot systems.
+// Prices are quoted in USD, the agency's official currency.
 
 export interface AutomationPick {
   slug: string; // matches /ai-automation/[slug]
@@ -11,8 +11,8 @@ export interface AutomationPick {
   category: string; // department
   emoji: string; // represents the system on its cover
   desc: string;
-  fromPrice: number; // setup, ZAR
-  monthly: number; // monthly, ZAR
+  fromPrice: number; // setup, USD
+  monthly: number; // monthly, USD
   accent: AccentKey;
 }
 
@@ -23,8 +23,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Hotel Booking System',
     category: 'Booking & Hospitality',
     desc: 'Guests ask about rooms, check availability, book and get confirmations — automatically, 24/7.',
-    fromPrice: 3900,
-    monthly: 590,
+    fromPrice: 229,
+    monthly: 35,
     accent: 'blue',
   },
   {
@@ -33,8 +33,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Doctor Appointment Booking',
     category: 'Healthcare & Wellness',
     desc: 'Schedules consultations, collects patient details and sends reminders that cut no-shows.',
-    fromPrice: 3500,
-    monthly: 490,
+    fromPrice: 199,
+    monthly: 29,
     accent: 'green',
   },
   {
@@ -43,8 +43,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Salon Booking System',
     category: 'Beauty, Fitness & Lifestyle',
     desc: 'Books salon services, upsells add-ons and sends reminders so chairs stay full.',
-    fromPrice: 2900,
-    monthly: 390,
+    fromPrice: 169,
+    monthly: 25,
     accent: 'purple',
   },
   {
@@ -53,8 +53,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Restaurant Reservation System',
     category: 'Food, Restaurants & Catering',
     desc: 'Takes table reservations, manages the waitlist and answers menu questions instantly.',
-    fromPrice: 2900,
-    monthly: 390,
+    fromPrice: 169,
+    monthly: 25,
     accent: 'gold',
   },
   {
@@ -63,8 +63,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Real Estate Lead Bot',
     category: 'Real Estate & Property',
     desc: 'Captures buyer/renter leads, qualifies serious ones and follows up fast — before competitors do.',
-    fromPrice: 3900,
-    monthly: 590,
+    fromPrice: 229,
+    monthly: 35,
     accent: 'blue',
   },
   {
@@ -73,8 +73,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Law Firm Intake System',
     category: 'Legal, Finance & Professional',
     desc: 'Collects case details, screens clients and books consultations — professional intake on autopilot.',
-    fromPrice: 3900,
-    monthly: 590,
+    fromPrice: 229,
+    monthly: 35,
     accent: 'gold',
   },
   {
@@ -83,8 +83,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Tutoring Booking System',
     category: 'Education & Training',
     desc: 'Schedules tutoring sessions, handles rescheduling and keeps students and parents updated.',
-    fromPrice: 2900,
-    monthly: 390,
+    fromPrice: 169,
+    monthly: 25,
     accent: 'green',
   },
   {
@@ -93,8 +93,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Cleaning Booking System',
     category: 'Home Services & Local',
     desc: 'Books home and office cleaning jobs, confirms details and sends reminders automatically.',
-    fromPrice: 2900,
-    monthly: 390,
+    fromPrice: 169,
+    monthly: 25,
     accent: 'purple',
   },
   {
@@ -103,8 +103,8 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     name: 'AI Invoice Reminder System',
     category: 'Logistics, Sales & Operations',
     desc: 'Chases unpaid invoices with polite, automatic reminders so you get paid faster.',
-    fromPrice: 2900,
-    monthly: 390,
+    fromPrice: 169,
+    monthly: 25,
     accent: 'blue',
   },
 ];

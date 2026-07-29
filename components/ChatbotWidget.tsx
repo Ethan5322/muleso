@@ -46,7 +46,9 @@ interface BookingData {
 // Deposit charged at booking time = this share of the service starting price.
 // (Balance is invoiced on delivery.) Custom / "Other" jobs use a flat secure fee.
 const DEPOSIT_PERCENT = 0.5;
-const CUSTOM_DEPOSIT = 1500;
+// Flat secure fee for Custom/Other jobs, in each currency.
+const CUSTOM_DEPOSIT_ZAR = 1500;
+const CUSTOM_DEPOSIT_USD = 89;
 
 const COUNTRY_CODES: { [key: string]: string } = {
   'south africa': '+27',
@@ -75,22 +77,25 @@ const COUNTRY_CODES: { [key: string]: string } = {
   'spain': '+34',
 };
 
+// `price` is what the visitor sees (USD, the agency's official currency).
+// `zar` is what the deposit is actually charged in, because Paystack settles
+// this account in rands — never derive the charge from the displayed string.
 const SERVICES = [
-  { id: '1', label: '💻 Design Website', value: 'Design Website', price: 'R3,500' },
-  { id: '2', label: '🔧 Fix Website', value: 'Fix Website', price: 'R3,500' },
-  { id: '3', label: '🎨 Design Widget', value: 'Design Widget', price: 'R3,500' },
-  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: 'R3,500' },
-  { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: 'R5,000' },
-  { id: '6', label: '🌐 All in One Website', value: 'All in One Website', price: 'R7,500' },
-  { id: '7', label: '📲 Build Custom App', value: 'Custom Apps Building', price: 'Custom' },
-  { id: '8', label: '📝 Other', value: 'Other', price: 'Custom' },
+  { id: '1', label: '💻 Design Website', value: 'Design Website', price: '$199', usd: 199, zar: 3500 },
+  { id: '2', label: '🔧 Fix Website', value: 'Fix Website', price: '$199', usd: 199, zar: 3500 },
+  { id: '3', label: '🎨 Design Widget', value: 'Design Widget', price: '$199', usd: 199, zar: 3500 },
+  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: '$199', usd: 199, zar: 3500 },
+  { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: '$299', usd: 299, zar: 5000 },
+  { id: '6', label: '🌐 All in One Website', value: 'All in One Website', price: '$449', usd: 449, zar: 7500 },
+  { id: '7', label: '📲 Build Custom App', value: 'Custom Apps Building', price: 'Custom', usd: null, zar: null },
+  { id: '8', label: '📝 Other', value: 'Other', price: 'Custom', usd: null, zar: null },
 ];
 
 const BUDGET_RANGES = [
-  { id: '1', label: 'R3,500 - R5,000', value: 'R3,500 - R5,000' },
-  { id: '2', label: 'R5,000 - R10,000', value: 'R5,000 - R10,000' },
-  { id: '3', label: 'R10,000 - R20,000', value: 'R10,000 - R20,000' },
-  { id: '4', label: 'R20,000+', value: 'R20,000+' },
+  { id: '1', label: '$199 - $299', value: '$199 - $299' },
+  { id: '2', label: '$299 - $599', value: '$299 - $599' },
+  { id: '3', label: '$599 - $1,199', value: '$599 - $1,199' },
+  { id: '4', label: '$1,199+', value: '$1,199+' },
   { id: '5', label: 'Not sure yet', value: 'Not sure yet' },
 ];
 
@@ -200,13 +205,21 @@ export default function ChatbotWidget() {
     return service?.price || 'Custom';
   };
 
-  // Deposit (in ZAR) to secure this booking. 50% of the starting price for
-  // fixed-price services; a flat fee for Custom/Other jobs.
+  // Deposit (in ZAR) actually charged through Paystack. 50% of the ZAR starting
+  // price for fixed-price services; a flat fee for Custom/Other jobs. This must
+  // read the `zar` field, never the displayed USD string — parsing "$199" here
+  // would charge R99 instead of R1,750.
   const getServiceDeposit = (serviceName: string): number => {
-    const priceStr = getServicePrice(serviceName);
-    const numeric = parseInt(priceStr.replace(/[^0-9]/g, ''), 10);
-    if (!numeric || isNaN(numeric)) return CUSTOM_DEPOSIT;
-    return Math.round(numeric * DEPOSIT_PERCENT);
+    const service = SERVICES.find(s => s.value === serviceName);
+    if (!service?.zar) return CUSTOM_DEPOSIT_ZAR;
+    return Math.round(service.zar * DEPOSIT_PERCENT);
+  };
+
+  // The same deposit expressed in USD — this is the figure shown to the client.
+  const getServiceDepositUSD = (serviceName: string): number => {
+    const service = SERVICES.find(s => s.value === serviceName);
+    if (!service?.usd) return CUSTOM_DEPOSIT_USD;
+    return Math.round(service.usd * DEPOSIT_PERCENT);
   };
 
   // Load Paystack's inline popup script once. We call this early (on open) so
@@ -744,7 +757,9 @@ export default function ChatbotWidget() {
       toast.loading('📄 Generating PDF...');
       await generateCleanBookingPDF({
         ...bookingData,
-        deposit: getServiceDeposit(bookingData.service),
+        // The agreement is a client-facing document, so it carries the USD
+        // figure the client was quoted — not the ZAR amount Paystack settles.
+        deposit: getServiceDepositUSD(bookingData.service),
         paymentStatus: paymentStatus === 'paid' ? 'paid' : 'pending',
       });
       toast.dismiss();
@@ -1117,11 +1132,13 @@ export default function ChatbotWidget() {
                             🔒 Secure Your Booking
                           </p>
                           <p className="text-lg font-bold text-[var(--accent-gold)]">
-                            R{getServiceDeposit(bookingData.service).toLocaleString('en-ZA')}
+                            ${getServiceDepositUSD(bookingData.service).toLocaleString('en-US')}
                           </p>
                         </div>
                         <p className="text-xs text-[var(--text-secondary)] mb-3">
                           Pay a deposit now to lock in your slot. The balance is invoiced on delivery.
+                          {' '}Billed as R{getServiceDeposit(bookingData.service).toLocaleString('en-ZA')} at
+                          checkout — our payment processor settles in ZAR.
                         </p>
                         <motion.button
                           whileHover={{ scale: paymentStatus === 'processing' ? 1 : 1.02 }}
@@ -1136,7 +1153,7 @@ export default function ChatbotWidget() {
                               Opening payment…
                             </>
                           ) : (
-                            <>💳 Pay R{getServiceDeposit(bookingData.service).toLocaleString('en-ZA')} Deposit</>
+                            <>💳 Pay ${getServiceDepositUSD(bookingData.service).toLocaleString('en-US')} Deposit</>
                           )}
                         </motion.button>
                         <p className="text-[10px] text-[var(--text-secondary)] text-center mt-2">
