@@ -157,7 +157,7 @@ async function auditPage(path) {
     if (svc?.offers) {
       ok(typeof svc.offers.price === 'number' && svc.offers.price > 0, path,
         `Offer price is ${svc.offers.price}, expected a positive number`);
-      ok(svc.offers.priceCurrency === 'ZAR', path, `currency ${svc.offers.priceCurrency}, expected ZAR`);
+      ok(svc.offers.priceCurrency === 'USD', path, `currency ${svc.offers.priceCurrency}, expected USD`);
     }
 
     const faq = blocks.find((b) => b['@type'] === 'FAQPage');
