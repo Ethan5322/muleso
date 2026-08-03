@@ -1,8 +1,33 @@
 import 'server-only';
 import { NextResponse, type NextRequest } from 'next/server';
 import { getCorpContext, type CorpContext } from '@/lib/corp/auth';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { supabaseAdmin, serviceRoleConfigured, SERVICE_ROLE_HINT } from '@/lib/supabaseAdmin';
 import { isAdminRequest } from '@/lib/adminAuth';
+
+/**
+ * The response for "getMessagingIdentity() gave us nothing".
+ *
+ * Distinguishes the two causes that used to be indistinguishable. A genuinely
+ * unauthenticated caller still gets 401 'unauthorized'. But when the
+ * service-role key is missing, identity lookup fails for a completely
+ * different reason — the query silently returned no rows — and reporting that
+ * as 'unauthorized' sent everyone hunting for a login problem. Say what is
+ * actually wrong; the UI renders `error` verbatim.
+ *
+ * The remedy names an env var and an internal diagnostic route, so it is shown
+ * only to the verified owner. That check reads the admin cookie and never
+ * touches Supabase, so it still works in exactly the broken state it reports
+ * on. Anonymous callers get the bare fact and nothing to enumerate.
+ */
+export function corpIdentityFailure(req: NextRequest): NextResponse {
+  if (!serviceRoleConfigured) {
+    const detail = isAdminRequest(req)
+      ? `Server misconfigured. ${SERVICE_ROLE_HINT}`
+      : 'This service is temporarily unavailable.';
+    return NextResponse.json({ error: detail }, { status: 503 });
+  }
+  return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+}
 
 /** Require any active corporate admin. Returns ctx or an error response. */
 export async function requireCorp(): Promise<

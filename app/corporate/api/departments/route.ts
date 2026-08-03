@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity, writeAudit } from '@/lib/corp/api';
+import { getMessagingIdentity, writeAudit, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // GET — list departments with headcount + open-task counts.
 export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
 
   const [{ data: depts }, { data: admins }, { data: tasks }] = await Promise.all([
     supabaseAdmin.from('corp_departments').select('*').order('id', { ascending: true }),

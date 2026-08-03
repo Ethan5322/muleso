@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity } from '@/lib/corp/api';
+import { getMessagingIdentity, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // Team channel feed — department-aware. Reliable delivery via service-role.
 export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
 
   const { data: channels } = await supabaseAdmin
     .from('corp_team_channels')

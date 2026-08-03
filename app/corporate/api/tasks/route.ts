@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity, adminHasCapability, writeAudit } from '@/lib/corp/api';
+import { getMessagingIdentity, adminHasCapability, writeAudit, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -40,7 +40,7 @@ async function departmentDirectory() {
 // GET — the task board, scoped to who's asking.
 export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
 
   let q = supabaseAdmin.from('corp_tasks').select('*').order('created_at', { ascending: false }).limit(500);
   if (!id.isSuper) {
@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
 // POST — create/assign a task.
 export async function POST(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
   if (id.isVisitor) return NextResponse.json({ error: 'Visitors are read-only.' }, { status: 403 });
 
   const body = await req.json().catch(() => ({}));

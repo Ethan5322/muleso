@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity } from '@/lib/corp/api';
+import { getMessagingIdentity, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +20,11 @@ interface DeptReport {
 // Per-department performance for the main admin. Super/main only.
 export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id?.isSuper) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
+  // No identity at all can mean "not signed in" or "service-role key missing";
+  // corpIdentityFailure(req) tells those apart. A real identity that just is not
+  // super is a genuine permission answer.
+  if (!id) return corpIdentityFailure(req);
+  if (!id.isSuper) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
 
   const [{ data: depts }, { data: admins }, { data: tasks }] = await Promise.all([
     supabaseAdmin.from('corp_departments').select('id, name, active').order('id', { ascending: true }),

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity } from '@/lib/corp/api';
+import { getMessagingIdentity, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // Current admin's DMs + the roster of other admins (for the recipient list).
 export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
 
   const [{ data: messages }, { data: roster }] = await Promise.all([
     supabaseAdmin

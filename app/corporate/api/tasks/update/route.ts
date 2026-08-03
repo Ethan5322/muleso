@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity, writeAudit } from '@/lib/corp/api';
+import { getMessagingIdentity, writeAudit, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 // Super/main admin may act on anything and reassign to anyone.
 export async function POST(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
   if (id.isVisitor) return NextResponse.json({ error: 'Visitors are read-only.' }, { status: 403 });
 
   const body = await req.json().catch(() => ({}));
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 // DELETE — remove a task (super/main only).
 export async function DELETE(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
   if (!id.isSuper) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
   const { searchParams } = new URL(req.url);
   const taskId = searchParams.get('id');

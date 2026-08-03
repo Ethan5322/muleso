@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity } from '@/lib/corp/api';
+import { getMessagingIdentity, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +15,7 @@ async function canSeeTask(taskId: string, id: { isSuper: boolean; departmentId: 
 // GET ?task_id= — comments for one task, oldest first.
 export async function GET(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
   const taskId = new URL(req.url).searchParams.get('task_id');
   if (!taskId) return NextResponse.json({ error: 'task_id required' }, { status: 400 });
   if (!(await canSeeTask(taskId, id))) return NextResponse.json({ error: 'forbidden' }, { status: 403 });
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
 // POST — add a comment to a task.
 export async function POST(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
   if (id.isVisitor) return NextResponse.json({ error: 'Visitors are read-only.' }, { status: 403 });
 
   const body = await req.json().catch(() => ({}));

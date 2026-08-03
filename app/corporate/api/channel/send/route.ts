@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { getMessagingIdentity, adminHasCapability } from '@/lib/corp/api';
+import { getMessagingIdentity, adminHasCapability, corpIdentityFailure } from '@/lib/corp/api';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 export const dynamic = 'force-dynamic';
@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 // Post a channel message / reply, optionally targeted to one department.
 export async function POST(req: NextRequest) {
   const id = await getMessagingIdentity(req);
-  if (!id) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  if (!id) return corpIdentityFailure(req);
   if (id.isVisitor) return NextResponse.json({ error: 'Read-only visitor access — you cannot post.' }, { status: 403 });
 
   const { channel_id, body, parent_message_id, target_department_id } = await req.json();
