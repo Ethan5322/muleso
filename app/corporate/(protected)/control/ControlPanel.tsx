@@ -38,19 +38,31 @@ export default function ControlPanel() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
 
+  // Every branch must reach `setLoading(false)`. Without the try/finally a
+  // single rejected fetch (offline, or an HTML error page that .json() chokes
+  // on) left this screen stuck on "Loading control panel…" forever.
   const load = useCallback(async () => {
-    const [a, l, d] = await Promise.all([
-      fetch('/corporate/api/admins').then((r) => r.json()),
-      fetch('/corporate/api/audit').then((r) => r.json()),
-      fetch('/corporate/api/dm-oversight').then((r) => r.json()).catch(() => ({ items: [] })),
-    ]);
-    setAdmins(a.admins ?? []);
-    setCaps(a.capabilities ?? []);
-    setLogs(l.logs ?? []);
-    setNameById({ ...(l.nameById ?? {}), ...(d.nameById ?? {}) });
-    setDmMeta(d.items ?? []);
-    setMe(a.me ?? null);
-    setLoading(false);
+    const asJson = (url: string, fallback: Record<string, unknown>) =>
+      fetch(url)
+        .then((r) => (r.ok ? r.json() : fallback))
+        .catch(() => fallback);
+    try {
+      const [a, l, d] = await Promise.all([
+        asJson('/corporate/api/admins', { admins: [], capabilities: [] }),
+        asJson('/corporate/api/audit', { logs: [] }),
+        asJson('/corporate/api/dm-oversight', { items: [] }),
+      ]);
+      setAdmins(a.admins ?? []);
+      setCaps(a.capabilities ?? []);
+      setLogs(l.logs ?? []);
+      setNameById({ ...(l.nameById ?? {}), ...(d.nameById ?? {}) });
+      setDmMeta(d.items ?? []);
+      setMe(a.me ?? null);
+    } catch {
+      toast.error('Could not load the control panel. Check your connection and refresh.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -68,18 +80,24 @@ export default function ControlPanel() {
       if (found) return prev.map((c) => (c === found ? { ...c, enabled: next } : c));
       return [...prev, { department_admin_id: adminId, capability_key: key, enabled: next }];
     });
-    const res = await fetch('/corporate/api/capability', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ department_admin_id: adminId, capability_key: key, enabled: next }),
-    });
-    if (!res.ok) {
-      toast.error('Could not update that capability — please try again.');
-      await load(); // revert on failure
-    } else {
-      load();
+    try {
+      const res = await fetch('/corporate/api/capability', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ department_admin_id: adminId, capability_key: key, enabled: next }),
+      });
+      if (!res.ok) {
+        toast.error('Could not update that capability — please try again.');
+        await load(); // revert on failure
+      } else {
+        await load();
+      }
+    } catch {
+      toast.error('Network error — that capability was not changed.');
+      await load();
+    } finally {
+      setBusy(null);
     }
-    setBusy(null);
   };
 
   const setStatus = async (adminId: string, status: 'active' | 'suspended') => {
@@ -91,15 +109,20 @@ export default function ControlPanel() {
       if (input.trim() !== '' && Number.isFinite(n) && n > 0) days = n;
     }
     setBusy(`status:${adminId}`);
-    const res = await fetch('/corporate/api/admin-status', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ department_admin_id: adminId, status, days }),
-    });
-    if (res.ok) toast.success(status === 'suspended' ? 'Admin suspended' : 'Admin reactivated');
-    else toast.error('Action failed — please try again.');
-    await load();
-    setBusy(null);
+    try {
+      const res = await fetch('/corporate/api/admin-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ department_admin_id: adminId, status, days }),
+      });
+      if (res.ok) toast.success(status === 'suspended' ? 'Admin suspended' : 'Admin reactivated');
+      else toast.error('Action failed — please try again.');
+      await load();
+    } catch {
+      toast.error('Network error — the status was not changed.');
+    } finally {
+      setBusy(null);
+    }
   };
 
   const downloadCard = async (adminId: string) => {
@@ -125,18 +148,23 @@ export default function ControlPanel() {
       : `Permanently delete ${name}? This removes their account and all their data.`;
     if (!confirm(msg)) return;
     setBusy(`del:${adminId}`);
-    const res = await fetch('/corporate/api/admin-delete', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ department_admin_id: adminId, force }),
-    });
-    if (res.ok) toast.success(`${name} deleted`);
-    else {
-      const e = await res.json().catch(() => ({}));
-      toast.error(e.error || 'Could not delete — please try again.');
+    try {
+      const res = await fetch('/corporate/api/admin-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ department_admin_id: adminId, force }),
+      });
+      if (res.ok) toast.success(`${name} deleted`);
+      else {
+        const e = await res.json().catch(() => ({}));
+        toast.error(e.error || 'Could not delete — please try again.');
+      }
+      await load();
+    } catch {
+      toast.error('Network error — nothing was deleted.');
+    } finally {
+      setBusy(null);
     }
-    await load();
-    setBusy(null);
   };
 
   if (loading) {
@@ -164,12 +192,12 @@ export default function ControlPanel() {
       <section className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl overflow-hidden">
         <div className="px-5 py-3 border-b border-[#1A2640]">
           <h2 className="font-semibold font-sora text-sm">Capabilities</h2>
-          <p className="text-xs text-[#6E7A91]">Toggle what each department admin is allowed to do.</p>
+          <p className="text-xs text-[#8FA0BE]">Toggle what each department admin is allowed to do.</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm min-w-[640px]">
             <thead>
-              <tr className="border-b border-[#1A2640] text-[#6E7A91]">
+              <tr className="border-b border-[#1A2640] text-[#8FA0BE]">
                 <th className="text-left p-3 font-semibold">Admin</th>
                 {CAPABILITIES.map((c) => (
                   <th key={c.key} className="p-3 font-semibold text-center" title={c.hint}>
@@ -182,7 +210,7 @@ export default function ControlPanel() {
             <tbody>
               {deptAdmins.length === 0 && (
                 <tr>
-                  <td colSpan={CAPABILITIES.length + 2} className="p-6 text-center text-[#6E7A91]">
+                  <td colSpan={CAPABILITIES.length + 2} className="p-6 text-center text-[#8FA0BE]">
                     No department admins yet. Use “Register new admin” above to add one.
                   </td>
                 </tr>
@@ -199,7 +227,7 @@ export default function ControlPanel() {
                       )}
                     </div>
                     {a.role_title && <div className="text-[11px] text-[#00C8FF] mt-0.5">{a.role_title}</div>}
-                    <div className="text-xs text-[#6E7A91] flex items-center gap-2 mt-0.5 flex-wrap">
+                    <div className="text-xs text-[#8FA0BE] flex items-center gap-2 mt-0.5 flex-wrap">
                       <span>{a.department_name || `Dept ${a.department_id ?? ''}`}</span>
                       {a.status === 'suspended' && (
                         <span className="text-red-400 font-semibold">
@@ -243,7 +271,7 @@ export default function ControlPanel() {
                         disabled={busy === `card:${a.id}`}
                         onClick={() => downloadCard(a.id)}
                         title="Download / re-issue ID card"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#00C8FF] hover:text-[#7B2FFF] disabled:opacity-40"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#00C8FF] hover:text-[#a78bfa] disabled:opacity-40"
                       >
                         {busy === `card:${a.id}` ? <Loader2 size={14} className="animate-spin" /> : <IdCard size={14} />}
                       </button>
@@ -271,7 +299,7 @@ export default function ControlPanel() {
                         disabled={busy === `del:${a.id}`}
                         onClick={() => deleteAdmin(a.id, a.display_name || 'this admin')}
                         title="Permanently delete"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#6E7A91] hover:text-red-400 disabled:opacity-40"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#8FA0BE] hover:text-red-400 disabled:opacity-40"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -292,7 +320,7 @@ export default function ControlPanel() {
             <h2 className="font-semibold font-sora text-sm">Super-admin accounts</h2>
           </div>
           <div className="p-5 space-y-2">
-            <p className="text-xs text-[#6E7A91] mb-1">
+            <p className="text-xs text-[#8FA0BE] mb-1">
               These accounts are flagged as super-admin (no capability limits). If one was created by mistake — e.g. a
               test account — you can force-delete it here.
             </p>
@@ -303,7 +331,7 @@ export default function ControlPanel() {
                     {a.display_name || 'Unnamed'}
                     <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#00C8FF]/15 text-[#00C8FF] uppercase tracking-wide">Super</span>
                   </p>
-                  <p className="text-xs text-[#6E7A91] truncate">{a.role_title || a.department_name || `Dept ${a.department_id ?? ''}`}</p>
+                  <p className="text-xs text-[#8FA0BE] truncate">{a.role_title || a.department_name || `Dept ${a.department_id ?? ''}`}</p>
                 </div>
                 <button
                   type="button"
@@ -326,7 +354,7 @@ export default function ControlPanel() {
           <h2 className="font-semibold font-sora text-sm">Audit log</h2>
         </div>
         <div className="divide-y divide-[#101a30] max-h-96 overflow-y-auto">
-          {logs.length === 0 && <p className="p-5 text-sm text-[#6E7A91]">No activity yet.</p>}
+          {logs.length === 0 && <p className="p-5 text-sm text-[#8FA0BE]">No activity yet.</p>}
           {logs.map((log) => (
             <div key={log.id} className="px-5 py-3 text-sm">
               <div className="flex items-center justify-between gap-3">
@@ -337,12 +365,12 @@ export default function ControlPanel() {
                     <span className="font-semibold">{nameById[log.target_admin_id] || 'an admin'}</span>
                   )}
                 </span>
-                <span className="text-xs text-[#6E7A91] whitespace-nowrap">
+                <span className="text-xs text-[#8FA0BE] whitespace-nowrap">
                   {new Date(log.created_at).toLocaleString()}
                 </span>
               </div>
               {Object.keys(log.detail || {}).length > 0 && (
-                <div className="text-xs text-[#6E7A91] mt-0.5 font-mono">{JSON.stringify(log.detail)}</div>
+                <div className="text-xs text-[#8FA0BE] mt-0.5 font-mono">{JSON.stringify(log.detail)}</div>
               )}
             </div>
           ))}
@@ -354,23 +382,23 @@ export default function ControlPanel() {
         <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
           <MessageSquareLock size={16} className="text-[#7B2FFF]" />
           <h2 className="font-semibold font-sora text-sm">Message oversight</h2>
-          <span className="ml-auto text-[11px] text-[#6E7A91] inline-flex items-center gap-1">
+          <span className="ml-auto text-[11px] text-[#8FA0BE] inline-flex items-center gap-1">
             <Check size={12} className="text-[#00FF88]" /> Metadata only — contents stay private
           </span>
         </div>
         <div className="divide-y divide-[#101a30] max-h-96 overflow-y-auto">
-          {dmMeta.length === 0 && <p className="p-5 text-sm text-[#6E7A91]">No messages yet.</p>}
+          {dmMeta.length === 0 && <p className="p-5 text-sm text-[#8FA0BE]">No messages yet.</p>}
           {dmMeta.map((m) => (
             <div key={m.id} className="px-5 py-2.5 text-sm flex items-center justify-between gap-3">
               <span className="text-[#F0F2FA] truncate">
                 <span className="font-semibold">{nameById[m.sender_id] || 'Admin'}</span>
-                <span className="text-[#6E7A91]"> → </span>
+                <span className="text-[#8FA0BE]"> → </span>
                 <span className="font-semibold">{nameById[m.recipient_id] || 'Admin'}</span>
                 <span className={`ml-2 text-[11px] ${m.read_at ? 'text-[#00FF88]' : 'text-[#E8B84B]'}`}>
                   {m.read_at ? 'read' : 'unread'}
                 </span>
               </span>
-              <span className="text-xs text-[#6E7A91] whitespace-nowrap">
+              <span className="text-xs text-[#8FA0BE] whitespace-nowrap">
                 {new Date(m.created_at).toLocaleString()}
               </span>
             </div>

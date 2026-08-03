@@ -92,18 +92,18 @@ export default function AdminSearch() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0F1624] border border-[#1E3A5F] text-[#5A6B88] hover:text-white transition-colors"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0F1624] border border-[#1E3A5F] text-[#8296B8] hover:text-white transition-colors"
         aria-label="Search"
       >
         <Search size={16} />
         <span className="hidden md:inline text-xs">Search…</span>
-        <span className="hidden md:inline text-[10px] border border-[#1E3A5F] rounded px-1 text-[#3d475e]">Ctrl K</span>
+        <span className="hidden md:inline text-[10px] border border-[#1E3A5F] rounded px-1 text-[#7A8BA8]">Ctrl K</span>
       </button>
 
       {open && (
         <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-[#0A0E17] border border-[#1E3A5F] rounded-xl shadow-2xl overflow-hidden z-50">
           <div className="flex items-center gap-2 px-3 py-2.5 border-b border-[#1E3A5F]">
-            <Search size={16} className="text-[#5A6B88]" />
+            <Search size={16} className="text-[#8296B8]" />
             <input
               ref={inputRef}
               value={q}
@@ -112,22 +112,22 @@ export default function AdminSearch() {
               className="flex-1 bg-transparent text-sm text-white focus:outline-none"
             />
             {q && (
-              <button type="button" onClick={() => setQ('')} className="text-[#5A6B88] hover:text-white">
+              <button type="button" onClick={() => setQ('')} className="text-[#8296B8] hover:text-white">
                 <X size={14} />
               </button>
             )}
           </div>
           <div className="max-h-80 overflow-y-auto">
             {loading && (
-              <p className="px-4 py-4 text-xs text-[#5A6B88] flex items-center gap-2">
+              <p className="px-4 py-4 text-xs text-[#8296B8] flex items-center gap-2">
                 <Loader2 size={13} className="animate-spin" /> Loading…
               </p>
             )}
             {!loading && term.length < 2 && (
-              <p className="px-4 py-4 text-xs text-[#5A6B88]">Type a name, email, service or code…</p>
+              <p className="px-4 py-4 text-xs text-[#8296B8]">Type a name, email, service or code…</p>
             )}
             {!loading && term.length >= 2 && results.length === 0 && (
-              <p className="px-4 py-4 text-xs text-[#5A6B88]">No matches.</p>
+              <p className="px-4 py-4 text-xs text-[#8296B8]">No matches.</p>
             )}
             {results.map((r) => (
               <button
@@ -145,11 +145,11 @@ export default function AdminSearch() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm text-white truncate">
-                    {r.name || 'Unknown'} <span className="text-[#5A6B88] font-normal">· {r.service || r.kind}</span>
+                    {r.name || 'Unknown'} <span className="text-[#8296B8] font-normal">· {r.service || r.kind}</span>
                   </span>
-                  <span className="block text-[11px] text-[#5A6B88] truncate">{r.email}</span>
+                  <span className="block text-[11px] text-[#8296B8] truncate">{r.email}</span>
                 </span>
-                {r.status && <span className="text-[10px] text-[#5A6B88]">{r.status}</span>}
+                {r.status && <span className="text-[10px] text-[#8296B8]">{r.status}</span>}
               </button>
             ))}
           </div>

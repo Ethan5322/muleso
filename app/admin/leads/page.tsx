@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Loader2, X, Mail, MessageCircle, Trash2, Save, Search, Download } from 'lucide-react';
 
 interface Lead {
@@ -153,7 +153,6 @@ export default function LeadsInbox() {
 
   return (
     <div className="text-white">
-      <Toaster position="top-center" />
       <div className="mb-6">
         <h2 className="text-3xl font-bold font-sora">Leads Inbox</h2>
         <p className="text-[#7A8BA8]">Contact-form enquiries — {leads.length} total</p>

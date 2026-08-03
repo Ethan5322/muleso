@@ -119,25 +119,35 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
       return;
     }
     setBusy(true);
-    const res = await fetch('/corporate/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        display_name: name,
-        email,
-        password,
-        department_id: deptId ? Number(deptId) : null,
-        department_name: deptName || null,
-        role_title: roleTitle || null,
-        capabilities: isVisitor ? [] : caps,
-        is_visitor: isVisitor,
-        expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
-        photo_data_url: idPhoto,
-        // Biometric only when captured live. Uploaded-photo registrations have
-        // no face template — the sub-admin enrols it themselves later.
-        face_descriptor: photoMode === 'capture' ? face?.descriptors ?? null : null,
-      }),
-    });
+    let res: Response;
+    try {
+      res = await fetch('/corporate/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          display_name: name,
+          email,
+          password,
+          department_id: deptId ? Number(deptId) : null,
+          department_name: deptName || null,
+          role_title: roleTitle || null,
+          capabilities: isVisitor ? [] : caps,
+          is_visitor: isVisitor,
+          expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
+          photo_data_url: idPhoto,
+          // Biometric only when captured live. Uploaded-photo registrations have
+          // no face template — the sub-admin enrols it themselves later.
+          face_descriptor: photoMode === 'capture' ? face?.descriptors ?? null : null,
+        }),
+      });
+    } catch {
+      // Without this the request could reject and leave `busy` true, which
+      // disabled the Register button until the page was reloaded.
+      setBusy(false);
+      setError('Network error — the admin was not registered. Check your connection and try again.');
+      return;
+    }
+
     const data = await res.json().catch(() => ({}));
     setBusy(false);
     if (!res.ok) {
@@ -183,7 +193,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
         <h2 className="font-semibold font-sora flex items-center gap-2">
           <UserPlus size={18} className="text-[#00C8FF]" /> Register department admin
         </h2>
-        <button onClick={() => { setOpen(false); reset(); }} className="text-[#6E7A91] hover:text-white">
+        <button onClick={() => { setOpen(false); reset(); }} className="text-[#8FA0BE] hover:text-white">
           <X size={18} />
         </button>
       </div>

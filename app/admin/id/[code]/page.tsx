@@ -93,7 +93,7 @@ export default function StaffIdPage() {
                   className="w-24 h-[124px] object-cover rounded-lg border border-[#1E3A5F]"
                 />
               ) : (
-                <div className="w-24 h-[124px] rounded-lg bg-[#1A2332] flex items-center justify-center text-[#3d475e] text-xs">
+                <div className="w-24 h-[124px] rounded-lg bg-[#1A2332] flex items-center justify-center text-[#7A8BA8] text-xs">
                   No photo
                 </div>
               )}

@@ -58,13 +58,20 @@ export default function CorporateSettings() {
     const reader = new FileReader();
     reader.onload = async () => {
       setSaving(true);
-      const { photo, descriptor } = await imageToIdData(reader.result as string);
-      if (!descriptor) {
+      try {
+        const { photo, descriptor } = await imageToIdData(reader.result as string);
+        if (!descriptor) {
+          setSaving(false);
+          setErr('No face detected in that photo. Use a clear, front-facing photo or use the live camera.');
+          return;
+        }
+        await enrol([descriptor], photo);
+      } catch {
+        // Image decoding / face-model load can throw. Without this the spinner
+        // never stops and the enrol controls stay disabled.
         setSaving(false);
-        setErr('No face detected in that photo. Use a clear, front-facing photo or use the live camera.');
-        return;
+        setErr('That photo could not be processed. Try a different one, or use the live camera.');
       }
-      await enrol([descriptor], photo);
     };
     reader.readAsDataURL(file);
   };
@@ -95,7 +102,7 @@ export default function CorporateSettings() {
           </span>
           <div>
             <h2 className="font-semibold font-sora text-sm">Face sign-in</h2>
-            <p className="text-xs text-[#6E7A91]">
+            <p className="text-xs text-[#8FA0BE]">
               {enrolled === null ? 'Checking…' : enrolled ? 'Enrolled — you can log in with Face.' : 'Not set up — log in by password, code, or QR until you enrol.'}
             </p>
           </div>
@@ -154,7 +161,7 @@ export default function CorporateSettings() {
             {saving && (
               <p className="text-xs text-[#00C8FF] flex items-center gap-1"><Loader2 className="animate-spin" size={12} /> Saving…</p>
             )}
-            <button type="button" onClick={() => setEnrolling(false)} className="text-xs text-[#6E7A91] hover:text-white">
+            <button type="button" onClick={() => setEnrolling(false)} className="text-xs text-[#8FA0BE] hover:text-white">
               Cancel
             </button>
           </div>
@@ -165,7 +172,7 @@ export default function CorporateSettings() {
       <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-6 flex items-center justify-between gap-4">
         <div>
           <h2 className="font-semibold font-sora text-sm">My staff ID card</h2>
-          <p className="text-xs text-[#6E7A91]">Download your badge (photo, staff no., verification code, QR).</p>
+          <p className="text-xs text-[#8FA0BE]">Download your badge (photo, staff no., verification code, QR).</p>
         </div>
         <button
           type="button"

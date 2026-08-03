@@ -140,28 +140,34 @@ export default function ChannelPage() {
     if (!body.trim() || !channel) return;
     setSending(true);
     setErr(null);
-    const res = await fetch('/corporate/api/channel/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        channel_id: channel.id,
-        body,
-        parent_message_id: parent || null,
-        // replies inherit the thread; top-level posts use the selected target
-        target_department_id: parent ? null : target || null,
-      }),
-    });
-    if (res.ok) {
-      if (parent) {
-        setReplyText('');
-        setReplyTo(null);
-      } else setInput('');
-      await load();
-    } else {
-      const d = await res.json().catch(() => ({}));
-      setErr(d.error || 'Could not post.');
+    try {
+      const res = await fetch('/corporate/api/channel/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          channel_id: channel.id,
+          body,
+          parent_message_id: parent || null,
+          // replies inherit the thread; top-level posts use the selected target
+          target_department_id: parent ? null : target || null,
+        }),
+      });
+      if (res.ok) {
+        if (parent) {
+          setReplyText('');
+          setReplyTo(null);
+        } else setInput('');
+        await load();
+      } else {
+        const d = await res.json().catch(() => ({}));
+        setErr(d.error || 'Could not post.');
+      }
+    } catch {
+      setErr('Network error — your post was not sent.');
+    } finally {
+      // Must always run, or the send button stays disabled until a reload.
+      setSending(false);
     }
-    setSending(false);
   };
 
   const react = async (message_id: string, emoji: string) => {
@@ -214,7 +220,7 @@ export default function ChannelPage() {
             </span>
             <div className="flex items-center gap-2">
               {m.pinned && <Pin size={12} className="text-[#E8B84B]" />}
-              <span className="text-[10px] text-[#6E7A91]">
+              <span className="text-[10px] text-[#8FA0BE]">
                 {new Date(m.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
               </span>
             </div>
@@ -241,7 +247,7 @@ export default function ChannelPage() {
             {!isReply && (
               <button
                 onClick={() => setReplyTo(replyTo === m.id ? null : m.id)}
-                className="text-xs text-[#6E7A91] hover:text-[#00C8FF] inline-flex items-center gap-1"
+                className="text-xs text-[#8FA0BE] hover:text-[#00C8FF] inline-flex items-center gap-1"
               >
                 <CornerDownRight size={12} /> Reply
               </button>
@@ -249,7 +255,7 @@ export default function ChannelPage() {
             {canPin && (
               <button
                 onClick={() => pin(m.id, !m.pinned)}
-                className="text-xs text-[#6E7A91] hover:text-[#E8B84B] inline-flex items-center gap-1"
+                className="text-xs text-[#8FA0BE] hover:text-[#E8B84B] inline-flex items-center gap-1"
               >
                 {m.pinned ? <PinOff size={12} /> : <Pin size={12} />} {m.pinned ? 'Unpin' : 'Pin'}
               </button>
@@ -296,7 +302,7 @@ export default function ChannelPage() {
       <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
         <Hash size={16} className="text-[#00C8FF]" />
         <h1 className="font-semibold font-sora text-sm">{channel?.name?.replace('#', '') || 'team-updates'}</h1>
-        <span className="text-xs text-[#6E7A91]">· share what you&apos;re building</span>
+        <span className="text-xs text-[#8FA0BE]">· share what you&apos;re building</span>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -316,7 +322,7 @@ export default function ChannelPage() {
         )}
 
         {topLevel.length === 0 && (
-          <p className="text-center text-sm text-[#6E7A91] py-10">
+          <p className="text-center text-sm text-[#8FA0BE] py-10">
             No posts yet. Be the first to share what you&apos;re building 🚀
           </p>
         )}
@@ -330,7 +336,7 @@ export default function ChannelPage() {
         {/* @mention autocomplete */}
         {suggestions.length > 0 && (
           <div className="absolute bottom-full left-3 mb-1 w-64 bg-[#0A0F1E] border border-[#1A2640] rounded-lg shadow-2xl overflow-hidden z-20">
-            <p className="px-3 py-1.5 text-[10px] uppercase tracking-wide text-[#6E7A91] border-b border-[#1A2640]">Mention</p>
+            <p className="px-3 py-1.5 text-[10px] uppercase tracking-wide text-[#8FA0BE] border-b border-[#1A2640]">Mention</p>
             {suggestions.map((r) => (
               <button
                 key={r.id}

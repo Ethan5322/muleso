@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Download, RefreshCw, ShieldCheck } from 'lucide-react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { getAllAuditLogs, downloadAuditLogsCSV, AuditLogEntry } from '@/lib/auditLog';
 
 // Mirrors the server's ADMIN_EMAIL env var (see app/admin/login/page.tsx).
@@ -66,7 +66,6 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="max-w-4xl space-y-6">
-      <Toaster position="top-center" />
       <div>
         <h2 className="text-3xl font-bold text-white mb-2 font-sora">Settings</h2>
         <p className="text-[#7A8BA8]">Account, security, and activity</p>

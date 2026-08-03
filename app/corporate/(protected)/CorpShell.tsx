@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { createCorpBrowserClient } from '@/lib/corp/supabaseBrowser';
 import { Building2, LogOut, LayoutDashboard, MessageSquare, Hash, ShieldCheck, Settings, ArrowLeft, CheckSquare } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 import type { CorpAdmin } from '@/lib/corp/constants';
 
 export default function CorpShell({
@@ -94,6 +95,22 @@ export default function CorpShell({
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Toast host for the corporate workspace — same reason as /admin:
+          ClientWrapper renders no ChatbotWidget here, so nothing was listening. */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#0A0F1E',
+            color: '#F0F2FA',
+            border: '1px solid #1A2640',
+            fontSize: '14px',
+          },
+          success: { iconTheme: { primary: '#00FF88', secondary: '#0A0F1E' } },
+          error: { duration: 6000, iconTheme: { primary: '#FF5C7C', secondary: '#0A0F1E' } },
+        }}
+      />
+
       {/* Top bar */}
       <header className="border-b border-[#1A2640] bg-[#0A0F1E]/80 backdrop-blur sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -111,7 +128,7 @@ export default function CorpShell({
             </span>
             <div className="leading-tight">
               <p className="font-bold font-sora text-sm">MuleSoo Corporate</p>
-              <p className="text-[11px] text-[#6E7A91]">
+              <p className="text-[11px] text-[#8FA0BE]">
                 {admin.is_super_admin ? 'Super Admin' : admin.department_name || `Dept ${admin.department_id ?? ''}`}
               </p>
             </div>
@@ -187,7 +204,7 @@ export default function CorpShell({
             ) : (
               <span
                 key={item.href}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#3d475e] cursor-not-allowed"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#8FA0BE] cursor-not-allowed"
                 title="Coming in a later phase"
               >
                 <Icon size={17} /> {item.label}

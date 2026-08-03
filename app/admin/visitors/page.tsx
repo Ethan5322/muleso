@@ -119,7 +119,7 @@ export default function VisitorsPage() {
             className="bg-[#1A2332] border border-[#00C8FF]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[#00C8FF]/60 text-sm font-semibold">TOTAL VISITORS</p>
+              <p className="text-[#00C8FF] text-sm font-semibold">TOTAL VISITORS</p>
               <Users className="text-[#00C8FF]" size={24} />
             </div>
             <p className="text-4xl font-bold">{totalVisitors}</p>
@@ -132,7 +132,7 @@ export default function VisitorsPage() {
             className="bg-[#1A2332] border border-[#00C8FF]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[#00C8FF]/60 text-sm font-semibold">MOBILE</p>
+              <p className="text-[#00C8FF] text-sm font-semibold">MOBILE</p>
               <Smartphone className="text-[#00C8FF]" size={24} />
             </div>
             <p className="text-4xl font-bold">{mobilePercentage.toFixed(1)}%</p>
@@ -145,7 +145,7 @@ export default function VisitorsPage() {
             className="bg-[#1A2332] border border-[#00C8FF]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[#00C8FF]/60 text-sm font-semibold">DESKTOP</p>
+              <p className="text-[#00C8FF] text-sm font-semibold">DESKTOP</p>
               <Monitor className="text-[#00C8FF]" size={24} />
             </div>
             <p className="text-4xl font-bold">{desktopPercentage.toFixed(1)}%</p>

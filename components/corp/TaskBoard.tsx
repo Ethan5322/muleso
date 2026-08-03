@@ -1,9 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, Plus, Trash2, Flag, CalendarDays, User, Building2, CheckCircle2, MessageSquare, Send, Download } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { TASK_STATUS, TASK_PRIORITY, type CorpTask } from '@/lib/corp/constants';
 import { downloadCSV } from '@/lib/csv';
+
+/** Turn any failed response into the clearest sentence we can show the user. */
+async function failureMessage(r: Response, fallback: string): Promise<string> {
+  const d = await r.json().catch(() => ({} as { error?: string }));
+  if (d?.error) return d.error;
+  if (r.status === 401) return 'Your session expired. Sign in again to continue.';
+  if (r.status === 403) return 'You do not have permission to do that.';
+  return `${fallback} (HTTP ${r.status})`;
+}
 
 interface TaskComment {
   id: string;
@@ -45,35 +55,44 @@ function TaskComments({ taskId }: { taskId: string }) {
     load();
   }, [load]);
 
+  // try/finally is load-bearing: without it a rejected fetch left `sending`
+  // true forever and the send button stayed disabled until a page reload.
   const send = async () => {
     if (!input.trim()) return;
     setSending(true);
-    const r = await fetch('/corporate/api/tasks/comments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ task_id: taskId, body: input }),
-    });
-    if (r.ok) {
-      setInput('');
-      await load();
+    try {
+      const r = await fetch('/corporate/api/tasks/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task_id: taskId, body: input }),
+      });
+      if (r.ok) {
+        setInput('');
+        await load();
+      } else {
+        toast.error(await failureMessage(r, 'Could not post that note'));
+      }
+    } catch {
+      toast.error('Network error — your note was not posted.');
+    } finally {
+      setSending(false);
     }
-    setSending(false);
   };
 
   return (
     <div className="mt-3 pt-3 border-t border-[#1A2640]">
       {loading ? (
-        <p className="text-[11px] text-[#6E7A91] flex items-center gap-1"><Loader2 className="animate-spin" size={11} /> Loading…</p>
+        <p className="text-[11px] text-[#8FA0BE] flex items-center gap-1"><Loader2 className="animate-spin" size={11} /> Loading…</p>
       ) : (
         <div className="space-y-2 mb-2 max-h-56 overflow-y-auto">
           {comments.length === 0 ? (
-            <p className="text-[11px] text-[#6E7A91]">No notes yet. Add the first progress note.</p>
+            <p className="text-[11px] text-[#8FA0BE]">No notes yet. Add the first progress note.</p>
           ) : (
             comments.map((c) => (
               <div key={c.id} className={`text-xs rounded-lg px-2.5 py-1.5 ${c.author_id === me ? 'bg-[#00C8FF]/5 border border-[#00C8FF]/20' : 'bg-[#0D1528] border border-[#1A2640]'}`}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold text-[#D4DAEA]">{c.author_id ? (nameById[c.author_id] || 'Admin') : 'Admin'}</span>
-                  <span className="text-[10px] text-[#5A6B88]">{new Date(c.created_at).toLocaleString()}</span>
+                  <span className="text-[10px] text-[#8FA0BE]">{new Date(c.created_at).toLocaleString()}</span>
                 </div>
                 <p className="text-[#A8B2D0] mt-0.5 whitespace-pre-wrap">{c.body}</p>
               </div>
@@ -154,15 +173,19 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
   const [fAssignee, setFAssignee] = useState('');
   const [creating, setCreating] = useState(false);
 
-  const load = useCallback(async () => {
+  // A mutation is in flight. The background poll must not overwrite the board
+  // mid-write, or an optimistic change flickers back to its old value.
+  const mutating = useRef(false);
+
+  const load = useCallback(async (opts?: { background?: boolean }) => {
+    if (opts?.background && mutating.current) return;
     try {
       const r = await fetch('/corporate/api/tasks');
       if (r.ok) {
         setData(await r.json());
         setErr(null);
       } else {
-        const d = await r.json().catch(() => ({}));
-        setErr(d.error || `Could not load work (HTTP ${r.status}).`);
+        setErr(await failureMessage(r, 'Could not load work'));
       }
     } catch {
       setErr('Network error loading work.');
@@ -173,7 +196,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
 
   useEffect(() => {
     load();
-    const t = setInterval(load, 10000);
+    const t = setInterval(() => load({ background: true }), 10000);
     return () => clearInterval(t);
   }, [load]);
 
@@ -186,50 +209,114 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
     });
   }, [data, filter]);
 
-  const patch = async (task_id: string, patch: Record<string, unknown>) => {
+  /**
+   * Apply a change to one task.
+   *
+   * `optimistic` paints the new value immediately so the click always produces
+   * visible feedback, even while the round-trip to Supabase is in flight; it is
+   * rolled back if the server rejects the change. The try/finally guarantees
+   * `busy` clears — previously a rejected fetch threw straight out of here and
+   * left every button on that row permanently disabled.
+   */
+  const patch = async (
+    task_id: string,
+    body: Record<string, unknown>,
+    optimistic?: Partial<CorpTask>
+  ) => {
+    const snapshot = data;
     setBusy(task_id);
     setErr(null);
-    const r = await fetch('/corporate/api/tasks/update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ task_id, ...patch }),
-    });
-    if (!r.ok) setErr((await r.json().catch(() => ({}))).error || 'Update failed');
-    await load();
-    setBusy(null);
+    mutating.current = true;
+
+    if (optimistic) {
+      setData((d) =>
+        d ? { ...d, tasks: d.tasks.map((t) => (t.id === task_id ? { ...t, ...optimistic } : t)) } : d
+      );
+    }
+
+    try {
+      const r = await fetch('/corporate/api/tasks/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task_id, ...body }),
+      });
+      if (!r.ok) {
+        if (snapshot) setData(snapshot); // roll the optimistic paint back
+        const msg = await failureMessage(r, 'Update failed');
+        setErr(msg);
+        toast.error(msg);
+        return;
+      }
+      await load();
+    } catch {
+      if (snapshot) setData(snapshot);
+      const msg = 'Network error — that change was not saved.';
+      setErr(msg);
+      toast.error(msg);
+    } finally {
+      mutating.current = false;
+      setBusy(null);
+    }
   };
 
   const remove = async (task_id: string) => {
+    if (!confirm('Delete this task? This cannot be undone.')) return;
     setBusy(task_id);
-    await fetch(`/corporate/api/tasks/update?id=${task_id}`, { method: 'DELETE' });
-    await load();
-    setBusy(null);
+    mutating.current = true;
+    try {
+      const r = await fetch(`/corporate/api/tasks/update?id=${task_id}`, { method: 'DELETE' });
+      if (!r.ok) {
+        const msg = await failureMessage(r, 'Could not delete that task');
+        setErr(msg);
+        toast.error(msg);
+        return;
+      }
+      toast.success('Task deleted');
+      await load();
+    } catch {
+      toast.error('Network error — the task was not deleted.');
+    } finally {
+      mutating.current = false;
+      setBusy(null);
+    }
   };
 
   const create = async () => {
     if (!fTitle.trim()) return;
     setCreating(true);
     setErr(null);
-    const r = await fetch('/corporate/api/tasks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: fTitle,
-        detail: fDetail,
-        priority: fPriority,
-        due_date: fDue || null,
-        department_id: fDept || null,
-        assignee_id: fAssignee || null,
-      }),
-    });
-    if (r.ok) {
-      setFTitle(''); setFDetail(''); setFPriority('normal'); setFDue(''); setFDept(''); setFAssignee('');
-      setShowForm(false);
-      await load();
-    } else {
-      setErr((await r.json().catch(() => ({}))).error || 'Could not create task');
+    mutating.current = true;
+    try {
+      const r = await fetch('/corporate/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: fTitle,
+          detail: fDetail,
+          priority: fPriority,
+          due_date: fDue || null,
+          department_id: fDept || null,
+          assignee_id: fAssignee || null,
+        }),
+      });
+      if (r.ok) {
+        setFTitle(''); setFDetail(''); setFPriority('normal'); setFDue(''); setFDept(''); setFAssignee('');
+        setShowForm(false);
+        toast.success('Task created');
+        await load();
+      } else {
+        const msg = await failureMessage(r, 'Could not create task');
+        setErr(msg);
+        toast.error(msg);
+      }
+    } catch {
+      const msg = 'Network error — the task was not created.';
+      setErr(msg);
+      toast.error(msg);
+    } finally {
+      mutating.current = false;
+      setCreating(false);
     }
-    setCreating(false);
   };
 
   const exportCsv = () => {
@@ -337,7 +424,14 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
         </div>
       )}
 
-      {err && <div className="text-xs text-red-400 mb-3">{err}</div>}
+      {err && (
+        <div role="alert" className="flex items-start gap-2 text-xs text-[#FF5C7C] bg-[#FF5C7C]/10 border border-[#FF5C7C]/35 rounded-lg px-3 py-2 mb-3">
+          <span className="flex-1">{err}</span>
+          <button type="button" onClick={() => setErr(null)} className="text-[#FF5C7C]/70 hover:text-[#FF5C7C] font-bold" aria-label="Dismiss">
+            ×
+          </button>
+        </div>
+      )}
 
       <div className="flex items-center gap-1.5 mb-4 flex-wrap">
         {FILTERS.map((f) => (
@@ -372,7 +466,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
                       <h3 className={`font-semibold text-sm ${t.status === 'done' ? 'line-through text-[#7A8BA8]' : ''}`}>{t.title}</h3>
                     </div>
                     {t.detail && <p className="text-xs text-[#A8B2D0] mt-1 whitespace-pre-wrap">{t.detail}</p>}
-                    <div className="flex items-center gap-3 mt-2 text-[11px] text-[#6E7A91] flex-wrap">
+                    <div className="flex items-center gap-3 mt-2 text-[11px] text-[#8FA0BE] flex-wrap">
                       {t.department_id != null && (
                         <span className="inline-flex items-center gap-1"><Building2 size={11} /> {data.deptNameById[t.department_id] || `Dept ${t.department_id}`}</span>
                       )}
@@ -387,30 +481,61 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
                     </div>
                   </div>
                   {data.isSuper && (
-                    <button type="button" onClick={() => remove(t.id)} disabled={busy === t.id} title="Delete task" className="text-[#6E7A91] hover:text-[#FF5C7C] shrink-0">
+                    <button type="button" onClick={() => remove(t.id)} disabled={busy === t.id} title="Delete task" className="text-[#8FA0BE] hover:text-[#FF5C7C] shrink-0">
                       <Trash2 size={15} />
                     </button>
                   )}
                 </div>
 
                 <div className="flex items-center gap-1.5 mt-3 flex-wrap">
+                  {busy === t.id && (
+                    <Loader2 className="animate-spin text-[#00C8FF] shrink-0" size={13} aria-label="Saving" />
+                  )}
                   {t.assignee_id !== data.me && t.status !== 'done' && (
-                    <button type="button" onClick={() => patch(t.id, { action: 'claim' })} disabled={busy === t.id} className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#00C8FF]/15 text-[#00C8FF] hover:bg-[#00C8FF]/25">
+                    <button
+                      type="button"
+                      onClick={() => patch(t.id, { action: 'claim' }, { assignee_id: data.me })}
+                      disabled={busy === t.id}
+                      className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#00C8FF]/15 text-[#00C8FF] hover:bg-[#00C8FF]/25 disabled:opacity-50"
+                    >
                       Claim
                     </button>
                   )}
-                  {TASK_STATUS.map((s) => (
-                    <button
-                      key={s.key}
-                      type="button"
-                      onClick={() => patch(t.id, { status: s.key })}
-                      disabled={busy === t.id || t.status === s.key}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors ${t.status === s.key ? 'text-black' : 'text-[#A8B2D0] hover:text-white border border-[#1A2640]'}`}
-                      style={t.status === s.key ? { background: s.color } : undefined}
-                    >
-                      {s.label}
-                    </button>
-                  ))}
+                  {/* Open / In progress / Blocked / Done. Each click repaints the
+                      row immediately (optimistic) and only reverts if the server
+                      rejects it, so pressing one is never a silent no-op. The
+                      task's current status is the one disabled button — it is
+                      filled with its status colour and says so on hover. */}
+                  {TASK_STATUS.map((s) => {
+                    const current = t.status === s.key;
+                    return (
+                      <button
+                        key={s.key}
+                        type="button"
+                        onClick={() =>
+                          patch(
+                            t.id,
+                            { status: s.key },
+                            {
+                              status: s.key as CorpTask['status'],
+                              completed_at: s.key === 'done' ? new Date().toISOString() : null,
+                            }
+                          )
+                        }
+                        disabled={busy === t.id || current}
+                        aria-pressed={current}
+                        title={current ? `Already ${s.label.toLowerCase()}` : `Move to ${s.label.toLowerCase()}`}
+                        className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors disabled:cursor-not-allowed ${
+                          current
+                            ? 'text-black'
+                            : 'text-[#C3CCE2] hover:text-white hover:border-[#00C8FF]/60 border border-[#243350] disabled:opacity-50'
+                        }`}
+                        style={current ? { background: s.color } : undefined}
+                      >
+                        {s.label}
+                      </button>
+                    );
+                  })}
                   <button
                     type="button"
                     onClick={() => setOpenComments((v) => (v === t.id ? null : t.id))}
@@ -421,7 +546,10 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
                   {data.isSuper && (
                     <select
                       value={t.assignee_id || ''}
-                      onChange={(e) => patch(t.id, { assignee_id: e.target.value || null })}
+                      onChange={(e) =>
+                        patch(t.id, { assignee_id: e.target.value || null }, { assignee_id: e.target.value || null })
+                      }
+                      disabled={busy === t.id}
                       title="Reassign"
                       className="ml-auto bg-[#0D1528] border border-[#1A2640] rounded-md px-2 py-1 text-[11px] text-[#A8B2D0]"
                     >

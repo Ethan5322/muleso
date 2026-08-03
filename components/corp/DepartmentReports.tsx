@@ -89,8 +89,8 @@ export default function DepartmentReports() {
             { label: 'Departments', value: totals.departments, color: '#00C8FF', icon: Users },
             { label: 'Open tasks', value: totals.open, color: '#E8B84B', icon: Inbox },
             { label: 'Completed', value: totals.done, color: '#00FF88', icon: CheckCircle2 },
-            { label: 'Overdue', value: totals.overdue, color: totals.overdue ? '#FF5C7C' : '#6E7A91', icon: AlertTriangle },
-            { label: 'Unassigned', value: totals.unassigned, color: totals.unassigned ? '#7B2FFF' : '#6E7A91', icon: Inbox },
+            { label: 'Overdue', value: totals.overdue, color: totals.overdue ? '#FF5C7C' : '#8FA0BE', icon: AlertTriangle },
+            { label: 'Unassigned', value: totals.unassigned, color: totals.unassigned ? '#7B2FFF' : '#8FA0BE', icon: Inbox },
           ].map((k) => {
             const Icon = k.icon;
             return (
@@ -118,11 +118,11 @@ export default function DepartmentReports() {
                 <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
                   <div>
                     <h3 className="font-semibold text-sm">{r.name}</h3>
-                    <p className="text-[11px] text-[#6E7A91] flex items-center gap-1 mt-0.5"><Users size={11} /> {r.headcount} member{r.headcount === 1 ? '' : 's'} · {r.total} task{r.total === 1 ? '' : 's'} total</p>
+                    <p className="text-[11px] text-[#8FA0BE] flex items-center gap-1 mt-0.5"><Users size={11} /> {r.headcount} member{r.headcount === 1 ? '' : 's'} · {r.total} task{r.total === 1 ? '' : 's'} total</p>
                   </div>
                   <div className="text-right">
                     <span className="text-lg font-bold font-sora" style={{ color: r.completion >= 70 ? '#00FF88' : r.completion >= 40 ? '#E8B84B' : '#FF5C7C' }}>{r.completion}%</span>
-                    <p className="text-[10px] text-[#6E7A91]">completed</p>
+                    <p className="text-[10px] text-[#8FA0BE]">completed</p>
                   </div>
                 </div>
 
@@ -137,7 +137,7 @@ export default function DepartmentReports() {
                   <Stat label="Blocked" value={r.blocked} color="#FF5C7C" />
                   <Stat label="Done" value={r.done} color="#00FF88" />
                   {r.overdue > 0 && <Stat label="Overdue" value={r.overdue} color="#FF5C7C" />}
-                  <span className="ml-auto text-[#6E7A91]">{active} active</span>
+                  <span className="ml-auto text-[#8FA0BE]">{active} active</span>
                 </div>
               </div>
             );

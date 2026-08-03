@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Plus, Edit2, Trash2, Loader2, X } from 'lucide-react';
 
 interface Service {
@@ -95,7 +95,6 @@ export default function ServicesManager() {
 
   return (
     <div className="text-white">
-      <Toaster position="top-center" />
       <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
         <div>
           <h2 className="text-3xl font-bold font-sora">Services & Pricing</h2>

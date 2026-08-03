@@ -69,7 +69,7 @@ export default function AdminNotifications() {
         <div className="absolute right-0 mt-2 w-72 bg-[#0A0E17] border border-[#1E3A5F] rounded-xl shadow-2xl overflow-hidden">
           <div className="px-4 py-3 border-b border-[#1E3A5F]">
             <p className="text-sm font-semibold">Notifications</p>
-            <p className="text-[11px] text-[#5A6B88]">Live activity across your business</p>
+            <p className="text-[11px] text-[#8296B8]">Live activity across your business</p>
           </div>
           <div className="divide-y divide-[#141d2e]">
             <Link
@@ -82,9 +82,9 @@ export default function AdminNotifications() {
               </span>
               <div className="flex-1">
                 <p className="text-sm text-white">New leads</p>
-                <p className="text-[11px] text-[#5A6B88]">Awaiting your response</p>
+                <p className="text-[11px] text-[#8296B8]">Awaiting your response</p>
               </div>
-              <span className={`text-sm font-bold ${newLeads > 0 ? 'text-[#00C8FF]' : 'text-[#3d475e]'}`}>{newLeads}</span>
+              <span className={`text-sm font-bold ${newLeads > 0 ? 'text-[#00C8FF]' : 'text-[#7A8BA8]'}`}>{newLeads}</span>
             </Link>
             <Link
               href="/admin/bookings"
@@ -96,13 +96,13 @@ export default function AdminNotifications() {
               </span>
               <div className="flex-1">
                 <p className="text-sm text-white">Pending bookings</p>
-                <p className="text-[11px] text-[#5A6B88]">Need confirmation</p>
+                <p className="text-[11px] text-[#8296B8]">Need confirmation</p>
               </div>
-              <span className={`text-sm font-bold ${pendingBookings > 0 ? 'text-[#E8B84B]' : 'text-[#3d475e]'}`}>{pendingBookings}</span>
+              <span className={`text-sm font-bold ${pendingBookings > 0 ? 'text-[#E8B84B]' : 'text-[#7A8BA8]'}`}>{pendingBookings}</span>
             </Link>
           </div>
           {total === 0 && (
-            <div className="px-4 py-4 text-center text-xs text-[#5A6B88]">You&apos;re all caught up ✓</div>
+            <div className="px-4 py-4 text-center text-xs text-[#8296B8]">You&apos;re all caught up ✓</div>
           )}
         </div>
       )}

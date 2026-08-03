@@ -29,7 +29,7 @@ import {
   ShieldCheck,
   IdCard,
 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import AdminNotifications from '@/components/admin/AdminNotifications';
 import AdminSearch from '@/components/admin/AdminSearch';
 
@@ -161,7 +161,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <nav className="p-3 space-y-4">
       {NAV_SECTIONS.map((section) => (
         <div key={section.title}>
-          <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#4A5A78]">
+          <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8296B8]">
             {section.title}
           </p>
           <div className="space-y-0.5">
@@ -181,7 +181,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   }`}
                 >
                   {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-gradient-to-b from-[#00C8FF] to-[#7B2FFF]" />}
-                  <Icon size={18} className={active ? 'text-[#00C8FF]' : 'text-[#6E7A91] group-hover:text-[#00C8FF]'} />
+                  <Icon size={18} className={active ? 'text-[#00C8FF]' : 'text-[#8FA0BE] group-hover:text-[#00C8FF]'} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -194,6 +194,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-[#0B111C] text-white">
+      {/* The one toast host for the whole admin panel.
+          react-hot-toast renders nothing unless a <Toaster /> is mounted, and
+          the only one on the site lived inside ChatbotWidget — which
+          ClientWrapper deliberately does NOT render on /admin. Every
+          toast.success()/toast.error() in here was therefore silent, so saving,
+          deleting and signing out all looked like the button did nothing. */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: '#0A0E17',
+            color: '#F0F2FA',
+            border: '1px solid #1E3A5F',
+            fontSize: '14px',
+          },
+          success: { iconTheme: { primary: '#00FF88', secondary: '#0A0E17' } },
+          error: { duration: 6000, iconTheme: { primary: '#FF5C7C', secondary: '#0A0E17' } },
+        }}
+      />
+
       {/* Top bar */}
       <header className="sticky top-0 z-50 bg-[#0A0E17]/95 backdrop-blur border-b border-[#1E3A5F]">
         <div className="px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
@@ -211,7 +231,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div>
               <h1 className="text-base font-bold font-sora leading-tight">MuleSoo Admin</h1>
-              <p className="text-[#5A6B88] text-[11px] leading-tight">Control Center</p>
+              <p className="text-[#8296B8] text-[11px] leading-tight">Control Center</p>
             </div>
           </div>
 
@@ -233,14 +253,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   <span className="block text-xs font-semibold">Main Admin</span>
                   <span className="block text-[10px] text-[#00FF88]">● Secured</span>
                 </span>
-                <ChevronDown size={15} className="text-[#5A6B88]" />
+                <ChevronDown size={15} className="text-[#8296B8]" />
               </button>
 
               {profileOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-[#0A0E17] border border-[#1E3A5F] rounded-xl shadow-2xl overflow-hidden">
                   <div className="px-4 py-3 border-b border-[#1E3A5F]">
                     <p className="text-sm font-semibold">Main Admin</p>
-                    <p className="text-[11px] text-[#5A6B88] flex items-center gap-1 mt-0.5">
+                    <p className="text-[11px] text-[#8296B8] flex items-center gap-1 mt-0.5">
                       <ShieldCheck size={12} className="text-[#00FF88]" /> 2FA + Face secured
                     </p>
                   </div>
@@ -309,7 +329,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={item.href}
               href={item.href}
               className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-                active ? 'text-[#00C8FF]' : 'text-[#6E7A91]'
+                active ? 'text-[#00C8FF]' : 'text-[#8FA0BE]'
               }`}
             >
               <Icon size={20} />
@@ -320,7 +340,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
-          className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium text-[#6E7A91]"
+          className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium text-[#8FA0BE]"
         >
           <Menu size={20} />
           More

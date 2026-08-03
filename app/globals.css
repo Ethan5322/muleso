@@ -18,7 +18,14 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* The whole site is dark. Without this, the browser paints every NATIVE
+     control in its light theme: <select> popups came out white-on-white
+     (unreadable "dead" option text), and the date picker's calendar icon was
+     black on a near-black field. */
+  color-scheme: dark;
+}
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -61,3 +68,30 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
 
 /* Selection color */
 ::selection { background: var(--accent-blue); color: #000; }
+
+/* Native dropdown items. `color-scheme` fixes the popup chrome, but the option
+   rows still inherit whatever colour the <select> was given (often a dim
+   --text-secondary), which reads as dead text against the popup. Pin them. */
+option,
+optgroup {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+
+/* The date/time picker indicator is a black glyph by default — invisible on a
+   dark field. Tint it to the brand blue so the control is discoverable. */
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator,
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  filter: invert(58%) sepia(85%) saturate(1500%) hue-rotate(155deg) brightness(105%);
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+/* Disabled controls must still be legible — a disabled button is information
+   ("this is the current state"), not something to hide. */
+button:disabled,
+select:disabled,
+input:disabled {
+  cursor: not-allowed;
+}

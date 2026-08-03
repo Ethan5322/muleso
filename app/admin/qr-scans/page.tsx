@@ -102,7 +102,7 @@ export default function QRScansPage() {
             className="bg-[#1A2332] border border-[#7B2FFF]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(123,47,190,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[#7B2FFF]/60 text-sm font-semibold">TOTAL SCANS</p>
+              <p className="text-[#a78bfa] text-sm font-semibold">TOTAL SCANS</p>
               <QrCode className="text-[#7B2FFF]" size={24} />
             </div>
             <p className="text-4xl font-bold">{totalScans}</p>
@@ -115,7 +115,7 @@ export default function QRScansPage() {
             className="bg-[#1A2332] border border-[#00FF88]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,255,136,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[#00FF88]/60 text-sm font-semibold">TODAY</p>
+              <p className="text-[#00FF88] text-sm font-semibold">TODAY</p>
               <TrendingUp className="text-[#00FF88]" size={24} />
             </div>
             <p className="text-4xl font-bold">{todayScans}</p>
@@ -128,7 +128,7 @@ export default function QRScansPage() {
             className="bg-[#1A2332] border border-[#00C8FF]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[#00C8FF]/60 text-sm font-semibold">THIS WEEK</p>
+              <p className="text-[#00C8FF] text-sm font-semibold">THIS WEEK</p>
               <TrendingUp className="text-[#00C8FF]" size={24} />
             </div>
             <p className="text-4xl font-bold">{weekScans}</p>

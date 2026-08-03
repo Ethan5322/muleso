@@ -254,7 +254,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
                 <button
                   onClick={() => imageInputRef.current?.click()}
                   disabled={uploading}
-                  className="flex items-center gap-2 bg-[#7B2FFF]/20 hover:bg-[#7B2FFF]/40 text-[#7B2FFF] px-4 py-2 rounded-lg transition-all disabled:opacity-50"
+                  className="flex items-center gap-2 bg-[#7B2FFF]/20 hover:bg-[#7B2FFF]/40 text-[#a78bfa] px-4 py-2 rounded-lg transition-all disabled:opacity-50"
                 >
                   <Upload size={18} />
                   {uploading ? 'Uploading...' : 'Upload Image'}
@@ -362,7 +362,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
             {(formData.tech_stack || []).map((tech, index) => (
               <div
                 key={index}
-                className="bg-[#7B2FFF]/20 text-[#7B2FFF] px-3 py-1 rounded-full flex items-center gap-2 text-sm"
+                className="bg-[#7B2FFF]/20 text-[#a78bfa] px-3 py-1 rounded-full flex items-center gap-2 text-sm"
               >
                 {tech}
                 <button

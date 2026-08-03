@@ -53,23 +53,30 @@ export default function AdminTeamChat() {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages.length]);
 
+  // try/finally: a rejected fetch used to leave `sending` true, which disabled
+  // the send button permanently until the page was reloaded.
   const send = async () => {
     if (!input.trim() || !channel) return;
     setSending(true);
     setErr(null);
-    const res = await fetch('/corporate/api/channel/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ channel_id: channel.id, body: input, target_department_id: target || null }),
-    });
-    if (res.ok) {
-      setInput('');
-      await load();
-    } else {
-      const d = await res.json().catch(() => ({}));
-      setErr(d.error || 'Could not post. (Seed your Super Admin row and set SUPABASE_SERVICE_ROLE_KEY.)');
+    try {
+      const res = await fetch('/corporate/api/channel/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channel_id: channel.id, body: input, target_department_id: target || null }),
+      });
+      if (res.ok) {
+        setInput('');
+        await load();
+      } else {
+        const d = await res.json().catch(() => ({}));
+        setErr(d.error || 'Could not post. (Seed your Super Admin row and set SUPABASE_SERVICE_ROLE_KEY.)');
+      }
+    } catch {
+      setErr('Network error — your message was not sent. Check your connection and try again.');
+    } finally {
+      setSending(false);
     }
-    setSending(false);
   };
 
   return (
@@ -100,7 +107,7 @@ export default function AdminTeamChat() {
                       </span>
                     )}
                   </span>
-                  <span className="text-[10px] text-[#5A6B88]">{new Date(m.created_at).toLocaleString()}</span>
+                  <span className="text-[10px] text-[#8296B8]">{new Date(m.created_at).toLocaleString()}</span>
                 </div>
                 <p className="text-sm text-[#D4DAEA] mt-1 whitespace-pre-wrap">{m.body}</p>
               </div>

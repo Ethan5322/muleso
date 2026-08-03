@@ -75,33 +75,42 @@ export default function DepartmentManager() {
     if (!name.trim()) return;
     setCreating(true);
     setErr(null);
-    const r = await fetch('/corporate/api/departments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, description: desc }),
-    });
-    if (r.ok) {
-      setName('');
-      setDesc('');
-      await load();
-    } else {
-      setErr((await r.json().catch(() => ({}))).error || 'Could not create department');
+    try {
+      const r = await fetch('/corporate/api/departments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, description: desc }),
+      });
+      if (r.ok) {
+        setName('');
+        setDesc('');
+        await load();
+      } else {
+        setErr((await r.json().catch(() => ({}))).error || 'Could not create department');
+      }
+    } catch {
+      setErr('Network error — the department was not created.');
+    } finally {
+      setCreating(false);
     }
-    setCreating(false);
   };
 
   const save = async (id: number, patch: Record<string, unknown>) => {
     setErr(null);
-    const r = await fetch('/corporate/api/departments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, ...patch }),
-    });
-    if (r.ok) {
-      setEditId(null);
-      await load();
-    } else {
-      setErr((await r.json().catch(() => ({}))).error || 'Could not update department');
+    try {
+      const r = await fetch('/corporate/api/departments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, ...patch }),
+      });
+      if (r.ok) {
+        setEditId(null);
+        await load();
+      } else {
+        setErr((await r.json().catch(() => ({}))).error || 'Could not update department');
+      }
+    } catch {
+      setErr('Network error — that change was not saved.');
     }
   };
 
@@ -185,15 +194,15 @@ export default function DepartmentManager() {
                     className="flex items-start gap-2 min-w-0 flex-1 text-left"
                     title="Click to view details"
                   >
-                    <span className="mt-0.5 text-[#6E7A91] shrink-0">{isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
+                    <span className="mt-0.5 text-[#8FA0BE] shrink-0">{isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-sm">{d.name}</h3>
-                        <span className="text-[10px] text-[#6E7A91]">#{d.id}</span>
+                        <span className="text-[10px] text-[#8FA0BE]">#{d.id}</span>
                         {!d.active && <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1A2640] text-[#7A8BA8]">inactive</span>}
                       </div>
                       {d.description && <p className="text-xs text-[#A8B2D0] mt-0.5">{d.description}</p>}
-                      <div className="flex items-center gap-4 mt-2 text-[11px] text-[#6E7A91]">
+                      <div className="flex items-center gap-4 mt-2 text-[11px] text-[#8FA0BE]">
                         <span className="inline-flex items-center gap-1"><Users size={12} /> {d.headcount} member{d.headcount === 1 ? '' : 's'}</span>
                         <span className="inline-flex items-center gap-1"><ClipboardList size={12} /> {d.open_tasks} open task{d.open_tasks === 1 ? '' : 's'}</span>
                       </div>
@@ -216,18 +225,18 @@ export default function DepartmentManager() {
                   <div className="mt-3 pt-3 border-t border-[#1A2640] grid sm:grid-cols-2 gap-4">
                     {/* Members */}
                     <div>
-                      <p className="text-[11px] uppercase tracking-wide text-[#6E7A91] mb-2 flex items-center gap-1">
+                      <p className="text-[11px] uppercase tracking-wide text-[#8FA0BE] mb-2 flex items-center gap-1">
                         <Users size={12} /> Members ({deptMembers.length})
                       </p>
                       {deptMembers.length === 0 ? (
-                        <p className="text-xs text-[#6E7A91]">No members assigned yet.</p>
+                        <p className="text-xs text-[#8FA0BE]">No members assigned yet.</p>
                       ) : (
                         <div className="space-y-1.5">
                           {deptMembers.map((m) => (
                             <div key={m.id} className="flex items-center justify-between gap-2 text-xs">
                               <div className="min-w-0">
                                 <p className="text-[#F0F2FA] font-medium truncate">{m.display_name}</p>
-                                <p className="text-[#6E7A91] truncate">{m.role_title || 'Staff'}{m.staff_number ? ` · ${m.staff_number}` : ''}</p>
+                                <p className="text-[#8FA0BE] truncate">{m.role_title || 'Staff'}{m.staff_number ? ` · ${m.staff_number}` : ''}</p>
                               </div>
                               <span className={`text-[10px] px-1.5 py-0.5 rounded shrink-0 ${m.status === 'active' ? 'bg-[#00FF88]/15 text-[#00FF88]' : 'bg-red-500/15 text-red-400'}`}>
                                 {m.status}
@@ -240,11 +249,11 @@ export default function DepartmentManager() {
 
                     {/* Open tasks */}
                     <div>
-                      <p className="text-[11px] uppercase tracking-wide text-[#6E7A91] mb-2 flex items-center gap-1">
+                      <p className="text-[11px] uppercase tracking-wide text-[#8FA0BE] mb-2 flex items-center gap-1">
                         <ClipboardList size={12} /> Open tasks ({openTasks.length})
                       </p>
                       {openTasks.length === 0 ? (
-                        <p className="text-xs text-[#6E7A91]">No open tasks.</p>
+                        <p className="text-xs text-[#8FA0BE]">No open tasks.</p>
                       ) : (
                         <div className="space-y-1.5">
                           {openTasks.slice(0, 8).map((t) => (

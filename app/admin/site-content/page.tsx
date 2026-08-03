@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Save, Loader2, Plus, Trash2, User } from 'lucide-react';
 import { SiteSettings, DEFAULT_SETTINGS, DEFAULT_TEAM, parseTeam, type TeamMember, type TeamAccent } from '@/lib/siteSettings';
 
@@ -112,7 +112,6 @@ export default function SiteContentPage() {
 
   return (
     <div className="max-w-2xl text-white">
-      <Toaster position="top-center" />
       <h2 className="text-3xl font-bold font-sora mb-2">Site Content — Business Info</h2>
       <p className="text-[#7A8BA8] mb-6">
         Edit the contact details and social links shown across the public site (footer, contact page).
@@ -163,7 +162,7 @@ export default function SiteContentPage() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={m.photo} alt={m.name || 'member'} className="w-full h-full object-cover" />
                       ) : (
-                        <User size={20} className="text-[#4A5A78]" />
+                        <User size={20} className="text-[#8296B8]" />
                       )}
                     </div>
                     <input

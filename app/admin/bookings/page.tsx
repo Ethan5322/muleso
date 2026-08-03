@@ -301,7 +301,7 @@ export default function BookingsPage() {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           onClick={() => handleSelectBooking(booking)}
-                          className="text-[#00C8FF] hover:text-[#7B2FFF] transition-colors font-semibold"
+                          className="text-[#00C8FF] hover:text-[#a78bfa] transition-colors font-semibold"
                         >
                           View
                         </motion.button>

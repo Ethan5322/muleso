@@ -103,19 +103,25 @@ export default function MessagesPage() {
     if (!body || !selected) return;
     setSending(true);
     setPermError(null);
-    const res = await fetch('/corporate/api/dm/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ recipient_id: selected, body }),
-    });
-    if (res.ok) {
-      setInput('');
-      await load();
-    } else {
-      const d = await res.json().catch(() => ({}));
-      setPermError(d.error || 'Could not send.');
+    try {
+      const res = await fetch('/corporate/api/dm/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipient_id: selected, body }),
+      });
+      if (res.ok) {
+        setInput('');
+        await load();
+      } else {
+        const d = await res.json().catch(() => ({}));
+        setPermError(d.error || 'Could not send.');
+      }
+    } catch {
+      setPermError('Network error — your message was not sent.');
+    } finally {
+      // Must always run, or the send button stays disabled until a reload.
+      setSending(false);
     }
-    setSending(false);
   };
 
   const sortedContacts = [...contacts].sort((a, b) => {
@@ -140,11 +146,11 @@ export default function MessagesPage() {
       <aside className={`${selected ? 'hidden md:flex' : 'flex'} w-full md:w-64 flex-shrink-0 bg-[#0A0F1E] border border-[#1A2640] rounded-xl overflow-hidden flex-col`}>
         <div className="px-4 py-3 border-b border-[#1A2640]">
           <h2 className="font-semibold font-sora text-sm">Messages</h2>
-          <p className="text-[11px] text-[#6E7A91]">Private &amp; end-to-end by database rule</p>
+          <p className="text-[11px] text-[#8FA0BE]">Private &amp; end-to-end by database rule</p>
         </div>
         <div className="flex-1 overflow-y-auto">
           {sortedContacts.length === 0 && (
-            <p className="p-4 text-xs text-[#6E7A91]">No other admins yet.</p>
+            <p className="p-4 text-xs text-[#8FA0BE]">No other admins yet.</p>
           )}
           {sortedContacts.map((c) => {
             const unread = unreadFrom(c.id);
@@ -167,7 +173,7 @@ export default function MessagesPage() {
                     </span>
                   )}
                 </div>
-                <div className="text-[11px] text-[#6E7A91] truncate">
+                <div className="text-[11px] text-[#8FA0BE] truncate">
                   {last ? last.body : c.department_name || `Dept ${c.department_id ?? ''}`}
                 </div>
               </button>
@@ -179,7 +185,7 @@ export default function MessagesPage() {
       {/* Thread — full width on mobile, hidden until a contact is picked */}
       <section className={`${selected ? 'flex' : 'hidden md:flex'} flex-1 min-w-0 bg-[#0A0F1E] border border-[#1A2640] rounded-xl flex-col`}>
         {!selected ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-[#6E7A91]">
+          <div className="flex-1 flex flex-col items-center justify-center text-[#8FA0BE]">
             <MessageSquare size={32} className="mb-2" />
             <p className="text-sm">Select an admin to start a private conversation.</p>
           </div>
@@ -196,7 +202,7 @@ export default function MessagesPage() {
               </button>
               <div>
                 <p className="font-semibold text-sm">{selectedContact?.display_name || 'Admin'}</p>
-                <p className="text-[11px] text-[#6E7A91]">
+                <p className="text-[11px] text-[#8FA0BE]">
                   {selectedContact?.department_name || `Dept ${selectedContact?.department_id ?? ''}`}
                 </p>
               </div>
@@ -204,7 +210,7 @@ export default function MessagesPage() {
 
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {thread.length === 0 && (
-                <p className="text-center text-xs text-[#6E7A91] py-8">
+                <p className="text-center text-xs text-[#8FA0BE] py-8">
                   No messages yet. Say hello 👋
                 </p>
               )}
@@ -220,7 +226,7 @@ export default function MessagesPage() {
                       }`}
                     >
                       {m.body}
-                      <div className={`text-[9px] mt-1 ${mine ? 'text-white/70' : 'text-[#6E7A91]'}`}>
+                      <div className={`text-[9px] mt-1 ${mine ? 'text-white/70' : 'text-[#8FA0BE]'}`}>
                         {new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         {mine && (m.read_at ? ' · Read' : ' · Sent')}
                       </div>

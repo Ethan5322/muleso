@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ScanBarcode, Camera, Loader2, CheckCircle2, XCircle, X, Ban, RotateCcw, IdCard, Users } from 'lucide-react';
 import { BrowserMultiFormatReader, type IScannerControls } from '@zxing/browser';
 import { DecodeHintType, BarcodeFormat } from '@zxing/library';
+import toast from 'react-hot-toast';
 import { generateIdCard } from '@/lib/corp/generateIdCard';
 
 interface Staff {
@@ -67,17 +68,29 @@ export default function ScanPage() {
 
   const setStatus = async (id: string, status: 'active' | 'suspended') => {
     setActing(true);
-    await fetch('/corporate/api/admin-status', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ department_admin_id: id, status }),
-    });
-    // refresh the shown record
-    if (code || result?.staff) {
-      const r = await fetch(`/api/admin/staff-lookup?code=${encodeURIComponent(lastCode.current)}`);
-      setResult(await r.json());
+    try {
+      const res = await fetch('/corporate/api/admin-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ department_admin_id: id, status }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        toast.error(d.error || 'Could not change that status — please try again.');
+        return;
+      }
+      toast.success(status === 'suspended' ? 'Staff member suspended' : 'Staff member reactivated');
+      // refresh the shown record
+      if (code || result?.staff) {
+        const r = await fetch(`/api/admin/staff-lookup?code=${encodeURIComponent(lastCode.current)}`);
+        setResult(await r.json());
+      }
+    } catch {
+      toast.error('Network error — the status was not changed.');
+    } finally {
+      // Always clears, so the action buttons never stay stuck disabled.
+      setActing(false);
     }
-    setActing(false);
   };
 
   const reissueCard = async (id: string) => {
@@ -87,7 +100,13 @@ export default function ScanPage() {
       if (r.ok) {
         const { card } = await r.json();
         await generateIdCard(card);
+        toast.success('ID card re-issued');
+      } else {
+        // Silence here read as "the button is broken".
+        toast.error('Could not load that ID card.');
       }
+    } catch {
+      toast.error('Could not generate the ID card.');
     } finally {
       setActing(false);
     }
@@ -226,7 +245,7 @@ export default function ScanPage() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={s.photo_data_url} alt={s.display_name} className="w-20 h-[104px] object-cover rounded-lg border border-[#1E3A5F]" />
                 ) : (
-                  <div className="w-20 h-[104px] rounded-lg bg-[#1A2332] flex items-center justify-center text-[#3d475e] text-xs">No photo</div>
+                  <div className="w-20 h-[104px] rounded-lg bg-[#1A2332] flex items-center justify-center text-[#7A8BA8] text-xs">No photo</div>
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">

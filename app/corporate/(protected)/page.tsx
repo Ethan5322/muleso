@@ -62,7 +62,7 @@ export default async function CorporateDashboard() {
           { label: admin.is_super_admin ? 'Open tasks' : 'Dept. open tasks', value: kpis.open, color: '#00C8FF' },
           { label: 'Assigned to me', value: kpis.mine, color: '#7B2FFF' },
           { label: 'In progress', value: kpis.inProgress, color: '#E8B84B' },
-          { label: 'Overdue', value: kpis.overdue, color: kpis.overdue ? '#FF5C7C' : '#6E7A91' },
+          { label: 'Overdue', value: kpis.overdue, color: kpis.overdue ? '#FF5C7C' : '#8FA0BE' },
         ].map((k) => (
           <div key={k.label} className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-4">
             <p className="text-3xl font-bold font-sora" style={{ color: k.color }}>{k.value}</p>
@@ -82,7 +82,7 @@ export default async function CorporateDashboard() {
         <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-5">
           <h2 className="font-semibold font-sora text-sm mb-3">Your responsibilities</h2>
           {responsibilities.length === 0 ? (
-            <p className="text-sm text-[#6E7A91]">No responsibilities assigned yet. Ask the Super Admin to grant access.</p>
+            <p className="text-sm text-[#8FA0BE]">No responsibilities assigned yet. Ask the Super Admin to grant access.</p>
           ) : (
             <div className="grid sm:grid-cols-2 gap-x-6 gap-y-2">
               {responsibilities.map((r) => (
@@ -90,7 +90,7 @@ export default async function CorporateDashboard() {
                   <Check size={15} className="text-[#00FF88] mt-0.5 flex-shrink-0" />
                   <span>
                     <span className="text-[#F0F2FA] font-medium">{r.label}</span>
-                    <span className="text-[#6E7A91]"> — {r.hint}</span>
+                    <span className="text-[#8FA0BE]"> — {r.hint}</span>
                   </span>
                 </div>
               ))}

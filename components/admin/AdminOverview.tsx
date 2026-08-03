@@ -102,7 +102,7 @@ export default function AdminOverview() {
       <div className="flex items-end justify-between gap-4 flex-wrap border-b border-[#1E3A5F] pb-5">
         <div>
           <h1 className="text-3xl font-bold font-sora">Dashboard</h1>
-          <p className="text-[#5A6B88] text-sm mt-1">Live overview of your bookings, traffic, and content</p>
+          <p className="text-[#8296B8] text-sm mt-1">Live overview of your bookings, traffic, and content</p>
         </div>
         <div className="flex gap-1 bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-1">
           {RANGES.map((r) => (
@@ -111,7 +111,7 @@ export default function AdminOverview() {
               type="button"
               onClick={() => setDays(r.days)}
               className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
-                days === r.days ? 'bg-[#00C8FF]/15 text-[#00C8FF]' : 'text-[#5A6B88] hover:text-white'
+                days === r.days ? 'bg-[#00C8FF]/15 text-[#00C8FF]' : 'text-[#8296B8] hover:text-white'
               }`}
             >
               {r.label}
@@ -137,7 +137,7 @@ export default function AdminOverview() {
                   <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${s.color} flex items-center justify-center mb-3`}>
                     <Icon className="text-white" size={20} />
                   </div>
-                  <p className="text-[#5A6B88] text-xs font-semibold">{s.label}</p>
+                  <p className="text-[#8296B8] text-xs font-semibold">{s.label}</p>
                   <div className="flex items-end justify-between mt-1">
                     <p className="text-2xl font-bold text-white">{s.value}</p>
                     <span className="text-[11px] text-emerald-400 font-semibold">{s.sub}</span>
@@ -164,8 +164,8 @@ export default function AdminOverview() {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#1E3A5F" vertical={false} />
-              <XAxis dataKey="label" tick={{ fill: '#5A6B88', fontSize: 11 }} interval="preserveStartEnd" minTickGap={24} />
-              <YAxis allowDecimals={false} tick={{ fill: '#5A6B88', fontSize: 11 }} />
+              <XAxis dataKey="label" tick={{ fill: '#8296B8', fontSize: 11 }} interval="preserveStartEnd" minTickGap={24} />
+              <YAxis allowDecimals={false} tick={{ fill: '#8296B8', fontSize: 11 }} />
               <Tooltip contentStyle={{ background: '#0A0E17', border: '1px solid #1E3A5F', borderRadius: 10, color: '#fff' }} />
               <Area type="monotone" dataKey="bookings" stroke="#00C8FF" fill="url(#gB)" strokeWidth={2} name="Bookings" />
               <Area type="monotone" dataKey="leads" stroke="#7B2FFF" fill="url(#gL)" strokeWidth={2} name="Leads" />
@@ -197,9 +197,9 @@ export default function AdminOverview() {
         <div className="lg:col-span-2 bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-xl p-6">
           <h2 className="text-lg font-bold mb-4">Recent activity</h2>
           {loading ? (
-            <p className="text-[#5A6B88] text-sm">Loading…</p>
+            <p className="text-[#8296B8] text-sm">Loading…</p>
           ) : activity.length === 0 ? (
-            <p className="text-[#5A6B88] text-sm">No activity yet.</p>
+            <p className="text-[#8296B8] text-sm">No activity yet.</p>
           ) : (
             <div className="space-y-2">
               {activity.map((a) => (
@@ -214,11 +214,11 @@ export default function AdminOverview() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-white truncate">
                       {a.name || 'Unknown'}{' '}
-                      <span className="text-[#5A6B88] font-normal">
+                      <span className="text-[#8296B8] font-normal">
                         · {a.kind === 'booking' ? a.service || 'Booking' : 'New lead'}
                       </span>
                     </p>
-                    <p className="text-[11px] text-[#5A6B88] flex items-center gap-1">
+                    <p className="text-[11px] text-[#8296B8] flex items-center gap-1">
                       <Clock size={11} /> {new Date(a.created_at).toLocaleString()}
                     </p>
                   </div>
