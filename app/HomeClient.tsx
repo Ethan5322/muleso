@@ -36,7 +36,7 @@ const StatCounter = ({ value, label }: { value: string; label: string }) => {
       transition={{ duration: 0.6 }}
       className="text-center"
     >
-      <div className="text-6xl font-bold gradient-text font-sora mb-3">{value}</div>
+      <div className="text-6xl font-bold heading-section font-sora mb-3">{value}</div>
       <div className="text-[var(--text-secondary)] text-base font-light">{label}</div>
     </motion.div>
   );
@@ -73,7 +73,7 @@ const TestimonialCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-8 hover:border-[var(--accent-blue)] transition-all duration-300"
+      className="glass-card p-8 hover:border-[rgba(0,200,255,0.28)] transition-all duration-300"
     >
       <div className="flex gap-1 mb-4">
         {[...Array(rating)].map((_, i) => (
@@ -116,7 +116,7 @@ const ServiceCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-8 hover:border-[var(--accent-blue)] hover:glow-blue transition-all duration-300 hover:-translate-y-2 group"
+      className="glass-card p-8 hover:border-[rgba(0,200,255,0.35)] hover:glow-blue transition-all duration-300 hover:-translate-y-0.5 group"
     >
       <div className="w-14 h-14 rounded-full bg-[var(--glow-blue)] flex items-center justify-center mb-6 group-hover:bg-[var(--accent-blue)]">
         <IconComponent size={28} className="text-[var(--accent-blue)]" />
@@ -178,10 +178,10 @@ export default function Home() {
       <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* coded corporate backdrop (decorative, non-interactive) */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full bg-[var(--accent-blue)] opacity-[0.06] blur-[130px]" />
-          <div className="absolute top-24 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--accent-purple)] opacity-[0.07] blur-[130px]" />
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full bg-[var(--accent-blue)] opacity-[0.035] blur-[150px]" />
+          <div className="absolute top-24 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--accent-purple)] opacity-[0.04] blur-[150px]" />
           <div
-            className="absolute inset-0 opacity-[0.12]"
+            className="absolute inset-0 opacity-[0.07]"
             style={{
               backgroundImage:
                 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
@@ -201,7 +201,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="inline-block"
             >
-              <div className="border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full w-fit mx-auto flex items-center gap-2">
+              <div className="pill-soft px-4 py-2 rounded-full w-fit mx-auto flex items-center gap-2">
                 <Rocket size={16} className="text-[var(--accent-blue)]" />
                 <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
                   {settings.hero_badge}
@@ -214,7 +214,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold font-sora leading-tight gradient-text"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold font-sora leading-[1.05] tracking-[-0.035em] gradient-text"
             >
               {settings.hero_title}
             </motion.h1>
@@ -236,16 +236,10 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
             >
-              <Link
-                href="/services"
-                className="px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform hover:shadow-[0_0_30px_var(--glow-blue)]"
-              >
+              <Link href="/services" className="btn-primary px-9 py-3.5 text-[15px]">
                 Explore Services
               </Link>
-              <Link
-                href="/portfolio"
-                className="px-10 py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors"
-              >
+              <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
                 View Our Work
               </Link>
             </motion.div>
@@ -318,7 +312,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
+            <h2 className="text-6xl md:text-7xl font-bold heading-section font-sora mb-6">
               Our Services
             </h2>
             <p className="text-[var(--text-secondary)] text-lg md:text-xl max-w-3xl mx-auto font-light">
@@ -384,11 +378,11 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 pill-soft px-4 py-2 rounded-full mb-6">
               <Zap size={16} className="text-[var(--accent-blue)]" />
               <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">Our AI Booking System</span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">
+            <h2 className="text-5xl md:text-6xl font-bold heading-section font-sora mb-6">
               Clients Book You on Autopilot
             </h2>
             <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
@@ -437,7 +431,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-6xl md:text-7xl font-bold gradient-text text-center font-sora mb-20"
+            className="text-6xl md:text-7xl font-bold heading-section text-center font-sora mb-20"
           >
             How We Work
           </motion.h2>
@@ -482,7 +476,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">
+            <h2 className="text-5xl md:text-6xl font-bold heading-section font-sora mb-6">
               Why Businesses Choose MuleSoo
             </h2>
             <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
@@ -507,7 +501,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: i * 0.06 }}
                   viewport={{ once: true }}
-                  className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all flex items-start gap-4"
+                  className="glass-card p-6 hover:border-[rgba(0,200,255,0.28)] transition-all flex items-start gap-4"
                 >
                   <div className="w-12 h-12 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center flex-shrink-0">
                     <Icon className="text-[var(--accent-blue)]" size={24} />
@@ -533,7 +527,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">Featured Work</h2>
+            <h2 className="text-5xl md:text-6xl font-bold heading-section font-sora mb-6">Featured Work</h2>
             <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
               Real systems, running real businesses. Explore the full case studies in our portfolio.
             </p>
@@ -551,7 +545,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[var(--accent-blue)] hover:-translate-y-1 transition-all"
+                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[rgba(0,200,255,0.28)] hover:-translate-y-1 transition-all"
               >
                 <div className="relative w-full h-48 overflow-hidden">
                   <Image src={`/${p.img}`} alt={p.title} width={800} height={450} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -567,7 +561,7 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/portfolio" className="inline-block px-10 py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors">
+            <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
               View Full Portfolio →
             </Link>
           </div>
@@ -584,7 +578,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
+            <h2 className="text-6xl md:text-7xl font-bold heading-section font-sora mb-6">
               What Clients Say
             </h2>
             <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
@@ -618,7 +612,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-6xl md:text-7xl font-bold gradient-text font-sora mb-6">
+            <h2 className="text-6xl md:text-7xl font-bold heading-section font-sora mb-6">
               Frequently Asked Questions
             </h2>
           </motion.div>
@@ -656,7 +650,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+                className="glass-card p-6 hover:border-[rgba(0,200,255,0.28)] transition-all"
               >
                 <h3 className="font-bold text-[var(--text-primary)] mb-3 text-lg">{item.q}</h3>
                 <p className="text-[var(--text-secondary)] leading-relaxed">{item.a}</p>
@@ -669,13 +663,13 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             viewport={{ once: true }}
-            className="mt-12 p-8 glass-card border border-[var(--accent-blue)] text-center"
+            className="mt-12 p-8 glass-card border border-[rgba(0,200,255,0.22)] text-center"
           >
             <p className="text-[var(--text-secondary)] mb-4">Still have questions?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={`mailto:${settings.email}`}
-                className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                className="btn-primary w-full px-6 py-3 text-[15px]"
               >
                 <Mail size={18} /> Email Us
               </a>
@@ -702,7 +696,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <h2 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">The Smart Choice</h2>
+            <h2 className="text-5xl md:text-6xl font-bold heading-section font-sora mb-6">The Smart Choice</h2>
             <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
               Agency quality, freelancer value — plus AI automation neither one offers.
             </p>
@@ -761,13 +755,13 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center glass-card rounded-2xl border border-[var(--accent-blue)] p-10 md:p-14"
+          className="max-w-4xl mx-auto text-center glass-card rounded-2xl border border-[rgba(0,200,255,0.22)] p-10 md:p-14"
         >
-          <span className="inline-flex items-center gap-2 border border-[var(--accent-blue)] bg-[var(--glow-blue)] px-4 py-2 rounded-full mb-6">
+          <span className="inline-flex items-center gap-2 pill-soft px-4 py-2 rounded-full mb-6">
             <Zap size={16} className="text-[var(--accent-blue)]" />
             <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">200 AI Automation Systems</span>
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold gradient-text font-sora mb-5">
+          <h2 className="text-4xl md:text-5xl font-bold heading-section font-sora mb-5">
             Not sure what you need? Explore what we can build.
           </h2>
           <p className="text-[var(--text-secondary)] text-lg mb-8 max-w-2xl mx-auto">
@@ -776,7 +770,7 @@ export default function Home() {
           </p>
           <Link
             href="/ai-automation"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
+            className="btn-primary px-9 py-3.5 text-base"
           >
             What do you want us to build for you? →
           </Link>
@@ -797,7 +791,7 @@ export default function Home() {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto text-center"
         >
-          <h2 className="text-5xl md:text-7xl font-bold gradient-text font-sora mb-8">
+          <h2 className="text-5xl md:text-7xl font-bold heading-section font-sora mb-8">
             Ready to Build Something Great?
           </h2>
           <p className="text-[var(--text-secondary)] text-lg md:text-xl mb-10 font-light">
@@ -805,7 +799,7 @@ export default function Home() {
           </p>
           <Link
             href="/contact"
-            className="inline-block px-12 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg hover:shadow-[0_0_30px_var(--glow-blue)]"
+            className="btn-primary px-10 py-3.5 text-base"
           >
             Start Your Project
           </Link>

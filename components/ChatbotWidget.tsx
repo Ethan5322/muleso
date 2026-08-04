@@ -780,8 +780,8 @@ export default function ChatbotWidget() {
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-blue)] text-white shadow-2xl z-40 flex items-center justify-center hover:shadow-3xl transition-shadow sm:w-16 sm:h-16"
-        whileHover={{ scale: 1.12, boxShadow: '0 0 30px rgba(0, 200, 255, 0.6)' }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.04, boxShadow: '0 8px 22px rgba(68, 87, 232, 0.35)' }}
+        whileTap={{ scale: 0.97 }}
         animate={{
           rotate: isOpen ? 45 : 0,
         }}
