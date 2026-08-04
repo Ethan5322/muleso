@@ -97,7 +97,6 @@ export async function POST(request: NextRequest) {
     const session = {
       authenticated: true,
       timestamp: Date.now(),
-      userId: faceId,
       method: 'face',
     };
     const signedSession = signSession(session);
