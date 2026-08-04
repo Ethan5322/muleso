@@ -87,8 +87,14 @@ export async function verifyTwoFactorCode(
     console.log('Current time:', new Date());
     console.log('Expires at:', new Date(codeRecord.expires_at));
 
-    // TODO: Fix timezone issue with expiration check
-    // For now, we skip expiration to get login working
+    // Check if the 2FA code has expired. Both timestamps are UTC.
+    const now = new Date();
+    const expiresAt = new Date(codeRecord.expires_at);
+    if (now > expiresAt) {
+      console.log('2FA code has expired');
+      return { success: false, error: '2FA code has expired. Please request a new one.' };
+    }
+
     console.log('Code is valid! (API will mark as used)');
 
     // Don't mark as used here - let the API do it to avoid double-verification

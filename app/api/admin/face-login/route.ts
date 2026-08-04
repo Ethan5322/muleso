@@ -92,18 +92,20 @@ export async function POST(request: NextRequest) {
 
     resetRateLimit(ip);
 
-    // Match — issue the admin session cookie (same shape middleware expects)
+    // Match — issue the signed admin session cookie
+    const { signSession } = await import('@/lib/sessionCrypto');
     const session = {
       authenticated: true,
       timestamp: Date.now(),
-      passwordHash: Math.random().toString(36).substring(2, 15),
+      userId: faceId,
       method: 'face',
     };
+    const signedSession = signSession(session);
 
     const response = NextResponse.json({ success: true, distance });
     response.cookies.set({
       name: 'admin_session',
-      value: JSON.stringify(session),
+      value: signedSession,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

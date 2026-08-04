@@ -1,5 +1,17 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 
+// Escape HTML entities to prevent XSS
+function escapeHtml(text: string): string {
+  const map: { [key: string]: string } = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return String(text).replace(/[&<>"']/g, (m) => map[m]);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { name, phone, email, service } = await req.json();
@@ -60,16 +72,16 @@ Time: ${new Date().toLocaleString()}
           body: JSON.stringify({
             from: 'chatbot@mulesoo.com',
             to: 'hello@mulesoo.com',
-            subject: `🤖 New Chatbot Lead: ${name}`,
+            subject: `🤖 New Chatbot Lead: ${escapeHtml(name)}`,
             html: `
 <h2>New Lead from Chatbot</h2>
-<p><strong>Name:</strong> ${name}</p>
-<p><strong>Phone:</strong> ${phone}</p>
-<p><strong>Email:</strong> ${email}</p>
-<p><strong>Service Interested:</strong> ${service}</p>
+<p><strong>Name:</strong> ${escapeHtml(name)}</p>
+<p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+<p><strong>Email:</strong> ${escapeHtml(email)}</p>
+<p><strong>Service Interested:</strong> ${escapeHtml(service)}</p>
 <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
 <hr>
-<p>👉 Contact them on WhatsApp at +${phone.replace(/\D/g, '')}</p>
+<p>👉 Contact them on WhatsApp at +${escapeHtml(phone).replace(/\D/g, '')}</p>
             `,
           }),
         });

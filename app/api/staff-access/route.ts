@@ -44,8 +44,10 @@ export async function GET(req: NextRequest) {
         loginUrl: `/corporate/login?token=${encodeURIComponent(token)}`,
       });
     }
-    return NextResponse.json({ kind: 'invalid', reason: 'inactive' });
+    // Don't leak whether token is expired, inactive, or non-existent. Return the same error.
+    return NextResponse.json({ kind: 'invalid' });
   }
 
+  // Token not found. Return the same error to prevent information leakage.
   return NextResponse.json({ kind: 'invalid' });
 }

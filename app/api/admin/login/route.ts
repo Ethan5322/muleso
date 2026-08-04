@@ -61,12 +61,14 @@ export async function POST(request: NextRequest) {
       // Don't fail login if this fails - code is already verified
     }
 
-    // Step 3: Create session
+    // Step 3: Create and sign session
+    const { signSession } = await import('@/lib/sessionCrypto');
     const session = {
       authenticated: true,
       timestamp: Date.now(),
-      passwordHash: Math.random().toString(36).substring(2, 15),
+      userId: admin.id,
     };
+    const signedSession = signSession(session);
 
     // Create response with success message
     const response = NextResponse.json({
@@ -74,10 +76,10 @@ export async function POST(request: NextRequest) {
       message: 'Login successful',
     });
 
-    // Set secure HTTP-only cookie (server-side)
+    // Set secure HTTP-only cookie with signed session (server-side)
     response.cookies.set({
       name: 'admin_session',
-      value: JSON.stringify(session),
+      value: signedSession,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
