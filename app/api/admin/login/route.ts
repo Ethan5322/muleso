@@ -66,7 +66,6 @@ export async function POST(request: NextRequest) {
     const session = {
       authenticated: true,
       timestamp: Date.now(),
-      userId: admin.id,
     };
     const signedSession = signSession(session);
 
