@@ -5,7 +5,11 @@ import { isAdminRequest } from '@/lib/adminAuth';
 const unauthorized = () =>
   NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-export async function GET() {
+// Admin-only: this runs on the service-role key, so it bypasses RLS and
+// returns UNPUBLISHED drafts too. The public site never calls this — only
+// PageManager and PageEditor do — so it must not answer anonymous callers.
+export async function GET(req: NextRequest) {
+  if (!isAdminRequest(req)) return unauthorized();
   try {
     const { data, error } = await supabaseAdmin
       .from('pages')

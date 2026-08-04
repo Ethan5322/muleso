@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Trash2, Edit2, Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { supabase, CustomPage } from '@/lib/supabase';
+import { CustomPage } from '@/lib/supabase';
 import PageEditor from './PageEditor';
 import ConfirmationDialog from './ConfirmationDialog';
 
@@ -14,15 +14,21 @@ export default function PageManager() {
   const [creating, setCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<CustomPage | null>(null);
 
+  // Read through the admin API, not the anon browser client. The `pages` RLS
+  // policy only exposes published rows, so reading directly here made every
+  // draft invisible to the person who wrote it. The API route runs on the
+  // service-role key and is admin-guarded, so it returns drafts too — which
+  // is the whole point of this screen. Delete already went through it.
   const load = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('pages')
-        .select('*')
-        .order('order', { ascending: true });
-      if (error) throw error;
-      setPages(data || []);
+      const res = await fetch('/api/admin/pages');
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `Could not load pages (HTTP ${res.status})`);
+      }
+      const data = await res.json();
+      setPages(Array.isArray(data) ? data : []);
     } catch (error: any) {
       toast.error(`Failed to load pages: ${error.message}`);
     } finally {

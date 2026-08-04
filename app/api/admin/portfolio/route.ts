@@ -5,7 +5,10 @@ import { isAdminRequest } from '@/lib/adminAuth';
 const unauthorized = () =>
   NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-export async function GET() {
+// Admin-only. The public /portfolio page reads the table directly with the
+// anon key and its own RLS policy; nothing public calls this route.
+export async function GET(req: NextRequest) {
+  if (!isAdminRequest(req)) return unauthorized();
   try {
     const { data, error } = await supabaseAdmin
       .from('portfolio')
