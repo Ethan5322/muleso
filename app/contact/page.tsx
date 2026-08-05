@@ -3,12 +3,48 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Mail, MessageCircle, MapPin, QrCode, ArrowRight } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, QrCode, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import { getRecaptchaToken } from '@/lib/captcha';
 import { useSiteSettings } from '@/lib/useSiteSettings';
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+// Validation helpers
+const validators = {
+  name: (v: string) => {
+    if (!v.trim()) return 'Full name is required';
+    if (v.trim().length < 2) return 'Name must be at least 2 characters';
+    if (v.length > 100) return 'Name must not exceed 100 characters';
+    return '';
+  },
+  email: (v: string) => {
+    if (!v.trim()) return 'Email is required';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(v)) return 'Please enter a valid email address';
+    return '';
+  },
+  company: (v: string) => {
+    if (v && v.length > 100) return 'Company name must not exceed 100 characters';
+    return '';
+  },
+  service: (v: string) => {
+    if (!v) return 'Please select a service';
+    return '';
+  },
+  budget: (v: string) => {
+    if (!v) return 'Please select a budget range';
+    return '';
+  },
+  details: (v: string) => {
+    if (!v.trim()) return 'Project details are required';
+    if (v.trim().length < 10) return 'Please provide at least 10 characters of detail';
+    if (v.length > 2000) return 'Project details must not exceed 2000 characters';
+    return '';
+  },
+};
+
+type FieldErrors = Record<string, string>;
 
 export default function ContactPage() {
   const settings = useSiteSettings();
@@ -22,6 +58,7 @@ export default function ContactPage() {
     source: '',
     website: '', // honeypot — must stay empty
   });
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,13 +87,41 @@ export default function ContactPage() {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Real-time validation for field
+    if (name in validators) {
+      const error = validators[name as keyof typeof validators](value);
+      setFieldErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const errors: FieldErrors = {};
+    (Object.keys(validators) as Array<keyof typeof validators>).forEach((field) => {
+      const value = formData[field as keyof typeof formData] as string;
+      const error = validators[field](value);
+      if (error) errors[field] = error;
+    });
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
+
+    // Validate all fields before submission
+    if (!validateForm()) {
+      setError('Please fix the errors above before submitting.');
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       // reCAPTCHA is optional protection — never let it hang the submit.
@@ -86,12 +151,21 @@ export default function ContactPage() {
       if (response.ok) {
         setSubmitted(true);
         setFormData({ name: '', email: '', company: '', service: '', budget: '', details: '', source: '', website: '' });
+        setFieldErrors({});
+      } else if (response.status === 429) {
+        setError('Too many requests. Please wait a few minutes before trying again.');
+      } else if (response.status >= 500) {
+        setError('Our server is experiencing issues. Please try again in a moment or contact us via WhatsApp.');
       } else {
         setError(data.error || 'Something went wrong. Please try again or WhatsApp us.');
       }
     } catch (err) {
       console.error('Form error:', err);
-      setError('Could not reach the server. Please check your connection or WhatsApp us.');
+      if (err instanceof Error && err.name === 'AbortError') {
+        setError('Request took too long. Please check your connection and try again.');
+      } else {
+        setError('Could not reach the server. Please check your connection or contact us via WhatsApp.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -105,7 +179,7 @@ export default function ContactPage() {
           subtitle="Tell us what you need. We respond within 2 hours on business days."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -118,73 +192,150 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-card p-8 text-center border border-[var(--accent-green)]"
               >
-                <div className="text-6xl mb-4 text-[var(--accent-green)]">🎉</div>
+                <div className="flex justify-center mb-4">
+                  <CheckCircle size={64} className="text-[var(--accent-green)]" />
+                </div>
                 <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-4">
-                  Congratulations!
+                  Message Received!
                 </h2>
                 <p className="text-[var(--text-secondary)] mb-2">
-                  You&apos;ve successfully sent your request to our team.
-                  We&apos;ll contact you within <strong className="text-[var(--accent-green)]">2 hours</strong>.
+                  Thanks for reaching out. Our team will contact you within <strong className="text-[var(--accent-green)]">2 hours</strong>.
                 </p>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  In the meantime, feel free to explore our services or check out our portfolio.
+                <p className="text-sm text-[var(--text-secondary)] mb-6">
+                  In the meantime, explore our services or check out our portfolio.
                 </p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="text-[var(--accent-blue)] hover:underline font-semibold text-sm"
+                >
+                  Send another enquiry
+                </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6" noValidate>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
-                      Full Name *
+                    <label htmlFor="name" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                      Full Name <span className="text-red-400/70">*</span>
                     </label>
                     <input
+                      id="name"
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
+                      maxLength={100}
                       required
-                      className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
+                      aria-invalid={!!fieldErrors.name}
+                      aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+                      className={`w-full px-4 py-3 sm:py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors min-h-[48px] ${
+                        fieldErrors.name
+                          ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
+                          : 'border-[var(--border)] focus:border-[var(--accent-blue)]'
+                      } text-[var(--text-primary)]`}
+                      placeholder="Your full name"
                     />
+                    {fieldErrors.name && (
+                      <motion.div
+                        id="name-error"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 mt-2 text-sm text-red-400"
+                      >
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors.name}
+                      </motion.div>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
-                      Email Address *
+                    <label htmlFor="email" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                      Email Address <span className="text-red-400/70">*</span>
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
+                      maxLength={254}
                       required
-                      className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
+                      aria-invalid={!!fieldErrors.email}
+                      aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                      className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors min-h-[48px] ${
+                        fieldErrors.email
+                          ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
+                          : 'border-[var(--border)] focus:border-[var(--accent-blue)]'
+                      } text-[var(--text-primary)]`}
+                      placeholder="you@example.com"
                     />
+                    {fieldErrors.email && (
+                      <motion.div
+                        id="email-error"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 mt-2 text-sm text-red-400"
+                      >
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors.email}
+                      </motion.div>
+                    )}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                  <label htmlFor="company" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
                     Company/Business Name
                   </label>
                   <input
+                    id="company"
                     type="text"
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
+                    maxLength={100}
+                    aria-invalid={!!fieldErrors.company}
+                    aria-describedby={fieldErrors.company ? 'company-error' : 'company-hint'}
+                    className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors min-h-[48px] ${
+                      fieldErrors.company
+                        ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
+                        : 'border-[var(--border)] focus:border-[var(--accent-blue)]'
+                    } text-[var(--text-primary)]`}
+                    placeholder="Your business name (optional)"
                   />
+                  {fieldErrors.company && (
+                    <motion.div
+                      id="company-error"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2 mt-2 text-sm text-red-400"
+                    >
+                      <AlertCircle size={14} className="flex-shrink-0" />
+                      {fieldErrors.company}
+                    </motion.div>
+                  )}
+                  {!fieldErrors.company && (
+                    <p id="company-hint" className="text-xs text-[var(--text-secondary)] mt-1">Optional</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
-                      Service Needed *
+                    <label htmlFor="service" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                      Service Needed <span className="text-red-400/70">*</span>
                     </label>
                     <select
+                      id="service"
                       name="service"
                       value={formData.service}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
+                      aria-invalid={!!fieldErrors.service}
+                      aria-describedby={fieldErrors.service ? 'service-error' : undefined}
+                      className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors cursor-pointer min-h-[48px] ${
+                        fieldErrors.service
+                          ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
+                          : 'border-[var(--border)] focus:border-[var(--accent-blue)]'
+                      } text-[var(--text-primary)]`}
                     >
                       <option value="">Select a service</option>
                       <option value="website">Website Design</option>
@@ -195,17 +346,35 @@ export default function ContactPage() {
                       <option value="pdf">PDF Guide</option>
                       <option value="other">Other</option>
                     </select>
+                    {fieldErrors.service && (
+                      <motion.div
+                        id="service-error"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 mt-2 text-sm text-red-400"
+                      >
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors.service}
+                      </motion.div>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
-                      Budget Range *
+                    <label htmlFor="budget" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                      Budget Range <span className="text-red-400/70">*</span>
                     </label>
                     <select
+                      id="budget"
                       name="budget"
                       value={formData.budget}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
+                      aria-invalid={!!fieldErrors.budget}
+                      aria-describedby={fieldErrors.budget ? 'budget-error' : undefined}
+                      className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors cursor-pointer min-h-[48px] ${
+                        fieldErrors.budget
+                          ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
+                          : 'border-[var(--border)] focus:border-[var(--accent-blue)]'
+                      } text-[var(--text-primary)]`}
                     >
                       <option value="">Select budget</option>
                       <option value="under-100">Under $100</option>
@@ -214,35 +383,78 @@ export default function ContactPage() {
                       <option value="600-plus">$600+</option>
                       <option value="unsure">Not sure yet</option>
                     </select>
+                    {fieldErrors.budget && (
+                      <motion.div
+                        id="budget-error"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 mt-2 text-sm text-red-400"
+                      >
+                        <AlertCircle size={14} className="flex-shrink-0" />
+                        {fieldErrors.budget}
+                      </motion.div>
+                    )}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
-                    Project Details *
+                  <label htmlFor="details" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                    Project Details <span className="text-red-400/70">*</span>
                   </label>
                   <textarea
+                    id="details"
                     name="details"
                     value={formData.details}
                     onChange={handleChange}
+                    maxLength={2000}
                     required
                     rows={6}
+                    aria-invalid={!!fieldErrors.details}
+                    aria-describedby={fieldErrors.details ? 'details-error' : 'details-hint'}
                     placeholder="Tell us about your project, goals, and timeline..."
-                    className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)] resize-none"
+                    className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors resize-none ${
+                      fieldErrors.details
+                        ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
+                        : 'border-[var(--border)] focus:border-[var(--accent-blue)]'
+                    } text-[var(--text-primary)]`}
                   />
+                  <div className="flex items-start justify-between mt-2">
+                    <div className="flex-1">
+                      {fieldErrors.details && (
+                        <motion.div
+                          id="details-error"
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center gap-2 text-sm text-red-400"
+                        >
+                          <AlertCircle size={14} className="flex-shrink-0" />
+                          {fieldErrors.details}
+                        </motion.div>
+                      )}
+                      {!fieldErrors.details && (
+                        <p id="details-hint" className="text-xs text-[var(--text-secondary)]">
+                          More details help us give you a better quote. The more you share, the faster we can respond.
+                        </p>
+                      )}
+                    </div>
+                    <span className="text-xs text-[var(--text-secondary)] ml-4 flex-shrink-0">
+                      {formData.details.length}/2000
+                    </span>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-[var(--text-primary)] mb-2">
+                  <label htmlFor="source" className="block text-sm font-bold text-[var(--text-primary)] mb-2">
                     How did you hear about us?
                   </label>
                   <select
+                    id="source"
                     name="source"
                     value={formData.source}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)]"
+                    className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--accent-blue)] cursor-pointer transition-colors min-h-[48px]"
                   >
-                    <option value="">Select source</option>
+                    <option value="">Select source (optional)</option>
                     <option value="linkedin">LinkedIn</option>
                     <option value="whatsapp">WhatsApp</option>
                     <option value="youtube">YouTube</option>
@@ -250,6 +462,7 @@ export default function ContactPage() {
                     <option value="referral">Referral</option>
                     <option value="other">Other</option>
                   </select>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">This helps us understand what's working.</p>
                 </div>
 
                 {/* Honeypot (hidden from users) */}
@@ -262,20 +475,34 @@ export default function ContactPage() {
                   autoComplete="off"
                   aria-hidden="true"
                   className="hidden"
+                  aria-label="Leave this field empty"
                 />
 
                 {error && (
-                  <div className="rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                    {error}
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-lg border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-start gap-3"
+                  >
+                    <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                    <span>{error}</span>
+                  </motion.div>
                 )}
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50"
+                  className="w-full py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] flex items-center justify-center gap-2"
+                  aria-busy={isSubmitting}
                 >
-                  {isSubmitting ? 'Sending...' : 'Send Enquiry'}
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    'Send Enquiry'
+                  )}
                 </button>
 
                 <p className="text-xs text-[var(--text-secondary)] text-center">
@@ -298,7 +525,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="glass-card p-8 space-y-6 sticky top-24">
+            <div className="glass-card p-6 sm:p-8 space-y-6 lg:sticky lg:top-24">
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)]">Contact Info</h3>
 
               <div className="space-y-4">

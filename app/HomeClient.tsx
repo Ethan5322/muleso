@@ -201,8 +201,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="inline-block"
             >
-              <div className="pill-soft px-4 py-2 rounded-full w-fit mx-auto flex items-center gap-2">
-                <Rocket size={16} className="text-[var(--accent-blue)]" />
+              <div className="pill-soft px-4 py-2 rounded-full w-fit mx-auto">
                 <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
                   {settings.hero_badge}
                 </span>

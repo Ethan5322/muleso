@@ -89,7 +89,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   linkedin: '',
   twitter: '',
   instagram: '',
-  hero_badge: 'AI-Powered Digital Solutions',
+  hero_badge: 'Intelligent Digital Solution',
   hero_title: 'Digital Excellence',
   hero_subtitle: 'Professional websites, AI chatbots, logos, and digital solutions built for businesses across the world.',
   stat1_value: '50+',
