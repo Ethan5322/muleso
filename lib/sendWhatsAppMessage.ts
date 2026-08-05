@@ -43,7 +43,7 @@ interface WhatsAppResult {
 }
 
 /**
- * Send WhatsApp message via CallMeBot API with error handling
+ * Send WhatsApp message via CallMeBot API with retry logic and fallback
  */
 export async function sendWhatsAppMessage({ phone, message }: SendWhatsAppParams): Promise<WhatsAppResult> {
   const timestamp = new Date().toISOString();
@@ -62,23 +62,56 @@ export async function sendWhatsAppMessage({ phone, message }: SendWhatsAppParams
 
     console.log(`[${timestamp}] Sending WhatsApp to ${phone}...`);
 
-    // Send request with timeout (10 seconds)
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    // Try up to 3 times with exponential backoff (CallMeBot can be flaky)
+    let lastError: any = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
 
-    const response = await fetch(url, {
-      method: 'GET',
-      signal: controller.signal,
-    });
+        const response = await fetch(url, {
+          method: 'GET',
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'MuleSoo/1.0 (+https://mulesoo.com)',
+          },
+        });
 
-    clearTimeout(timeoutId);
+        clearTimeout(timeoutId);
 
-    if (!response.ok) {
-      throw new Error(`API error ${response.status}: ${response.statusText}`);
+        // 200-299 = success, 429 = rate limited (retry), 5xx = server error (retry)
+        if (response.ok) {
+          console.log(`[${timestamp}] WhatsApp sent to ${phone} (attempt ${attempt})`);
+          return { success: true, timestamp };
+        }
+
+        // If it's a rate limit or server error, wait and retry
+        if (response.status === 429 || response.status >= 500) {
+          lastError = new Error(`API error ${response.status}: ${response.statusText}`);
+          if (attempt < 3) {
+            const delayMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+            console.warn(`[${timestamp}] Retry attempt ${attempt + 1} after ${delayMs}ms...`);
+            await new Promise(r => setTimeout(r, delayMs));
+            continue;
+          }
+          throw lastError;
+        }
+
+        // Other errors (4xx except 429) = don't retry
+        throw new Error(`API error ${response.status}: ${response.statusText}`);
+      } catch (attemptError: any) {
+        lastError = attemptError;
+        if (attempt < 3 && (attemptError.name === 'AbortError' || attemptError.message.includes('429') || attemptError.message.includes('500'))) {
+          const delayMs = Math.pow(2, attempt) * 1000;
+          console.warn(`[${timestamp}] Attempt ${attempt} failed, retrying in ${delayMs}ms...`);
+          await new Promise(r => setTimeout(r, delayMs));
+          continue;
+        }
+        if (attempt === 3) throw lastError;
+      }
     }
 
-    console.log(`[${timestamp}] WhatsApp sent to ${phone}`);
-    return { success: true, timestamp };
+    throw lastError || new Error('Failed after 3 attempts');
   } catch (error: any) {
     const errorMsg = error?.message || 'Unknown error';
     console.error(`[${timestamp}] WhatsApp failed for ${phone}:`, errorMsg);
@@ -200,6 +233,7 @@ export async function sendAdminNotification(
   }
 ): Promise<WhatsAppResult> {
   const dash = '—';
+  const timestamp = new Date().toISOString();
   const receivedAt = new Date().toLocaleString('en-ZA', {
     timeZone: 'Africa/Johannesburg',
     day: '2-digit',
@@ -252,7 +286,15 @@ Verification Code: ${verificationCode}
 
 ➡️ *ACTION:* Reply to the client within 2 hours. Full record in Admin → Bookings.`;
 
+  console.log(`[${timestamp}] 🔔 Sending admin notification for booking: ${clientName} (${service})`);
   const result = await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+
+  if (result.success) {
+    console.log(`[${timestamp}] ✅ Admin WhatsApp notification delivered`);
+  } else {
+    console.warn(`[${timestamp}] ⚠️ Admin WhatsApp notification failed:`, result.error);
+  }
+
   await sendTelegramMessage(message);
   return result;
 }
@@ -269,6 +311,7 @@ export async function sendDepositPaidNotification(details: {
   phone?: string;
   email?: string;
 }): Promise<void> {
+  const timestamp = new Date().toISOString();
   const dash = '—';
   const paidAt = new Date().toLocaleString('en-ZA', {
     timeZone: 'Africa/Johannesburg',
@@ -294,7 +337,14 @@ A client's deposit has just been received via Paystack.
 
 The booking is now secured. View it in Admin → Bookings.`;
 
-  await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  console.log(`[${timestamp}] 💰 Sending deposit paid notification for: ${details.clientName} - R${details.amount}`);
+  const result = await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  if (result.success) {
+    console.log(`[${timestamp}] ✅ Deposit paid WhatsApp notification delivered`);
+  } else {
+    console.warn(`[${timestamp}] ⚠️ Deposit paid WhatsApp notification failed:`, result.error);
+  }
+
   await sendTelegramMessage(message);
 }
 
@@ -313,6 +363,7 @@ export async function sendLeadNotification(
     source?: string;
   }
 ): Promise<void> {
+  const timestamp = new Date().toISOString();
   const dash = '—';
   const receivedAt = new Date().toLocaleString('en-ZA', {
     timeZone: 'Africa/Johannesburg',
@@ -344,7 +395,14 @@ ${details?.projectDetails || 'No message provided'}
 
 ➡️ *ACTION:* Reply within 2 hours. Full record in Admin → Leads.`;
 
-  await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  console.log(`[${timestamp}] 🔔 Sending lead notification for: ${name} (${service})`);
+  const result = await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  if (result.success) {
+    console.log(`[${timestamp}] ✅ Lead WhatsApp notification delivered`);
+  } else {
+    console.warn(`[${timestamp}] ⚠️ Lead WhatsApp notification failed:`, result.error);
+  }
+
   await sendTelegramMessage(message);
 }
 
@@ -364,6 +422,7 @@ export async function sendPurchaseNotification(details: {
    */
   password?: string;
 }): Promise<void> {
+  const timestamp = new Date().toISOString();
   const dash = '—';
   const paidAt = new Date().toLocaleString('en-ZA', {
     timeZone: 'Africa/Johannesburg',
@@ -399,7 +458,14 @@ A guide has just been bought and paid via Paystack.
 📅 Paid: ${paidAt} (SAST)
 ${passwordSection}`;
 
-  await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  console.log(`[${timestamp}] 🛒 Sending purchase notification for: ${details.productName} - R${details.amount}`);
+  const result = await sendWhatsAppMessage({ phone: ADMIN_PHONE, message });
+  if (result.success) {
+    console.log(`[${timestamp}] ✅ Purchase WhatsApp notification delivered`);
+  } else {
+    console.warn(`[${timestamp}] ⚠️ Purchase WhatsApp notification failed:`, result.error);
+  }
+
   await sendTelegramMessage(message);
 }
 
