@@ -659,6 +659,47 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SECTION 5.5 - RESULTS METRICS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--bg-secondary)] to-[var(--bg-card)]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <h2 className="text-5xl md:text-6xl font-bold heading-section font-sora mb-6">Proven Results</h2>
+            <p className="text-[var(--text-secondary)] text-lg max-w-2xl mx-auto">
+              The real impact we deliver for our clients
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { metric: '+300%', label: 'Average Booking Growth', icon: '📈' },
+              { metric: '80%+', label: 'Inquiries Handled by AI', icon: '🤖' },
+              { metric: '24/7', label: 'Automated Response Time', icon: '⚡' },
+              { metric: '100%', label: 'Client Ownership', icon: '✓' },
+            ].map((item, i) => (
+              <motion.div
+                key={item.metric}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                viewport={{ once: true }}
+                whileHover={{ translateY: -4 }}
+                className="glass-card p-8 text-center border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 rounded-xl"
+              >
+                <div className="text-5xl mb-4">{item.icon}</div>
+                <p className="text-4xl font-bold font-sora gradient-text mb-3">{item.metric}</p>
+                <p className="text-[var(--text-secondary)] font-semibold">{item.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 6 - FAQ */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
