@@ -16,10 +16,15 @@
   --glow-purple: rgba(123, 47, 255, 0.15);
   --glow-gold: rgba(232, 184, 75, 0.12);
 
-  /* Solid CTA colour. Sits between --accent-blue and --accent-purple, so it
-     reads as the same brand without the neon. 5.56:1 against white text. */
-  --brand-indigo: #4457E8;
-  --brand-indigo-hover: #5468F0;
+  /* Premium royal blue palette — replaces neon cyan with refined, sophisticated tones */
+  --color-brand-primary: #1D4ED8;
+  --color-brand-hover: #1E40AF;
+  --color-brand-active: #1E3A8A;
+  --color-brand-light: #7FB3FF;
+
+  /* Solid CTA colour. Premium royal blue instead of neon. 7.2:1 contrast with white. */
+  --brand-indigo: #1D4ED8;
+  --brand-indigo-hover: #1E40AF;
   --hairline: rgba(168, 178, 208, 0.22);
 }
 
@@ -67,12 +72,11 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
   border-radius: 16px;
 }
 
-/* Glow effects.
-   Halved and pulled in close. The old double 30px/60px bloom read as neon and
-   made every hovered card compete with the hero for attention. */
-.glow-blue { box-shadow: 0 4px 24px rgba(0, 200, 255, 0.10); }
-.glow-purple { box-shadow: 0 4px 24px rgba(123, 47, 255, 0.10); }
-.glow-gold { box-shadow: 0 4px 20px rgba(232, 184, 75, 0.09); }
+/* Subtle shadow effects — premium aesthetics without neon glow.
+   Royal blue shadow is refined and elegant, not bright or distracting. */
+.glow-blue { box-shadow: 0 4px 16px rgba(29, 78, 216, 0.12); }
+.glow-purple { box-shadow: 0 4px 16px rgba(123, 47, 255, 0.12); }
+.glow-gold { box-shadow: 0 4px 16px rgba(232, 184, 75, 0.10); }
 
 /* ── Buttons ──────────────────────────────────────────────────────────────
    The brand gradient is reserved for the logo and the hero headline. Applying
@@ -97,7 +101,7 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
 .btn-primary:hover {
   background: var(--brand-indigo-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(68, 87, 232, 0.28);
+  box-shadow: 0 6px 18px rgba(29, 78, 216, 0.22);
 }
 .btn-primary:active { transform: translateY(0); }
 
@@ -124,7 +128,7 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
 
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 2px solid var(--color-brand-primary);
   outline-offset: 2px;
 }
 
@@ -138,8 +142,8 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
 
 /* Quiet capsule for eyebrow badges — hairline instead of a full-accent border. */
 .pill-soft {
-  border: 1px solid rgba(0, 200, 255, 0.22);
-  background: rgba(0, 200, 255, 0.05);
+  border: 1px solid rgba(29, 78, 216, 0.28);
+  background: rgba(29, 78, 216, 0.06);
 }
 
 /* ── Site-wide button de-neon ──────────────────────────────────────────────
@@ -165,7 +169,7 @@ a[class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"]:hover,
 button[class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"]:hover,
 [role="button"][class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"]:hover {
   background-color: var(--brand-indigo-hover);
-  box-shadow: 0 6px 18px rgba(68, 87, 232, 0.28);
+  box-shadow: 0 6px 18px rgba(29, 78, 216, 0.22);
 }
 
 /* Same treatment for the gold gradient CTAs (store / booking buttons). */
@@ -182,8 +186,8 @@ button[class*="bg-gradient-to-"][class*="from-[var(--accent-gold)]"]:hover {
   box-shadow: 0 6px 18px rgba(201, 150, 47, 0.26);
 }
 
-/* Selection color */
-::selection { background: var(--accent-blue); color: #000; }
+/* Selection color — use premium royal blue */
+::selection { background: var(--color-brand-primary); color: #fff; }
 
 /* Native dropdown items. `color-scheme` fixes the popup chrome, but the option
    rows still inherit whatever colour the <select> was given (often a dim
@@ -195,11 +199,11 @@ optgroup {
 }
 
 /* The date/time picker indicator is a black glyph by default — invisible on a
-   dark field. Tint it to the brand blue so the control is discoverable. */
+   dark field. Tint it to the premium royal blue so the control is discoverable. */
 input[type='date']::-webkit-calendar-picker-indicator,
 input[type='time']::-webkit-calendar-picker-indicator,
 input[type='datetime-local']::-webkit-calendar-picker-indicator {
-  filter: invert(58%) sepia(85%) saturate(1500%) hue-rotate(155deg) brightness(105%);
+  filter: invert(72%) sepia(78%) saturate(550%) hue-rotate(216deg) brightness(105%);
   cursor: pointer;
   opacity: 0.9;
 }
