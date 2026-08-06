@@ -200,20 +200,18 @@ export default function Home() {
         <div className="max-w-5xl mx-auto w-full text-center relative">
           <motion.div className="space-y-6">
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="inline-block"
-            >
-              <Link href="/ai-automation">
-                <div className="px-6 py-3 rounded-full w-fit mx-auto border-2 border-[var(--accent-blue)] bg-[var(--glow-blue)] hover:bg-[var(--accent-blue)] hover:text-[var(--bg-primary)] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[var(--glow-blue)] cursor-pointer">
-                  <span className="text-[var(--accent-blue)] hover:text-[var(--bg-primary)] font-sora text-sm font-bold transition-colors duration-300">
-                    ⚡ {settings.hero_badge}
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
+            <Link href="/ai-automation">
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="inline-block px-6 py-3 rounded-full w-fit mx-auto border-2 border-[var(--accent-blue)] bg-[var(--glow-blue)] hover:bg-[var(--accent-blue)] hover:text-[var(--bg-primary)] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[var(--glow-blue)] cursor-pointer"
+              >
+                <span className="text-[var(--accent-blue)] hover:text-[var(--bg-primary)] font-sora text-sm font-bold transition-colors duration-300">
+                  ⚡ {settings.hero_badge}
+                </span>
+              </motion.div>
+            </Link>
 
             {/* Main Headline */}
             <motion.h1
