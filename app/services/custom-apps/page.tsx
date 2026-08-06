@@ -65,7 +65,8 @@ export default function CustomAppsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -91,13 +92,13 @@ export default function CustomAppsPage() {
               { num: 3, title: 'Development', desc: 'We build in milestones with regular demos and feedback.' },
               { num: 4, title: 'Launch & Support', desc: 'Deploy, train your team, and provide ongoing maintenance.' },
             ].map((item) => (
-              <div key={item.num} className="glass-card p-6">
+              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-purple)] hover:shadow-lg hover:shadow-[var(--glow-purple)] transition-all duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
                 <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
