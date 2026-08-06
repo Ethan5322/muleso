@@ -91,7 +91,8 @@ export default function PDFGuidesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 hover:border-[var(--accent-blue)] transition-all"
+                whileHover={{ translateY: -6 }}
+                className="glass-card p-8 border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
               >
                 <div className="mb-4">
                   <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">{guide.title}</h3>

@@ -58,7 +58,8 @@ export default function QRCodesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+                whileHover={{ translateY: -4 }}
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
               >
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">✓ {item.title}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
@@ -112,13 +113,13 @@ export default function QRCodesPage() {
               { num: 3, title: 'Get Analytics', desc: 'Dashboard shows all scans in real-time' },
               { num: 4, title: 'Print & Deploy', desc: 'Use in marketing, packaging, anywhere!' },
             ].map((item) => (
-              <div key={item.num} className="glass-card p-6">
+              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-purple)] hover:shadow-lg hover:shadow-[var(--glow-purple)] transition-all duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
                 <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
