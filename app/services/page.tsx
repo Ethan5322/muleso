@@ -137,12 +137,14 @@ export default function ServicesPage() {
               </ul>
               <div className="mt-auto">
                 <p className="text-lg font-bold gold-text font-sora mb-4">From $299</p>
-                <Link
-                  href="/ai-automation"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] w-full text-center"
-                >
-                  Explore the Library <ArrowRight size={17} />
-                </Link>
+                <motion.div whileHover={{ scale: 1.05 }}>
+                  <Link
+                    href="/ai-automation"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow w-full text-center"
+                  >
+                    Explore the Library <ArrowRight size={17} />
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
 
@@ -153,7 +155,7 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                whileHover={{ translateY: -4 }}
+                whileHover={{ translateY: -6 }}
                 className="glass-card p-8 hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 flex flex-col"
               >
                 <div className="text-5xl mb-4">{service.icon}</div>
@@ -172,12 +174,14 @@ export default function ServicesPage() {
                   {service.price && (
                     <p className="text-lg font-bold gold-text font-sora mb-4">{service.price}</p>
                   )}
-                  <Link
-                    href={service.href}
-                    className="inline-block px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] w-full text-center"
-                  >
-                    View Full Details →
-                  </Link>
+                  <motion.div whileHover={{ scale: 1.05 }}>
+                    <Link
+                      href={service.href}
+                      className="inline-block px-8 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow w-full text-center"
+                    >
+                      View Full Details →
+                    </Link>
+                  </motion.div>
                 </div>
               </motion.div>
             ))}
