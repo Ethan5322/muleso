@@ -40,7 +40,7 @@ function BookingConfirmationContent() {
 
         {/* Booking Details Card */}
         <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-xl p-8 mb-8">
-          <h2 className="text-2xl font-bold text-[#00C8FF] mb-6">Booking Details</h2>
+          <h2 className="text-2xl font-bold text-[#1D4ED8] mb-6">Booking Details</h2>
 
           <div className="space-y-4">
             <div className="flex justify-between">
@@ -67,7 +67,7 @@ function BookingConfirmationContent() {
 
           <div className="border-t border-[#1E3A5F] mt-6 pt-6">
             <p className="text-gray-400 text-sm mb-4">
-              A confirmation email has been sent to <span className="text-[#00C8FF]">{email}</span>
+              A confirmation email has been sent to <span className="text-[#1D4ED8]">{email}</span>
             </p>
             <p className="text-gray-400 text-sm">
               We will reach out within 2 hours to discuss your project in detail.
@@ -94,7 +94,7 @@ function BookingConfirmationContent() {
           <div className="flex justify-center">
             <button
               onClick={handleDownloadQR}
-              className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
+              className="bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
             >
               Download QR Code
             </button>
@@ -106,7 +106,7 @@ function BookingConfirmationContent() {
           <h3 className="text-xl font-bold mb-6">What Happens Next?</h3>
           <ol className="space-y-4">
             <li className="flex gap-4">
-              <span className="bg-[#00C8FF] text-black rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">
+              <span className="bg-[#1D4ED8] text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">
                 1
               </span>
               <div>
@@ -143,7 +143,7 @@ function BookingConfirmationContent() {
             </button>
           </Link>
           <Link href="/contact">
-            <button className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 px-8 rounded-lg transition transform hover:scale-105">
+            <button className="bg-[#1D4ED8] hover:bg-[#1E40AF] text-white font-bold py-3 px-8 rounded-lg transition transform hover:scale-105">
               Contact Us
             </button>
           </Link>
@@ -158,7 +158,7 @@ function BookingConfirmationFallback() {
     <div className="min-h-screen bg-[#050810] text-white py-20 px-4 flex items-center justify-center">
       <div className="max-w-2xl mx-auto text-center">
         <div className="animate-pulse">
-          <div className="h-20 w-20 bg-[#00C8FF] rounded-full mx-auto mb-6"></div>
+          <div className="h-20 w-20 bg-[#1D4ED8] rounded-full mx-auto mb-6"></div>
           <div className="h-8 bg-gray-700 rounded-lg w-64 mx-auto mb-4"></div>
           <div className="h-4 bg-gray-800 rounded-lg w-96 mx-auto"></div>
         </div>
