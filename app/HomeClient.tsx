@@ -240,12 +240,16 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
             >
-              <Link href="/services" className="btn-primary px-9 py-3.5 text-[15px]">
-                Explore Services
-              </Link>
-              <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
-                View Our Work
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link href="/services" className="btn-primary px-9 py-3.5 text-[15px]">
+                  Explore Services
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
+                  View Our Work
+                </Link>
+              </motion.div>
             </motion.div>
 
             {/* Trust chips */}
@@ -569,9 +573,11 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
-              View Full Portfolio →
-            </Link>
+            <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
+              <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
+                View Full Portfolio →
+              </Link>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -675,20 +681,24 @@ export default function Home() {
           >
             <p className="text-[var(--text-secondary)] mb-4">Still have questions?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href={`mailto:${settings.email}`}
-                className="btn-primary w-full px-6 py-3 text-[15px]"
-              >
-                <Mail size={18} /> Email Us
-              </a>
-              <a
-                href={`https://wa.me/${settings.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={18} /> WhatsApp Us
-              </a>
+              <motion.div whileHover={{ scale: 1.05 }} className="w-full">
+                <a
+                  href={`mailto:${settings.email}`}
+                  className="btn-primary w-full px-6 py-3 text-[15px] block"
+                >
+                  <Mail size={18} /> Email Us
+                </a>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <a
+                  href={`https://wa.me/${settings.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-6 py-3 bg-[#25D366] text-white font-bold rounded-lg transition-shadow hover:shadow-[0_0_20px_rgba(37,211,102,0.4)] flex items-center justify-center gap-2"
+                >
+                  <MessageCircle size={18} /> WhatsApp Us
+                </a>
+              </motion.div>
             </div>
           </motion.div>
         </div>
@@ -776,12 +786,14 @@ export default function Home() {
             Smart booking, payment, support and workflow systems for every industry — or request a fully
             custom build designed around your exact process.
           </p>
-          <Link
-            href="/ai-automation"
-            className="btn-primary px-9 py-3.5 text-base"
-          >
-            What do you want us to build for you? →
-          </Link>
+          <motion.div whileHover={{ scale: 1.05 }}>
+            <Link
+              href="/ai-automation"
+              className="btn-primary px-9 py-3.5 text-base inline-block"
+            >
+              What do you want us to build for you? →
+            </Link>
+          </motion.div>
         </motion.div>
       </section>
 
@@ -805,12 +817,14 @@ export default function Home() {
           <p className="text-[var(--text-secondary)] text-lg md:text-xl mb-10 font-light">
             Let's discuss your project. We respond within 2 hours and deliver excellence.
           </p>
-          <Link
-            href="/contact"
-            className="btn-primary px-10 py-3.5 text-base"
-          >
-            Start Your Project
-          </Link>
+          <motion.div whileHover={{ scale: 1.05 }}>
+            <Link
+              href="/contact"
+              className="btn-primary px-10 py-3.5 text-base inline-block"
+            >
+              Start Your Project
+            </Link>
+          </motion.div>
         </motion.div>
       </section>
     </>
