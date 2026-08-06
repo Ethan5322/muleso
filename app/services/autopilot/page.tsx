@@ -67,7 +67,7 @@ export default function AutopilotPage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div className="glass-card p-8">
+            <motion.div whileHover={{ translateY: -4 }} className="glass-card p-8 border border-[var(--border)] hover:border-[var(--accent-purple)] hover:shadow-lg hover:shadow-[var(--glow-purple)] transition-all duration-300">
               <div className="text-4xl mb-3">🤖</div>
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2">AI Automation</h3>
               <p className="text-[var(--text-secondary)] mb-4">
@@ -80,9 +80,9 @@ export default function AutopilotPage() {
                 <li className="flex gap-2"><span className="text-[var(--accent-blue)]">•</span> Best when you already have systems in place</li>
                 <li className="flex gap-2"><span className="text-[var(--accent-blue)]">•</span> Plug into your existing workflow</li>
               </ul>
-            </div>
+            </motion.div>
 
-            <div className="glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)]">
+            <motion.div whileHover={{ translateY: -4 }} className="glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)] hover:shadow-[0_0_30px_var(--glow-blue)] transition-all duration-300">
               <div className="text-4xl mb-3">🛫</div>
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2">Auto Pilot System</h3>
               <p className="text-[var(--text-secondary)] mb-4">
@@ -95,7 +95,7 @@ export default function AutopilotPage() {
                 <li className="flex gap-2"><span className="text-[var(--accent-green)]">✓</span> Best when you want everything to just run itself</li>
                 <li className="flex gap-2"><span className="text-[var(--accent-green)]">✓</span> Front desk → back office, all in one</li>
               </ul>
-            </div>
+            </motion.div>
           </div>
 
           <p className="text-center text-[var(--text-secondary)] mt-8 max-w-2xl mx-auto">
@@ -125,13 +125,13 @@ export default function AutopilotPage() {
               { num: 5, title: 'Remind & Follow Up', desc: 'Automatic WhatsApp/SMS reminders cut no-shows and bring customers back.' },
               { num: 6, title: 'Report to You', desc: 'You get a clean admin dashboard — bookings, income, members and trends, updated live.' },
             ].map((item) => (
-              <div key={item.num} className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all">
+              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
                 <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
