@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight, TrendingUp, Clock, CheckCircle } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 
 export default function CaseStudiesPage() {
@@ -125,10 +125,15 @@ export default function CaseStudiesPage() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 }}
                     viewport={{ once: true }}
-                    className="glass-card p-5 border-l-4 border-[var(--accent-blue)]"
+                    className="glass-card p-5 border border-[var(--border)] hover:border-[var(--accent-blue)] transition-colors"
                   >
-                    <p className="text-sm font-bold text-[var(--accent-blue)] uppercase tracking-wide mb-2">Challenge</p>
-                    <p className="text-[var(--text-secondary)]">{study.challenge}</p>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-1 rounded-full bg-[var(--accent-blue)] mt-2 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-[var(--accent-blue)] uppercase tracking-wide mb-2">Challenge</p>
+                        <p className="text-[var(--text-secondary)]">{study.challenge}</p>
+                      </div>
+                    </div>
                   </motion.div>
 
                   <motion.div
@@ -136,10 +141,15 @@ export default function CaseStudiesPage() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
                     viewport={{ once: true }}
-                    className="glass-card p-5 border-l-4 border-[var(--accent-purple)]"
+                    className="glass-card p-5 border border-[var(--border)] hover:border-[var(--accent-purple)] transition-colors"
                   >
-                    <p className="text-sm font-bold text-[var(--accent-purple)] uppercase tracking-wide mb-2">Solution</p>
-                    <p className="text-[var(--text-secondary)]">{study.solution}</p>
+                    <div className="flex items-start gap-3">
+                      <div className="w-1 h-1 rounded-full bg-[var(--accent-purple)] mt-2 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-[var(--accent-purple)] uppercase tracking-wide mb-2">Solution</p>
+                        <p className="text-[var(--text-secondary)]">{study.solution}</p>
+                      </div>
+                    </div>
                   </motion.div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
