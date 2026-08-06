@@ -207,9 +207,9 @@ export default function Home() {
               className="inline-block"
             >
               <Link href="/ai-automation">
-                <div className="pill-soft px-4 py-2 rounded-full w-fit mx-auto hover:scale-105 transition-transform cursor-pointer">
-                  <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
-                    {settings.hero_badge}
+                <div className="px-6 py-3 rounded-full w-fit mx-auto border-2 border-[var(--accent-blue)] bg-[var(--glow-blue)] hover:bg-[var(--accent-blue)] hover:text-[var(--bg-primary)] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[var(--glow-blue)] cursor-pointer">
+                  <span className="text-[var(--accent-blue)] hover:text-[var(--bg-primary)] font-sora text-sm font-bold transition-colors duration-300">
+                    ⚡ {settings.hero_badge}
                   </span>
                 </div>
               </Link>
