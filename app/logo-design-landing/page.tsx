@@ -1,5 +1,3 @@
-'use client';
-
 import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/seo';
 import { useState } from 'react';
