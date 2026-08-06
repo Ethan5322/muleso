@@ -159,19 +159,19 @@ export default function StorePage() {
             >
               <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[var(--accent-blue)]" />
 
-              <div className="relative w-full h-52 overflow-hidden">
+              <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                 <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                   <EmojiCover emoji={product.emoji} title={product.name} label="DIGITAL GUIDE" category={`${product.pages} pages`} accent={product.accent} />
                 </div>
                 {i === 0 && (
-                  <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg">
+                  <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg whitespace-nowrap">
                     ★ BESTSELLER
                   </span>
                 )}
               </div>
 
-              <div className="p-8 flex flex-col flex-1">
-                <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-gold)] transition-colors">
+              <div className="p-5 sm:p-8 flex flex-col flex-1">
+                <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-gold)] transition-colors">
                   {product.name}
                 </h3>
                 <p className="text-[var(--text-secondary)] mb-4">{product.description}</p>
@@ -243,19 +243,19 @@ export default function StorePage() {
                 whileHover={{ translateY: -6 }}
                 className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
               >
-                <div className="relative w-full h-52 overflow-hidden">
+                <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                     <EmojiCover emoji={s.emoji} title={systemDisplayName(s)} label="AUTO PILOT SYSTEM" category={s.category} accent={s.accent} />
                   </div>
                   {s.enterprise && (
-                    <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-blue)] to-[#7DE0FF] shadow-lg">
+                    <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-blue)] to-[#7DE0FF] shadow-lg whitespace-nowrap">
                       ★ ENTERPRISE
                     </span>
                   )}
                 </div>
 
-                <div className="p-8 flex flex-col flex-1">
-                  <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                <div className="p-5 sm:p-8 flex flex-col flex-1">
+                  <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
                     {systemDisplayName(s)}
                   </h3>
                   <p className="text-[var(--text-secondary)] mb-4">{s.description}</p>
@@ -313,14 +313,14 @@ export default function StorePage() {
                 whileHover={{ translateY: -6 }}
                 className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
               >
-                <div className="relative w-full h-40 overflow-hidden">
+                <div className="relative w-full h-36 sm:h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                     <EmojiCover emoji={a.emoji} title={a.name} label="AI AUTOMATION" category={a.category} accent={a.accent} />
                   </div>
                 </div>
 
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                <div className="p-4 sm:p-6 flex flex-col flex-1">
+                  <h3 className="text-base sm:text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
                     {a.name}
                   </h3>
                   <p className="text-[var(--text-secondary)] text-sm mb-4">{a.desc}</p>
