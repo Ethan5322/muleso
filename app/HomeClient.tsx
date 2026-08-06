@@ -206,11 +206,13 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="inline-block"
             >
-              <div className="pill-soft px-4 py-2 rounded-full w-fit mx-auto">
-                <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
-                  {settings.hero_badge}
-                </span>
-              </div>
+              <Link href="/ai-automation">
+                <div className="pill-soft px-4 py-2 rounded-full w-fit mx-auto hover:scale-105 transition-transform cursor-pointer">
+                  <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">
+                    {settings.hero_badge}
+                  </span>
+                </div>
+              </Link>
             </motion.div>
 
             {/* Main Headline */}

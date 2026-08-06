@@ -91,7 +91,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   instagram: '',
   hero_badge: 'Intelligent Digital Solution',
   hero_title: 'Digital Excellence',
-  hero_subtitle: 'Professional websites, AI chatbots, logos, and digital solutions built for businesses across the world.',
+  hero_subtitle: 'AI Automation, Auto Pilot System, AI Chatbots, Professional Websites, Logos, and Digital Solutions built for businesses across the world.',
   stat1_value: '50+',
   stat1_label: 'Projects Delivered',
   stat2_value: '100%',
