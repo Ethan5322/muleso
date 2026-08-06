@@ -153,6 +153,65 @@ export default function ChatbotPage() {
           </p>
         </motion.div>
 
+        {/* FAQ */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mb-20"
+        >
+          <h2 className="text-4xl font-bold font-sora text-center mb-12 gradient-text">Chatbot FAQ</h2>
+          <div className="space-y-4 max-w-3xl mx-auto">
+            {[
+              {
+                q: 'How much does a chatbot cost?',
+                a: 'Chatbots start at R2,500 (Starter) up to R8,000+ (Enterprise). The R4,500 Business tier is most popular — includes appointment booking, WhatsApp integration, and lead qualification. Get a custom quote in minutes.',
+              },
+              {
+                q: 'How long to set up?',
+                a: 'Typically 1-3 weeks depending on complexity. We handle the entire setup — you just review and approve. We\'ll have it live and handling inquiries within 21 days.',
+              },
+              {
+                q: 'Can it handle complex questions?',
+                a: 'Yes. We train it on your specific business knowledge — pricing, policies, procedures, FAQs. It uses advanced AI (Claude API) that understands context and learns from every interaction.',
+              },
+              {
+                q: 'Will customers know it\'s an AI?',
+                a: 'We train it to match your tone and voice. Most customers think they\'re chatting with a real person. If needed, we can transparently say "I\'m an AI, but I can help" upfront.',
+              },
+              {
+                q: 'What if it gives wrong information?',
+                a: 'You set rules and confidence thresholds. If the chatbot isn\'t confident about an answer, it automatically hands off to you via email or WhatsApp. You maintain full control.',
+              },
+              {
+                q: 'Can it take payments?',
+                a: 'Yes! The Business and Enterprise tiers can take deposits and payments through Stripe. It can even send digital agreements via email.',
+              },
+              {
+                q: 'Can it work in other languages?',
+                a: 'Absolutely. Enterprise tier supports bilingual (or more) chatbots. Great for serving diverse customer bases.',
+              },
+              {
+                q: 'Do you provide support after launch?',
+                a: 'Yes. 30 days of free fixes included. After that, we offer monthly optimization and training plans (R1,000-3,000/month) to keep it sharp.',
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                viewport={{ once: true }}
+                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all duration-300 border border-[var(--border)]"
+              >
+                <h3 className="font-bold text-[var(--text-primary)] mb-3 text-lg">{item.q}</h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed">{item.a}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
