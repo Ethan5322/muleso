@@ -582,6 +582,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SECTION 4.8 - TRUSTED BY */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <p className="text-sm uppercase tracking-wider font-semibold text-[var(--accent-blue)] mb-3">Trusted By Industry Leaders</p>
+            <h3 className="text-2xl md:text-3xl font-bold font-sora text-[var(--text-primary)]">
+              Businesses That Trust MuleSoo
+            </h3>
+          </motion.div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+            {[
+              { name: 'Yoyo Gym', category: 'Fitness' },
+              { name: 'Shime Events', category: 'Events' },
+              { name: 'Tsedi Catering', category: 'Catering' },
+              { name: 'X-Boss Photography', category: 'Photography' },
+              { name: 'Habesha Events', category: 'Wedding Planning' },
+            ].map((client, i) => (
+              <motion.div
+                key={client.name}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.05 }}
+                className="glass-card p-6 flex flex-col items-center justify-center text-center min-h-[140px] border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 rounded-xl"
+              >
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-3 flex-shrink-0">
+                  <span className="text-white font-bold font-sora text-lg">{client.name.charAt(0)}</span>
+                </div>
+                <h4 className="font-bold font-sora text-[var(--text-primary)] text-sm mb-1">{client.name}</h4>
+                <p className="text-xs text-[var(--text-secondary)]">{client.category}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 5 - TESTIMONIALS */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
