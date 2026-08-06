@@ -380,7 +380,8 @@ export default function PortfolioPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] text-left transition-all duration-300 hover:border-[var(--accent-blue)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_rgba(0,200,255,0.4)]"
+                whileHover={{ translateY: -6 }}
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] text-left transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-xl hover:shadow-[var(--glow-blue)]"
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-gold)]" />
 
@@ -430,7 +431,7 @@ export default function PortfolioPage() {
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="text-center">
           <h2 className="text-3xl font-bold font-sora mb-4 gradient-text">Ready to Build Your Next Project?</h2>
           <p className="text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">Let&apos;s create something amazing together. Start with a free consultation.</p>
-          <a href="/contact" className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform">Get Started</a>
+          <motion.a href="/contact" whileHover={{ scale: 1.05 }} className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow">Get Started</motion.a>
         </motion.div>
       </div>
 
@@ -459,9 +460,9 @@ export default function PortfolioPage() {
                   <PortfolioCover title={selected.name} category={selected.category} tagline={selected.result} theme={selected.theme} />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] to-transparent" />
-                <button type="button" onClick={() => setSelected(null)} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70">
+                <motion.button type="button" onClick={() => setSelected(null)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors">
                   <X size={20} />
-                </button>
+                </motion.button>
                 <div className="absolute bottom-3 left-4 right-4">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="inline-block px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 border border-white/20">{selected.category.toUpperCase()}</span>
