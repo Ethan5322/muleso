@@ -1,8 +1,17 @@
 'use client';
 
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Check, ArrowRight } from 'lucide-react';
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Website Design That Converts | MuleSoo',
+  description: 'Professional website design that converts visitors into paying customers. Fast loading, SEO optimized, fully responsive. Starting from R3,500.',
+  path: '/website-design-landing',
+  keywords: ['website design', 'professional websites', 'conversion-focused design', 'responsive web design', 'SEO websites'],
+});
 
 export default function WebsiteDesignLanding() {
   return (

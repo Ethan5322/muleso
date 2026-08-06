@@ -1,10 +1,19 @@
 'use client';
 
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock } from 'lucide-react';
 import PageHero from '@/components/PageHero';
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Case Studies & Client Success Stories | MuleSoo',
+  description: 'Real results from real clients. See how MuleSoo transformed businesses with AI automation, custom software, and digital solutions.',
+  path: '/case-studies',
+  keywords: ['case studies', 'client success', 'project results', 'business transformation', 'AI implementation'],
+});
 
 export default function CaseStudiesPage() {
   const caseStudies = [

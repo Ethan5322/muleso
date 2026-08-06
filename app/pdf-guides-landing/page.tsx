@@ -1,5 +1,7 @@
 'use client';
 
+import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Check, X, ArrowRight, BookOpen, TrendingUp, Users, Shield, Download } from 'lucide-react';
@@ -27,6 +29,13 @@ const PDF_FAQS = [
     a: 'Request custom guides! We can create specialized content for your niche or business model.',
   },
 ];
+
+export const metadata: Metadata = pageMetadata({
+  title: 'Expert PDF Guides & Digital Products | MuleSoo',
+  description: 'Battle-tested guides built from real projects. Learn, build, and monetize. Resale rights included on all products. Starting from R149.',
+  path: '/pdf-guides-landing',
+  keywords: ['PDF guides', 'digital products', 'expert knowledge', 'online courses', 'resale rights'],
+});
 
 export default function PDFGuidesLanding() {
   const tiers = [
