@@ -10,7 +10,7 @@ import FaqSection, { type Faq } from '@/components/FaqSection';
 
 const HOME_FAQS: Faq[] = [
   { q: 'What does MuleSoo Digital Services do?', a: 'MuleSoo is a digital and AI agency in Pretoria, South Africa. We build professional websites, AI chatbots, whole-business Auto Pilot systems, AI automations, digital ID systems, logos, QR codes and custom apps for businesses across South Africa and Africa.' },
-  { q: 'How much does a website cost?', a: 'Websites start from $199, business sites from $449, and enterprise builds are quoted on scope. AI chatbots start from $149 and full AI automation systems from $299.' },
+  { q: 'How much does a website cost?', a: 'Websites start from R3,500, business sites from R7,500, and enterprise builds are quoted on scope. AI chatbots start from R2,500 and full AI automation systems from R4,500.' },
   { q: 'How long does a project take?', a: 'Most websites and systems launch within about three weeks, depending on scope. We work fast and keep you updated throughout.' },
   { q: 'Do I own what you build?', a: 'Yes. After full payment, the complete source code, data and product are 100% yours — with no per-transaction commissions.' },
   { q: 'Where are you based and do you work remotely?', a: 'We are based in Pretoria, South Africa, and work with clients across South Africa and Africa, remotely worldwide.' },
@@ -73,13 +73,18 @@ const TestimonialCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-8 hover:border-[rgba(0,200,255,0.28)] transition-all duration-300"
+      className="glass-card p-8 hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
     >
-      <div className="flex gap-1 mb-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: delay + 0.2, duration: 0.4 }}
+        className="flex gap-1 mb-4"
+      >
         {[...Array(rating)].map((_, i) => (
           <Star key={i} size={16} className="fill-[var(--accent-gold)] text-[var(--accent-gold)]" />
         ))}
-      </div>
+      </motion.div>
       <p className="text-[var(--text-secondary)] mb-6 italic leading-relaxed">"{quote}"</p>
       <div className="border-t border-[var(--border)] pt-4">
         <p className="font-bold text-[var(--text-primary)]">{author}</p>
@@ -116,7 +121,7 @@ const ServiceCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-8 hover:border-[rgba(0,200,255,0.35)] hover:glow-blue transition-all duration-300 hover:-translate-y-0.5 group"
+      className="glass-card p-8 hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 hover:-translate-y-1 group"
     >
       <div className="w-14 h-14 rounded-full bg-[var(--glow-blue)] flex items-center justify-center mb-6 group-hover:bg-[var(--accent-blue)]">
         <IconComponent size={28} className="text-[var(--accent-blue)]" />
@@ -268,20 +273,21 @@ export default function Home() {
       </section>
 
       {/* SECTION 1.5 - TRUST BAR */}
-      <section className="py-10 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-gradient-to-r from-transparent via-[var(--glow-blue)]/5 to-transparent">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-6">
+          <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-8 font-bold">
             Trusted by businesses across the world
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-5">
             {['Habesha Celebration Events', 'Shime Events', 'YoYo Gym', 'Tsedi Catering', 'DR. Hospital'].map(
               (brand) => (
-                <span
+                <motion.span
                   key={brand}
-                  className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-60 hover:opacity-100 transition-opacity"
+                  whileHover={{ scale: 1.05 }}
+                  className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-60 hover:opacity-100 hover:text-[var(--accent-blue)] transition-all duration-200 cursor-default"
                 >
                   {brand}
-                </span>
+                </motion.span>
               )
             )}
           </div>
@@ -407,14 +413,14 @@ export default function Home() {
                   viewport={{ once: true }}
                   className="glass-card p-6 text-center relative"
                 >
-                  <span className="absolute top-3 right-4 text-4xl font-bold font-sora text-[var(--border)]">
+                  <span className="absolute top-4 right-6 text-5xl font-bold font-sora bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] bg-clip-text text-transparent opacity-20">
                     {i + 1}
                   </span>
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mx-auto mb-4">
-                    <Icon className="text-white" size={26} />
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[var(--glow-blue)]">
+                    <Icon className="text-white" size={28} />
                   </div>
-                  <h3 className="font-bold font-sora text-[var(--text-primary)] mb-2">{step.title}</h3>
-                  <p className="text-sm text-[var(--text-secondary)]">{step.desc}</p>
+                  <h3 className="font-bold font-sora text-lg text-[var(--text-primary)] mb-3">{step.title}</h3>
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{step.desc}</p>
                 </motion.div>
               );
             })}
@@ -448,16 +454,17 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 viewport={{ once: true }}
+                whileHover={{ translateY: -4 }}
                 className="relative"
               >
-                <div className="glass-card p-6 h-full">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
-                    <span className="text-white font-bold font-sora">{step.number}</span>
+                <div className="glass-card p-8 h-full hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-6 shadow-lg shadow-[var(--glow-blue)]">
+                    <span className="text-white font-bold font-sora text-lg">{step.number}</span>
                   </div>
-                  <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-2">
+                  <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-sm text-[var(--text-secondary)]">{step.desc}</p>
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -500,14 +507,15 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: i * 0.06 }}
                   viewport={{ once: true }}
-                  className="glass-card p-6 hover:border-[rgba(0,200,255,0.28)] transition-all flex items-start gap-4"
+                  whileHover={{ translateY: -4 }}
+                  className="glass-card p-6 hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 flex items-start gap-4"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center flex-shrink-0">
+                  <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-[var(--glow-blue)] to-[rgba(123,47,255,0.1)] flex items-center justify-center flex-shrink-0 shadow-sm">
                     <Icon className="text-[var(--accent-blue)]" size={24} />
                   </div>
-                  <div>
-                    <h3 className="font-bold font-sora text-[var(--text-primary)] mb-1">{item.title}</h3>
-                    <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
+                  <div className="flex-1">
+                    <h3 className="font-bold font-sora text-lg text-[var(--text-primary)] mb-2">{item.title}</h3>
+                    <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
                   </div>
                 </motion.div>
               );
@@ -544,7 +552,8 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[rgba(0,200,255,0.28)] hover:-translate-y-1 transition-all"
+                whileHover={{ translateY: -6 }}
+                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-xl hover:shadow-[var(--glow-blue)] transition-all duration-300"
               >
                 <div className="relative w-full h-48 overflow-hidden">
                   <Image src={`/${p.img}`} alt={p.title} width={800} height={450} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
