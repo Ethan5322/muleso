@@ -106,13 +106,14 @@ export default function AboutPage() {
                 { name: 'GitHub', url: '#' },
                 { name: 'YouTube', url: '#' },
               ].map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.url}
-                  className="px-4 py-2 border border-[var(--accent-blue)] text-[var(--accent-blue)] rounded-lg hover:bg-[var(--glow-blue)] transition-colors"
-                >
-                  {link.name}
-                </Link>
+                <motion.div key={link.name} whileHover={{ scale: 1.05 }}>
+                  <Link
+                    href={link.url}
+                    className="inline-block px-4 py-2 border border-[var(--accent-blue)] text-[var(--accent-blue)] rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all"
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -134,7 +135,7 @@ export default function AboutPage() {
             {team.map((m, i) => {
               const color = ACCENT[m.accent] || 'var(--accent-blue)';
               return (
-                <div key={`${m.name}-${i}`} className="glass-card p-6 flex flex-col items-center text-center hover:border-[var(--accent-blue)] transition-all">
+                <motion.div key={`${m.name}-${i}`} whileHover={{ translateY: -4 }} className="glass-card p-6 flex flex-col items-center text-center border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
                   <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border-2 shrink-0" style={{ borderColor: color }}>
                     {m.photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -151,7 +152,7 @@ export default function AboutPage() {
                   <h3 className="text-lg font-bold font-sora text-[var(--text-primary)]">{m.name}</h3>
                   <p className="text-sm font-semibold mb-3" style={{ color }}>{m.role}</p>
                   <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{m.bio}</p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -192,13 +193,13 @@ export default function AboutPage() {
                 desc: 'We use the latest AI tools so you benefit from cutting-edge tech.',
               },
             ].map((value) => (
-              <div key={value.title} className="glass-card p-6 text-center">
+              <motion.div key={value.title} whileHover={{ translateY: -4 }} className="glass-card p-6 text-center border border-[var(--border)] hover:border-[var(--accent-purple)] hover:shadow-lg hover:shadow-[var(--glow-purple)] transition-all duration-300">
                 <p className="text-4xl mb-3">{value.emoji}</p>
                 <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] mb-2">
                   {value.title}
                 </h3>
                 <p className="text-sm text-[var(--text-secondary)]">{value.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>

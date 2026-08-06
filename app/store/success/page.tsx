@@ -108,16 +108,20 @@ export default function SuccessPage() {
             )}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {downloadUrl && (
-                <a
-                  href={downloadUrl}
-                  className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] text-black font-bold font-sora rounded-lg hover:scale-105 transition-transform"
-                >
-                  <Download size={18} /> Download Your Guide
-                </a>
+                <motion.div whileHover={{ scale: 1.05 }}>
+                  <a
+                    href={downloadUrl}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] text-black font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(232,184,75,0.5)] transition-shadow"
+                  >
+                    <Download size={18} /> Download Your Guide
+                  </a>
+                </motion.div>
               )}
-              <Link href="/store" className="px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors">
-                Explore More Guides
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link href="/store" className="inline-block px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all">
+                  Explore More Guides
+                </Link>
+              </motion.div>
             </div>
           </>
         )}
@@ -128,12 +132,16 @@ export default function SuccessPage() {
             <h1 className="text-3xl font-bold font-sora mb-3">We couldn&apos;t confirm your payment</h1>
             <p className="text-[var(--text-secondary)] mb-8">{message}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://wa.me/27688529333" target="_blank" rel="noopener noreferrer" className="px-8 py-3 bg-[#25D366] text-white font-bold rounded-lg hover:scale-105 transition-transform">
-                Contact on WhatsApp
-              </a>
-              <Link href="/store" className="px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold rounded-lg hover:bg-[var(--glow-blue)] transition-colors">
-                Back to Store
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <a href="https://wa.me/27688529333" target="_blank" rel="noopener noreferrer" className="inline-block px-8 py-3 bg-[#25D366] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_20px_rgba(37,211,102,0.4)] transition-shadow">
+                  Contact on WhatsApp
+                </a>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link href="/store" className="inline-block px-8 py-3 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all">
+                  Back to Store
+                </Link>
+              </motion.div>
             </div>
           </>
         )}
