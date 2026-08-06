@@ -145,7 +145,8 @@ export default function StorePage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: i * 0.08 }}
               viewport={{ once: true }}
-              className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-gold)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_rgba(232,184,75,0.4)]"
+              whileHover={{ translateY: -6 }}
+              className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-[0_24px_60px_-15px_rgba(232,184,75,0.5)]"
             >
               <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[var(--accent-blue)]" />
 
@@ -188,13 +189,15 @@ export default function StorePage() {
                     <span className="text-xs text-[var(--text-secondary)]">once-off</span>
                   </div>
                   {product.available ? (
-                    <button
-                      type="button"
-                      onClick={() => startBuy(product)}
-                      className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform"
-                    >
-                      Buy Now
-                    </button>
+                    <motion.div whileHover={{ scale: 1.05 }}>
+                      <button
+                        type="button"
+                        onClick={() => startBuy(product)}
+                        className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(232,184,75,0.5)] transition-shadow"
+                      >
+                        Buy Now
+                      </button>
+                    </motion.div>
                   ) : (
                     <button
                       type="button"
@@ -228,7 +231,8 @@ export default function StorePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: (i % 2) * 0.08 }}
                 viewport={{ once: true }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+                whileHover={{ translateY: -6 }}
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
               >
                 <div className="relative w-full h-52 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -263,13 +267,15 @@ export default function StorePage() {
                       <span className="text-3xl font-bold font-sora gradient-text">From ${s.fromPrice.toLocaleString('en-US')}</span>
                       <span className="text-sm font-semibold text-[var(--accent-green)]">+ ${s.monthly.toLocaleString('en-US')}/mo</span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => openSystemDetail(s)}
-                      className="w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform"
-                    >
-                      View &amp; Book →
-                    </button>
+                    <motion.div whileHover={{ scale: 1.05 }}>
+                      <button
+                        type="button"
+                        onClick={() => openSystemDetail(s)}
+                        className="w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
+                      >
+                        View &amp; Book →
+                      </button>
+                    </motion.div>
                   </div>
                 </div>
               </motion.div>
@@ -295,7 +301,8 @@ export default function StorePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:-translate-y-2 hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+                whileHover={{ translateY: -6 }}
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
               >
                 <div className="relative w-full h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -323,19 +330,23 @@ export default function StorePage() {
                       <span className="text-sm font-semibold text-[var(--accent-green)]">+ ${a.monthly.toLocaleString('en-US')}/mo</span>
                     </div>
                     <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => openAutomationDetail(a)}
-                        className="flex-1 py-2.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform text-sm"
-                      >
-                        View &amp; Book
-                      </button>
-                      <Link
-                        href={`/ai-automation/${a.slug}`}
-                        className="px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-colors text-sm font-semibold flex items-center"
-                      >
-                        Details
-                      </Link>
+                      <motion.div whileHover={{ scale: 1.05 }} className="flex-1">
+                        <button
+                          type="button"
+                          onClick={() => openAutomationDetail(a)}
+                          className="w-full py-2.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] transition-shadow text-sm"
+                        >
+                          View &amp; Book
+                        </button>
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.05 }}>
+                        <Link
+                          href={`/ai-automation/${a.slug}`}
+                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all text-sm font-semibold flex items-center justify-center"
+                        >
+                          Details
+                        </Link>
+                      </motion.div>
                     </div>
                   </div>
                 </div>
