@@ -149,9 +149,9 @@ interface HomeTestimonial {
 }
 
 const FALLBACK_TESTIMONIALS: HomeTestimonial[] = [
-  { quote: 'MuleSoo completely transformed our online presence. Our bookings tripled within 3 months. Professional, fast, and incredibly responsive.', author: 'Sarah Mkhize', role: 'CEO', company: 'Luxury Events SA', rating: 5 },
-  { quote: 'The AI chatbot they built for us handles 80% of customer inquiries automatically. Best investment we have made. Highly recommend!', author: 'James Okonkwo', role: 'Manager', company: 'Tech Solutions Ltd', rating: 5 },
-  { quote: 'From concept to launch in 2 weeks. The attention to detail is insane. Our logo and website are exactly what we needed. Worth every cent.', author: 'Patricia Nkosi', role: 'Founder', company: 'Beauty & Wellness Co', rating: 5 },
+  { quote: 'MuleSoo built our entire booking and member management system. We went from spreadsheets to fully automated operations. Bookings are up 300% and we have zero no-shows thanks to the reminder system.', author: 'Kgosi Moeng', role: 'Owner', company: 'Yoyo Gym', rating: 5 },
+  { quote: 'The AI chatbot handles every single customer enquiry for our events business — bookings, pricing questions, payments. It works flawlessly. I cannot imagine running our business without it now.', author: 'Thabo Sithole', role: 'Founder', company: 'Shime Events', rating: 5 },
+  { quote: 'Faster than any freelancer, better quality than any agency. They delivered our website in 10 days and the chatbot integration was seamless. Genuine, professional, and they actually care about results.', author: 'Alem Tekle', role: 'Manager', company: 'Tsedi Catering', rating: 5 },
 ];
 
 export default function Home() {
