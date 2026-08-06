@@ -16,9 +16,9 @@ const priceNum = (p: string) => {
 };
 
 const SERVICE_FAQS: Faq[] = [
-  { q: 'How much does a professional website cost in South Africa?', a: 'MuleSoo websites start from $199. Business sites (more pages, animations, an AI chatbot) start from $449, and larger enterprise builds are quoted on scope.' },
+  { q: 'How much does a professional website cost in South Africa?', a: 'MuleSoo websites start from R3,500. Business sites (more pages, animations, an AI chatbot) start from R7,500, and larger enterprise builds are quoted on scope.' },
   { q: 'What services does MuleSoo offer?', a: 'Website design, AI chatbots, website support/sales widgets, AI automation (200 systems across 9 industries), complete Auto Pilot business systems, Digital ID systems, logo design, QR codes, custom email setup and custom web/mobile apps.' },
-  { q: 'Do you build AI chatbots and automation?', a: 'Yes. Our AI chatbots start from $149 and answer customers 24/7 on your website and WhatsApp, capture leads, book appointments and take deposits. Full AI automation systems start from $299.' },
+  { q: 'Do you build AI chatbots and automation?', a: 'Yes. Our AI chatbots start from R2,500 and answer customers 24/7 on your website and WhatsApp, capture leads, book appointments and take deposits. Full AI automation systems start from R4,500.' },
   { q: 'Where is MuleSoo based and do you work remotely?', a: 'MuleSoo is based in Pretoria, South Africa, and serves businesses across South Africa and Africa, working remotely worldwide.' },
   { q: 'How do I get a quote?', a: 'Message us on WhatsApp at +27 68 852 9333 or fill in the free quote form on our contact page. We usually reply within 2 hours.' },
 ];
@@ -113,7 +113,8 @@ export default function ServicesPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="relative glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)] hover:shadow-[0_0_35px_-8px_var(--glow-blue)] transition-all duration-300 flex flex-col"
+              whileHover={{ translateY: -6, boxShadow: "0 0 40px -4px var(--glow-blue)" }}
+              className="relative glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)] transition-all duration-300 flex flex-col"
             >
               <span className="absolute top-5 right-5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold font-sora uppercase tracking-wide text-[var(--accent-blue)] bg-[var(--glow-blue)] border border-[var(--accent-blue)]/40">
                 <Zap size={11} /> Flagship
@@ -152,7 +153,8 @@ export default function ServicesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 hover:border-[var(--accent-blue)] transition-all duration-300 flex flex-col"
+                whileHover={{ translateY: -4 }}
+                className="glass-card p-8 hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 flex flex-col"
               >
                 <div className="text-5xl mb-4">{service.icon}</div>
                 <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-3">
