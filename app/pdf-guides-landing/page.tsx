@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Check, X, ArrowRight, BookOpen, Zap, TrendingUp, Users, Shield, Download } from 'lucide-react';
+import { Check, X, ArrowRight, BookOpen, TrendingUp, Users, Shield, Download } from 'lucide-react';
 import FaqSection from '@/components/FaqSection';
 
 const PDF_FAQS = [
@@ -160,15 +159,15 @@ export default function PDFGuidesLanding() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16"
           >
             <Link href="/store">
-              <button className="px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg">
+              <button className="px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap">
                 Browse Guides
                 <ArrowRight className="inline ml-2" size={20} />
               </button>
             </Link>
-            <button className="px-8 py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-lg">
+            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-sm sm:text-lg whitespace-nowrap">
               See What's Inside
             </button>
           </motion.div>
@@ -401,7 +400,7 @@ export default function PDFGuidesLanding() {
           >
             Common Questions
           </motion.h2>
-          <FaqSection faqs={PDF_FAQS} />
+          <FaqSection items={PDF_FAQS} />
         </div>
       </section>
 

@@ -127,15 +127,15 @@ export default function LogoDesignLanding() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16"
           >
             <Link href="/contact">
-              <button className="px-8 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[var(--accent-purple)] text-[var(--bg-primary)] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg">
+              <button className="px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[var(--accent-purple)] text-[var(--bg-primary)] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap">
                 Get Started Now
                 <ArrowRight className="inline ml-2" size={20} />
               </button>
             </Link>
-            <button className="px-8 py-4 border-2 border-[var(--accent-gold)] text-[var(--accent-gold)] font-bold font-sora rounded-lg hover:bg-[var(--glow-gold)] transition-colors text-lg">
+            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--accent-gold)] text-[var(--accent-gold)] font-bold font-sora rounded-lg hover:bg-[var(--glow-gold)] transition-colors text-sm sm:text-lg whitespace-nowrap">
               View Portfolio
             </button>
           </motion.div>
