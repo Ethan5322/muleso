@@ -741,6 +741,22 @@ export default function Home() {
                 q: 'Do you provide support after the project is complete?',
                 a: 'Yes! All services include 30-day post-launch support. After that, we\'re available for maintenance and updates.',
               },
+              {
+                q: 'What if the project costs more than my budget?',
+                a: 'We always quote exactly what you need before starting. No hidden fees. If you have budget constraints, we\'ll scope the project to fit — launch smaller now, add features later. Payment plans available for larger projects.',
+              },
+              {
+                q: 'How do I know MuleSoo can deliver on promises?',
+                a: 'Check our portfolio — every project is a real business we built. Our clients (Yoyo Gym, Shime Events, Tsedi Catering) run live systems right now. We also include unlimited revisions — you only pay when 100% satisfied.',
+              },
+              {
+                q: 'What happens if something breaks after launch?',
+                a: 'All projects come with 30 days of free fixes. After that, we offer affordable maintenance plans. Plus, you own the source code — if you ever need another developer, they can step in anytime.',
+              },
+              {
+                q: 'How do I get started?',
+                a: 'Book a free 30-min consultation at /contact. No pitch, just a real conversation about your goals, timeline, and budget. We\'ll give you a custom quote and timeline before you commit to anything.',
+              },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -783,6 +799,50 @@ export default function Home() {
                   <MessageCircle size={18} /> WhatsApp Us
                 </a>
               </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SECTION 6.3 - GUARANTEE */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--accent-blue)]/5 to-[var(--accent-purple)]/5 border-t border-b border-[var(--border)]">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-[var(--accent-green)]/10 border border-[var(--accent-green)]/30">
+              <span className="text-lg">🛡️</span>
+              <span className="text-sm font-bold text-[var(--accent-green)]">OUR GUARANTEE</span>
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-4">
+              100% Satisfaction or Your Money Back
+            </h3>
+            <p className="text-lg text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto leading-relaxed">
+              If you're not 100% happy with the final deliverable, we'll refund your deposit in full. No questions asked. We only get paid when you're thrilled with the results. That's how confident we are in our work.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+              {[
+                { icon: '✓', label: 'Unlimited Revisions', desc: 'We refine until perfect.' },
+                { icon: '✓', label: '30-Day Support', desc: 'Free fixes post-launch.' },
+                { icon: '✓', label: 'You Own Everything', desc: 'Full source code included.' },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  viewport={{ once: true }}
+                  className="text-center"
+                >
+                  <div className="text-3xl font-bold text-[var(--accent-green)] mb-2">{item.icon}</div>
+                  <p className="font-bold text-[var(--text-primary)] mb-1">{item.label}</p>
+                  <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>

@@ -23,6 +23,7 @@ export default function Navbar() {
     { label: 'Services', href: '/services' },
     { label: 'AI Automation', href: '/ai-automation' },
     { label: 'Portfolio', href: '/portfolio' },
+    { label: 'Case Studies', href: '/case-studies' },
     { label: 'Store', href: '/store' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },

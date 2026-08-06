@@ -12,6 +12,7 @@ import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
 import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
 import { AUTOMATION_PICKS, AUTOMATION_FEATURES, type AutomationPick } from '@/lib/storeAutomations';
 import { useChatbot } from '@/context/ChatbotContext';
+import { analytics } from '@/lib/analytics';
 
 type Plan = 'full' | 'monthly';
 
@@ -63,20 +64,26 @@ export default function StorePage() {
     setPending(product);
     setEmail('');
     setError(null);
+    // Track product click
+    analytics.productClick(product.title);
   };
 
   const handleCheckout = async () => {
     if (!pending) return;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Please enter a valid email — that’s where your guide is delivered.');
+      setError(‘Please enter a valid email — that’s where your guide is delivered.’);
+      analytics.errorOccurred(‘invalid_email’, ‘Email validation failed on store checkout’);
       return;
     }
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/store/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      // Track checkout start
+      analytics.checkoutStart(pending.price);
+
+      const res = await fetch(‘/api/store/checkout’, {
+        method: ‘POST’,
+        headers: { ‘Content-Type’: ‘application/json’ },
         body: JSON.stringify({ slug: pending.slug, email }),
       });
       const data = await res.json();
@@ -84,9 +91,11 @@ export default function StorePage() {
         window.location.href = data.url; // Paystack hosted checkout
         return;
       }
-      setError(data.error || 'Could not start the payment. Please try again.');
+      setError(data.error || ‘Could not start the payment. Please try again.’);
+      analytics.errorOccurred(‘checkout_failed’, data.error || ‘Unknown error’);
     } catch {
-      setError('Could not reach the payment service. Please try again.');
+      setError(‘Could not reach the payment service. Please try again.’);
+      analytics.errorOccurred(‘checkout_error’, ‘Network error during checkout’);
     } finally {
       setLoading(false);
     }

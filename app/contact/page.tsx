@@ -7,6 +7,7 @@ import { Mail, MessageCircle, MapPin, QrCode, ArrowRight, CheckCircle, AlertCirc
 import PageHero from '@/components/PageHero';
 import { getRecaptchaToken } from '@/lib/captcha';
 import { useSiteSettings } from '@/lib/useSiteSettings';
+import { analytics } from '@/lib/analytics';
 
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
@@ -152,15 +153,22 @@ export default function ContactPage() {
         setSubmitted(true);
         setFormData({ name: '', email: '', company: '', service: '', budget: '', details: '', source: '', website: '' });
         setFieldErrors({});
+        // Track successful form submission
+        analytics.contactFormSubmit(formData.service || 'general');
+        analytics.leadSource(formData.source || 'direct', 'contact_form');
       } else if (response.status === 429) {
         setError('Too many requests. Please wait a few minutes before trying again.');
+        analytics.contactFormError('rate_limited');
       } else if (response.status >= 500) {
         setError('Our server is experiencing issues. Please try again in a moment or contact us via WhatsApp.');
+        analytics.contactFormError('server_error');
       } else {
         setError(data.error || 'Something went wrong. Please try again or WhatsApp us.');
+        analytics.contactFormError('submission_failed');
       }
     } catch (err) {
       console.error('Form error:', err);
+      analytics.contactFormError('request_error');
       if (err instanceof Error && err.name === 'AbortError') {
         setError('Request took too long. Please check your connection and try again.');
       } else {
