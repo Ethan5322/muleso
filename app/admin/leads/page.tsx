@@ -160,13 +160,13 @@ export default function LeadsInbox() {
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-2.5 text-[var(--color-action-primary)]" size={18} />
+          <Search className="absolute left-3 top-2.5 text-[var(--color-action-on-dark)]" size={18} />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email or service…"
-            className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]"
+            className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)]"
           />
         </div>
         <button
@@ -187,7 +187,7 @@ export default function LeadsInbox() {
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all border ${
               filter === s
                 ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white border-transparent'
-                : 'bg-[#1A2332] text-[#7A8BA8] border-[#1E3A5F] hover:text-[var(--color-action-primary)]'
+                : 'bg-[#1A2332] text-[#7A8BA8] border-[#1E3A5F] hover:text-[var(--color-action-on-dark)]'
             }`}
           >
             {s} <span className="opacity-70">({counts[s]})</span>
@@ -225,7 +225,7 @@ export default function LeadsInbox() {
                     <td className="px-6 py-3 text-sm text-[#7A8BA8]">{l.budget}</td>
                     <td className="px-6 py-3 text-sm"><span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColor(l.status)}`}>{l.status}</span></td>
                     <td className="px-6 py-3 text-center">
-                      <button type="button" onClick={() => open(l)} className="text-[var(--color-action-primary)] hover:underline font-semibold text-sm">View</button>
+                      <button type="button" onClick={() => open(l)} className="text-[var(--color-action-on-dark)] hover:underline font-semibold text-sm">View</button>
                     </td>
                   </tr>
                 ))}
@@ -256,20 +256,20 @@ export default function LeadsInbox() {
             </div>
 
             <div className="flex gap-2 mb-4">
-              <a href={`mailto:${selected.email}`} className="flex-1 flex items-center justify-center gap-2 bg-[#1A2332] border border-[#1E3A5F] text-[var(--color-action-primary)] py-2 rounded-lg text-sm font-semibold hover:bg-[#253345]"><Mail size={15} /> Email</a>
+              <a href={`mailto:${selected.email}`} className="flex-1 flex items-center justify-center gap-2 bg-[#1A2332] border border-[#1E3A5F] text-[var(--color-action-on-dark)] py-2 rounded-lg text-sm font-semibold hover:bg-[#253345]"><Mail size={15} /> Email</a>
               <a href={`https://wa.me/?text=${encodeURIComponent(`Hi ${selected.name}, thanks for your enquiry to MuleSoo about ${selected.service}.`)}`} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366]/15 border border-[#25D366]/50 text-[#25D366] py-2 rounded-lg text-sm font-semibold hover:bg-[#25D366]/25"><MessageCircle size={15} /> WhatsApp</a>
             </div>
 
             <div className="space-y-3">
               <div>
                 <label className="block text-xs text-[#7A8BA8] mb-1.5">Status</label>
-                <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} aria-label="Status" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]">
+                <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)} aria-label="Status" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)]">
                   {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-xs text-[#7A8BA8] mb-1.5">Notes</label>
-                <textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={3} placeholder="Internal notes…" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] resize-none" />
+                <textarea value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={3} placeholder="Internal notes…" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)] resize-none" />
               </div>
               <div className="flex gap-2">
                 <button type="button" onClick={save} disabled={saving} className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold rounded-xl disabled:opacity-60">

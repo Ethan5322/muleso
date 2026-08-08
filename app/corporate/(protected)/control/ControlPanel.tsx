@@ -182,7 +182,7 @@ export default function ControlPanel() {
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="text-[var(--color-action-primary)]" size={22} />
+          <ShieldCheck className="text-[var(--color-action-on-dark)]" size={22} />
           <h1 className="text-2xl font-bold font-sora">Super Admin Control Panel</h1>
         </div>
         <RegisterAdmin onDone={load} />
@@ -221,12 +221,12 @@ export default function ControlPanel() {
                     <div className="font-semibold text-[#F0F2FA] flex items-center gap-2">
                       {a.display_name || 'Unnamed'}
                       {a.is_visitor && (
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#E8B84B]/15 text-[#E8B84B] uppercase tracking-wide">
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#1D4ED8]/15 text-[#7FB3FF] uppercase tracking-wide">
                           Visitor
                         </span>
                       )}
                     </div>
-                    {a.role_title && <div className="text-[11px] text-[var(--color-action-primary)] mt-0.5">{a.role_title}</div>}
+                    {a.role_title && <div className="text-[11px] text-[var(--color-action-on-dark)] mt-0.5">{a.role_title}</div>}
                     <div className="text-xs text-[#8FA0BE] flex items-center gap-2 mt-0.5 flex-wrap">
                       <span>{a.department_name || `Dept ${a.department_id ?? ''}`}</span>
                       {a.status === 'suspended' && (
@@ -271,7 +271,7 @@ export default function ControlPanel() {
                         disabled={busy === `card:${a.id}`}
                         onClick={() => downloadCard(a.id)}
                         title="Download / re-issue ID card"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-action-primary)] hover:text-[#a78bfa] disabled:opacity-40"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-action-on-dark)] hover:text-[#a78bfa] disabled:opacity-40"
                       >
                         {busy === `card:${a.id}` ? <Loader2 size={14} className="animate-spin" /> : <IdCard size={14} />}
                       </button>
@@ -314,9 +314,9 @@ export default function ControlPanel() {
 
       {/* Super-admin accounts — force-delete for wrong/test accounts */}
       {superAdmins.length > 0 && (
-        <section className="bg-[#0A0F1E] border border-[#E8B84B]/40 rounded-xl">
+        <section className="bg-[#0A0F1E] border border-[#7FB3FF]/40 rounded-xl">
           <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
-            <ShieldCheck size={16} className="text-[#E8B84B]" />
+            <ShieldCheck size={16} className="text-[#7FB3FF]" />
             <h2 className="font-semibold font-sora text-sm">Super-admin accounts</h2>
           </div>
           <div className="p-5 space-y-2">
@@ -329,7 +329,7 @@ export default function ControlPanel() {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-[#F0F2FA] flex items-center gap-2">
                     {a.display_name || 'Unnamed'}
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] uppercase tracking-wide">Super</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[var(--color-action-primary)]/15 text-[var(--color-action-on-dark)] uppercase tracking-wide">Super</span>
                   </p>
                   <p className="text-xs text-[#8FA0BE] truncate">{a.role_title || a.department_name || `Dept ${a.department_id ?? ''}`}</p>
                 </div>
@@ -350,7 +350,7 @@ export default function ControlPanel() {
       {/* Audit log */}
       <section className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl">
         <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
-          <ScrollText size={16} className="text-[#E8B84B]" />
+          <ScrollText size={16} className="text-[#7FB3FF]" />
           <h2 className="font-semibold font-sora text-sm">Audit log</h2>
         </div>
         <div className="divide-y divide-[#101a30] max-h-96 overflow-y-auto">
@@ -394,7 +394,7 @@ export default function ControlPanel() {
                 <span className="font-semibold">{nameById[m.sender_id] || 'Admin'}</span>
                 <span className="text-[#8FA0BE]"> → </span>
                 <span className="font-semibold">{nameById[m.recipient_id] || 'Admin'}</span>
-                <span className={`ml-2 text-[11px] ${m.read_at ? 'text-[#00FF88]' : 'text-[#E8B84B]'}`}>
+                <span className={`ml-2 text-[11px] ${m.read_at ? 'text-[#00FF88]' : 'text-[#7FB3FF]'}`}>
                   {m.read_at ? 'read' : 'unread'}
                 </span>
               </span>

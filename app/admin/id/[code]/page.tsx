@@ -52,13 +52,13 @@ export default function StaffIdPage() {
   return (
     <div className="max-w-lg text-white">
       <div className="flex items-center gap-2 mb-6">
-        <ShieldCheck className="text-[var(--color-action-primary)]" size={24} />
+        <ShieldCheck className="text-[var(--color-action-on-dark)]" size={24} />
         <h1 className="text-2xl font-bold font-sora">Staff ID Verification</h1>
       </div>
 
       {loading ? (
         <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-xl p-10 flex flex-col items-center gap-3">
-          <Loader2 className="animate-spin text-[var(--color-action-primary)]" size={28} />
+          <Loader2 className="animate-spin text-[var(--color-action-on-dark)]" size={28} />
           <p className="text-sm text-[#7A8BA8]">Reading ID {code}…</p>
         </div>
       ) : !result?.found ? (
@@ -101,9 +101,9 @@ export default function StaffIdPage() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="text-xl font-bold font-sora">{s?.display_name || 'Staff'}</h2>
                   {s?.is_super_admin && <Badge color="var(--color-action-primary)">Super Admin</Badge>}
-                  {s?.is_visitor && <Badge color="#E8B84B">Visitor</Badge>}
+                  {s?.is_visitor && <Badge color="#7FB3FF">Visitor</Badge>}
                 </div>
-                <p className="text-sm text-[var(--color-action-primary)] font-mono mt-0.5">{s?.staff_number}</p>
+                <p className="text-sm text-[var(--color-action-on-dark)] font-mono mt-0.5">{s?.staff_number}</p>
                 {s?.role_title && <p className="text-sm text-[#F0F2FA] font-semibold mt-1">{s.role_title}</p>}
                 <p className="text-sm text-[#7A8BA8]">{s?.department_name}</p>
                 {s?.email && <p className="text-xs text-[#7A8BA8] mt-1">{s.email}</p>}

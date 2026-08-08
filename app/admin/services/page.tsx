@@ -103,7 +103,7 @@ export default function ServicesManager() {
         <button
           type="button"
           onClick={() => openEditor({ ...EMPTY, order: items.length })}
-          className="bg-[var(--color-action-primary)] hover:bg-[#00B3E6] text-black font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition"
+          className="bg-[var(--color-action-primary)] hover:bg-[#7FB3FF] text-black font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition"
         >
           <Plus size={18} /> Add Service
         </button>
@@ -135,7 +135,7 @@ export default function ServicesManager() {
                         <span className="text-white font-semibold">{s.title}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-[#E8B84B] font-semibold">{s.price || '—'}</td>
+                    <td className="px-6 py-4 text-[#7FB3FF] font-semibold">{s.price || '—'}</td>
                     <td className="px-6 py-4 text-center">
                       <div className="flex gap-2 justify-center">
                         <button type="button" onClick={() => openEditor(s)} className="bg-[#7B2FFF] hover:bg-[#6B1FEF] text-white px-3 py-1 rounded-lg flex items-center gap-1 text-sm">
@@ -163,17 +163,17 @@ export default function ServicesManager() {
             </div>
             <div className="space-y-4">
               <div className="grid grid-cols-4 gap-3">
-                <input value={editing.icon} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} placeholder="🌐" aria-label="Icon emoji" className="col-span-1 bg-[#1A2332] border border-[#1E3A5F] text-white px-3 py-2.5 rounded-lg text-center focus:outline-none focus:border-[var(--color-action-primary)]" />
-                <input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} placeholder="Service title *" className="col-span-3 bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={editing.icon} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} placeholder="🌐" aria-label="Icon emoji" className="col-span-1 bg-[#1A2332] border border-[#1E3A5F] text-white px-3 py-2.5 rounded-lg text-center focus:outline-none focus:border-[var(--color-action-on-dark)]" />
+                <input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} placeholder="Service title *" className="col-span-3 bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)]" />
               </div>
-              <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Description" rows={2} className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] resize-none" />
+              <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Description" rows={2} className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)] resize-none" />
               <div className="grid grid-cols-2 gap-3">
-                <input value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} placeholder="Price (e.g. From $199)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
-                <input value={editing.href} onChange={(e) => setEditing({ ...editing, href: e.target.value })} placeholder="Link (e.g. /services/chatbot)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} placeholder="Price (e.g. From $199)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)]" />
+                <input value={editing.href} onChange={(e) => setEditing({ ...editing, href: e.target.value })} placeholder="Link (e.g. /services/chatbot)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)]" />
               </div>
               <div>
                 <label className="block text-sm text-[#7A8BA8] mb-1.5">Features (comma-separated)</label>
-                <input value={featuresText} onChange={(e) => setFeaturesText(e.target.value)} placeholder="Responsive, SEO, Fast Loading" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={featuresText} onChange={(e) => setFeaturesText(e.target.value)} placeholder="Responsive, SEO, Fast Loading" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)]" />
               </div>
               <button type="button" onClick={save} disabled={saving} className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold rounded-xl disabled:opacity-60">
                 {saving ? <Loader2 className="animate-spin" size={18} /> : null}

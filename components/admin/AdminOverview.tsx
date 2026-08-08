@@ -111,7 +111,7 @@ export default function AdminOverview() {
               type="button"
               onClick={() => setDays(r.days)}
               className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
-                days === r.days ? 'bg-[#00C8FF]/15 text-[#00C8FF]' : 'text-[#8296B8] hover:text-white'
+                days === r.days ? 'bg-[#7FB3FF]/15 text-[#7FB3FF]' : 'text-[#8296B8] hover:text-white'
               }`}
             >
               {r.label}
@@ -132,7 +132,7 @@ export default function AdminOverview() {
                 <Link
                   key={i}
                   href={s.href}
-                  className="block bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-xl p-5 hover:border-[#00C8FF] hover:-translate-y-0.5 transition-all"
+                  className="block bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border border-[#1E3A5F] rounded-xl p-5 hover:border-[#7FB3FF] hover:-translate-y-0.5 transition-all"
                 >
                   <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${s.color} flex items-center justify-center mb-3`}>
                     <Icon className="text-white" size={20} />
@@ -155,8 +155,8 @@ export default function AdminOverview() {
             <AreaChart data={series} margin={{ top: 4, right: 8, bottom: 0, left: -18 }}>
               <defs>
                 <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#00C8FF" stopOpacity={0.5} />
-                  <stop offset="100%" stopColor="#00C8FF" stopOpacity={0} />
+                  <stop offset="0%" stopColor="#7FB3FF" stopOpacity={0.5} />
+                  <stop offset="100%" stopColor="#7FB3FF" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="gL" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#7B2FFF" stopOpacity={0.5} />
@@ -167,7 +167,7 @@ export default function AdminOverview() {
               <XAxis dataKey="label" tick={{ fill: '#8296B8', fontSize: 11 }} interval="preserveStartEnd" minTickGap={24} />
               <YAxis allowDecimals={false} tick={{ fill: '#8296B8', fontSize: 11 }} />
               <Tooltip contentStyle={{ background: '#0A0E17', border: '1px solid #1E3A5F', borderRadius: 10, color: '#fff' }} />
-              <Area type="monotone" dataKey="bookings" stroke="#00C8FF" fill="url(#gB)" strokeWidth={2} name="Bookings" />
+              <Area type="monotone" dataKey="bookings" stroke="#7FB3FF" fill="url(#gB)" strokeWidth={2} name="Bookings" />
               <Area type="monotone" dataKey="leads" stroke="#7B2FFF" fill="url(#gL)" strokeWidth={2} name="Leads" />
             </AreaChart>
           </ResponsiveContainer>
@@ -185,9 +185,9 @@ export default function AdminOverview() {
                 <Link
                   key={a.href}
                   href={a.href}
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#0F1624] border border-[#1E3A5F] hover:border-[#00C8FF] hover:bg-[#141d2e] text-sm font-semibold transition-all"
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#0F1624] border border-[#1E3A5F] hover:border-[#7FB3FF] hover:bg-[#141d2e] text-sm font-semibold transition-all"
                 >
-                  <Icon size={17} className="text-[#00C8FF]" /> {a.label}
+                  <Icon size={17} className="text-[#7FB3FF]" /> {a.label}
                 </Link>
               );
             })}
@@ -208,7 +208,7 @@ export default function AdminOverview() {
                   href={a.kind === 'booking' ? '/admin/bookings' : '/admin/leads'}
                   className="flex items-center gap-3 p-2.5 hover:bg-[#141d2e] rounded-lg transition"
                 >
-                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center ${a.kind === 'booking' ? 'bg-[#00C8FF]/10 text-[#00C8FF]' : 'bg-[#7B2FFF]/10 text-[#a78bfa]'}`}>
+                  <span className={`w-8 h-8 rounded-lg flex items-center justify-center ${a.kind === 'booking' ? 'bg-[#7FB3FF]/10 text-[#7FB3FF]' : 'bg-[#7B2FFF]/10 text-[#a78bfa]'}`}>
                     {a.kind === 'booking' ? <BookOpen size={15} /> : <Inbox size={15} />}
                   </span>
                   <div className="flex-1 min-w-0">

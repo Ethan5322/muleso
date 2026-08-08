@@ -45,12 +45,12 @@ export default async function CorporateDashboard() {
           ) : (
             <>
               {admin.role_title && (
-                <span className="inline-flex items-center gap-1 text-[var(--color-action-primary)] font-semibold">
+                <span className="inline-flex items-center gap-1 text-[var(--color-action-on-dark)] font-semibold">
                   <BadgeCheck size={14} /> {admin.role_title}
                 </span>
               )}
               <span>· {admin.department_name || `Dept ${admin.department_id ?? ''}`}</span>
-              {admin.is_visitor && <span className="text-[#E8B84B] font-semibold">· Read-only visitor</span>}
+              {admin.is_visitor && <span className="text-[#7FB3FF] font-semibold">· Read-only visitor</span>}
             </>
           )}
         </p>
@@ -61,7 +61,7 @@ export default async function CorporateDashboard() {
         {[
           { label: admin.is_super_admin ? 'Open tasks' : 'Dept. open tasks', value: kpis.open, color: 'var(--color-action-primary)' },
           { label: 'Assigned to me', value: kpis.mine, color: '#7B2FFF' },
-          { label: 'In progress', value: kpis.inProgress, color: '#E8B84B' },
+          { label: 'In progress', value: kpis.inProgress, color: '#7FB3FF' },
           { label: 'Overdue', value: kpis.overdue, color: kpis.overdue ? '#FF5C7C' : '#8FA0BE' },
         ].map((k) => (
           <div key={k.label} className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-4">
@@ -110,7 +110,7 @@ export default async function CorporateDashboard() {
           const Icon = c.icon;
           return (
             <div key={c.title} className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-5">
-              <span className="w-10 h-10 rounded-lg bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)] flex items-center justify-center mb-3">
+              <span className="w-10 h-10 rounded-lg bg-[var(--color-action-primary)]/10 text-[var(--color-action-on-dark)] flex items-center justify-center mb-3">
                 <Icon size={20} />
               </span>
               <h3 className="font-semibold font-sora text-sm">{c.title}</h3>

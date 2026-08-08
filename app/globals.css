@@ -26,14 +26,21 @@
   --text-primary: #F0F2FA;
   --text-secondary: #A8B2D0;
 
-  /* ── ACTION — gold ────────────────────────────────────────────────────
-     On a dark ground hover BRIGHTENS. Darkening a control against near-black
-     lowers its contrast, which reads as disabled rather than as hovered. */
-  --color-action-primary: #E8B84B;   /* 10.9:1 — the CTA colour            */
-  --color-action-hover:   #F2C860;   /* brighter, not darker               */
-  --color-action-active:  #D4A940;   /* pressed dips below resting         */
-  --color-action-ink:     #0A0705;   /* label ON gold — 11.4:1             */
-  --glow-action: rgba(232, 184, 75, 0.15);
+  /* ── ACTION — azure, two tones ────────────────────────────────────────
+     Blue needs two tones on this ground where gold needed one. #1D4ED8 is a
+     strong button fill (7.2:1 under white) but only 2.99:1 as text against
+     #050810 — it fails AA the moment it stops being a filled shape. So fills
+     take the deep tone and anything that is read (links, icons, borders,
+     accent text) takes the light one.
+
+     Hover brightens rather than darkens: against near-black, a darker control
+     loses contrast and reads as disabled instead of as hovered. */
+  --color-action-primary: #1D4ED8;   /* fills — 7.2:1 under white ink      */
+  --color-action-hover:   #2563EB;   /* brighter — 5.2:1 under white ink   */
+  --color-action-active:  #1E40AF;   /* pressed dips below resting         */
+  --color-action-ink:     #FFFFFF;   /* label ON deep blue                 */
+  --color-action-on-dark: #7FB3FF;   /* text, links, icons — 9.3:1         */
+  --glow-action: rgba(29, 78, 216, 0.22);
 
   /* ── PREMIUM — copper ─────────────────────────────────────────────────
      Deliberately redder than gold (hue ~20° vs ~42°) so the two never read
@@ -55,14 +62,22 @@
      Older names still referenced across the app. They resolve to a role
      rather than to a literal, so the palette has one source of truth and no
      surface can drift back to cyan. Prefer the role names above in new code. */
-  --accent-blue: var(--color-action-primary);
-  --accent-gold: var(--color-action-primary);
+  /* --accent-blue predates the two-tone split and is used mostly as text and
+     borders, so it resolves to the light tone: on a dark ground a too-light
+     blue is merely soft, while a too-dark one is unreadable. */
+  --accent-blue: var(--color-action-on-dark);
   --glow-blue: var(--glow-action);
-  --glow-gold: var(--glow-action);
+
+  /* Gold is no longer in the palette. Its old references were premium cues —
+     prices, badges, highlights — so they resolve to copper, which is the role
+     that survived. */
+  --accent-gold: var(--color-premium);
+  --glow-gold: var(--glow-premium);
+
   --color-brand-primary: var(--color-action-primary);
   --color-brand-hover: var(--color-action-hover);
   --color-brand-active: var(--color-action-active);
-  --color-brand-light: var(--color-premium-bright);
+  --color-brand-light: var(--color-action-on-dark);
   --brand-indigo: var(--color-action-primary);
   --brand-indigo-hover: var(--color-action-hover);
 }

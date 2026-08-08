@@ -8,13 +8,17 @@
 
 type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
 
-/* Product art is a premium surface, so covers ramp into warm darks rather than
-   the old navy — a cool ground under a warm accent was what made these read as
-   stock AI covers. `blue` is kept as a key because product data still uses it,
-   but it now paints copper; there is no blue in the palette. */
+/* Each cover ramps its accent into a ground of the SAME temperature. Mixing
+   them — a cool accent over a warm ground — is what made the old covers read
+   as generic stock art.
+
+   The keys are historical: product data still asks for `gold` and `blue`, so
+   they stay, but `gold` now paints azure (the action hue) and `blue` paints
+   copper (the premium hue). Renaming them means migrating the product data,
+   which is a content change, not a colour one. */
 const ACCENTS: Record<AccentKey, { from: string; to: string; accent: string }> = {
-  gold: { from: '#E8B84B', to: '#2A1E08', accent: '#E8B84B' },
-  blue: { from: '#D97645', to: '#2A1408', accent: '#F0A46B' },
+  gold: { from: '#7FB3FF', to: '#0A1A33', accent: '#7FB3FF' },   // azure, cool ground
+  blue: { from: '#D97645', to: '#2A1408', accent: '#F0A46B' },   // copper, warm ground
   purple: { from: '#7B2FFF', to: '#180E33', accent: '#9D6BFF' },
   green: { from: '#00FF88', to: '#062B1C', accent: '#00FF88' },
 };

@@ -110,7 +110,7 @@ export default function VideoTestimonialSection({
               {/* Client Info Card */}
               <motion.div
                 whileHover={{ translateY: -4 }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-all flex-1"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] transition-all flex-1"
               >
                 <p className="text-[var(--text-secondary)] italic mb-4 leading-relaxed">"{testimonial.quote}"</p>
                 <div className="border-t border-[var(--border)] pt-4">
@@ -181,7 +181,7 @@ export function VideoTestimonialCard({ testimonial }: { testimonial: VideoTestim
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
-      className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-all cursor-pointer"
+      className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] transition-all cursor-pointer"
       onClick={() => setIsPlaying(!isPlaying)}
     >
       {isPlaying ? (

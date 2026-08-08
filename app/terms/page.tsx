@@ -237,7 +237,7 @@ export default function TermsPage() {
             </h2>
             <p className="text-[var(--text-secondary)] mb-6 max-w-2xl mx-auto">
               We're happy to discuss any concerns. Reach out to us at{' '}
-              <span className="text-[var(--color-action-primary)] font-semibold">
+              <span className="text-[var(--color-action-on-dark)] font-semibold">
                 hello@mulesoo.com
               </span>
             </p>

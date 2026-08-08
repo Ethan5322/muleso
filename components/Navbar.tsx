@@ -57,7 +57,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors duration-200 text-sm font-medium"
+                className="text-[var(--text-secondary)] hover:text-[var(--color-action-on-dark)] transition-colors duration-200 text-sm font-medium"
               >
                 {link.label}
               </Link>
@@ -67,7 +67,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-[var(--color-action-primary)]"
+            className="md:hidden text-[var(--color-action-on-dark)]"
             aria-label="Toggle menu"
           >
             {menuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -86,7 +86,7 @@ export default function Navbar() {
             >
               <button
                 onClick={() => setMenuOpen(false)}
-                className="absolute top-6 right-6 text-[var(--color-action-primary)]"
+                className="absolute top-6 right-6 text-[var(--color-action-on-dark)]"
               >
                 <X size={28} />
               </button>
@@ -96,7 +96,7 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-[var(--text-primary)] text-lg font-sora font-bold hover:text-[var(--color-action-primary)] transition-colors"
+                    className="text-[var(--text-primary)] text-lg font-sora font-bold hover:text-[var(--color-action-on-dark)] transition-colors"
                     onClick={() => setMenuOpen(false)}
                   >
                     {link.label}

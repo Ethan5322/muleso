@@ -138,7 +138,7 @@ export default function AdminSearch() {
               >
                 <span
                   className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    r.kind === 'booking' ? 'bg-[#00C8FF]/10 text-[#00C8FF]' : 'bg-[#7B2FFF]/10 text-[#a78bfa]'
+                    r.kind === 'booking' ? 'bg-[#7FB3FF]/10 text-[#7FB3FF]' : 'bg-[#7B2FFF]/10 text-[#a78bfa]'
                   }`}
                 >
                   {r.kind === 'booking' ? <BookOpen size={15} /> : <Inbox size={15} />}

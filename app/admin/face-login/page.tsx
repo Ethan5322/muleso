@@ -57,7 +57,7 @@ export default function FaceLoginPage() {
 
         <p className="text-center text-sm text-[#7A8BA8] mt-6">
           Prefer a password?{' '}
-          <Link href="/admin/login" className="text-[var(--color-action-primary)] hover:underline">
+          <Link href="/admin/login" className="text-[var(--color-action-on-dark)] hover:underline">
             Use password + 2FA
           </Link>
         </p>

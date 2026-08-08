@@ -322,7 +322,7 @@ export default function AdminLogin() {
       <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
       {/* Animated Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-[#00BFFF] rounded-full mix-blend-screen filter blur-3xl opacity-10" />
+        <div className="absolute top-0 left-0 w-96 h-96 bg-[#7FB3FF] rounded-full mix-blend-screen filter blur-3xl opacity-10" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#7B2FBE] rounded-full mix-blend-screen filter blur-3xl opacity-10" />
       </div>
 
@@ -333,16 +333,16 @@ export default function AdminLogin() {
         className="relative w-full max-w-md"
       >
         {/* Card */}
-        <div className="bg-[#0a0a0a] border border-[#00BFFF]/30 rounded-2xl p-8 shadow-[0_0_30px_rgba(0,191,255,0.2)]">
+        <div className="bg-[#0a0a0a] border border-[#7FB3FF]/30 rounded-2xl p-8 shadow-[0_0_30px_rgba(0,191,255,0.2)]">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-block p-4 bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] rounded-lg mb-4">
+            <div className="inline-block p-4 bg-gradient-to-r from-[#7FB3FF] to-[#7B2FBE] rounded-lg mb-4">
               <Lock size={32} className="text-white" />
             </div>
             <h1 className="text-3xl font-bold font-sora text-white mb-2">
               Admin Panel
             </h1>
-            <p className="text-[#00BFFF] text-sm">MuleSoo Digital Services</p>
+            <p className="text-[#7FB3FF] text-sm">MuleSoo Digital Services</p>
           </div>
 
           {/* Lockout Message */}
@@ -369,7 +369,7 @@ export default function AdminLogin() {
               className="space-y-6"
             >
               <div className="relative">
-                <label className="block text-sm font-bold text-[var(--color-action-primary)] mb-2">
+                <label className="block text-sm font-bold text-[var(--color-action-on-dark)] mb-2">
                   Step 1: Enter Admin Password
                 </label>
                 <div className="relative">
@@ -380,17 +380,17 @@ export default function AdminLogin() {
                     disabled={loading}
                     placeholder="Enter your admin password"
                     autoComplete="off"
-                    className="w-full bg-[#1a1a2e] border border-[#00BFFF]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#00BFFF] focus:ring-2 focus:ring-[#00BFFF]/50 transition-all disabled:opacity-50"
+                    className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#7FB3FF] focus:ring-2 focus:ring-[#7FB3FF]/50 transition-all disabled:opacity-50"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-10 text-[#00BFFF] hover:text-[#7B2FBE]"
+                    className="absolute right-3 top-10 text-[#7FB3FF] hover:text-[#7B2FBE]"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
-                <p className="text-[#00BFFF]/60 text-xs mt-2">
+                <p className="text-[#7FB3FF]/60 text-xs mt-2">
                   Must be exactly correct. Case-sensitive.
                 </p>
               </div>
@@ -414,7 +414,7 @@ export default function AdminLogin() {
                 whileTap={{ scale: !loading ? 0.98 : 1 }}
                 type="submit"
                 disabled={loading || !password}
-                className="w-full bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] text-white font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#00BFFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-[#7FB3FF] to-[#7B2FBE] text-white font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#7FB3FF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Verifying...' : 'Continue to Confirmation'}
               </motion.button>
@@ -436,7 +436,7 @@ export default function AdminLogin() {
               </div>
 
               <div className="relative">
-                <label className="block text-sm font-bold text-[#E8B84B] mb-2">
+                <label className="block text-sm font-bold text-[#7FB3FF] mb-2">
                   Step 2: Confirm Password (Re-enter)
                 </label>
                 <div className="relative">
@@ -447,17 +447,17 @@ export default function AdminLogin() {
                     disabled={loading}
                     placeholder="Re-enter your password to confirm"
                     autoComplete="off"
-                    className="w-full bg-[#1a1a2e] border border-[#E8B84B]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#E8B84B] focus:ring-2 focus:ring-[#E8B84B]/50 transition-all disabled:opacity-50"
+                    className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#7FB3FF] focus:ring-2 focus:ring-[#7FB3FF]/50 transition-all disabled:opacity-50"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-10 text-[#E8B84B] hover:text-[var(--color-action-primary)]"
+                    className="absolute right-3 top-10 text-[#7FB3FF] hover:text-[var(--color-action-on-dark)]"
                   >
                     {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
-                <p className="text-[#E8B84B]/60 text-xs mt-2">
+                <p className="text-[#7FB3FF]/60 text-xs mt-2">
                   Must match exactly. This is a security verification step.
                 </p>
               </div>
@@ -499,7 +499,7 @@ export default function AdminLogin() {
                     setConfirmPassword('');
                   }}
                   disabled={loading}
-                  className="flex-1 bg-[#00BFFF]/20 hover:bg-[#00BFFF]/30 text-[#00BFFF] font-bold py-3 rounded-lg transition-all disabled:opacity-50"
+                  className="flex-1 bg-[#7FB3FF]/20 hover:bg-[#7FB3FF]/30 text-[#7FB3FF] font-bold py-3 rounded-lg transition-all disabled:opacity-50"
                 >
                   Back
                 </motion.button>
@@ -508,7 +508,7 @@ export default function AdminLogin() {
                   whileTap={{ scale: !loading && confirmPassword === password ? 0.98 : 1 }}
                   type="submit"
                   disabled={loading || confirmPassword !== password}
-                  className="flex-1 bg-gradient-to-r from-[#E8B84B] to-[#00BFFF] text-black font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#E8B84B]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-gradient-to-r from-[#1D4ED8] to-[#7FB3FF] text-black font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#7FB3FF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Logging in...' : 'Login'}
                 </motion.button>
@@ -534,7 +534,7 @@ export default function AdminLogin() {
               </div>
 
               <div className="relative">
-                <label className="block text-sm font-bold text-[var(--color-action-primary)] mb-2">
+                <label className="block text-sm font-bold text-[var(--color-action-on-dark)] mb-2">
                   Step 3: Enter 6-Digit 2FA Code
                 </label>
                 <input
@@ -546,9 +546,9 @@ export default function AdminLogin() {
                   maxLength={6}
                   autoComplete="off"
                   inputMode="numeric"
-                  className="w-full bg-[#1a1a2e] border border-[var(--color-action-primary)]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] focus:ring-2 focus:ring-[var(--color-action-primary)]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
+                  className="w-full bg-[#1a1a2e] border border-[var(--color-action-on-dark)]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)] focus:ring-2 focus:ring-[var(--color-action-on-dark)]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
                 />
-                <p className="text-[var(--color-action-primary)]/60 text-xs mt-2">
+                <p className="text-[var(--color-action-on-dark)]/60 text-xs mt-2">
                   Check your email ({ADMIN_EMAIL}) for the code. It expires in 10 minutes.
                 </p>
               </div>
@@ -576,7 +576,7 @@ export default function AdminLogin() {
                     setTwoFactorAttempts(0);
                   }}
                   disabled={loading}
-                  className="flex-1 bg-[#00BFFF]/20 hover:bg-[#00BFFF]/30 text-[#00BFFF] font-bold py-3 rounded-lg transition-all disabled:opacity-50"
+                  className="flex-1 bg-[#7FB3FF]/20 hover:bg-[#7FB3FF]/30 text-[#7FB3FF] font-bold py-3 rounded-lg transition-all disabled:opacity-50"
                 >
                   Back
                 </motion.button>
@@ -585,7 +585,7 @@ export default function AdminLogin() {
                   whileTap={{ scale: !loading && twoFactorCode.length === 6 ? 0.98 : 1 }}
                   type="submit"
                   disabled={loading || twoFactorCode.length !== 6}
-                  className="flex-1 bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] text-white font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#00BFFF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-gradient-to-r from-[#7FB3FF] to-[#7B2FBE] text-white font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-[#7FB3FF]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Verifying...' : 'Verify Code'}
                 </motion.button>
@@ -609,24 +609,24 @@ export default function AdminLogin() {
                 <CheckCircle size={32} className="text-green-400" />
               </motion.div>
               <h2 className="text-2xl font-bold text-white mb-2">Welcome Back!</h2>
-              <p className="text-[#00BFFF]/60">Admin panel is loading...</p>
+              <p className="text-[#7FB3FF]/60">Admin panel is loading...</p>
             </motion.div>
           )}
 
           {/* Face login */}
           {step === 'password' && (
-            <div className="mt-8 pt-6 border-t border-[#00BFFF]/20 text-center">
-              <p className="text-[#00BFFF]/80 text-sm font-semibold mb-3">Or sign in with Face</p>
+            <div className="mt-8 pt-6 border-t border-[#7FB3FF]/20 text-center">
+              <p className="text-[#7FB3FF]/80 text-sm font-semibold mb-3">Or sign in with Face</p>
               {faceQr && (
                 <div className="flex flex-col items-center">
                   <div className="inline-block bg-white p-2 rounded-xl mb-3">
                     <Image src={faceQr} alt="Scan to open Face Login on your phone" width={140} height={140} />
                   </div>
-                  <p className="text-[var(--color-action-primary)]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
+                  <p className="text-[var(--color-action-on-dark)]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
                   <a
                     href={faceQr}
                     download="mulesoo-admin-face-login-qr.png"
-                    className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-lg bg-[var(--color-action-primary)]/15 border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)] hover:bg-[var(--color-action-primary)]/25 text-sm font-semibold transition-all"
+                    className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-lg bg-[var(--color-action-primary)]/15 border border-[var(--color-action-on-dark)]/40 text-[var(--color-action-on-dark)] hover:bg-[var(--color-action-primary)]/25 text-sm font-semibold transition-all"
                   >
                     ⬇ Download QR Code
                   </a>
@@ -634,7 +634,7 @@ export default function AdminLogin() {
               )}
               <Link
                 href="/admin/face-login"
-                className="inline-block text-[var(--color-action-primary)] hover:underline text-sm font-semibold"
+                className="inline-block text-[var(--color-action-on-dark)] hover:underline text-sm font-semibold"
               >
                 Use Face Login on this device →
               </Link>
@@ -642,8 +642,8 @@ export default function AdminLogin() {
           )}
 
           {/* Footer */}
-          <div className="mt-8 pt-8 border-t border-[#00BFFF]/20">
-            <p className="text-center text-[#00BFFF]/60 text-xs">
+          <div className="mt-8 pt-8 border-t border-[#7FB3FF]/20">
+            <p className="text-center text-[#7FB3FF]/60 text-xs">
               🔐 Enterprise-Grade Security • Two-Step Verification
             </p>
           </div>

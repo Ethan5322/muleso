@@ -149,7 +149,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
         <motion.button
           whileHover={{ scale: 1.1 }}
           onClick={onCancel}
-          className="p-2 hover:bg-[#00C8FF]/20 rounded-lg text-[#00C8FF] transition-all"
+          className="p-2 hover:bg-[#7FB3FF]/20 rounded-lg text-[#7FB3FF] transition-all"
         >
           <X size={24} />
         </motion.button>
@@ -157,37 +157,37 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
 
       <div className="space-y-6">
         {/* Basic Info */}
-        <div className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-[#00C8FF] mb-4">📋 Basic Information</h3>
+        <div className="bg-[#0A0F1E] border border-[#7FB3FF]/30 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">📋 Basic Information</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Project Title *</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Project Title *</label>
               <input
                 type="text"
                 value={formData.title || ''}
                 onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
                 placeholder="e.g., E-commerce Website"
               />
             </div>
 
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Description *</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Description *</label>
               <textarea
                 value={formData.description || ''}
                 onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white h-24"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white h-24"
                 placeholder="Brief project description..."
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#00C8FF] font-semibold mb-2">Category *</label>
+                <label className="block text-[#7FB3FF] font-semibold mb-2">Category *</label>
                 <select
                   value={formData.category || 'Website'}
                   onChange={e => setFormData(prev => ({ ...prev, category: e.target.value as any }))}
-                  className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+                  className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat}>
@@ -198,35 +198,35 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
               </div>
 
               <div>
-                <label className="block text-[#00C8FF] font-semibold mb-2">Client Name *</label>
+                <label className="block text-[#7FB3FF] font-semibold mb-2">Client Name *</label>
                 <input
                   type="text"
                   value={formData.client_name || ''}
                   onChange={e => setFormData(prev => ({ ...prev, client_name: e.target.value }))}
-                  className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+                  className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
                   placeholder="Client name..."
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Client Type</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Client Type</label>
               <input
                 type="text"
                 value={formData.client_type || ''}
                 onChange={e => setFormData(prev => ({ ...prev, client_type: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
                 placeholder="e.g., E-commerce Business, Restaurant"
               />
             </div>
 
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Project Link</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Project Link</label>
               <input
                 type="url"
                 value={formData.link || ''}
                 onChange={e => setFormData(prev => ({ ...prev, link: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
                 placeholder="https://example.com"
               />
             </div>
@@ -234,11 +234,11 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
         </div>
 
         {/* Media */}
-        <div className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-[#00C8FF] mb-4">🖼️ Media</h3>
+        <div className="bg-[#0A0F1E] border border-[#7FB3FF]/30 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">🖼️ Media</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Project Image</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Project Image</label>
               <div className="flex gap-4 items-center">
                 {formData.image_url ? (
                   <img
@@ -247,7 +247,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
                     className="w-24 h-24 object-cover rounded-lg"
                   />
                 ) : (
-                  <div className="w-24 h-24 bg-[#1a1a2e] rounded-lg flex items-center justify-center text-[#00C8FF]/40">
+                  <div className="w-24 h-24 bg-[#1a1a2e] rounded-lg flex items-center justify-center text-[#7FB3FF]/40">
                     <ImageIcon size={32} />
                   </div>
                 )}
@@ -270,19 +270,19 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
             </div>
 
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Video URL (Optional)</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Video URL (Optional)</label>
               <div className="flex gap-4 items-center">
                 <input
                   type="url"
                   value={formData.video_url || ''}
                   onChange={e => setFormData(prev => ({ ...prev, video_url: e.target.value }))}
-                  className="flex-1 bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+                  className="flex-1 bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
                   placeholder="YouTube or video URL..."
                 />
                 <button
                   onClick={() => videoInputRef.current?.click()}
                   disabled={uploading}
-                  className="flex items-center gap-2 bg-[#00C8FF]/20 hover:bg-[#00C8FF]/40 text-[#00C8FF] px-4 py-2 rounded-lg transition-all disabled:opacity-50 whitespace-nowrap"
+                  className="flex items-center gap-2 bg-[#7FB3FF]/20 hover:bg-[#7FB3FF]/40 text-[#7FB3FF] px-4 py-2 rounded-lg transition-all disabled:opacity-50 whitespace-nowrap"
                 >
                   <Upload size={18} />
                   {uploading ? 'Uploading...' : 'Upload Video'}
@@ -300,35 +300,35 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
         </div>
 
         {/* Project Details */}
-        <div className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-[#00C8FF] mb-4">📝 Project Details</h3>
+        <div className="bg-[#0A0F1E] border border-[#7FB3FF]/30 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">📝 Project Details</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Challenge</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Challenge</label>
               <textarea
                 value={formData.challenge || ''}
                 onChange={e => setFormData(prev => ({ ...prev, challenge: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white h-20"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white h-20"
                 placeholder="What was the main challenge?"
               />
             </div>
 
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Solution</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Solution</label>
               <textarea
                 value={formData.solution || ''}
                 onChange={e => setFormData(prev => ({ ...prev, solution: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white h-20"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white h-20"
                 placeholder="How did you solve it?"
               />
             </div>
 
             <div>
-              <label className="block text-[#00C8FF] font-semibold mb-2">Result</label>
+              <label className="block text-[#7FB3FF] font-semibold mb-2">Result</label>
               <textarea
                 value={formData.result || ''}
                 onChange={e => setFormData(prev => ({ ...prev, result: e.target.value }))}
-                className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white h-20"
+                className="w-full bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white h-20"
                 placeholder="What was the outcome? e.g., +300% bookings"
               />
             </div>
@@ -336,8 +336,8 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
         </div>
 
         {/* Tech Stack */}
-        <div className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-[#00C8FF] mb-4">⚙️ Tech Stack</h3>
+        <div className="bg-[#0A0F1E] border border-[#7FB3FF]/30 rounded-xl p-6">
+          <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">⚙️ Tech Stack</h3>
           <div className="flex gap-2 mb-4">
             <input
               type="text"
@@ -348,12 +348,12 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
                   handleAddTech();
                 }
               }}
-              className="flex-1 bg-[#1a1a2e] border border-[#00C8FF]/30 rounded-lg px-4 py-2 text-white"
+              className="flex-1 bg-[#1a1a2e] border border-[#7FB3FF]/30 rounded-lg px-4 py-2 text-white"
               placeholder="e.g., React, Next.js, Tailwind CSS..."
             />
             <button
               onClick={handleAddTech}
-              className="bg-[#00C8FF]/20 hover:bg-[#00C8FF]/40 text-[#00C8FF] px-6 py-2 rounded-lg transition-all font-semibold"
+              className="bg-[#7FB3FF]/20 hover:bg-[#7FB3FF]/40 text-[#7FB3FF] px-6 py-2 rounded-lg transition-all font-semibold"
             >
               Add
             </button>
@@ -377,7 +377,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
         </div>
 
         {/* Featured */}
-        <div className="bg-[#0A0F1E] border border-[#00C8FF]/30 rounded-xl p-6">
+        <div className="bg-[#0A0F1E] border border-[#7FB3FF]/30 rounded-xl p-6">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -385,7 +385,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
               onChange={e => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
               className="w-4 h-4"
             />
-            <span className="text-[#00C8FF] font-semibold">⭐ Featured Project (Show in portfolio highlights)</span>
+            <span className="text-[#7FB3FF] font-semibold">⭐ Featured Project (Show in portfolio highlights)</span>
           </label>
         </div>
 
@@ -396,7 +396,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
             whileTap={{ scale: 0.95 }}
             onClick={handleSaveClick}
             disabled={saving}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white px-6 py-3 rounded-lg font-bold disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#7FB3FF] to-[#7B2FFF] text-white px-6 py-3 rounded-lg font-bold disabled:opacity-50"
           >
             <Save size={20} />
             {saving ? 'Saving...' : 'Save Project'}
@@ -406,7 +406,7 @@ export default function PortfolioEditor({ item, onSave, onCancel }: PortfolioEdi
             whileTap={{ scale: 0.95 }}
             onClick={onCancel}
             disabled={saving}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#00C8FF]/10 hover:bg-[#00C8FF]/20 text-[#00C8FF] px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#7FB3FF]/10 hover:bg-[#7FB3FF]/20 text-[#7FB3FF] px-6 py-3 rounded-lg font-bold transition-all disabled:opacity-50"
           >
             <X size={20} />
             Cancel

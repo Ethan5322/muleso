@@ -79,7 +79,7 @@ export default function QRScansPage() {
   if (!isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-[var(--color-action-primary)] text-lg">Loading QR scan data...</div>
+        <div className="text-[var(--color-action-on-dark)] text-lg">Loading QR scan data...</div>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function QRScansPage() {
       {/* Page heading */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold font-sora">QR Code Tracker</h1>
-        <p className="text-[var(--color-action-primary)] text-sm">{totalScans} total scans</p>
+        <p className="text-[var(--color-action-on-dark)] text-sm">{totalScans} total scans</p>
       </div>
 
       {/* Content */}
@@ -125,11 +125,11 @@ export default function QRScansPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+            className="bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[var(--color-action-primary)] text-sm font-semibold">THIS WEEK</p>
-              <TrendingUp className="text-[var(--color-action-primary)]" size={24} />
+              <p className="text-[var(--color-action-on-dark)] text-sm font-semibold">THIS WEEK</p>
+              <TrendingUp className="text-[var(--color-action-on-dark)]" size={24} />
             </div>
             <p className="text-4xl font-bold">{weekScans}</p>
           </motion.div>
@@ -169,7 +169,7 @@ export default function QRScansPage() {
           className="mt-6 bg-gradient-to-r from-[#7B2FFF]/20 to-[var(--color-action-primary)]/20 border border-[#7B2FFF]/30 rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold mb-2 text-white">📊 Weekly Insights</h3>
-          <p className="text-[var(--color-action-primary)]/60">
+          <p className="text-[var(--color-action-on-dark)]/60">
             {weekScans > 0
               ? `You've had ${weekScans} QR code scans this week. That's an average of ${(weekScans / 7).toFixed(1)} scans per day!`
               : 'No QR scans this week yet. Share your QR code to start tracking!'}

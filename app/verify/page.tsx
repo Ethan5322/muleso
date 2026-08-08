@@ -64,7 +64,7 @@ export default function VerifyPage() {
           <h1 className="text-4xl md:text-5xl font-bold font-sora text-white mb-4">
             Verify Your <span className="gradient-text">Booking</span>
           </h1>
-          <p className="text-[#00BFFF] text-lg">
+          <p className="text-[#7FB3FF] text-lg">
             Enter your verification code from the booking confirmation PDF
           </p>
         </motion.div>
@@ -74,11 +74,11 @@ export default function VerifyPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-2xl p-8 mb-8 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+          className="bg-[#1a1a1a] border border-[#7FB3FF]/30 rounded-2xl p-8 mb-8 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
         >
           <form onSubmit={handleVerify} className="space-y-6">
             <div>
-              <label className="block text-sm font-semibold text-[#00BFFF] mb-3 uppercase">
+              <label className="block text-sm font-semibold text-[#7FB3FF] mb-3 uppercase">
                 Verification Code
               </label>
               <div className="flex gap-3">
@@ -87,7 +87,7 @@ export default function VerifyPage() {
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
                   placeholder="e.g., ABC1-2345-DEF6"
-                  className="flex-1 bg-[#0a0a0a] border border-[#00BFFF]/30 text-white px-6 py-4 rounded-lg focus:outline-none focus:border-[#00BFFF] text-lg font-mono"
+                  className="flex-1 bg-[#0a0a0a] border border-[#7FB3FF]/30 text-white px-6 py-4 rounded-lg focus:outline-none focus:border-[#7FB3FF] text-lg font-mono"
                   disabled={loading}
                 />
                 <motion.button
@@ -95,7 +95,7 @@ export default function VerifyPage() {
                   whileTap={{ scale: 0.95 }}
                   type="submit"
                   disabled={loading}
-                  className="bg-gradient-to-r from-[#00BFFF] to-[#7B2FBE] text-white font-bold px-8 py-4 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
+                  className="bg-gradient-to-r from-[#7FB3FF] to-[#7B2FBE] text-white font-bold px-8 py-4 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
                 >
                   <Search size={20} />
                   {loading ? 'Verifying...' : 'Verify'}
@@ -133,7 +133,7 @@ export default function VerifyPage() {
               <motion.div
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
-                className="bg-gradient-to-r from-[#00FF88]/20 to-[#00BFFF]/20 border border-[#00FF88] rounded-2xl p-6 flex items-center gap-4"
+                className="bg-gradient-to-r from-[#00FF88]/20 to-[#7FB3FF]/20 border border-[#00FF88] rounded-2xl p-6 flex items-center gap-4"
               >
                 <CheckCircle className="text-[#00FF88] flex-shrink-0" size={28} />
                 <div>
@@ -151,29 +151,29 @@ export default function VerifyPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-xl p-6"
+                  className="bg-[#1a1a1a] border border-[#7FB3FF]/30 rounded-xl p-6"
                 >
-                  <h3 className="text-lg font-bold text-[#00BFFF] mb-4">Client Information</h3>
+                  <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">Client Information</h3>
                   <div className="space-y-3 text-sm">
                     <div>
-                      <p className="text-[#00BFFF]/60">Name</p>
+                      <p className="text-[#7FB3FF]/60">Name</p>
                       <p className="text-white font-semibold">{booking.name}</p>
                     </div>
                     <div>
-                      <p className="text-[#00BFFF]/60">Email</p>
+                      <p className="text-[#7FB3FF]/60">Email</p>
                       <p className="text-white font-semibold break-all">{booking.email}</p>
                     </div>
                     <div>
-                      <p className="text-[#00BFFF]/60">Phone</p>
+                      <p className="text-[#7FB3FF]/60">Phone</p>
                       <p className="text-white font-semibold">{booking.phone}</p>
                     </div>
                     <div>
-                      <p className="text-[#00BFFF]/60">Country</p>
+                      <p className="text-[#7FB3FF]/60">Country</p>
                       <p className="text-white font-semibold">{booking.country}</p>
                     </div>
                     {booking.client_id && (
                       <div>
-                        <p className="text-[#00BFFF]/60">
+                        <p className="text-[#7FB3FF]/60">
                           {booking.client_id_type === 'passport' ? 'Passport' : 'National ID'}
                         </p>
                         <p className="text-white font-mono font-bold">{booking.client_id}</p>
@@ -223,9 +223,9 @@ export default function VerifyPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-xl p-6"
+                className="bg-[#1a1a1a] border border-[#7FB3FF]/30 rounded-xl p-6"
               >
-                <h3 className="text-lg font-bold text-[#00BFFF] mb-4">Project Description</h3>
+                <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">Project Description</h3>
                 <p className="text-white whitespace-pre-wrap break-words text-sm leading-relaxed">
                   {booking.project_description}
                 </p>
@@ -236,26 +236,26 @@ export default function VerifyPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="bg-[#1a1a1a] border border-[#00BFFF]/30 rounded-xl p-6"
+                className="bg-[#1a1a1a] border border-[#7FB3FF]/30 rounded-xl p-6"
               >
-                <h3 className="text-lg font-bold text-[#00BFFF] mb-4">Booking Information</h3>
+                <h3 className="text-lg font-bold text-[#7FB3FF] mb-4">Booking Information</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-[#00BFFF]/60">Booking ID:</span>
+                    <span className="text-[#7FB3FF]/60">Booking ID:</span>
                     <span className="text-white font-mono">{booking.id.slice(0, 8)}...</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#00BFFF]/60">Verification Code:</span>
+                    <span className="text-[#7FB3FF]/60">Verification Code:</span>
                     <span className="text-white font-mono font-bold">{booking.verification_code}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#00BFFF]/60">Submitted:</span>
+                    <span className="text-[#7FB3FF]/60">Submitted:</span>
                     <span className="text-white">
                       {new Date(booking.created_at).toLocaleString('en-ZA')}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#00BFFF]/60">Contact Method:</span>
+                    <span className="text-[#7FB3FF]/60">Contact Method:</span>
                     <span className="text-white">{booking.contact_method}</span>
                   </div>
                 </div>
@@ -284,12 +284,12 @@ export default function VerifyPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="mt-12 bg-[#1a1a1a]/50 border border-[#00BFFF]/20 rounded-xl p-6 text-center"
+          className="mt-12 bg-[#1a1a1a]/50 border border-[#7FB3FF]/20 rounded-xl p-6 text-center"
         >
-          <p className="text-[#00BFFF]/60 text-sm mb-2">
+          <p className="text-[#7FB3FF]/60 text-sm mb-2">
             💡 Your verification code can be found in your booking confirmation PDF
           </p>
-          <p className="text-[#00BFFF]/40 text-xs">
+          <p className="text-[#7FB3FF]/40 text-xs">
             The code is used to verify project completion and track client information securely.
           </p>
         </motion.div>

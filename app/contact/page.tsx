@@ -214,7 +214,7 @@ export default function ContactPage() {
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="text-[var(--color-action-primary)] hover:underline font-semibold text-sm"
+                  className="text-[var(--color-action-on-dark)] hover:underline font-semibold text-sm"
                 >
                   Send another enquiry
                 </button>
@@ -239,7 +239,7 @@ export default function ContactPage() {
                       className={`w-full px-4 py-3 sm:py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors min-h-[48px] ${
                         fieldErrors.name
                           ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
-                          : 'border-[var(--border)] focus:border-[var(--color-action-primary)]'
+                          : 'border-[var(--border)] focus:border-[var(--color-action-on-dark)]'
                       } text-[var(--text-primary)]`}
                       placeholder="Your full name"
                     />
@@ -272,7 +272,7 @@ export default function ContactPage() {
                       className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors min-h-[48px] ${
                         fieldErrors.email
                           ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
-                          : 'border-[var(--border)] focus:border-[var(--color-action-primary)]'
+                          : 'border-[var(--border)] focus:border-[var(--color-action-on-dark)]'
                       } text-[var(--text-primary)]`}
                       placeholder="you@example.com"
                     />
@@ -306,7 +306,7 @@ export default function ContactPage() {
                     className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors min-h-[48px] ${
                       fieldErrors.company
                         ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
-                        : 'border-[var(--border)] focus:border-[var(--color-action-primary)]'
+                        : 'border-[var(--border)] focus:border-[var(--color-action-on-dark)]'
                     } text-[var(--text-primary)]`}
                     placeholder="Your business name (optional)"
                   />
@@ -342,7 +342,7 @@ export default function ContactPage() {
                       className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors cursor-pointer min-h-[48px] ${
                         fieldErrors.service
                           ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
-                          : 'border-[var(--border)] focus:border-[var(--color-action-primary)]'
+                          : 'border-[var(--border)] focus:border-[var(--color-action-on-dark)]'
                       } text-[var(--text-primary)]`}
                     >
                       <option value="">Select a service</option>
@@ -381,7 +381,7 @@ export default function ContactPage() {
                       className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors cursor-pointer min-h-[48px] ${
                         fieldErrors.budget
                           ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
-                          : 'border-[var(--border)] focus:border-[var(--color-action-primary)]'
+                          : 'border-[var(--border)] focus:border-[var(--color-action-on-dark)]'
                       } text-[var(--text-primary)]`}
                     >
                       <option value="">Select budget</option>
@@ -423,7 +423,7 @@ export default function ContactPage() {
                     className={`w-full px-4 py-3 bg-[var(--bg-card)] border rounded-lg focus:outline-none transition-colors resize-none ${
                       fieldErrors.details
                         ? 'border-red-500/50 focus:border-red-400 bg-red-500/5'
-                        : 'border-[var(--border)] focus:border-[var(--color-action-primary)]'
+                        : 'border-[var(--border)] focus:border-[var(--color-action-on-dark)]'
                     } text-[var(--text-primary)]`}
                   />
                   <div className="flex items-start justify-between mt-2">
@@ -460,7 +460,7 @@ export default function ContactPage() {
                     name="source"
                     value={formData.source}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] cursor-pointer transition-colors min-h-[48px]"
+                    className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-primary)] rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)] cursor-pointer transition-colors min-h-[48px]"
                   >
                     <option value="">Select source (optional)</option>
                     <option value="linkedin">LinkedIn</option>
@@ -538,12 +538,12 @@ export default function ContactPage() {
 
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <Mail className="text-[var(--color-action-primary)] mt-1 flex-shrink-0" size={20} />
+                  <Mail className="text-[var(--color-action-on-dark)] mt-1 flex-shrink-0" size={20} />
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">Email</p>
                     <a
                       href={`mailto:${settings.email}`}
-                      className="text-[var(--color-action-primary)] hover:underline font-semibold break-all"
+                      className="text-[var(--color-action-on-dark)] hover:underline font-semibold break-all"
                     >
                       {settings.email}
                     </a>
@@ -566,7 +566,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <MapPin className="text-[var(--color-action-primary)] mt-1 flex-shrink-0" size={20} />
+                  <MapPin className="text-[var(--color-action-on-dark)] mt-1 flex-shrink-0" size={20} />
                   <div>
                     <p className="text-sm text-[var(--text-secondary)] font-bold">Location</p>
                     <p className="text-[var(--text-secondary)]">{settings.address}</p>
@@ -593,16 +593,16 @@ export default function ContactPage() {
             {/* QR code sub-page link */}
             <Link
               href="/contact/qr-code"
-              className="mt-6 glass-card p-5 rounded-2xl border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-colors flex items-center gap-4 group"
+              className="mt-6 glass-card p-5 rounded-2xl border border-[var(--border)] hover:border-[var(--color-action-on-dark)] transition-colors flex items-center gap-4 group"
             >
               <div className="w-11 h-11 rounded-lg bg-[var(--glow-action)] flex items-center justify-center flex-shrink-0">
-                <QrCode className="text-[var(--color-action-primary)]" size={22} />
+                <QrCode className="text-[var(--color-action-on-dark)]" size={22} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-[var(--text-primary)]">Our QR Code</p>
                 <p className="text-xs text-[var(--text-secondary)]">Scan or download to visit MuleSoo anywhere</p>
               </div>
-              <ArrowRight className="text-[var(--text-secondary)] group-hover:text-[var(--color-action-primary)] transition-colors flex-shrink-0" size={18} />
+              <ArrowRight className="text-[var(--text-secondary)] group-hover:text-[var(--color-action-on-dark)] transition-colors flex-shrink-0" size={18} />
             </Link>
           </motion.div>
         </div>

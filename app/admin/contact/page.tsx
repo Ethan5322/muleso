@@ -80,7 +80,7 @@ export default function ContactAdmin() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
 
@@ -93,7 +93,7 @@ export default function ContactAdmin() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+27 68 852 9333"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
 
@@ -108,7 +108,7 @@ export default function ContactAdmin() {
                   value={formData.whatsapp}
                   onChange={handleChange}
                   placeholder="27688529333"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
                 <p className="text-xs text-[var(--text-secondary)] mt-1">Enter digits only (no +, spaces, or dashes)</p>
               </div>
@@ -122,7 +122,7 @@ export default function ContactAdmin() {
                   value={formData.address}
                   onChange={handleChange}
                   placeholder="Pretoria, South Africa"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export default function ContactAdmin() {
                   value={formData.hours}
                   onChange={handleChange}
                   placeholder="Mon–Fri 8am–6pm SAST | Sat 9am–1pm"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function ContactAdmin() {
                   value={formData.linkedin}
                   onChange={handleChange}
                   placeholder="https://linkedin.com/company/mulesoo"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
 
@@ -168,7 +168,7 @@ export default function ContactAdmin() {
                   value={formData.twitter}
                   onChange={handleChange}
                   placeholder="https://x.com/mulesoo"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
 
@@ -181,7 +181,7 @@ export default function ContactAdmin() {
                   value={formData.instagram}
                   onChange={handleChange}
                   placeholder="https://instagram.com/mulesoo"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-on-dark)] transition-colors"
                 />
               </div>
             </div>

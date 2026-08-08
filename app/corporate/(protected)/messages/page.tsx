@@ -247,7 +247,7 @@ export default function MessagesPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send())}
                 placeholder="Type a private message…"
-                className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
+                className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-on-dark)]"
               />
               <button
                 type="button"

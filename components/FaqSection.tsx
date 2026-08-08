@@ -34,7 +34,7 @@ export default function FaqSection({
           <details key={i} className="glass-card p-5 group">
             <summary className="cursor-pointer font-semibold text-[var(--text-primary)] flex items-center justify-between gap-3 list-none">
               <span>{f.q}</span>
-              <span className="text-[var(--color-action-primary)] text-2xl leading-none transition-transform group-open:rotate-45">+</span>
+              <span className="text-[var(--color-action-on-dark)] text-2xl leading-none transition-transform group-open:rotate-45">+</span>
             </summary>
             <p className="text-[var(--text-secondary)] mt-3 leading-relaxed">{f.a}</p>
           </details>

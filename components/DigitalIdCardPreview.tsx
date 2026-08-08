@@ -97,7 +97,7 @@ export default function DigitalIdCardPreview({
         {/* Header */}
         <div
           className="flex items-center justify-between"
-          style={{ height: '21%', padding: '0 4cqw', background: 'linear-gradient(90deg,#E8B84B,#7B2FFF)' }}
+          style={{ height: '21%', padding: '0 4cqw', background: 'linear-gradient(90deg,#7FB3FF,#7B2FFF)' }}
         >
           <div className="flex items-center" style={{ gap: '2cqw' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -115,7 +115,7 @@ export default function DigitalIdCardPreview({
             DIGITAL ID
           </div>
         </div>
-        <div style={{ height: '0.6cqw', background: '#E8B84B' }} />
+        <div style={{ height: '0.6cqw', background: '#7FB3FF' }} />
 
         {/* Body */}
         <div className="flex-1 flex" style={{ padding: '3cqw 4cqw', gap: '3cqw', minHeight: 0 }}>
@@ -127,7 +127,7 @@ export default function DigitalIdCardPreview({
               {name}
             </div>
             <div style={{ fontSize: '2.9cqw', color: muted, marginTop: '0.4cqw' }}>{role}</div>
-            <div style={{ height: '0.35cqw', width: '58%', background: '#E8B84B', margin: '2.2cqw 0' }} />
+            <div style={{ height: '0.35cqw', width: '58%', background: '#7FB3FF', margin: '2.2cqw 0' }} />
 
             <div className="flex" style={{ gap: '6cqw', marginBottom: '2.4cqw' }}>
               <Field label="ISSUED" value={issued} />
@@ -140,7 +140,7 @@ export default function DigitalIdCardPreview({
 
             <div style={{ marginTop: 'auto' }}>
               <div style={{ fontSize: '2cqw', color: muted, letterSpacing: '0.1em' }}>VERIFICATION CODE</div>
-              <div className="font-bold font-sora" style={{ fontSize: '4.8cqw', color: '#E8B84B' }}>
+              <div className="font-bold font-sora" style={{ fontSize: '4.8cqw', color: '#7FB3FF' }}>
                 {code}
               </div>
             </div>

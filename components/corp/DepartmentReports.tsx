@@ -54,7 +54,7 @@ export default function DepartmentReports() {
     <div className="text-white">
       <div className="mb-5 flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><BarChart3 className="text-[#00C8FF]" size={22} /> Department Reports</h1>
+          <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><BarChart3 className="text-[#7FB3FF]" size={22} /> Department Reports</h1>
           <p className="text-[#7A8BA8] text-sm mt-0.5">Workload and completion rate for every department — see who’s delivering and where work is piling up.</p>
         </div>
         <button
@@ -86,8 +86,8 @@ export default function DepartmentReports() {
       {totals && (
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
           {[
-            { label: 'Departments', value: totals.departments, color: '#00C8FF', icon: Users },
-            { label: 'Open tasks', value: totals.open, color: '#E8B84B', icon: Inbox },
+            { label: 'Departments', value: totals.departments, color: '#7FB3FF', icon: Users },
+            { label: 'Open tasks', value: totals.open, color: '#7FB3FF', icon: Inbox },
             { label: 'Completed', value: totals.done, color: '#00FF88', icon: CheckCircle2 },
             { label: 'Overdue', value: totals.overdue, color: totals.overdue ? '#FF5C7C' : '#8FA0BE', icon: AlertTriangle },
             { label: 'Unassigned', value: totals.unassigned, color: totals.unassigned ? '#7B2FFF' : '#8FA0BE', icon: Inbox },
@@ -121,19 +121,19 @@ export default function DepartmentReports() {
                     <p className="text-[11px] text-[#8FA0BE] flex items-center gap-1 mt-0.5"><Users size={11} /> {r.headcount} member{r.headcount === 1 ? '' : 's'} · {r.total} task{r.total === 1 ? '' : 's'} total</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-lg font-bold font-sora" style={{ color: r.completion >= 70 ? '#00FF88' : r.completion >= 40 ? '#E8B84B' : '#FF5C7C' }}>{r.completion}%</span>
+                    <span className="text-lg font-bold font-sora" style={{ color: r.completion >= 70 ? '#00FF88' : r.completion >= 40 ? '#7FB3FF' : '#FF5C7C' }}>{r.completion}%</span>
                     <p className="text-[10px] text-[#8FA0BE]">completed</p>
                   </div>
                 </div>
 
                 {/* completion bar */}
                 <div className="h-2 rounded-full bg-[#0D1528] overflow-hidden mb-3">
-                  <div className="h-full rounded-full" style={{ width: `${r.completion}%`, background: 'linear-gradient(90deg,#00C8FF,#00FF88)' }} />
+                  <div className="h-full rounded-full" style={{ width: `${r.completion}%`, background: 'linear-gradient(90deg,#7FB3FF,#00FF88)' }} />
                 </div>
 
                 <div className="flex items-center gap-4 text-[11px] flex-wrap">
-                  <Stat label="Open" value={r.open} color="#00C8FF" />
-                  <Stat label="In progress" value={r.in_progress} color="#E8B84B" />
+                  <Stat label="Open" value={r.open} color="#7FB3FF" />
+                  <Stat label="In progress" value={r.in_progress} color="#7FB3FF" />
                   <Stat label="Blocked" value={r.blocked} color="#FF5C7C" />
                   <Stat label="Done" value={r.done} color="#00FF88" />
                   {r.overdue > 0 && <Stat label="Overdue" value={r.overdue} color="#FF5C7C" />}

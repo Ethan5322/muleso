@@ -200,7 +200,7 @@ export default function StoreClient() {
                       <button
                         type="button"
                         onClick={() => startBuy(product)}
-                        className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(232,184,75,0.5)] transition-shadow"
+                        className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(232,184,75,0.5)] transition-shadow"
                       >
                         Buy Now
                       </button>
@@ -223,7 +223,7 @@ export default function StoreClient() {
         {/* Done-for-you systems */}
         <div className="mb-16">
           <div className="text-center mb-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-action-primary)] mb-2">🛫 Department 2</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-action-on-dark)] mb-2">🛫 Department 2</p>
             <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Auto Pilot Systems</h2>
             <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
               Proven, ready-to-brand platforms that run your business on autopilot. Pay in full, or subscribe monthly —
@@ -239,7 +239,7 @@ export default function StoreClient() {
                 transition={{ duration: 0.6, delay: (i % 2) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-on-dark)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
               >
                 <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -253,7 +253,7 @@ export default function StoreClient() {
                 </div>
 
                 <div className="p-5 sm:p-8 flex flex-col flex-1">
-                  <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-on-dark)] transition-colors">
                     {systemDisplayName(s)}
                   </h3>
                   <p className="text-[var(--text-secondary)] mb-4">{s.description}</p>
@@ -262,7 +262,7 @@ export default function StoreClient() {
                     {s.features.map((f) => (
                       <span
                         key={f}
-                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--color-action-primary)]/50 transition-colors"
+                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--color-action-on-dark)]/50 transition-colors"
                       >
                         {f}
                       </span>
@@ -293,7 +293,7 @@ export default function StoreClient() {
         {/* Essential AI automations */}
         <div className="mb-16">
           <div className="text-center mb-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-action-primary)] mb-2">🤖 Department 3</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-action-on-dark)] mb-2">🤖 Department 3</p>
             <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Essential AI Automations</h2>
             <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
               The most-in-demand AI system from every industry — affordable to start, working for you 24/7.
@@ -309,7 +309,7 @@ export default function StoreClient() {
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-on-dark)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
               >
                 <div className="relative w-full h-36 sm:h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -318,7 +318,7 @@ export default function StoreClient() {
                 </div>
 
                 <div className="p-4 sm:p-6 flex flex-col flex-1">
-                  <h3 className="text-base sm:text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-on-dark)] transition-colors">
                     {a.name}
                   </h3>
                   <p className="text-[var(--text-secondary)] text-sm mb-4">{a.desc}</p>
@@ -349,7 +349,7 @@ export default function StoreClient() {
                       <motion.div whileHover={{ scale: 1.05 }}>
                         <Link
                           href={`/ai-automation/${a.slug}`}
-                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)]/50 transition-all text-sm font-semibold flex items-center justify-center"
+                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)]/50 transition-all text-sm font-semibold flex items-center justify-center"
                         >
                           Details
                         </Link>
@@ -361,7 +361,7 @@ export default function StoreClient() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href="/ai-automation" className="text-[var(--color-action-primary)] hover:underline font-semibold">
+            <Link href="/ai-automation" className="text-[var(--color-action-on-dark)] hover:underline font-semibold">
               See all 200 AI automation systems →
             </Link>
           </div>
@@ -376,7 +376,7 @@ export default function StoreClient() {
         >
           <p className="text-[var(--text-secondary)] text-sm mb-4">
             Need a custom guide or bulk licence?{' '}
-            <Link href="/contact" className="text-[var(--color-action-primary)] hover:underline">
+            <Link href="/contact" className="text-[var(--color-action-on-dark)] hover:underline">
               Contact us
             </Link>
           </p>
@@ -423,7 +423,7 @@ export default function StoreClient() {
               type="button"
               onClick={handleCheckout}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-60"
             >
               {loading ? <><Loader2 size={18} className="animate-spin" /> Opening payment…</> : `Pay $${pending.priceUSD} securely →`}
             </button>

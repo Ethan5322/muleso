@@ -82,7 +82,7 @@ export default function AdminTeamChat() {
   return (
     <div className="max-w-2xl text-white">
       <div className="flex items-center gap-2 mb-1">
-        <Hash className="text-[var(--color-action-primary)]" size={22} />
+        <Hash className="text-[var(--color-action-on-dark)]" size={22} />
         <h1 className="text-2xl font-bold font-sora">Team Chat</h1>
       </div>
       <p className="text-[#7A8BA8] text-sm mb-5">
@@ -97,7 +97,7 @@ export default function AdminTeamChat() {
             <p className="text-center text-sm text-[#7A8BA8] py-10">No messages yet. Post the first update or announcement.</p>
           ) : (
             messages.map((m) => (
-              <div key={m.id} className={`p-3 rounded-xl border ${m.sender_id === me ? 'bg-[var(--color-action-primary)]/5 border-[var(--color-action-primary)]/30' : 'bg-[#0D1528] border-[#1E3A5F]'}`}>
+              <div key={m.id} className={`p-3 rounded-xl border ${m.sender_id === me ? 'bg-[var(--color-action-primary)]/5 border-[var(--color-action-on-dark)]/30' : 'bg-[#0D1528] border-[#1E3A5F]'}`}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold text-sm flex items-center gap-2">
                     {nameById[m.sender_id] || 'Admin'}
@@ -135,7 +135,7 @@ export default function AdminTeamChat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), send())}
             placeholder={target ? 'Announce to this department…' : 'Message all staff…'}
-            className="flex-1 bg-[#1A2332] border border-[#1E3A5F] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-action-primary)]"
+            className="flex-1 bg-[#1A2332] border border-[#1E3A5F] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[var(--color-action-on-dark)]"
           />
           <button
             type="button"

@@ -89,7 +89,7 @@ export default function PageManager() {
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
+          className="bg-[#7FB3FF] hover:bg-[#7FB3FF] text-black font-bold py-2 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
         >
           <Plus size={20} /> New Page
         </button>

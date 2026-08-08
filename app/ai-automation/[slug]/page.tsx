@@ -78,7 +78,7 @@ export default function AutomationDetailPage() {
         </div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
-          <Link href="/ai-automation" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-action-primary)] hover:underline mb-8">
+          <Link href="/ai-automation" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-action-on-dark)] hover:underline mb-8">
             <ArrowLeft size={16} /> Back to Library
           </Link>
 
@@ -109,7 +109,7 @@ export default function AutomationDetailPage() {
               <p className="text-lg text-[var(--text-secondary)]">{automation.desc}</p>
 
               <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--text-secondary)]">
-                <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--color-action-primary)]" /> Built with AI</span>
+                <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--color-action-on-dark)]" /> Built with AI</span>
                 <span className="inline-flex items-center gap-1.5"><Sparkles size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
                 <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You control it all</span>
               </div>
@@ -170,13 +170,13 @@ export default function AutomationDetailPage() {
 
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
-                <h2 className="flex items-center gap-2 text-sm font-bold font-sora uppercase tracking-wide mb-3 text-[var(--color-action-primary)]">
+                <h2 className="flex items-center gap-2 text-sm font-bold font-sora uppercase tracking-wide mb-3 text-[var(--color-action-on-dark)]">
                   <Gauge size={16} /> What the admin controls
                 </h2>
                 <ul className="space-y-1.5">
                   {ADMIN_CONTROLS.map((c) => (
                     <li key={c} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
-                      <Check size={15} className="text-[var(--color-action-primary)] mt-0.5 flex-shrink-0" /> {c}
+                      <Check size={15} className="text-[var(--color-action-on-dark)] mt-0.5 flex-shrink-0" /> {c}
                     </li>
                   ))}
                 </ul>
@@ -270,9 +270,9 @@ export default function AutomationDetailPage() {
           </div>
 
           {/* ===== BUY / CUSTOM TO BUY ===== */}
-          <div className="mt-8 relative overflow-hidden glass-card rounded-2xl border border-[var(--color-action-primary)] p-8 sm:p-10 text-center">
+          <div className="mt-8 relative overflow-hidden glass-card rounded-2xl border border-[var(--color-action-on-dark)] p-8 sm:p-10 text-center">
             <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--glow-action)] to-[var(--glow-purple)] opacity-60" />
-            <Bot className="mx-auto text-[var(--color-action-primary)] mb-3" size={30} />
+            <Bot className="mx-auto text-[var(--color-action-on-dark)] mb-3" size={30} />
             <h2 className="text-2xl sm:text-3xl font-bold font-sora text-[var(--text-primary)] mb-2">
               Ready to put the <span className="gradient-text">{title}</span> to work?
             </h2>
@@ -312,13 +312,13 @@ export default function AutomationDetailPage() {
                   <Link
                     key={r.slug}
                     href={`/ai-automation/${r.slug}`}
-                    className="group glass-card rounded-xl border border-[var(--border)] p-4 hover:border-[var(--color-action-primary)] transition-all"
+                    className="group glass-card rounded-xl border border-[var(--border)] p-4 hover:border-[var(--color-action-on-dark)] transition-all"
                   >
-                    <h4 className="font-semibold font-sora text-sm text-[var(--text-primary)] group-hover:text-[var(--color-action-primary)] transition-colors mb-1">
+                    <h4 className="font-semibold font-sora text-sm text-[var(--text-primary)] group-hover:text-[var(--color-action-on-dark)] transition-colors mb-1">
                       {r.name.replace(/^AI\s+/, '')}
                     </h4>
                     <p className="text-xs text-[var(--text-secondary)] line-clamp-2">{r.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-action-primary)] mt-2">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-action-on-dark)] mt-2">
                       View <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   </Link>

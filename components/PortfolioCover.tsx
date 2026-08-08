@@ -15,12 +15,12 @@ interface Theme {
 }
 
 const THEMES: Record<ThemeKey, Theme> = {
-  blue: { from: '#E8B84B', to: '#1B3A8F', accent: '#E8B84B' },
-  gold: { from: '#E8B84B', to: '#6B4BA8', accent: '#E8B84B' },
-  green: { from: '#00FF88', to: '#0A6E8F', accent: '#E8B84B' },
-  dark: { from: '#2A3550', to: '#0A0F1E', accent: '#E8B84B' },
-  purple: { from: '#7B2FFF', to: '#1B2A6B', accent: '#E8B84B' },
-  rose: { from: '#FF6B9D', to: '#6B2F8F', accent: '#E8B84B' },
+  blue: { from: '#7FB3FF', to: '#1B3A8F', accent: '#7FB3FF' },
+  gold: { from: '#7FB3FF', to: '#6B4BA8', accent: '#7FB3FF' },
+  green: { from: '#00FF88', to: '#0A6E8F', accent: '#7FB3FF' },
+  dark: { from: '#2A3550', to: '#0A0F1E', accent: '#7FB3FF' },
+  purple: { from: '#7B2FFF', to: '#1B2A6B', accent: '#7FB3FF' },
+  rose: { from: '#FF6B9D', to: '#6B2F8F', accent: '#7FB3FF' },
 };
 
 const categoryTheme = (category: string): ThemeKey =>

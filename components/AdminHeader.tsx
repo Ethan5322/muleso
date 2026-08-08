@@ -23,7 +23,7 @@ export default function AdminHeader() {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#00BFFF]/20 to-[#7B2FBE]/20 border-b border-[#00BFFF]/50 backdrop-blur-md">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#7FB3FF]/20 to-[#7B2FBE]/20 border-b border-[#7FB3FF]/50 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -31,14 +31,14 @@ export default function AdminHeader() {
           className="flex items-center gap-3"
         >
           <div className="w-2 h-2 bg-[#00FF88] rounded-full animate-pulse"></div>
-          <span className="text-[#00BFFF] font-semibold text-sm">🛡️ ADMIN MODE ACTIVE</span>
+          <span className="text-[#7FB3FF] font-semibold text-sm">🛡️ ADMIN MODE ACTIVE</span>
         </motion.div>
 
         <div className="flex items-center gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             onClick={() => router.push('/admin')}
-            className="flex items-center gap-2 bg-[#00BFFF]/20 hover:bg-[#00BFFF]/30 border border-[#00BFFF] text-[#00BFFF] px-4 py-2 rounded-lg text-sm font-medium transition-all"
+            className="flex items-center gap-2 bg-[#7FB3FF]/20 hover:bg-[#7FB3FF]/30 border border-[#7FB3FF] text-[#7FB3FF] px-4 py-2 rounded-lg text-sm font-medium transition-all"
           >
             <BarChart3 size={16} />
             Dashboard

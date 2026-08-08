@@ -177,14 +177,14 @@ export default function FaceCapture({
         {/* Face-position guide (ID framing) */}
         {ready && !captured && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className={`h-[78%] aspect-[7/9] rounded-[50%] border-2 ${pct >= 68 ? 'border-[#00FF88]' : 'border-[#00C8FF]/70'} shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]`} />
+            <div className={`h-[78%] aspect-[7/9] rounded-[50%] border-2 ${pct >= 68 ? 'border-[#00FF88]' : 'border-[#7FB3FF]/70'} shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]`} />
           </div>
         )}
 
         {/* Live quality % */}
         {ready && !captured && !denied && (
           <div className="absolute top-2 left-2 bg-black/55 rounded-lg px-2 py-0.5 text-[11px] font-bold">
-            <span className={pct >= 68 ? 'text-[#00FF88]' : 'text-[#E8B84B]'}>{pct}%</span>
+            <span className={pct >= 68 ? 'text-[#00FF88]' : 'text-[#7FB3FF]'}>{pct}%</span>
             <span className="text-[#8A9AB8] font-normal"> quality</span>
           </div>
         )}
@@ -196,7 +196,7 @@ export default function FaceCapture({
             <button
               type="button"
               onClick={startCamera}
-              className="px-4 py-2 rounded-lg bg-[#00C8FF]/15 text-[#00C8FF] border border-[#00C8FF]/40 text-sm font-semibold"
+              className="px-4 py-2 rounded-lg bg-[#7FB3FF]/15 text-[#7FB3FF] border border-[#7FB3FF]/40 text-sm font-semibold"
             >
               Enable camera
             </button>
@@ -216,7 +216,7 @@ export default function FaceCapture({
         type="button"
         onClick={capture}
         disabled={!ready || busy}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#00C8FF]/10 text-[#00C8FF] border border-[#00C8FF]/40 text-sm font-semibold disabled:opacity-50"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#7FB3FF]/10 text-[#7FB3FF] border border-[#7FB3FF]/40 text-sm font-semibold disabled:opacity-50"
       >
         {busy ? <Loader2 className="animate-spin" size={16} /> : <Camera size={16} />}
         {captured ? 'Recapture' : mode === 'register' ? 'Capture face & ID photo' : 'Scan my face'}

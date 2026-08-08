@@ -103,9 +103,9 @@ export default function CaseStudiesClient() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40"
+                  className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-on-dark)]/40"
                 >
-                  <span className="text-sm font-bold text-[var(--color-action-primary)]">{study.industry}</span>
+                  <span className="text-sm font-bold text-[var(--color-action-on-dark)]">{study.industry}</span>
                 </motion.div>
 
                 <h2 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-3 gradient-text">
@@ -121,12 +121,12 @@ export default function CaseStudiesClient() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 }}
                     viewport={{ once: true }}
-                    className="glass-card p-5 border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-colors"
+                    className="glass-card p-5 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] transition-colors"
                   >
                     <div className="flex items-start gap-3">
                       <div className="w-1 h-1 rounded-full bg-[var(--color-action-primary)] mt-2 flex-shrink-0" />
                       <div className="flex-1">
-                        <p className="text-sm font-bold text-[var(--color-action-primary)] uppercase tracking-wide mb-2">Challenge</p>
+                        <p className="text-sm font-bold text-[var(--color-action-on-dark)] uppercase tracking-wide mb-2">Challenge</p>
                         <p className="text-[var(--text-secondary)]">{study.challenge}</p>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export default function CaseStudiesClient() {
                   transition={{ duration: 0.6, delay: 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.02 }}
-                  className="relative rounded-2xl overflow-hidden border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-all"
+                  className="relative rounded-2xl overflow-hidden border border-[var(--border)] hover:border-[var(--color-action-on-dark)] transition-all"
                 >
                   <Image
                     src={study.image}
@@ -233,7 +233,7 @@ export default function CaseStudiesClient() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mt-24 glass-card p-12 text-center border border-[var(--color-action-primary)]"
+          className="mt-24 glass-card p-12 text-center border border-[var(--color-action-on-dark)]"
         >
           <h2 className="text-4xl md:text-5xl font-bold font-sora mb-4 gradient-text">
             Your Business Could Be Next

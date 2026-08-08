@@ -132,8 +132,8 @@ export default function PdfGuidesLandingClient() {
             transition={{ duration: 0.6 }}
             className="inline-block mb-6"
           >
-            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--glow-action)] to-transparent border border-[var(--color-action-primary)]">
-              <span className="text-[var(--color-action-primary)] font-sora text-sm font-bold">Expert Knowledge on Demand</span>
+            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--glow-action)] to-transparent border border-[var(--color-action-on-dark)]">
+              <span className="text-[var(--color-action-on-dark)] font-sora text-sm font-bold">Expert Knowledge on Demand</span>
             </div>
           </motion.div>
 
@@ -168,7 +168,7 @@ export default function PdfGuidesLandingClient() {
                 <ArrowRight className="inline ml-2" size={20} />
               </button>
             </Link>
-            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold font-sora rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap">
+            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--color-action-on-dark)] text-[var(--color-action-on-dark)] font-bold font-sora rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap">
               See What's Inside
             </button>
           </motion.div>
@@ -181,15 +181,15 @@ export default function PdfGuidesLandingClient() {
             className="flex flex-wrap justify-center gap-6 text-sm text-[var(--text-secondary)]"
           >
             <div className="flex items-center gap-2">
-              <BookOpen size={18} className="text-[var(--color-action-primary)]" />
+              <BookOpen size={18} className="text-[var(--color-action-on-dark)]" />
               <span>5+ Guides Published</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users size={18} className="text-[var(--color-action-primary)]" />
+              <Users size={18} className="text-[var(--color-action-on-dark)]" />
               <span>2,000+ Readers</span>
             </div>
             <div className="flex items-center gap-2">
-              <TrendingUp size={18} className="text-[var(--color-action-primary)]" />
+              <TrendingUp size={18} className="text-[var(--color-action-on-dark)]" />
               <span>Resale Rights Included</span>
             </div>
           </motion.div>
@@ -236,9 +236,9 @@ export default function PdfGuidesLandingClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--color-action-primary)] transition-all"
+                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--color-action-on-dark)] transition-all"
               >
-                <item.icon size={40} className="text-[var(--color-action-primary)] mb-4" />
+                <item.icon size={40} className="text-[var(--color-action-on-dark)] mb-4" />
                 <h3 className="text-2xl font-bold font-sora mb-3">{item.title}</h3>
                 <p className="text-[var(--text-secondary)]">{item.desc}</p>
               </motion.div>
@@ -271,7 +271,7 @@ export default function PdfGuidesLandingClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--color-action-primary)] transition-all group"
+                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--color-action-on-dark)] transition-all group"
               >
                 {guide.bestseller && (
                   <div className="mb-4 inline-block px-3 py-1 bg-[var(--glow-gold)] border border-[var(--accent-gold)] rounded-full">
@@ -279,7 +279,7 @@ export default function PdfGuidesLandingClient() {
                   </div>
                 )}
 
-                <h3 className="text-2xl font-bold font-sora mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">
+                <h3 className="text-2xl font-bold font-sora mb-2 group-hover:text-[var(--color-action-on-dark)] transition-colors">
                   {guide.title}
                 </h3>
                 <p className="text-[var(--text-secondary)] mb-4">{guide.description}</p>
@@ -288,7 +288,7 @@ export default function PdfGuidesLandingClient() {
                   <span className="flex items-center gap-1">
                     <BookOpen size={16} /> {guide.pages} pages
                   </span>
-                  <span className="text-[var(--color-action-primary)] font-bold">{guide.price}</span>
+                  <span className="text-[var(--color-action-on-dark)] font-bold">{guide.price}</span>
                 </div>
 
                 <div className="mb-6 space-y-2">
@@ -340,20 +340,20 @@ export default function PdfGuidesLandingClient() {
                 viewport={{ once: true }}
                 className={`glass-card p-8 border rounded-xl transition-all ${
                   tier.highlighted
-                    ? 'border-[var(--color-action-primary)] shadow-lg shadow-[var(--glow-action)] scale-105'
-                    : 'border-[var(--border)] hover:border-[var(--color-action-primary)]'
+                    ? 'border-[var(--color-action-on-dark)] shadow-lg shadow-[var(--glow-action)] scale-105'
+                    : 'border-[var(--border)] hover:border-[var(--color-action-on-dark)]'
                 }`}
               >
                 {tier.popular && (
-                  <div className="mb-4 px-4 py-2 bg-[var(--glow-action)] border border-[var(--color-action-primary)] rounded-full w-fit">
-                    <span className="text-[var(--color-action-primary)] font-bold text-sm">Most Popular</span>
+                  <div className="mb-4 px-4 py-2 bg-[var(--glow-action)] border border-[var(--color-action-on-dark)] rounded-full w-fit">
+                    <span className="text-[var(--color-action-on-dark)] font-bold text-sm">Most Popular</span>
                   </div>
                 )}
 
                 <h3 className="text-3xl font-bold font-sora mb-2">{tier.name}</h3>
                 <p className="text-[var(--text-secondary)] mb-6">{tier.description}</p>
                 <div className="mb-8">
-                  <span className="text-5xl font-bold font-sora text-[var(--color-action-primary)]">{tier.price}</span>
+                  <span className="text-5xl font-bold font-sora text-[var(--color-action-on-dark)]">{tier.price}</span>
                   <span className="text-[var(--text-secondary)] ml-2">one-time</span>
                 </div>
 
@@ -377,7 +377,7 @@ export default function PdfGuidesLandingClient() {
                     className={`w-full py-3 rounded-lg font-bold font-sora transition-all ${
                       tier.highlighted
                         ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:scale-105'
-                        : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-action)]'
+                        : 'border border-[var(--color-action-on-dark)] text-[var(--color-action-on-dark)] hover:bg-[var(--glow-action)]'
                     }`}
                   >
                     Get Access

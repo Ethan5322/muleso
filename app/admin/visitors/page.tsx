@@ -89,7 +89,7 @@ export default function VisitorsPage() {
   if (!isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-[var(--color-action-primary)] text-lg">Loading visitor data...</div>
+        <div className="text-[var(--color-action-on-dark)] text-lg">Loading visitor data...</div>
       </div>
     );
   }
@@ -106,7 +106,7 @@ export default function VisitorsPage() {
       {/* Page heading */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold font-sora">Visitor Analytics</h1>
-        <p className="text-[var(--color-action-primary)] text-sm">{totalVisitors} total visitors</p>
+        <p className="text-[var(--color-action-on-dark)] text-sm">{totalVisitors} total visitors</p>
       </div>
 
       {/* Content */}
@@ -116,11 +116,11 @@ export default function VisitorsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+            className="bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[var(--color-action-primary)] text-sm font-semibold">TOTAL VISITORS</p>
-              <Users className="text-[var(--color-action-primary)]" size={24} />
+              <p className="text-[var(--color-action-on-dark)] text-sm font-semibold">TOTAL VISITORS</p>
+              <Users className="text-[var(--color-action-on-dark)]" size={24} />
             </div>
             <p className="text-4xl font-bold">{totalVisitors}</p>
           </motion.div>
@@ -129,11 +129,11 @@ export default function VisitorsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+            className="bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[var(--color-action-primary)] text-sm font-semibold">MOBILE</p>
-              <Smartphone className="text-[var(--color-action-primary)]" size={24} />
+              <p className="text-[var(--color-action-on-dark)] text-sm font-semibold">MOBILE</p>
+              <Smartphone className="text-[var(--color-action-on-dark)]" size={24} />
             </div>
             <p className="text-4xl font-bold">{mobilePercentage.toFixed(1)}%</p>
           </motion.div>
@@ -142,11 +142,11 @@ export default function VisitorsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+            className="bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <div className="flex items-center justify-between mb-4">
-              <p className="text-[var(--color-action-primary)] text-sm font-semibold">DESKTOP</p>
-              <Monitor className="text-[var(--color-action-primary)]" size={24} />
+              <p className="text-[var(--color-action-on-dark)] text-sm font-semibold">DESKTOP</p>
+              <Monitor className="text-[var(--color-action-on-dark)]" size={24} />
             </div>
             <p className="text-4xl font-bold">{desktopPercentage.toFixed(1)}%</p>
           </motion.div>
@@ -159,7 +159,7 @@ export default function VisitorsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="lg:col-span-2 bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+            className="lg:col-span-2 bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <h3 className="text-lg font-semibold mb-6 text-white">Visitors (Last 7 Days)</h3>
             <ResponsiveContainer width="100%" height={300}>
@@ -184,7 +184,7 @@ export default function VisitorsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+            className="bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
           >
             <h3 className="text-lg font-semibold mb-6 text-white">Device Split</h3>
             <ResponsiveContainer width="100%" height={300}>
@@ -221,14 +221,14 @@ export default function VisitorsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-6 bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
+          className="mt-6 bg-[#1A2332] border border-[var(--color-action-on-dark)]/30 rounded-xl p-6 shadow-[0_0_20px_rgba(0,191,255,0.2)]"
         >
           <h3 className="text-lg font-semibold mb-6 text-white">Top Pages</h3>
           <div className="space-y-2">
             {topPages.map((page, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-[#0A0E17] rounded-lg border border-[var(--color-action-primary)]/10">
+              <div key={idx} className="flex items-center justify-between p-4 bg-[#0A0E17] rounded-lg border border-[var(--color-action-on-dark)]/10">
                 <p className="text-white">{page.page}</p>
-                <p className="text-[var(--color-action-primary)] font-semibold">{page.count} visits</p>
+                <p className="text-[var(--color-action-on-dark)] font-semibold">{page.count} visits</p>
               </div>
             ))}
           </div>

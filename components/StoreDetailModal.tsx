@@ -15,8 +15,8 @@ export interface StoreDetailItem {
 }
 
 const ACCENT_HEX: Record<AccentKey, string> = {
-  gold: '#E8B84B',
-  blue: '#E8B84B',
+  gold: '#7FB3FF',
+  blue: '#7FB3FF',
   purple: '#9D6BFF',
   green: '#00FF88',
 };

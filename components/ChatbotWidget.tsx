@@ -789,7 +789,7 @@ export default function ChatbotWidget() {
         {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
         {!isOpen && (
           <motion.div
-            className="absolute inset-0 border-2 border-[var(--color-action-primary)] rounded-full"
+            className="absolute inset-0 border-2 border-[var(--color-action-on-dark)] rounded-full"
             animate={{
               scale: [1, 1.2],
               opacity: [0.8, 0],
@@ -858,7 +858,7 @@ export default function ChatbotWidget() {
                   </>
                 )}
                 <div className="text-2xl font-bold font-sora">
-                  <span className="text-[var(--color-action-primary)]">MULE</span>
+                  <span className="text-[var(--color-action-on-dark)]">MULE</span>
                   <span>SOO</span>
                 </div>
               </div>
@@ -877,9 +877,9 @@ export default function ChatbotWidget() {
 
             {/* Estimated Time */}
             {stage !== 'greeting' && stage !== 'summary' && (
-              <div className="bg-[var(--glow-action)] border-b border-[var(--color-action-primary)] px-4 py-2 flex items-center gap-2">
-                <Clock size={14} className="text-[var(--color-action-primary)]" />
-                <span className="text-xs text-[var(--color-action-primary)] font-semibold">~5 min to complete</span>
+              <div className="bg-[var(--glow-action)] border-b border-[var(--color-action-on-dark)] px-4 py-2 flex items-center gap-2">
+                <Clock size={14} className="text-[var(--color-action-on-dark)]" />
+                <span className="text-xs text-[var(--color-action-on-dark)] font-semibold">~5 min to complete</span>
               </div>
             )}
 
@@ -936,7 +936,7 @@ export default function ChatbotWidget() {
                         setStage('service');
                         handleServiceSelect(service.value);
                       }}
-                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-action)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] hover:from-[var(--glow-action)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-action)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)] hover:from-[var(--glow-action)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                     >
                       <div className="flex justify-between items-center">
                         <span>{service.label}</span>
@@ -991,7 +991,7 @@ export default function ChatbotWidget() {
                       whileHover={{ scale: 1.02, x: 8 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleUsageTypeSelect(type)}
-                      className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-action)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--color-action-primary)] hover:from-[var(--glow-action)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-action)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--color-action-on-dark)] hover:from-[var(--glow-action)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                     >
                       {type === 'Personal' ? '👤 Personal' : '🏢 Company'}
                     </motion.button>
@@ -1109,7 +1109,7 @@ export default function ChatbotWidget() {
                     </div>
 
                     {/* Confirmation Message */}
-                    <div className="bg-[var(--glow-action)] border border-[var(--color-action-primary)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
+                    <div className="bg-[var(--glow-action)] border border-[var(--color-action-on-dark)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
                       <p className="font-semibold">✅ Booking Confirmed!</p>
                       <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
                       <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ena Muluken will contact you within 2 hours</p>
@@ -1197,7 +1197,7 @@ export default function ChatbotWidget() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={generatePDF}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
                     >
                       <Download size={18} />
                       Download Booking Agreement PDF
@@ -1267,7 +1267,7 @@ export default function ChatbotWidget() {
                       }
                       autoFocus
                       maxLength={stage === 'details' ? 500 : undefined}
-                      className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] text-base placeholder-[var(--text-secondary)] font-medium"
+                      className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)] text-base placeholder-[var(--text-secondary)] font-medium"
                     />
                     <motion.button
                       whileHover={{ scale: 1.05 }}
@@ -1308,7 +1308,7 @@ export default function ChatbotWidget() {
                         setStage('client_id');
                       }, 300);
                     }}
-                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)]"
+                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)]"
                   >
                     🪪 National ID
                   </motion.button>
@@ -1324,7 +1324,7 @@ export default function ChatbotWidget() {
                         setStage('client_id');
                       }, 300);
                     }}
-                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)]"
+                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)]"
                   >
                     📕 Passport
                   </motion.button>
@@ -1357,7 +1357,7 @@ export default function ChatbotWidget() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={resetChat}
-                  className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] transition-all font-medium"
+                  className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)] transition-all font-medium"
                 >
                   Start New Booking
                 </motion.button>

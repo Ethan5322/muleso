@@ -181,7 +181,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   }`}
                 >
                   {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-gradient-to-b from-[var(--color-action-primary)] to-[#7B2FFF]" />}
-                  <Icon size={18} className={active ? 'text-[var(--color-action-primary)]' : 'text-[#8FA0BE] group-hover:text-[var(--color-action-primary)]'} />
+                  <Icon size={18} className={active ? 'text-[var(--color-action-on-dark)]' : 'text-[#8FA0BE] group-hover:text-[var(--color-action-on-dark)]'} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -221,7 +221,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden p-2 rounded-lg hover:bg-[#1A2332] text-[var(--color-action-primary)]"
+              className="lg:hidden p-2 rounded-lg hover:bg-[#1A2332] text-[var(--color-action-on-dark)]"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -329,7 +329,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={item.href}
               href={item.href}
               className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-                active ? 'text-[var(--color-action-primary)]' : 'text-[#8FA0BE]'
+                active ? 'text-[var(--color-action-on-dark)]' : 'text-[#8FA0BE]'
               }`}
             >
               <Icon size={20} />

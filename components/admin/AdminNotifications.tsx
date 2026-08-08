@@ -57,7 +57,7 @@ export default function AdminNotifications() {
         className="relative p-2 rounded-lg hover:bg-[#141d2e] text-[#8A9AB8] hover:text-white transition-colors"
         aria-label="Notifications"
       >
-        <Bell size={19} className={pulse ? 'animate-bounce text-[#00C8FF]' : ''} />
+        <Bell size={19} className={pulse ? 'animate-bounce text-[#7FB3FF]' : ''} />
         {total > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#FF4D6D] text-white text-[10px] font-bold flex items-center justify-center">
             {total > 99 ? '99+' : total}
@@ -77,28 +77,28 @@ export default function AdminNotifications() {
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 px-4 py-3 hover:bg-[#141d2e] transition-colors"
             >
-              <span className="w-9 h-9 rounded-lg bg-[#00C8FF]/10 text-[#00C8FF] flex items-center justify-center">
+              <span className="w-9 h-9 rounded-lg bg-[#7FB3FF]/10 text-[#7FB3FF] flex items-center justify-center">
                 <Inbox size={17} />
               </span>
               <div className="flex-1">
                 <p className="text-sm text-white">New leads</p>
                 <p className="text-[11px] text-[#8296B8]">Awaiting your response</p>
               </div>
-              <span className={`text-sm font-bold ${newLeads > 0 ? 'text-[#00C8FF]' : 'text-[#7A8BA8]'}`}>{newLeads}</span>
+              <span className={`text-sm font-bold ${newLeads > 0 ? 'text-[#7FB3FF]' : 'text-[#7A8BA8]'}`}>{newLeads}</span>
             </Link>
             <Link
               href="/admin/bookings"
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 px-4 py-3 hover:bg-[#141d2e] transition-colors"
             >
-              <span className="w-9 h-9 rounded-lg bg-[#E8B84B]/10 text-[#E8B84B] flex items-center justify-center">
+              <span className="w-9 h-9 rounded-lg bg-[#1D4ED8]/10 text-[#7FB3FF] flex items-center justify-center">
                 <BookOpen size={17} />
               </span>
               <div className="flex-1">
                 <p className="text-sm text-white">Pending bookings</p>
                 <p className="text-[11px] text-[#8296B8]">Need confirmation</p>
               </div>
-              <span className={`text-sm font-bold ${pendingBookings > 0 ? 'text-[#E8B84B]' : 'text-[#7A8BA8]'}`}>{pendingBookings}</span>
+              <span className={`text-sm font-bold ${pendingBookings > 0 ? 'text-[#7FB3FF]' : 'text-[#7A8BA8]'}`}>{pendingBookings}</span>
             </Link>
           </div>
           {total === 0 && (

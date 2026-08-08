@@ -45,7 +45,7 @@ export default function PageHero({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="text-xs md:text-sm font-semibold font-sora tracking-[0.2em] uppercase text-[var(--color-action-primary)]"
+              className="text-xs md:text-sm font-semibold font-sora tracking-[0.2em] uppercase text-[var(--color-action-on-dark)]"
             >
               {eyebrow}
             </motion.p>

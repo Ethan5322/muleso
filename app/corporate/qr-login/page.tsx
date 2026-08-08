@@ -46,7 +46,7 @@ export default function QrLoginPage() {
         </div>
         <p className="text-[#F0F2FA] font-semibold">{status}</p>
         {failed && (
-          <a href="/corporate/login" className="text-[var(--color-action-primary)] text-sm hover:underline mt-3 inline-block">
+          <a href="/corporate/login" className="text-[var(--color-action-on-dark)] text-sm hover:underline mt-3 inline-block">
             Go to sign-in →
           </a>
         )}

@@ -11,7 +11,7 @@ export default function WidgetPreview() {
   return (
     <div className="relative mx-auto w-full max-w-sm">
       {/* Chat panel */}
-      <div className="glass-card rounded-2xl overflow-hidden border border-[var(--color-action-primary)]/40 shadow-[0_24px_60px_-20px_var(--glow-action)]">
+      <div className="glass-card rounded-2xl overflow-hidden border border-[var(--color-action-on-dark)]/40 shadow-[0_24px_60px_-20px_var(--glow-action)]">
         {/* Header */}
         <div className="px-4 py-3 flex items-center gap-3 bg-[var(--color-action-primary)]">
           <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
@@ -45,7 +45,7 @@ export default function WidgetPreview() {
           {/* quick chips */}
           <div className="flex gap-1.5 flex-wrap pt-1">
             {['📅 Book now', '💰 Pricing', '📞 Call me'].map((c) => (
-              <span key={c} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-action-primary)]/50 text-[var(--color-action-primary)] bg-[var(--glow-action)]">
+              <span key={c} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-action-on-dark)]/50 text-[var(--color-action-on-dark)] bg-[var(--glow-action)]">
                 {c}
               </span>
             ))}

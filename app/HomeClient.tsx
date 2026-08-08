@@ -73,7 +73,7 @@ const TestimonialCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-8 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
+      className="glass-card p-8 hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -121,10 +121,10 @@ const ServiceCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={controls}
       transition={{ duration: 0.5, delay }}
-      className="glass-card p-8 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 hover:-translate-y-1 group"
+      className="glass-card p-8 hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 hover:-translate-y-1 group"
     >
       <div className="w-14 h-14 rounded-full bg-[var(--glow-action)] flex items-center justify-center mb-6 group-hover:bg-[var(--color-action-primary)]">
-        <IconComponent size={28} className="text-[var(--color-action-primary)]" />
+        <IconComponent size={28} className="text-[var(--color-action-on-dark)]" />
       </div>
       <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-3">
         {title}
@@ -132,7 +132,7 @@ const ServiceCard = ({
       <p className="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">{description}</p>
       <Link
         href="/services"
-        className="text-[var(--color-action-primary)] text-base font-medium hover:gap-2 inline-flex items-center transition-all"
+        className="text-[var(--color-action-on-dark)] text-base font-medium hover:gap-2 inline-flex items-center transition-all"
       >
         Learn more →
       </Link>
@@ -205,9 +205,9 @@ export default function Home() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="inline-block px-6 py-3 rounded-full w-fit mx-auto border-2 border-[var(--color-action-primary)] bg-[var(--glow-action)] hover:bg-[var(--color-action-primary)] hover:text-[var(--bg-primary)] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[var(--glow-action)] cursor-pointer"
+                className="inline-block px-6 py-3 rounded-full w-fit mx-auto border-2 border-[var(--color-action-on-dark)] bg-[var(--glow-action)] hover:bg-[var(--color-action-primary)] hover:text-[var(--bg-primary)] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[var(--glow-action)] cursor-pointer"
               >
-                <span className="text-[var(--color-action-primary)] hover:text-[var(--bg-primary)] font-sora text-sm font-bold transition-colors duration-300">
+                <span className="text-[var(--color-action-on-dark)] hover:text-[var(--bg-primary)] font-sora text-sm font-bold transition-colors duration-300">
                   ⚡ {settings.hero_badge}
                 </span>
               </motion.div>
@@ -260,7 +260,7 @@ export default function Home() {
               className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3 pt-6 text-sm text-[var(--text-secondary)]"
             >
               <span className="inline-flex items-center gap-2">
-                <Zap size={16} className="text-[var(--color-action-primary)]" /> 200 AI systems
+                <Zap size={16} className="text-[var(--color-action-on-dark)]" /> 200 AI systems
               </span>
               <span className="inline-flex items-center gap-2">
                 <ShieldCheck size={16} className="text-[var(--accent-gold)]" /> POPIA-compliant
@@ -269,7 +269,7 @@ export default function Home() {
                 <Check size={16} className="text-[var(--accent-green)]" /> You own everything
               </span>
               <span className="inline-flex items-center gap-2">
-                <Clock size={16} className="text-[var(--color-action-primary)]" /> 2-hour response
+                <Clock size={16} className="text-[var(--color-action-on-dark)]" /> 2-hour response
               </span>
             </motion.div>
           </motion.div>
@@ -288,7 +288,7 @@ export default function Home() {
                 <motion.span
                   key={brand}
                   whileHover={{ scale: 1.05 }}
-                  className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-60 hover:opacity-100 hover:text-[var(--color-action-primary)] transition-all duration-200 cursor-default"
+                  className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-60 hover:opacity-100 hover:text-[var(--color-action-on-dark)] transition-all duration-200 cursor-default"
                 >
                   {brand}
                 </motion.span>
@@ -388,8 +388,8 @@ export default function Home() {
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-2 pill-soft px-4 py-2 rounded-full mb-6">
-              <Zap size={16} className="text-[var(--color-action-primary)]" />
-              <span className="text-[var(--color-action-primary)] font-sora text-sm font-bold">Our AI Booking System</span>
+              <Zap size={16} className="text-[var(--color-action-on-dark)]" />
+              <span className="text-[var(--color-action-on-dark)] font-sora text-sm font-bold">Our AI Booking System</span>
             </div>
             <h2 className="text-5xl md:text-6xl font-bold heading-section font-sora mb-6">
               Clients Book You on Autopilot
@@ -461,7 +461,7 @@ export default function Home() {
                 whileHover={{ translateY: -4 }}
                 className="relative"
               >
-                <div className="glass-card p-8 h-full hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300">
+                <div className="glass-card p-8 h-full hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300">
                   <div className="w-14 h-14 rounded-full bg-[var(--color-action-primary)] flex items-center justify-center mb-6 shadow-lg shadow-[var(--glow-action)]">
                     <span className="text-white font-bold font-sora text-lg">{step.number}</span>
                   </div>
@@ -512,10 +512,10 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: i * 0.06 }}
                   viewport={{ once: true }}
                   whileHover={{ translateY: -4 }}
-                  className="glass-card p-6 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 flex items-start gap-4"
+                  className="glass-card p-6 hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 flex items-start gap-4"
                 >
                   <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-[var(--glow-action)] to-[rgba(123,47,255,0.1)] flex items-center justify-center flex-shrink-0 shadow-sm">
-                    <Icon className="text-[var(--color-action-primary)]" size={24} />
+                    <Icon className="text-[var(--color-action-on-dark)]" size={24} />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold font-sora text-lg text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -557,7 +557,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-xl hover:shadow-[var(--glow-action)] transition-all duration-300"
+                className="group glass-card overflow-hidden rounded-2xl border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-xl hover:shadow-[var(--glow-action)] transition-all duration-300"
               >
                 <div className="relative w-full h-48 overflow-hidden">
                   <Image src={`/${p.img}`} alt={p.title} width={800} height={450} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -565,7 +565,7 @@ export default function Home() {
                   <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold font-sora text-white bg-black/45 border border-white/20">{p.category.toUpperCase()}</span>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-bold font-sora text-lg text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">{p.title}</h3>
+                  <h3 className="font-bold font-sora text-lg text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-on-dark)] transition-colors">{p.title}</h3>
                   <p className="text-sm text-[var(--text-secondary)]">{p.benefit}</p>
                 </div>
               </motion.div>
@@ -592,7 +592,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <p className="text-sm uppercase tracking-wider font-semibold text-[var(--color-action-primary)] mb-3">Trusted By Industry Leaders</p>
+            <p className="text-sm uppercase tracking-wider font-semibold text-[var(--color-action-on-dark)] mb-3">Trusted By Industry Leaders</p>
             <h3 className="text-2xl md:text-3xl font-bold font-sora text-[var(--text-primary)]">
               Businesses That Trust MuleSoo
             </h3>
@@ -612,7 +612,7 @@ export default function Home() {
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.05 }}
-                className="glass-card p-6 flex flex-col items-center justify-center text-center min-h-[140px] border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 rounded-xl"
+                className="glass-card p-6 flex flex-col items-center justify-center text-center min-h-[140px] border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 rounded-xl"
               >
                 <div className="w-12 h-12 rounded-lg bg-[var(--color-action-primary)] flex items-center justify-center mb-3 flex-shrink-0">
                   <span className="text-white font-bold font-sora text-lg">{client.name.charAt(0)}</span>
@@ -689,7 +689,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -4 }}
-                className="glass-card p-8 text-center border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 rounded-xl"
+                className="glass-card p-8 text-center border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 rounded-xl"
               >
                 <div className="text-5xl mb-4">{item.icon}</div>
                 <p className="text-4xl font-bold font-sora gradient-text mb-3">{item.metric}</p>
@@ -920,8 +920,8 @@ export default function Home() {
           className="max-w-4xl mx-auto text-center glass-card rounded-2xl border border-[rgba(0,200,255,0.22)] p-10 md:p-14"
         >
           <span className="inline-flex items-center gap-2 pill-soft px-4 py-2 rounded-full mb-6">
-            <Zap size={16} className="text-[var(--color-action-primary)]" />
-            <span className="text-[var(--color-action-primary)] font-sora text-sm font-bold">200 AI Automation Systems</span>
+            <Zap size={16} className="text-[var(--color-action-on-dark)]" />
+            <span className="text-[var(--color-action-on-dark)] font-sora text-sm font-bold">200 AI Automation Systems</span>
           </span>
           <h2 className="text-4xl md:text-5xl font-bold heading-section font-sora mb-5">
             Not sure what you need? Explore what we can build.

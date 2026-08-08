@@ -258,7 +258,7 @@ export default function FaceScanner({
   }, [camReady, detectorReady, descriptorReady, mode, steps, TARGET, done, finish]);
 
   const ready = camReady && detectorReady;
-  const ring = pct >= CAPTURE_QUALITY ? 'border-[#00FF88]' : pct >= 35 ? 'border-[#E8B84B]' : 'border-red-400/60';
+  const ring = pct >= CAPTURE_QUALITY ? 'border-[#00FF88]' : pct >= 35 ? 'border-[#7FB3FF]' : 'border-red-400/60';
 
   const statusLine = !camReady ? 'Starting camera…' : !detectorReady ? 'Loading face models…' : guide;
 
@@ -272,19 +272,19 @@ export default function FaceScanner({
         {/* live quality % */}
         {ready && !error && (
           <div className="absolute top-2 left-2 bg-black/55 rounded-lg px-2.5 py-1 text-xs font-bold">
-            <span className={pct >= CAPTURE_QUALITY ? 'text-[#00FF88]' : 'text-[#E8B84B]'}>{pct}%</span>
+            <span className={pct >= CAPTURE_QUALITY ? 'text-[#00FF88]' : 'text-[#7FB3FF]'}>{pct}%</span>
             <span className="text-[#7A8BA8] font-normal"> quality</span>
           </div>
         )}
         {/* The ring is live off the small detector; tell the user the big net is still coming. */}
         {ready && !descriptorReady && !error && (
-          <div className="absolute top-2 right-2 bg-black/55 rounded-lg px-2.5 py-1 text-xs text-[#00C8FF] flex items-center gap-1.5">
+          <div className="absolute top-2 right-2 bg-black/55 rounded-lg px-2.5 py-1 text-xs text-[#7FB3FF] flex items-center gap-1.5">
             <Loader2 className="animate-spin" size={12} /> Preparing
           </div>
         )}
         {(!ready || busy || done) && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <Loader2 className="animate-spin text-[#00C8FF]" size={32} />
+            <Loader2 className="animate-spin text-[#7FB3FF]" size={32} />
           </div>
         )}
       </div>
@@ -294,10 +294,10 @@ export default function FaceScanner({
         <div>
           <div className="flex justify-between text-xs mb-1">
             <span className="text-[#7A8BA8]">Enrolling biometric</span>
-            <span className="text-[#00C8FF] font-bold">{progress}%</span>
+            <span className="text-[#7FB3FF] font-bold">{progress}%</span>
           </div>
           <div className="h-2 rounded-full bg-[#1A2332] overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] transition-all" style={{ width: `${progress}%` }} />
+            <div className="h-full bg-gradient-to-r from-[#7FB3FF] to-[#7B2FFF] transition-all" style={{ width: `${progress}%` }} />
           </div>
         </div>
       )}
@@ -311,7 +311,7 @@ export default function FaceScanner({
       )}
 
       <div className="flex items-center justify-center gap-2 text-xs text-[#7A8BA8]">
-        {mode === 'single' ? <ScanFace size={14} className="text-[#00C8FF]" /> : <Camera size={14} className="text-[#00C8FF]" />}
+        {mode === 'single' ? <ScanFace size={14} className="text-[#7FB3FF]" /> : <Camera size={14} className="text-[#7FB3FF]" />}
         {mode === 'single'
           ? 'Look at the camera — recognition is automatic. No photo is taken; only a numeric face signature is used.'
           : 'Move slowly through the prompts — samples are captured automatically as a numeric signature (no photo stored).'}

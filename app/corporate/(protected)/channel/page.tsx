@@ -120,7 +120,7 @@ export default function ChannelPage() {
         if (match) {
           const isMe = match === nameById[me];
           nodes.push(
-            <span key={idx} className={`font-semibold ${isMe ? 'bg-[var(--color-action-primary)]/20 text-[var(--color-action-primary)] rounded px-0.5' : 'text-[var(--color-action-primary)]'}`}>
+            <span key={idx} className={`font-semibold ${isMe ? 'bg-[var(--color-action-primary)]/20 text-[var(--color-action-on-dark)] rounded px-0.5' : 'text-[var(--color-action-on-dark)]'}`}>
               @{match}
             </span>
           );
@@ -219,7 +219,7 @@ export default function ChannelPage() {
               )}
             </span>
             <div className="flex items-center gap-2">
-              {m.pinned && <Pin size={12} className="text-[#E8B84B]" />}
+              {m.pinned && <Pin size={12} className="text-[#7FB3FF]" />}
               <span className="text-[10px] text-[#8FA0BE]">
                 {new Date(m.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
               </span>
@@ -236,8 +236,8 @@ export default function ChannelPage() {
                   onClick={() => react(m.id, e)}
                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
                     g?.mine
-                      ? 'border-[var(--color-action-primary)] bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)]'
-                      : 'border-[#1A2640] text-[#A8B2D0] hover:border-[var(--color-action-primary)]'
+                      ? 'border-[var(--color-action-on-dark)] bg-[var(--color-action-primary)]/10 text-[var(--color-action-on-dark)]'
+                      : 'border-[#1A2640] text-[#A8B2D0] hover:border-[var(--color-action-on-dark)]'
                   }`}
                 >
                   {e} {g?.count ? g.count : ''}
@@ -247,7 +247,7 @@ export default function ChannelPage() {
             {!isReply && (
               <button
                 onClick={() => setReplyTo(replyTo === m.id ? null : m.id)}
-                className="text-xs text-[#8FA0BE] hover:text-[var(--color-action-primary)] inline-flex items-center gap-1"
+                className="text-xs text-[#8FA0BE] hover:text-[var(--color-action-on-dark)] inline-flex items-center gap-1"
               >
                 <CornerDownRight size={12} /> Reply
               </button>
@@ -255,7 +255,7 @@ export default function ChannelPage() {
             {canPin && (
               <button
                 onClick={() => pin(m.id, !m.pinned)}
-                className="text-xs text-[#8FA0BE] hover:text-[#E8B84B] inline-flex items-center gap-1"
+                className="text-xs text-[#8FA0BE] hover:text-[#7FB3FF] inline-flex items-center gap-1"
               >
                 {m.pinned ? <PinOff size={12} /> : <Pin size={12} />} {m.pinned ? 'Unpin' : 'Pin'}
               </button>
@@ -274,7 +274,7 @@ export default function ChannelPage() {
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), send(replyText, m.id))}
               placeholder="Reply…"
-              className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-1.5 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
+              className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-1.5 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-on-dark)]"
             />
             <button
               onClick={() => send(replyText, m.id)}
@@ -300,15 +300,15 @@ export default function ChannelPage() {
   return (
     <div className="h-[calc(100vh-160px)] flex flex-col bg-[#0A0F1E] border border-[#1A2640] rounded-xl">
       <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
-        <Hash size={16} className="text-[var(--color-action-primary)]" />
+        <Hash size={16} className="text-[var(--color-action-on-dark)]" />
         <h1 className="font-semibold font-sora text-sm">{channel?.name?.replace('#', '') || 'team-updates'}</h1>
         <span className="text-xs text-[#8FA0BE]">· share what you&apos;re building</span>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {pinned.length > 0 && (
-          <div className="bg-[#12101f] border border-[#E8B84B]/30 rounded-xl p-3">
-            <p className="text-[11px] font-semibold text-[#E8B84B] uppercase tracking-wide mb-2 flex items-center gap-1">
+          <div className="bg-[#12101f] border border-[#7FB3FF]/30 rounded-xl p-3">
+            <p className="text-[11px] font-semibold text-[#7FB3FF] uppercase tracking-wide mb-2 flex items-center gap-1">
               <Pin size={12} /> Pinned
             </p>
             <div className="space-y-2">
@@ -367,7 +367,7 @@ export default function ChannelPage() {
           onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send(input))}
           placeholder={target ? `Message ${deptNameById[Number(target)] || 'department'}…` : 'Share an update…  @ to mention'}
-          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
+          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-on-dark)]"
         />
         <button
           onClick={() => send(input)}

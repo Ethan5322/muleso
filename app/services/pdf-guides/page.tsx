@@ -92,7 +92,7 @@ export default function PDFGuidesPage() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="glass-card p-8 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
+                className="glass-card p-8 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
               >
                 <div className="mb-4">
                   <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">{guide.title}</h3>
@@ -103,7 +103,7 @@ export default function PDFGuidesPage() {
                 </div>
                 <p className="text-[var(--text-secondary)] mb-4">{guide.desc}</p>
                 <div className="border-t border-[var(--border)] pt-4">
-                  <p className="text-xs font-bold text-[var(--color-action-primary)] mb-2">INCLUDES:</p>
+                  <p className="text-xs font-bold text-[var(--color-action-on-dark)] mb-2">INCLUDES:</p>
                   <ul className="space-y-1 text-xs text-[var(--text-secondary)]">
                     {guide.includes.map((item, j) => (
                       <li key={j}>✓ {item}</li>
@@ -134,7 +134,7 @@ export default function PDFGuidesPage() {
             <li>✓ Custom branding and styling</li>
             <li>✓ SEO-optimized for digital</li>
           </ul>
-          <p className="text-[var(--color-action-primary)] font-semibold">Perfect for courses, lead magnets, or product sales</p>
+          <p className="text-[var(--color-action-on-dark)] font-semibold">Perfect for courses, lead magnets, or product sales</p>
         </motion.div>
 
         {/* Store CTA */}
@@ -147,7 +147,7 @@ export default function PDFGuidesPage() {
         >
           <Link
             href="/store"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[#E8B84B] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[#1D4ED8] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Browse & Purchase Guides →
           </Link>
@@ -159,7 +159,7 @@ export default function PDFGuidesPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="glass-card p-12 text-center border border-[var(--color-action-primary)]"
+          className="glass-card p-12 text-center border border-[var(--color-action-on-dark)]"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Need a Custom PDF?</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">

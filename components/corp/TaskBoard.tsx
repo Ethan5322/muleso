@@ -89,7 +89,7 @@ function TaskComments({ taskId }: { taskId: string }) {
             <p className="text-[11px] text-[#8FA0BE]">No notes yet. Add the first progress note.</p>
           ) : (
             comments.map((c) => (
-              <div key={c.id} className={`text-xs rounded-lg px-2.5 py-1.5 ${c.author_id === me ? 'bg-[#00C8FF]/5 border border-[#00C8FF]/20' : 'bg-[#0D1528] border border-[#1A2640]'}`}>
+              <div key={c.id} className={`text-xs rounded-lg px-2.5 py-1.5 ${c.author_id === me ? 'bg-[#7FB3FF]/5 border border-[#7FB3FF]/20' : 'bg-[#0D1528] border border-[#1A2640]'}`}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold text-[#D4DAEA]">{c.author_id ? (nameById[c.author_id] || 'Admin') : 'Admin'}</span>
                   <span className="text-[10px] text-[#8FA0BE]">{new Date(c.created_at).toLocaleString()}</span>
@@ -106,7 +106,7 @@ function TaskComments({ taskId }: { taskId: string }) {
             value=""
             onChange={(e) => e.target.value && mention(e.target.value)}
             title="Mention a teammate"
-            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-1.5 py-1.5 text-xs text-[#00C8FF] max-w-[42px]"
+            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-1.5 py-1.5 text-xs text-[#7FB3FF] max-w-[42px]"
           >
             <option value="">@</option>
             {roster.map((a) => (
@@ -119,9 +119,9 @@ function TaskComments({ taskId }: { taskId: string }) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), send())}
           placeholder="Add a note… use @ to mention"
-          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#00C8FF]"
+          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-[#7FB3FF]"
         />
-        <button type="button" onClick={send} disabled={sending || !input.trim()} className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50">
+        <button type="button" onClick={send} disabled={sending || !input.trim()} className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7FB3FF] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50">
           {sending ? <Loader2 className="animate-spin" size={13} /> : <Send size={13} />}
         </button>
       </div>
@@ -344,7 +344,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
       <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-6 text-sm">
         <p className="text-[#FF5C7C] font-semibold mb-1">Could not load the work board.</p>
         <p className="text-[#A8B2D0]">{err || 'The corporate service did not respond.'}</p>
-        <button type="button" onClick={() => { setLoading(true); load(); }} className="mt-3 px-3 py-1.5 rounded-lg bg-[#00C8FF] text-black text-xs font-semibold">
+        <button type="button" onClick={() => { setLoading(true); load(); }} className="mt-3 px-3 py-1.5 rounded-lg bg-[#7FB3FF] text-black text-xs font-semibold">
           Retry
         </button>
       </div>
@@ -357,7 +357,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
     <div className="text-white">
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><CheckCircle2 className="text-[#00C8FF]" size={22} /> {title}</h1>
+          <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><CheckCircle2 className="text-[#7FB3FF]" size={22} /> {title}</h1>
           <p className="text-[#7A8BA8] text-sm mt-0.5">
             {data.isSuper ? 'Assign work to any department or person, and track it to done.' : 'Your department’s queue. Claim a task and move it to done.'}
           </p>
@@ -375,7 +375,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
           <button
             type="button"
             onClick={() => setShowForm((v) => !v)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white text-sm font-semibold"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#7FB3FF] to-[#7B2FFF] text-white text-sm font-semibold"
           >
             <Plus size={16} /> New task
           </button>
@@ -388,14 +388,14 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
             value={fTitle}
             onChange={(e) => setFTitle(e.target.value)}
             placeholder="What needs doing? (task title)"
-            className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00C8FF]"
+            className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#7FB3FF]"
           />
           <textarea
             value={fDetail}
             onChange={(e) => setFDetail(e.target.value)}
             placeholder="Details (optional)"
             rows={2}
-            className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00C8FF]"
+            className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#7FB3FF]"
           />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
             <select value={fPriority} onChange={(e) => setFPriority(e.target.value)} title="Priority" className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-2 py-2 text-sm text-[#A8B2D0]">
@@ -416,7 +416,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={create} disabled={creating || !fTitle.trim()} className="px-4 py-2 rounded-lg bg-[#00C8FF] text-black text-sm font-semibold disabled:opacity-50 inline-flex items-center gap-2">
+            <button type="button" onClick={create} disabled={creating || !fTitle.trim()} className="px-4 py-2 rounded-lg bg-[#7FB3FF] text-black text-sm font-semibold disabled:opacity-50 inline-flex items-center gap-2">
               {creating && <Loader2 className="animate-spin" size={14} />} Create task
             </button>
             <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 rounded-lg border border-[#1A2640] text-sm text-[#A8B2D0]">Cancel</button>
@@ -439,7 +439,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
             key={f.key}
             type="button"
             onClick={() => setFilter(f.key)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${filter === f.key ? 'bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white' : 'border border-[#1A2640] text-[#A8B2D0] hover:text-white'}`}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${filter === f.key ? 'bg-gradient-to-br from-[#7FB3FF] to-[#7B2FFF] text-white' : 'border border-[#1A2640] text-[#A8B2D0] hover:text-white'}`}
           >
             {f.label}
           </button>
@@ -489,14 +489,14 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
 
                 <div className="flex items-center gap-1.5 mt-3 flex-wrap">
                   {busy === t.id && (
-                    <Loader2 className="animate-spin text-[#00C8FF] shrink-0" size={13} aria-label="Saving" />
+                    <Loader2 className="animate-spin text-[#7FB3FF] shrink-0" size={13} aria-label="Saving" />
                   )}
                   {t.assignee_id !== data.me && t.status !== 'done' && (
                     <button
                       type="button"
                       onClick={() => patch(t.id, { action: 'claim' }, { assignee_id: data.me })}
                       disabled={busy === t.id}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#00C8FF]/15 text-[#00C8FF] hover:bg-[#00C8FF]/25 disabled:opacity-50"
+                      className="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#7FB3FF]/15 text-[#7FB3FF] hover:bg-[#7FB3FF]/25 disabled:opacity-50"
                     >
                       Claim
                     </button>
@@ -528,7 +528,7 @@ export default function TaskBoard({ title = 'Work' }: { title?: string }) {
                         className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors disabled:cursor-not-allowed ${
                           current
                             ? 'text-black'
-                            : 'text-[#C3CCE2] hover:text-white hover:border-[#00C8FF]/60 border border-[#243350] disabled:opacity-50'
+                            : 'text-[#C3CCE2] hover:text-white hover:border-[#7FB3FF]/60 border border-[#243350] disabled:opacity-50'
                         }`}
                         style={current ? { background: s.color } : undefined}
                       >

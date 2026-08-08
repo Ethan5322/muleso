@@ -30,7 +30,7 @@ export default function ContactQRCodePage() {
         {/* Back to contact */}
         <Link
           href="/contact"
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors mb-10"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--color-action-on-dark)] transition-colors mb-10"
         >
           <ArrowLeft size={16} /> Back to Contact
         </Link>
@@ -42,7 +42,7 @@ export default function ContactQRCodePage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 rounded-full px-3 py-1 mb-5">
+          <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-action-on-dark)] border border-[var(--color-action-on-dark)]/40 rounded-full px-3 py-1 mb-5">
             Marketing Toolkit
           </span>
           <h1 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-4">
@@ -82,7 +82,7 @@ export default function ContactQRCodePage() {
                 Links to
               </p>
               <div className="flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-3">
-                <code className="flex-1 text-sm text-[var(--color-action-primary)] truncate">{WEBSITE_URL}</code>
+                <code className="flex-1 text-sm text-[var(--color-action-on-dark)] truncate">{WEBSITE_URL}</code>
                 <button
                   type="button"
                   onClick={copyURL}
@@ -113,10 +113,10 @@ export default function ContactQRCodePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 viewport={{ once: true }}
-                className="glass-card border border-[var(--border)] rounded-xl p-6 hover:border-[var(--color-action-primary)] transition-colors"
+                className="glass-card border border-[var(--border)] rounded-xl p-6 hover:border-[var(--color-action-on-dark)] transition-colors"
               >
                 <div className="w-10 h-10 rounded-lg bg-[var(--glow-action)] flex items-center justify-center mb-4">
-                  <Icon className="text-[var(--color-action-primary)]" size={20} />
+                  <Icon className="text-[var(--color-action-on-dark)]" size={20} />
                 </div>
                 <h3 className="font-semibold text-[var(--text-primary)] mb-1.5">{u.title}</h3>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{u.desc}</p>

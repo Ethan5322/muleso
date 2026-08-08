@@ -84,7 +84,7 @@ export default function PortfolioManager() {
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
+          className="bg-[#7FB3FF] hover:bg-[#7FB3FF] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
         >
           <Plus size={20} /> Add New Project
         </button>
@@ -124,7 +124,7 @@ export default function PortfolioManager() {
                     <td className="px-6 py-4 text-[#7A8BA8]">{item.category}</td>
                     <td className="px-6 py-4 text-[#7A8BA8]">{item.client_name}</td>
                     <td className="px-6 py-4 text-center">
-                      {item.featured ? <Star size={16} className="inline text-[#E8B84B] fill-[#E8B84B]" /> : <span className="text-[#7A8BA8]">—</span>}
+                      {item.featured ? <Star size={16} className="inline text-[#7FB3FF] fill-[#7FB3FF]" /> : <span className="text-[#7A8BA8]">—</span>}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className="flex gap-2 justify-center">

@@ -62,7 +62,7 @@ export default function AiAutomationLibrary() {
           <motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 bg-[var(--glow-action)]"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--color-action-on-dark)] border border-[var(--color-action-on-dark)]/40 bg-[var(--glow-action)]"
           >
             <Bot size={14} /> AI Automation · Pretoria, South Africa
           </motion.span>
@@ -96,7 +96,7 @@ export default function AiAutomationLibrary() {
             transition={{ delay: 0.25 }}
             className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-[var(--text-secondary)]"
           >
-            <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--color-action-primary)]" /> 200 systems</span>
+            <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--color-action-on-dark)]" /> 200 systems</span>
             <span className="inline-flex items-center gap-1.5"><Clock size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
             <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You own everything</span>
             <span className="inline-flex items-center gap-1.5"><TrendingUp size={15} className="text-[var(--accent-purple)]" /> No commission, ever</span>
@@ -114,7 +114,7 @@ export default function AiAutomationLibrary() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search 200 systems… (e.g. salon, hotel, dentist, invoice)"
-              className="w-full bg-[var(--bg-card)]/80 backdrop-blur border border-[var(--border)] text-[var(--text-primary)] pl-11 pr-4 py-3.5 rounded-xl focus:outline-none focus:border-[var(--color-action-primary)]"
+              className="w-full bg-[var(--bg-card)]/80 backdrop-blur border border-[var(--border)] text-[var(--text-primary)] pl-11 pr-4 py-3.5 rounded-xl focus:outline-none focus:border-[var(--color-action-on-dark)]"
             />
           </motion.div>
         </div>
@@ -132,7 +132,7 @@ export default function AiAutomationLibrary() {
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                   category === c
                     ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] border-transparent'
-                    : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:text-[var(--color-action-primary)]'
+                    : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:text-[var(--color-action-on-dark)]'
                 }`}
               >
                 {c === 'All' ? 'All departments' : c}
@@ -247,7 +247,7 @@ export default function AiAutomationLibrary() {
           </p>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#E8B84B] text-black font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Build My Custom System →
           </Link>

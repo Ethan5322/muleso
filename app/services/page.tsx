@@ -114,7 +114,7 @@ export default function ServicesPage() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
               whileHover={{ translateY: -6, boxShadow: "0 0 40px -4px var(--glow-action)" }}
-              className="relative glass-card p-8 border border-[var(--color-action-primary)] shadow-[0_0_30px_-12px_var(--glow-action)] transition-all duration-300 flex flex-col"
+              className="relative glass-card p-8 border border-[var(--color-action-on-dark)] shadow-[0_0_30px_-12px_var(--glow-action)] transition-all duration-300 flex flex-col"
             >
               <div className="w-14 h-14 rounded-xl bg-[var(--color-action-primary)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(0,200,255,0.6)]">
                 <Bot className="text-white" size={30} />
@@ -153,7 +153,7 @@ export default function ServicesPage() {
                 transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="glass-card p-8 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 flex flex-col"
+                className="glass-card p-8 hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 flex flex-col"
               >
                 <div className="text-5xl mb-4">{service.icon}</div>
                 <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-3">

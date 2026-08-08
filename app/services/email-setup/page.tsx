@@ -64,7 +64,7 @@ export default function EmailSetupPage() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -4 }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
               >
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">✓ {item.title}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
@@ -116,7 +116,7 @@ export default function EmailSetupPage() {
               { q: 'Can I access email on my phone?', a: 'Yes! Works on iPhone, Android, and desktop apps.' },
               { q: 'Is my email secure?', a: 'Yes, with encryption, spam filtering, and automatic backups.' },
             ].map((item, i) => (
-              <div key={i} className="glass-card p-6 hover:border-[var(--color-action-primary)] transition-all">
+              <div key={i} className="glass-card p-6 hover:border-[var(--color-action-on-dark)] transition-all">
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.q}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.a}</p>
               </div>
@@ -130,7 +130,7 @@ export default function EmailSetupPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="glass-card p-12 text-center border border-[var(--color-action-primary)]"
+          className="glass-card p-12 text-center border border-[var(--color-action-on-dark)]"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Get Professional Email Today</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">

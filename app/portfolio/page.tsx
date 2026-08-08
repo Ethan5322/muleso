@@ -381,7 +381,7 @@ export default function PortfolioPage() {
                 transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] text-left transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-xl hover:shadow-[var(--glow-action)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] text-left transition-all duration-300 hover:border-[var(--color-action-on-dark)] hover:shadow-xl hover:shadow-[var(--glow-action)]"
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--color-action-primary)] via-[var(--accent-purple)] to-[var(--accent-gold)]" />
 
@@ -411,11 +411,11 @@ export default function PortfolioPage() {
                 </div>
 
                 <div className="p-6 space-y-3">
-                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight group-hover:text-[var(--color-action-primary)] transition-colors">{project.name}</h3>
+                  <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] leading-tight group-hover:text-[var(--color-action-on-dark)] transition-colors">{project.name}</h3>
                   {project.client && <p className="text-xs text-[var(--accent-gold)] font-semibold">{project.client}</p>}
                   <p className="text-sm text-[var(--text-secondary)] line-clamp-3">{project.description}</p>
                   <div className="flex items-center justify-between pt-1">
-                    <p className="text-xs font-semibold text-[var(--color-action-primary)]">View project details →</p>
+                    <p className="text-xs font-semibold text-[var(--color-action-on-dark)]">View project details →</p>
                     {project.site && (
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[var(--accent-green)]">
                         <Globe size={11} /> Live site
@@ -487,13 +487,13 @@ export default function PortfolioPage() {
                     href={selected.site}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-action-primary)]/40 bg-[var(--glow-action)] px-4 py-3.5 hover:border-[var(--color-action-primary)] transition-colors"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-action-on-dark)]/40 bg-[var(--glow-action)] px-4 py-3.5 hover:border-[var(--color-action-on-dark)] transition-colors"
                   >
                     <span className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-semibold">
-                      <Globe size={17} className="text-[var(--color-action-primary)]" />
+                      <Globe size={17} className="text-[var(--color-action-on-dark)]" />
                       Want proof? Visit the live working site
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[var(--color-action-primary)] font-bold text-sm whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1 text-[var(--color-action-on-dark)] font-bold text-sm whitespace-nowrap">
                       Open <ExternalLink size={14} />
                     </span>
                   </a>
@@ -502,7 +502,7 @@ export default function PortfolioPage() {
                 {/* Capabilities */}
                 {selected.capabilities && selected.capabilities.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-bold font-sora text-[var(--color-action-primary)] uppercase tracking-wide mb-3">What it does</h4>
+                    <h4 className="text-sm font-bold font-sora text-[var(--color-action-on-dark)] uppercase tracking-wide mb-3">What it does</h4>
                     <ul className="space-y-2">
                       {selected.capabilities.map((c) => (
                         <li key={c} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -515,14 +515,14 @@ export default function PortfolioPage() {
 
                 {/* Admin tracking */}
                 {selected.adminTracking && selected.adminTracking.length > 0 && (
-                  <div className="bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 rounded-xl p-4">
-                    <h4 className="text-sm font-bold font-sora text-[var(--color-action-primary)] uppercase tracking-wide mb-3 flex items-center gap-2">
+                  <div className="bg-[var(--glow-action)] border border-[var(--color-action-on-dark)]/40 rounded-xl p-4">
+                    <h4 className="text-sm font-bold font-sora text-[var(--color-action-on-dark)] uppercase tracking-wide mb-3 flex items-center gap-2">
                       <Gauge size={15} /> What you can track (Admin Panel)
                     </h4>
                     <ul className="space-y-2">
                       {selected.adminTracking.map((c) => (
                         <li key={c} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
-                          <Check size={16} className="text-[var(--color-action-primary)] mt-0.5 flex-shrink-0" /> {c}
+                          <Check size={16} className="text-[var(--color-action-on-dark)] mt-0.5 flex-shrink-0" /> {c}
                         </li>
                       ))}
                     </ul>

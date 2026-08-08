@@ -35,7 +35,7 @@ export default function QRCodeFrame({
       {frameStyle === 'notebook' && (
         <div className="relative">
           {/* Outer notebook border */}
-          <div className="bg-gradient-to-br from-[#1A2332] to-[#0F1624] border-4 border-[#E8B84B] rounded-2xl p-8 shadow-2xl"
+          <div className="bg-gradient-to-br from-[#1A2332] to-[#0F1624] border-4 border-[#7FB3FF] rounded-2xl p-8 shadow-2xl"
             style={{
               boxShadow: '0 0 30px rgba(232, 184, 75, 0.3), inset 0 0 20px rgba(232, 184, 75, 0.1)'
             }}>
@@ -63,17 +63,17 @@ export default function QRCodeFrame({
             </div>
 
             {/* Gold accent lines */}
-            <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#E8B84B]"></div>
-            <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-[#E8B84B]"></div>
-            <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-[#E8B84B]"></div>
-            <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[#E8B84B]"></div>
+            <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#7FB3FF]"></div>
+            <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-[#7FB3FF]"></div>
+            <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-[#7FB3FF]"></div>
+            <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-[#7FB3FF]"></div>
           </div>
         </div>
       )}
 
       {/* Elegant Frame */}
       {frameStyle === 'elegant' && (
-        <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border-2 border-[#E8B84B] rounded-xl p-8 shadow-xl"
+        <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border-2 border-[#7FB3FF] rounded-xl p-8 shadow-xl"
           style={{ boxShadow: '0 0 40px rgba(0, 200, 255, 0.2)' }}>
           <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
             <div ref={qrRef} className="bg-white p-4">
@@ -103,7 +103,7 @@ export default function QRCodeFrame({
       {showDownload && (
         <button
           onClick={downloadQR}
-          className="mt-8 bg-[#E8B84B] hover:bg-[#00B3E6] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
+          className="mt-8 bg-[#1D4ED8] hover:bg-[#00B3E6] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
         >
           <Download size={20} /> Download QR Code
         </button>

@@ -65,7 +65,7 @@ export default function CustomAppsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
                 whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -119,7 +119,7 @@ export default function CustomAppsPage() {
               { q: 'Do I own the code?', a: 'Yes. After full payment, the complete source code and data are 100% yours.' },
               { q: 'Can you maintain it after launch?', a: 'Absolutely. We offer ongoing maintenance and feature plans.' },
             ].map((item, i) => (
-              <div key={i} className="glass-card p-6 hover:border-[var(--color-action-primary)] transition-all">
+              <div key={i} className="glass-card p-6 hover:border-[var(--color-action-on-dark)] transition-all">
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.q}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.a}</p>
               </div>
@@ -133,7 +133,7 @@ export default function CustomAppsPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="glass-card p-12 text-center border border-[var(--color-action-primary)]"
+          className="glass-card p-12 text-center border border-[var(--color-action-on-dark)]"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Build Your Next Project?</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">

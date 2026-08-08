@@ -61,7 +61,7 @@ function BookingConfirmationContent() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Investment:</span>
-              <span className="text-[#E8B84B] font-bold text-lg">{price}</span>
+              <span className="text-[#7FB3FF] font-bold text-lg">{price}</span>
             </div>
           </div>
 
@@ -124,7 +124,7 @@ function BookingConfirmationContent() {
               </div>
             </li>
             <li className="flex gap-4">
-              <span className="bg-[#E8B84B] text-black rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">
+              <span className="bg-[#1D4ED8] text-black rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">
                 3
               </span>
               <div>

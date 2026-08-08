@@ -12,10 +12,10 @@ export default function CustomAppsLandingClient() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--bg-primary)]/95 backdrop-blur border-b border-[var(--border)] px-6 py-3">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-lg font-bold font-sora">
-            <span className="text-[var(--color-action-primary)]">MULE</span>
+            <span className="text-[var(--color-action-on-dark)]">MULE</span>
             <span>SOO</span>
           </Link>
-          <Link href="/" className="text-sm text-[var(--text-secondary)] hover:text-[var(--color-action-primary)]">
+          <Link href="/" className="text-sm text-[var(--text-secondary)] hover:text-[var(--color-action-on-dark)]">
             ← Back to Home
           </Link>
         </div>
@@ -30,7 +30,7 @@ export default function CustomAppsLandingClient() {
             transition={{ duration: 0.6 }}
             className="mb-6"
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 text-sm font-bold text-[var(--color-action-primary)]">
+            <span className="inline-block px-4 py-2 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-on-dark)]/40 text-sm font-bold text-[var(--color-action-on-dark)]">
               Custom Software Built For Your Business
             </span>
           </motion.div>
@@ -67,7 +67,7 @@ export default function CustomAppsLandingClient() {
             </Link>
             <Link
               href="/case-studies"
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 border border-[var(--color-action-on-dark)] text-[var(--color-action-on-dark)] font-bold rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap"
             >
               See Examples
             </Link>
@@ -152,7 +152,7 @@ export default function CustomAppsLandingClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-colors"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-on-dark)] transition-colors"
               >
                 <div className="text-4xl mb-4 text-[var(--accent-green)]">{item.icon}</div>
                 <h3 className="font-bold text-lg mb-2">{item.title}</h3>
@@ -306,7 +306,7 @@ export default function CustomAppsLandingClient() {
                 viewport={{ once: true }}
                 className={`glass-card p-8 border rounded-xl ${
                   tier.popular
-                    ? 'border-[var(--color-action-primary)] bg-[var(--glow-action)]/10 ring-2 ring-[var(--color-action-primary)]/30'
+                    ? 'border-[var(--color-action-on-dark)] bg-[var(--glow-action)]/10 ring-2 ring-[var(--color-action-on-dark)]/30'
                     : 'border-[var(--border)]'
                 }`}
               >
@@ -331,7 +331,7 @@ export default function CustomAppsLandingClient() {
                   className={`block text-center py-3 rounded-lg font-bold transition-all ${
                     tier.popular
                       ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:scale-105'
-                      : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-action)]'
+                      : 'border border-[var(--color-action-on-dark)] text-[var(--color-action-on-dark)] hover:bg-[var(--glow-action)]'
                   }`}
                 >
                   Discuss Your App
@@ -406,7 +406,7 @@ export default function CustomAppsLandingClient() {
               Book Strategy Call <ArrowRight size={20} />
             </Link>
             <p className="text-sm text-[var(--text-secondary)] mt-6">
-              💬 Questions? <a href="https://wa.me/27688529333" className="text-[var(--color-action-primary)] hover:underline">WhatsApp us</a>
+              💬 Questions? <a href="https://wa.me/27688529333" className="text-[var(--color-action-on-dark)] hover:underline">WhatsApp us</a>
             </p>
           </motion.div>
         </div>

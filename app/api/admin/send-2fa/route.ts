@@ -24,12 +24,12 @@ export async function POST(req: NextRequest) {
           <head>
             <style>
               body { font-family: Arial, sans-serif; background: #050810; color: #F0F2FA; }
-              .container { max-width: 500px; margin: 0 auto; background: #0A0F1E; border: 1px solid #E8B84B; border-radius: 12px; padding: 40px; }
+              .container { max-width: 500px; margin: 0 auto; background: #0A0F1E; border: 1px solid #7FB3FF; border-radius: 12px; padding: 40px; }
               .header { text-align: center; margin-bottom: 30px; }
               .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-              .logo span { color: #E8B84B; }
-              .code { background: #1A2640; border: 2px solid #E8B84B; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
-              .code-text { font-size: 48px; font-weight: bold; color: #E8B84B; letter-spacing: 8px; font-family: 'Courier New', monospace; }
+              .logo span { color: #7FB3FF; }
+              .code { background: #1A2640; border: 2px solid #7FB3FF; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
+              .code-text { font-size: 48px; font-weight: bold; color: #7FB3FF; letter-spacing: 8px; font-family: 'Courier New', monospace; }
               .note { font-size: 12px; color: #A8B2D0; text-align: center; margin: 20px 0; }
               .footer { text-align: center; font-size: 11px; color: #A8B2D0; margin-top: 30px; padding-top: 20px; border-top: 1px solid #1A2640; }
             </style>

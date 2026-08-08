@@ -127,7 +127,7 @@ export default function DepartmentManager() {
   return (
     <div className="text-white max-w-3xl">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><Building2 className="text-[#00C8FF]" size={22} /> Departments</h1>
+        <h1 className="text-2xl font-bold font-sora flex items-center gap-2"><Building2 className="text-[#7FB3FF]" size={22} /> Departments</h1>
         <p className="text-[#7A8BA8] text-sm mt-0.5">
           Name your departments and see each one’s team size and open workload. Auto-routing sends leads to a
           <b className="text-[#A8B2D0]"> Sales</b> dept and bookings to an <b className="text-[#A8B2D0]">Operations</b>/Support dept.
@@ -141,19 +141,19 @@ export default function DepartmentManager() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Department name (e.g. Sales)"
-            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00C8FF]"
+            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#7FB3FF]"
           />
           <input
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
             placeholder="What this department handles (optional)"
-            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00C8FF]"
+            className="bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#7FB3FF]"
           />
           <button
             type="button"
             onClick={create}
             disabled={creating || !name.trim()}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white text-sm font-semibold disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#7FB3FF] to-[#7B2FFF] text-white text-sm font-semibold disabled:opacity-50"
           >
             {creating ? <Loader2 className="animate-spin" size={15} /> : <Plus size={16} />} Add
           </button>
@@ -178,8 +178,8 @@ export default function DepartmentManager() {
             <div key={d.id} className={`bg-[#0A0F1E] border rounded-xl p-4 ${d.active ? 'border-[#1A2640]' : 'border-[#1A2640]/50 opacity-60'}`}>
               {editId === d.id ? (
                 <div className="space-y-2">
-                  <input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Department name" className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00C8FF]" />
-                  <input value={editDesc} onChange={(e) => setEditDesc(e.target.value)} placeholder="Description" className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#00C8FF]" />
+                  <input value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Department name" className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#7FB3FF]" />
+                  <input value={editDesc} onChange={(e) => setEditDesc(e.target.value)} placeholder="Description" className="w-full bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#7FB3FF]" />
                   <div className="flex items-center gap-2">
                     <button type="button" onClick={() => save(d.id, { name: editName, description: editDesc, active: d.active })} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#00FF88]/15 text-[#00FF88] text-xs font-semibold"><Check size={14} /> Save</button>
                     <button type="button" onClick={() => setEditId(null)} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#1A2640] text-[#A8B2D0] text-xs"><X size={14} /> Cancel</button>
@@ -261,7 +261,7 @@ export default function DepartmentManager() {
                               <p className="text-[#F0F2FA] truncate">{t.title}</p>
                               <span className={`text-[10px] px-1.5 py-0.5 rounded shrink-0 capitalize ${
                                 t.priority === 'urgent' || t.priority === 'high'
-                                  ? 'bg-[#E8B84B]/15 text-[#E8B84B]'
+                                  ? 'bg-[#1D4ED8]/15 text-[#7FB3FF]'
                                   : 'bg-[#1A2640] text-[#8A9AB8]'
                               }`}>
                                 {t.priority}

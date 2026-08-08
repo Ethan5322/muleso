@@ -138,7 +138,7 @@ export default function CorpShell({
             <button
               type="button"
               onClick={signOut}
-              className="flex items-center gap-1.5 text-xs font-semibold text-[#A8B2D0] hover:text-[var(--color-action-primary)] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-[#A8B2D0] hover:text-[var(--color-action-on-dark)] transition-colors"
             >
               <LogOut size={15} /> Sign out
             </button>
@@ -162,7 +162,7 @@ export default function CorpShell({
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-                  active ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)]' : 'text-[#A8B2D0] bg-[#0D1528]'
+                  active ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-on-dark)]' : 'text-[#A8B2D0] bg-[#0D1528]'
                 }`}
               >
                 <Icon size={14} /> {item.label}
@@ -183,7 +183,7 @@ export default function CorpShell({
             const active = pathname === item.href;
             const cls = `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               active
-                ? 'bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)]'
+                ? 'bg-[var(--color-action-primary)]/10 text-[var(--color-action-on-dark)]'
                 : 'text-[#A8B2D0] hover:bg-[#0D1528] hover:text-[#F0F2FA]'
             }`;
             const count =

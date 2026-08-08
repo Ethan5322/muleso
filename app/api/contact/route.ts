@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     if (resend) {
       const html = `
         <div style="font-family:Arial,sans-serif;color:#0A0F1E">
-          <h2 style="color:#E8B84B">New enquiry from www.mulesoo.com</h2>
+          <h2 style="color:#7FB3FF">New enquiry from www.mulesoo.com</h2>
           <table style="border-collapse:collapse">
             <tr><td style="padding:4px 12px"><b>Name</b></td><td style="padding:4px 12px">${escapeHtml(name)}</td></tr>
             <tr><td style="padding:4px 12px"><b>Email</b></td><td style="padding:4px 12px">${escapeHtml(email)}</td></tr>
