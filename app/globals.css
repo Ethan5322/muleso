@@ -248,6 +248,44 @@ optgroup {
   color: var(--text-primary);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION RHYTHM
+
+   Every section on the site was py-20 — 63 of them — so the page read as one
+   even stripe and nothing led. These four steps give a section air in
+   proportion to its job, and they are fluid, so the cadence survives the jump
+   from 375px to a wide desktop instead of collapsing to the same gap.
+
+   Ratios are roughly 1 : 1.5 : 2.2 : 2.9 against the tight step.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --section-tight:  clamp(2.75rem, 6vw,  4rem);    /*  44 →  64px  supporting  */
+  --section-base:   clamp(4rem,    9vw,  6.5rem);  /*  64 → 104px  standard    */
+  --section-loose:  clamp(5.5rem, 12vw,  9rem);    /*  88 → 144px  feature     */
+  --section-climax: clamp(7rem,   16vw, 12rem);    /* 112 → 192px  the close   */
+}
+
+/* Supporting bands: stats, trust marks, logo rows. Dense on purpose — they
+   are scanned, not read, and generous padding here steals emphasis from the
+   sections that need it. */
+.section-tight { padding-block: var(--section-tight); }
+
+/* The default for ordinary content sections. */
+.section-base { padding-block: var(--section-base); }
+
+/* Feature moments that carry the argument and need room to land. */
+.section-loose { padding-block: var(--section-loose); }
+
+/* Exactly one per page: the final ask. The largest interval on the page is
+   what makes it read as a conclusion rather than as another section. */
+.section-climax { padding-block: var(--section-climax); }
+
+/* Section headers already group correctly: the h2 is first-child of a centred
+   wrapper, so space above it comes from the section's own padding and space
+   below is the short gap to its subtitle. No heading margin rule is needed,
+   and adding one would fight the wrapper. */
+
 /* The date/time picker indicator is a black glyph by default — invisible on a
    dark field. Tint it to the premium royal blue so the control is discoverable. */
 input[type='date']::-webkit-calendar-picker-indicator,

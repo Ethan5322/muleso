@@ -277,7 +277,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 1.5 - TRUST BAR */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-gradient-to-r from-transparent via-[var(--glow-action)]/5 to-transparent">
+      <section className="section-tight px-4 sm:px-6 lg:px-8 border-t border-[var(--border)] bg-gradient-to-r from-transparent via-[var(--glow-action)]/5 to-transparent">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-8 font-bold">
             Trusted by businesses across the world
@@ -299,7 +299,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 2 - STATS BAR */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)] border-y border-[var(--border)]">
+      <section className="section-tight px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)] border-y border-[var(--border)]">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             <StatCounter value={settings.stat1_value} label={settings.stat1_label} />
@@ -311,7 +311,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 3 - SERVICES GRID */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="section-loose px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Heading */}
           <motion.div
@@ -378,7 +378,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 3.5 - HOW AI BOOKING WORKS */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="section-loose px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -433,7 +433,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4 - PROCESS */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
+      <section className="section-base px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -477,7 +477,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4.5 - WHY MULESOO */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="section-base px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -529,7 +529,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4.7 - FEATURED WORK */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
+      <section className="section-loose px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -583,7 +583,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4.8 - TRUSTED BY */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]">
+      <section className="section-tight px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -626,7 +626,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 5 - TESTIMONIALS */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="section-base px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -660,7 +660,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 5.5 - RESULTS METRICS */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--bg-secondary)] to-[var(--bg-card)]">
+      <section className="section-base px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--bg-secondary)] to-[var(--bg-card)]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -701,7 +701,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 6 - FAQ */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="section-base px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -805,7 +805,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 6.3 - GUARANTEE */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--color-action-primary)]/5 to-[var(--accent-purple)]/5 border-t border-b border-[var(--border)]">
+      <section className="section-tight px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--color-action-primary)]/5 to-[var(--accent-purple)]/5 border-t border-b border-[var(--border)]">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -849,7 +849,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 6.5 - COMPARISON */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
+      <section className="section-base px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -911,7 +911,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 6.7 - AI AUTOMATION LIBRARY CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="section-base px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -942,12 +942,12 @@ export default function Home() {
       </section>
 
       {/* FAQ — visible + FAQPage schema (helps Google & AI answer engines) */}
-      <section className="py-10 px-4 sm:px-6 lg:px-8">
+      <section className="section-tight px-4 sm:px-6 lg:px-8">
         <FaqSection items={HOME_FAQS} />
       </section>
 
       {/* SECTION 7 - FINAL CTA */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
+      <section className="section-climax px-4 sm:px-6 lg:px-8 border-y border-[var(--border)]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
