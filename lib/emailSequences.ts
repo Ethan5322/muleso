@@ -266,8 +266,8 @@ Ethan & team`,
       },
       {
         delay: '2 days',
-        subject: 'Started reading {{product}}? Here's the #1 mistake to avoid 🚨',
-        preview: 'Most people miss this — don\'t be one of them',
+        subject: "Started reading {{product}}? Here is the #1 mistake to avoid",
+        preview: "Most people miss this - don't be one of them",
         body: `Hi {{name}},
 
 Started reading {{product}}?
