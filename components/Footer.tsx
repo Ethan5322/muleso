@@ -45,19 +45,19 @@ export default function Footer() {
             <div className="flex gap-3">
               {s.linkedin && (
                 <a href={s.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors">
+                  className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors">
                   <LinkedInIcon />
                 </a>
               )}
               {s.twitter && (
                 <a href={s.twitter} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors">
+                  className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors">
                   <XIcon />
                 </a>
               )}
               {s.instagram && (
                 <a href={s.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors">
+                  className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors">
                   <InstagramIcon />
                 </a>
               )}
@@ -81,7 +81,7 @@ export default function Footer() {
                   <li key={service}>
                     <Link
                       href="/services"
-                      className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors text-sm"
+                      className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors text-sm"
                     >
                       {service}
                     </Link>
@@ -109,7 +109,7 @@ export default function Footer() {
                 <li key={label}>
                   <Link
                     href={href}
-                    className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors text-sm"
+                    className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors text-sm"
                   >
                     {label}
                   </Link>
@@ -125,10 +125,10 @@ export default function Footer() {
             </h3>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <Mail size={18} className="text-[var(--accent-blue)] mt-1 flex-shrink-0" />
+                <Mail size={18} className="text-[var(--color-action-primary)] mt-1 flex-shrink-0" />
                 <a
                   href={`mailto:${s.email}`}
-                  className="text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors text-sm break-all"
+                  className="text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors text-sm break-all"
                 >
                   {s.email}
                 </a>
@@ -145,7 +145,7 @@ export default function Footer() {
                 </a>
               </div>
               <div className="flex items-start gap-3">
-                <MapPin size={18} className="text-[var(--accent-blue)] mt-1 flex-shrink-0" />
+                <MapPin size={18} className="text-[var(--color-action-primary)] mt-1 flex-shrink-0" />
                 <p className="text-[var(--text-secondary)] text-sm">{s.address}</p>
               </div>
               <p className="text-[var(--accent-green)] text-xs font-semibold pt-2">⚡ Reply within 2 hours</p>

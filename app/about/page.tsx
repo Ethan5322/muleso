@@ -92,7 +92,7 @@ export default function AboutPage() {
                 {['MuleSoo.com 🛠️', 'Habesha Events 🎊', 'YouTube AI Channel 🎥'].map((item) => (
                   <span
                     key={item}
-                    className="px-4 py-2 bg-[var(--glow-blue)] text-[var(--color-action-primary)] rounded-full text-sm"
+                    className="px-4 py-2 bg-[var(--glow-action)] text-[var(--color-action-primary)] rounded-full text-sm"
                   >
                     {item}
                   </span>
@@ -109,7 +109,7 @@ export default function AboutPage() {
                 <motion.div key={link.name} whileHover={{ scale: 1.05 }}>
                   <Link
                     href={link.url}
-                    className="inline-block px-4 py-2 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all"
+                    className="inline-block px-4 py-2 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] rounded-lg hover:bg-[var(--glow-action)] hover:shadow-lg hover:shadow-[var(--glow-action)]/50 transition-all"
                   >
                     {link.name}
                   </Link>
@@ -135,7 +135,7 @@ export default function AboutPage() {
             {team.map((m, i) => {
               const color = ACCENT[m.accent] || 'var(--color-action-primary)';
               return (
-                <motion.div key={`${m.name}-${i}`} whileHover={{ translateY: -4 }} className="glass-card p-6 flex flex-col items-center text-center border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
+                <motion.div key={`${m.name}-${i}`} whileHover={{ translateY: -4 }} className="glass-card p-6 flex flex-col items-center text-center border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300">
                   <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border-2 shrink-0" style={{ borderColor: color }}>
                     {m.photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -217,7 +217,7 @@ export default function AboutPage() {
           </h2>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Schedule a Call
           </Link>

@@ -118,7 +118,7 @@ export default function AutomationDetailPage() {
                 <button
                   type="button"
                   onClick={() => startBooking('buy')}
-                  className="px-7 py-3.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
+                  className="px-7 py-3.5 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
                 >
                   Buy / Build This System →
                 </button>
@@ -271,7 +271,7 @@ export default function AutomationDetailPage() {
 
           {/* ===== BUY / CUSTOM TO BUY ===== */}
           <div className="mt-8 relative overflow-hidden glass-card rounded-2xl border border-[var(--color-action-primary)] p-8 sm:p-10 text-center">
-            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--glow-blue)] to-[var(--glow-purple)] opacity-60" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--glow-action)] to-[var(--glow-purple)] opacity-60" />
             <Bot className="mx-auto text-[var(--color-action-primary)] mb-3" size={30} />
             <h2 className="text-2xl sm:text-3xl font-bold font-sora text-[var(--text-primary)] mb-2">
               Ready to put the <span className="gradient-text">{title}</span> to work?
@@ -284,7 +284,7 @@ export default function AutomationDetailPage() {
               <button
                 type="button"
                 onClick={() => startBooking('buy')}
-                className="px-8 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
+                className="px-8 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-[1.03] transition-transform"
               >
                 Buy This System
               </button>

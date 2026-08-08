@@ -23,7 +23,7 @@ function OrbScene() {
 
   return (
     <>
-      <pointLight position={[0, 0, 2]} intensity={2} color="#00C8FF" />
+      <pointLight position={[0, 0, 2]} intensity={2} color="#E8B84B" />
 
       {/* Main sphere */}
       <mesh
@@ -33,8 +33,8 @@ function OrbScene() {
       >
         <sphereGeometry args={[2, 32, 32]} />
         <meshStandardMaterial
-          color="#00C8FF"
-          emissive="#00C8FF"
+          color="#E8B84B"
+          emissive="#E8B84B"
           emissiveIntensity={isHovered ? 0.8 : 0.3}
           metalness={0.7}
           roughness={0.3}
@@ -44,7 +44,7 @@ function OrbScene() {
       {/* Wireframe overlay */}
       <mesh ref={wireframeRef} scale={2.1}>
         <sphereGeometry args={[2, 32, 32]} />
-        <meshBasicMaterial wireframe color="#00C8FF" transparent opacity={0.2} />
+        <meshBasicMaterial wireframe color="#E8B84B" transparent opacity={0.2} />
       </mesh>
     </>
   );

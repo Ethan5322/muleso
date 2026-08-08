@@ -123,7 +123,7 @@ export default function PdfGuidesLandingClient() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Animated background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--glow-blue)] to-transparent opacity-20 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--glow-action)] to-transparent opacity-20 blur-3xl" />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <motion.div
@@ -132,7 +132,7 @@ export default function PdfGuidesLandingClient() {
             transition={{ duration: 0.6 }}
             className="inline-block mb-6"
           >
-            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--glow-blue)] to-transparent border border-[var(--color-action-primary)]">
+            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--glow-action)] to-transparent border border-[var(--color-action-primary)]">
               <span className="text-[var(--color-action-primary)] font-sora text-sm font-bold">Expert Knowledge on Demand</span>
             </div>
           </motion.div>
@@ -163,12 +163,12 @@ export default function PdfGuidesLandingClient() {
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16"
           >
             <Link href="/store">
-              <button className="px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap">
+              <button className="px-4 sm:px-8 py-3 sm:py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap">
                 Browse Guides
                 <ArrowRight className="inline ml-2" size={20} />
               </button>
             </Link>
-            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-sm sm:text-lg whitespace-nowrap">
+            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold font-sora rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap">
               See What's Inside
             </button>
           </motion.div>
@@ -306,7 +306,7 @@ export default function PdfGuidesLandingClient() {
                 </div>
 
                 <Link href="/store">
-                  <button className="w-full py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                  <button className="w-full py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
                     <Download size={18} /> Download Now
                   </button>
                 </Link>
@@ -340,12 +340,12 @@ export default function PdfGuidesLandingClient() {
                 viewport={{ once: true }}
                 className={`glass-card p-8 border rounded-xl transition-all ${
                   tier.highlighted
-                    ? 'border-[var(--color-action-primary)] shadow-lg shadow-[var(--glow-blue)] scale-105'
+                    ? 'border-[var(--color-action-primary)] shadow-lg shadow-[var(--glow-action)] scale-105'
                     : 'border-[var(--border)] hover:border-[var(--color-action-primary)]'
                 }`}
               >
                 {tier.popular && (
-                  <div className="mb-4 px-4 py-2 bg-[var(--glow-blue)] border border-[var(--color-action-primary)] rounded-full w-fit">
+                  <div className="mb-4 px-4 py-2 bg-[var(--glow-action)] border border-[var(--color-action-primary)] rounded-full w-fit">
                     <span className="text-[var(--color-action-primary)] font-bold text-sm">Most Popular</span>
                   </div>
                 )}
@@ -376,8 +376,8 @@ export default function PdfGuidesLandingClient() {
                   <button
                     className={`w-full py-3 rounded-lg font-bold font-sora transition-all ${
                       tier.highlighted
-                        ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white hover:scale-105'
-                        : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-blue)]'
+                        ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:scale-105'
+                        : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-action)]'
                     }`}
                   >
                     Get Access
@@ -435,7 +435,7 @@ export default function PdfGuidesLandingClient() {
             viewport={{ once: true }}
           >
             <Link href="/store">
-              <button className="px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora text-lg rounded-lg hover:scale-105 transition-transform">
+              <button className="px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora text-lg rounded-lg hover:scale-105 transition-transform">
                 Browse All Guides
               </button>
             </Link>

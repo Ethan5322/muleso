@@ -39,7 +39,7 @@ export default function WebsiteDesignPage() {
               '30-Day Support',
               'Source Code',
             ].map((item, i) => (
-              <motion.div key={item} whileHover={{ translateY: -4 }} className="glass-card p-6 text-center border border-[var(--border)] transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)]">
+              <motion.div key={item} whileHover={{ translateY: -4 }} className="glass-card p-6 text-center border border-[var(--border)] transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)]">
                 <p className="text-[var(--text-primary)] font-sora font-bold">{item}</p>
               </motion.div>
             ))}
@@ -67,7 +67,7 @@ export default function WebsiteDesignPage() {
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <a
                     href="mailto:hello@mulesoo.com"
-                    className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
+                    className="inline-block px-6 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg shadow-lg hover:shadow-[0_8px_30px_var(--glow-action)] transition-shadow"
                   >
                     Email: hello@mulesoo.com
                   </a>

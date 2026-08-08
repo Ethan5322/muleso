@@ -118,7 +118,7 @@ export default function SuccessPage() {
                 </motion.div>
               )}
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Link href="/store" className="inline-block px-8 py-3 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all">
+                <Link href="/store" className="inline-block px-8 py-3 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold font-sora rounded-lg hover:bg-[var(--glow-action)] hover:shadow-lg hover:shadow-[var(--glow-action)]/50 transition-all">
                   Explore More Guides
                 </Link>
               </motion.div>
@@ -138,7 +138,7 @@ export default function SuccessPage() {
                 </a>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Link href="/store" className="inline-block px-8 py-3 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all">
+                <Link href="/store" className="inline-block px-8 py-3 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-action)] hover:shadow-lg hover:shadow-[var(--glow-action)]/50 transition-all">
                   Back to Store
                 </Link>
               </motion.div>

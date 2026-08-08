@@ -46,7 +46,7 @@ export default function StaffAccessPage() {
             href="/"
             className="flex items-center gap-4 p-5 rounded-2xl glass-card border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-colors"
           >
-            <span className="w-11 h-11 rounded-xl bg-[var(--glow-blue)] text-[var(--color-action-primary)] flex items-center justify-center">
+            <span className="w-11 h-11 rounded-xl bg-[var(--glow-action)] text-[var(--color-action-primary)] flex items-center justify-center">
               <Globe size={22} />
             </span>
             <span>

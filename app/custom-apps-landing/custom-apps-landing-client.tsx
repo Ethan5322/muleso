@@ -30,7 +30,7 @@ export default function CustomAppsLandingClient() {
             transition={{ duration: 0.6 }}
             className="mb-6"
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40 text-sm font-bold text-[var(--color-action-primary)]">
+            <span className="inline-block px-4 py-2 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 text-sm font-bold text-[var(--color-action-primary)]">
               Custom Software Built For Your Business
             </span>
           </motion.div>
@@ -61,13 +61,13 @@ export default function CustomAppsLandingClient() {
           >
             <Link
               href="/contact?service=Custom%20Apps"
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap"
             >
               Book Strategy Call <ArrowRight size={20} />
             </Link>
             <Link
               href="/case-studies"
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-sm sm:text-lg whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap"
             >
               See Examples
             </Link>
@@ -230,7 +230,7 @@ export default function CustomAppsLandingClient() {
                 viewport={{ once: true }}
                 className="glass-card p-6 border border-[var(--border)]"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-action-primary)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold text-lg">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-lg mb-2">{item.title}</h3>
@@ -306,7 +306,7 @@ export default function CustomAppsLandingClient() {
                 viewport={{ once: true }}
                 className={`glass-card p-8 border rounded-xl ${
                   tier.popular
-                    ? 'border-[var(--color-action-primary)] bg-[var(--glow-blue)]/10 ring-2 ring-[var(--color-action-primary)]/30'
+                    ? 'border-[var(--color-action-primary)] bg-[var(--glow-action)]/10 ring-2 ring-[var(--color-action-primary)]/30'
                     : 'border-[var(--border)]'
                 }`}
               >
@@ -330,8 +330,8 @@ export default function CustomAppsLandingClient() {
                   href="/contact?service=Custom%20Apps"
                   className={`block text-center py-3 rounded-lg font-bold transition-all ${
                     tier.popular
-                      ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white hover:scale-105'
-                      : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-blue)]'
+                      ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:scale-105'
+                      : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-action)]'
                   }`}
                 >
                   Discuss Your App
@@ -401,7 +401,7 @@ export default function CustomAppsLandingClient() {
             </p>
             <Link
               href="/contact?service=Custom%20Apps"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform text-lg"
+              className="inline-flex items-center gap-2 px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-105 transition-transform text-lg"
             >
               Book Strategy Call <ArrowRight size={20} />
             </Link>

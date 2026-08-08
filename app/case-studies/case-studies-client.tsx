@@ -103,7 +103,7 @@ export default function CaseStudiesClient() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   viewport={{ once: true }}
-                  className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40"
+                  className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40"
                 >
                   <span className="text-sm font-bold text-[var(--color-action-primary)]">{study.industry}</span>
                 </motion.div>
@@ -190,7 +190,7 @@ export default function CaseStudiesClient() {
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.5, delay: 0.35 }}
                   viewport={{ once: true }}
-                  className="glass-card p-6 border border-[var(--border)] bg-[var(--glow-blue)]/5"
+                  className="glass-card p-6 border border-[var(--border)] bg-[var(--glow-action)]/5"
                 >
                   <p className="text-[var(--text-primary)] italic mb-4">"{study.testimonial.quote}"</p>
                   <p className="font-bold text-[var(--text-primary)]">{study.testimonial.author}</p>
@@ -243,7 +243,7 @@ export default function CaseStudiesClient() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Start Your Case Study <ArrowRight size={20} />
           </Link>

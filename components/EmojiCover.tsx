@@ -8,11 +8,15 @@
 
 type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
 
+/* Product art is a premium surface, so covers ramp into warm darks rather than
+   the old navy — a cool ground under a warm accent was what made these read as
+   stock AI covers. `blue` is kept as a key because product data still uses it,
+   but it now paints copper; there is no blue in the palette. */
 const ACCENTS: Record<AccentKey, { from: string; to: string; accent: string }> = {
-  gold: { from: '#E8B84B', to: '#1B2A6B', accent: '#E8B84B' },
-  blue: { from: '#D4A940', to: '#1B2A6B', accent: '#D4A940' },
-  purple: { from: '#7B2FFF', to: '#101A40', accent: '#9D6BFF' },
-  green: { from: '#00FF88', to: '#0A3A5F', accent: '#00FF88' },
+  gold: { from: '#E8B84B', to: '#2A1E08', accent: '#E8B84B' },
+  blue: { from: '#D97645', to: '#2A1408', accent: '#F0A46B' },
+  purple: { from: '#7B2FFF', to: '#180E33', accent: '#9D6BFF' },
+  green: { from: '#00FF88', to: '#062B1C', accent: '#00FF88' },
 };
 
 function wrap(title: string, max = 16): string[] {

@@ -500,7 +500,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] flex items-center justify-center gap-2"
                   aria-busy={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -583,7 +583,7 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="bg-[var(--glow-blue)] p-4 rounded-lg">
+              <div className="bg-[var(--glow-action)] p-4 rounded-lg">
                 <p className="text-xs text-[var(--text-secondary)]">
                   <strong>Pro tip:</strong> The more details you share about your project, the faster we can give you an accurate quote.
                 </p>
@@ -595,7 +595,7 @@ export default function ContactPage() {
               href="/contact/qr-code"
               className="mt-6 glass-card p-5 rounded-2xl border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-colors flex items-center gap-4 group"
             >
-              <div className="w-11 h-11 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center flex-shrink-0">
+              <div className="w-11 h-11 rounded-lg bg-[var(--glow-action)] flex items-center justify-center flex-shrink-0">
                 <QrCode className="text-[var(--color-action-primary)]" size={22} />
               </div>
               <div className="flex-1 min-w-0">

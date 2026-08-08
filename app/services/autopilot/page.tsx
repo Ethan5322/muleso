@@ -39,7 +39,7 @@ export default function AutopilotPage() {
               {['Works 24/7', 'No manual admin', 'You fully own it', 'Runs on autopilot'].map((b) => (
                 <span
                   key={b}
-                  className="px-3 py-1.5 rounded-full text-sm font-semibold bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)]"
+                  className="px-3 py-1.5 rounded-full text-sm font-semibold bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)]"
                 >
                   {b}
                 </span>
@@ -82,7 +82,7 @@ export default function AutopilotPage() {
               </ul>
             </motion.div>
 
-            <motion.div whileHover={{ translateY: -4 }} className="glass-card p-8 border border-[var(--color-action-primary)] shadow-[0_0_30px_-12px_var(--glow-blue)] hover:shadow-[0_0_30px_var(--glow-blue)] transition-all duration-300">
+            <motion.div whileHover={{ translateY: -4 }} className="glass-card p-8 border border-[var(--color-action-primary)] shadow-[0_0_30px_-12px_var(--glow-action)] hover:shadow-[0_8px_30px_var(--glow-action)] transition-all duration-300">
               <div className="text-4xl mb-3">🛫</div>
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2">Auto Pilot System</h3>
               <p className="text-[var(--text-secondary)] mb-4">
@@ -125,8 +125,8 @@ export default function AutopilotPage() {
               { num: 5, title: 'Remind & Follow Up', desc: 'Automatic WhatsApp/SMS reminders cut no-shows and bring customers back.' },
               { num: 6, title: 'Report to You', desc: 'You get a clean admin dashboard — bookings, income, members and trends, updated live.' },
             ].map((item) => (
-              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-action-primary)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -184,7 +184,7 @@ export default function AutopilotPage() {
                   href="https://yoyogym.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                  className="inline-block px-6 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-105 transition-transform"
                 >
                   Visit the Live System →
                 </a>
@@ -322,7 +322,7 @@ export default function AutopilotPage() {
           </p>
           <a
             href="/contact?service=Auto%20Pilot%20System"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Get Started →
           </a>

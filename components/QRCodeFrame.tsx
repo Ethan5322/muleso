@@ -73,7 +73,7 @@ export default function QRCodeFrame({
 
       {/* Elegant Frame */}
       {frameStyle === 'elegant' && (
-        <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border-2 border-[#00C8FF] rounded-xl p-8 shadow-xl"
+        <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border-2 border-[#E8B84B] rounded-xl p-8 shadow-xl"
           style={{ boxShadow: '0 0 40px rgba(0, 200, 255, 0.2)' }}>
           <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
             <div ref={qrRef} className="bg-white p-4">
@@ -103,7 +103,7 @@ export default function QRCodeFrame({
       {showDownload && (
         <button
           onClick={downloadQR}
-          className="mt-8 bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
+          className="mt-8 bg-[#E8B84B] hover:bg-[#00B3E6] text-black font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition transform hover:scale-105"
         >
           <Download size={20} /> Download QR Code
         </button>

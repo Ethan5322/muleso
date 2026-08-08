@@ -62,7 +62,7 @@ export default function AiAutomationLibrary() {
           <motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 bg-[var(--glow-blue)]"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 bg-[var(--glow-action)]"
           >
             <Bot size={14} /> AI Automation · Pretoria, South Africa
           </motion.span>
@@ -131,7 +131,7 @@ export default function AiAutomationLibrary() {
                 onClick={() => setCategory(c)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                   category === c
-                    ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white border-transparent'
+                    ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] border-transparent'
                     : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:text-[var(--color-action-primary)]'
                 }`}
               >

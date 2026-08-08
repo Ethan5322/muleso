@@ -65,7 +65,7 @@ export default function CustomAppsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
                 whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -93,7 +93,7 @@ export default function CustomAppsPage() {
               { num: 4, title: 'Launch & Support', desc: 'Deploy, train your team, and provide ongoing maintenance.' },
             ].map((item) => (
               <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-purple)] hover:shadow-lg hover:shadow-[var(--glow-purple)] transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-action-primary)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -142,7 +142,7 @@ export default function CustomAppsPage() {
           </p>
           <a
             href="/contact?service=Custom%20Apps%20Building"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Get Started →
           </a>

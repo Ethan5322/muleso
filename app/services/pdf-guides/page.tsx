@@ -92,7 +92,7 @@ export default function PDFGuidesPage() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="glass-card p-8 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-8 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
               >
                 <div className="mb-4">
                   <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">{guide.title}</h3>
@@ -168,7 +168,7 @@ export default function PDFGuidesPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="mailto:hello@mulesoo.com"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+              className="inline-block px-8 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-105 transition-transform"
             >
               📧 Email: hello@mulesoo.com
             </a>

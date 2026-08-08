@@ -97,7 +97,7 @@ export default function DigitalIdCardPreview({
         {/* Header */}
         <div
           className="flex items-center justify-between"
-          style={{ height: '21%', padding: '0 4cqw', background: 'linear-gradient(90deg,#00C8FF,#7B2FFF)' }}
+          style={{ height: '21%', padding: '0 4cqw', background: 'linear-gradient(90deg,#E8B84B,#7B2FFF)' }}
         >
           <div className="flex items-center" style={{ gap: '2cqw' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}

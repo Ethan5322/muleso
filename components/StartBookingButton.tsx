@@ -22,9 +22,9 @@ export default function StartBookingButton({
   };
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white hover:shadow-[0_0_20px_var(--glow-blue)]',
-    secondary: 'border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] hover:bg-[var(--glow-blue)]',
-    tertiary: 'bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]',
+    primary: 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:shadow-[0_5px_20px_var(--glow-action)]',
+    secondary: 'border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-action)]',
+    tertiary: 'bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)]',
   };
 
   return (

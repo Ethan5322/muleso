@@ -137,7 +137,7 @@ export default function StoreClient() {
         </div>
 
         <div className="text-center mb-10">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-gold)] mb-2">📘 Department 1</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-premium)] mb-2">📘 Department 1</p>
           <h2 className="text-3xl sm:text-4xl font-bold font-sora gold-text mb-3">Digital Guides</h2>
           <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
             Battle-tested guides you can buy and download instantly — delivered to your email with a password only you can use.
@@ -153,23 +153,23 @@ export default function StoreClient() {
               transition={{ duration: 0.6, delay: i * 0.08 }}
               viewport={{ once: true }}
               whileHover={{ translateY: -6 }}
-              className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-[0_24px_60px_-15px_rgba(232,184,75,0.5)]"
+              className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-premium)] hover:shadow-[0_24px_60px_-15px_var(--glow-premium)]"
             >
-              <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[var(--color-action-primary)]" />
+              <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--color-premium-deep)] via-[var(--color-premium)] to-[var(--color-premium-bright)]" />
 
               <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                 <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                   <EmojiCover emoji={product.emoji} title={product.name} label="DIGITAL GUIDE" category={`${product.pages} pages`} accent={product.accent} />
                 </div>
                 {i === 0 && (
-                  <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] shadow-lg whitespace-nowrap">
+                  <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--color-premium)] to-[var(--color-premium-bright)] shadow-lg whitespace-nowrap">
                     ★ BESTSELLER
                   </span>
                 )}
               </div>
 
               <div className="p-5 sm:p-8 flex flex-col flex-1">
-                <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-gold)] transition-colors">
+                <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-premium)] transition-colors">
                   {product.name}
                 </h3>
                 <p className="text-[var(--text-secondary)] mb-4">{product.description}</p>
@@ -182,7 +182,7 @@ export default function StoreClient() {
                     {product.features.map((feature) => (
                       <span
                         key={feature}
-                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--accent-gold)]/50 transition-colors"
+                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--color-premium)]/50 transition-colors"
                       >
                         {feature}
                       </span>
@@ -239,14 +239,14 @@ export default function StoreClient() {
                 transition={{ duration: 0.6, delay: (i % 2) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
               >
                 <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                     <EmojiCover emoji={s.emoji} title={systemDisplayName(s)} label="AUTO PILOT SYSTEM" category={s.category} accent={s.accent} />
                   </div>
                   {s.enterprise && (
-                    <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--color-action-primary)] to-[#7DE0FF] shadow-lg whitespace-nowrap">
+                    <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--color-premium)] to-[var(--color-premium-bright)] shadow-lg whitespace-nowrap">
                       ★ ENTERPRISE
                     </span>
                   )}
@@ -278,7 +278,7 @@ export default function StoreClient() {
                       <button
                         type="button"
                         onClick={() => openSystemDetail(s)}
-                        className="w-full py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
+                        className="w-full py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg shadow-lg hover:shadow-[0_8px_30px_var(--glow-action)] transition-shadow"
                       >
                         View &amp; Book →
                       </button>
@@ -309,7 +309,7 @@ export default function StoreClient() {
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
               >
                 <div className="relative w-full h-36 sm:h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -341,7 +341,7 @@ export default function StoreClient() {
                         <button
                           type="button"
                           onClick={() => openAutomationDetail(a)}
-                          className="w-full py-2.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] transition-shadow text-sm"
+                          className="w-full py-2.5 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg shadow-lg hover:shadow-[0_5px_20px_var(--glow-action)] transition-shadow text-sm"
                         >
                           View &amp; Book
                         </button>
@@ -349,7 +349,7 @@ export default function StoreClient() {
                       <motion.div whileHover={{ scale: 1.05 }}>
                         <Link
                           href={`/ai-automation/${a.slug}`}
-                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all text-sm font-semibold flex items-center justify-center"
+                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)]/50 transition-all text-sm font-semibold flex items-center justify-center"
                         >
                           Details
                         </Link>

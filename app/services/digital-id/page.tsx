@@ -75,7 +75,7 @@ export default function DigitalIdPage() {
               { num: 4, title: 'Details Appear', desc: 'Their verified record shows instantly — name, role, status, validity — so you know exactly who they are.' },
             ].map((item) => (
               <div key={item.num} className="glass-card p-6">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[var(--color-action-primary)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -115,7 +115,7 @@ export default function DigitalIdPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
                 whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -181,7 +181,7 @@ export default function DigitalIdPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
                 whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -232,7 +232,7 @@ export default function DigitalIdPage() {
           </p>
           <a
             href="/contact?service=Digital%20ID%20Service"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Get Started →
           </a>

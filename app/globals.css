@@ -1,36 +1,70 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:ital@1&display=swap');
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   COLOUR ROLES
+
+   Two warm hues, ~22° apart, each with exactly one job:
+
+     GOLD   acts.   Buttons, links, focus. The only solid-gold fills on a
+                    page, so the CTA always wins the eye.
+     COPPER marks.  Prices, badges, headings — value, never interaction.
+
+   Purple supports, green reports status. Nothing else carries colour.
+   Contrast ratios below are computed against --bg-primary (#050810).
+   ═══════════════════════════════════════════════════════════════════════ */
+
 :root {
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
   --bg-primary: #050810;
   --bg-secondary: #0A0F1E;
   --bg-card: #0D1528;
-  --accent-blue: #00C8FF;
-  --accent-purple: #7B2FFF;
-  --accent-gold: #E8B84B;
-  --accent-green: #00FF88;
-  --text-primary: #F0F2FA;
-  --text-secondary: #A8B2D0;
   --border: #1A2640;
-  --glow-blue: rgba(0, 200, 255, 0.15);
-  --glow-purple: rgba(123, 47, 255, 0.15);
-  --glow-gold: rgba(232, 184, 75, 0.12);
-
-  /* Premium royal blue palette — replaces neon cyan with refined, sophisticated tones */
-  --color-brand-primary: #1D4ED8;
-  --color-brand-hover: #1E40AF;
-  --color-brand-active: #1E3A8A;
-  --color-brand-light: #7FB3FF;
-
-  /* Solid CTA colour. Premium royal blue instead of neon. 7.2:1 contrast with white. */
-  --brand-indigo: #1D4ED8;
-  --brand-indigo-hover: #1E40AF;
   --hairline: rgba(168, 178, 208, 0.22);
 
-  /* Action color system: replaces neon blue with warm gold for premium feel */
-  --color-action-primary: #E8B84B;
-  --color-action-hover: #D4A940;
-  --color-action-active: #C19D38;
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --text-primary: #F0F2FA;
+  --text-secondary: #A8B2D0;
+
+  /* ── ACTION — gold ────────────────────────────────────────────────────
+     On a dark ground hover BRIGHTENS. Darkening a control against near-black
+     lowers its contrast, which reads as disabled rather than as hovered. */
+  --color-action-primary: #E8B84B;   /* 10.9:1 — the CTA colour            */
+  --color-action-hover:   #F2C860;   /* brighter, not darker               */
+  --color-action-active:  #D4A940;   /* pressed dips below resting         */
+  --color-action-ink:     #0A0705;   /* label ON gold — 11.4:1             */
+  --glow-action: rgba(232, 184, 75, 0.15);
+
+  /* ── PREMIUM — copper ─────────────────────────────────────────────────
+     Deliberately redder than gold (hue ~20° vs ~42°) so the two never read
+     as the same colour, and lifted off #B87333 because true copper goes
+     muddy against near-black. */
+  --color-premium:        #D97645;   /* 6.3:1 — prices, badge text         */
+  --color-premium-deep:   #B87333;   /* 5.3:1 — solid fills, borders       */
+  --color-premium-bright: #F0A46B;   /* 9.8:1 — gradient top, hover        */
+  --glow-premium: rgba(217, 118, 69, 0.14);
+
+  /* ── SUPPORT — purple ─────────────────────────────────────────────────── */
+  --accent-purple: #7B2FFF;
+  --glow-purple: rgba(123, 47, 255, 0.15);
+
+  /* ── STATUS — green. Live indicators and success only. ────────────────── */
+  --accent-green: #00FF88;
+
+  /* ── Compatibility aliases ────────────────────────────────────────────
+     Older names still referenced across the app. They resolve to a role
+     rather than to a literal, so the palette has one source of truth and no
+     surface can drift back to cyan. Prefer the role names above in new code. */
+  --accent-blue: var(--color-action-primary);
+  --accent-gold: var(--color-action-primary);
+  --glow-blue: var(--glow-action);
+  --glow-gold: var(--glow-action);
+  --color-brand-primary: var(--color-action-primary);
+  --color-brand-hover: var(--color-action-hover);
+  --color-brand-active: var(--color-action-active);
+  --color-brand-light: var(--color-premium-bright);
+  --brand-indigo: var(--color-action-primary);
+  --brand-indigo-hover: var(--color-action-hover);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -55,15 +89,22 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
 
-/* Gradient text utility */
+/* Heading treatment. Copper → purple, warm to cool.
+   Deliberately NOT gold: gold is the action colour, and 122 gold headings
+   would drown every button on the page. Large text only — the purple stop
+   lands at 3.5:1, which clears AA for display sizes but not for body. */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background: linear-gradient(135deg, var(--color-premium-bright), var(--accent-purple));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Price and value treatment. Copper, brightest stop first so the figure
+   reads immediately; previously ramped into #fff, which bleached the warmth
+   out of exactly the moment that needed it. */
 .gold-text {
-  background: linear-gradient(135deg, var(--accent-gold), #fff);
+  background: linear-gradient(135deg, var(--color-premium-bright), var(--color-premium));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -77,11 +118,14 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
   border-radius: 16px;
 }
 
-/* Subtle shadow effects — premium aesthetics without neon glow.
-   Royal blue shadow is refined and elegant, not bright or distracting. */
-.glow-blue { box-shadow: 0 4px 16px rgba(29, 78, 216, 0.12); }
-.glow-purple { box-shadow: 0 4px 16px rgba(123, 47, 255, 0.12); }
-.glow-gold { box-shadow: 0 4px 16px rgba(232, 184, 75, 0.10); }
+/* Elevation, not halo. Every shadow carries a downward offset and a real
+   blur so it reads as light falling on a raised surface. A zero-offset
+   coloured ring is decoration and gets no depth for the pixels it costs. */
+.glow-blue,
+.glow-action { box-shadow: 0 4px 16px var(--glow-action); }
+.glow-gold { box-shadow: 0 4px 16px var(--glow-action); }
+.glow-premium { box-shadow: 0 4px 16px var(--glow-premium); }
+.glow-purple { box-shadow: 0 4px 16px var(--glow-purple); }
 
 /* ── Buttons ──────────────────────────────────────────────────────────────
    The brand gradient is reserved for the logo and the hero headline. Applying
@@ -162,37 +206,38 @@ h1, h2, h3, h4 { font-family: 'Sora', sans-serif; }
    their gradient, because those read as accents rather than as controls. The
    logo and hero headline are untouched: they use .gradient-text, which is a
    background-clip:text utility and never matches these selectors. */
-a[class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"],
-button[class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"],
-[role="button"][class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"] {
-  background-image: none !important;
-  background-color: var(--brand-indigo);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-}
-a[class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"]:hover,
-button[class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"]:hover,
-[role="button"][class*="bg-gradient-to-"][class*="from-[var(--accent-blue)]"]:hover {
-  background-color: var(--brand-indigo-hover);
-  box-shadow: 0 6px 18px rgba(29, 78, 216, 0.22);
-}
+/* Safety net for any gradient CTA that escapes the markup pass. Controls are
+   now solid gold at the source; this catches stragglers and anything authored
+   later, so no control can reappear as a gradient with a white label — the
+   pairing that measured 1.84:1 and failed AA across the site.
 
-/* Same treatment for the gold gradient CTAs (store / booking buttons). */
+   Scoped to a/button/[role=button] on purpose: decorative gradients on plain
+   divs — icon tiles, the chat header, progress bars, message bubbles — keep
+   theirs, because those read as accents rather than as controls. The logo and
+   hero headline are untouched: they use .gradient-text, a background-clip:text
+   utility that never matches these selectors. */
+a[class*="bg-gradient-to-"][class*="from-[var(--color-action-primary)]"],
+button[class*="bg-gradient-to-"][class*="from-[var(--color-action-primary)]"],
+[role="button"][class*="bg-gradient-to-"][class*="from-[var(--color-action-primary)]"],
 a[class*="bg-gradient-to-"][class*="from-[var(--accent-gold)]"],
 button[class*="bg-gradient-to-"][class*="from-[var(--accent-gold)]"] {
   background-image: none !important;
-  background-color: #C9962F;
-  color: #0B0B0F;
+  background-color: var(--color-action-primary);
+  color: var(--color-action-ink) !important;   /* 11.4:1 */
   border: 1px solid rgba(255, 255, 255, 0.10);
+  transition: background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
+a[class*="bg-gradient-to-"][class*="from-[var(--color-action-primary)]"]:hover,
+button[class*="bg-gradient-to-"][class*="from-[var(--color-action-primary)]"]:hover,
+[role="button"][class*="bg-gradient-to-"][class*="from-[var(--color-action-primary)]"]:hover,
 a[class*="bg-gradient-to-"][class*="from-[var(--accent-gold)]"]:hover,
 button[class*="bg-gradient-to-"][class*="from-[var(--accent-gold)]"]:hover {
-  background-color: #DCAA43;
-  box-shadow: 0 6px 18px rgba(201, 150, 47, 0.26);
+  background-color: var(--color-action-hover);
+  box-shadow: 0 6px 18px var(--glow-action);
 }
 
-/* Selection color — use premium royal blue */
-::selection { background: var(--color-brand-primary); color: #fff; }
+/* Selection: the action colour, with the same ink the buttons use. */
+::selection { background: var(--color-action-primary); color: var(--color-action-ink); }
 
 /* Native dropdown items. `color-scheme` fixes the popup chrome, but the option
    rows still inherit whatever colour the <select> was given (often a dim

@@ -30,7 +30,7 @@ export default function ChatbotLandingClient() {
             transition={{ duration: 0.6 }}
             className="mb-6"
           >
-            <span className="inline-block px-4 py-2 rounded-full bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40 text-sm font-bold text-[var(--color-action-primary)]">
+            <span className="inline-block px-4 py-2 rounded-full bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 text-sm font-bold text-[var(--color-action-primary)]">
               AI Chatbot That Books Clients 24/7
             </span>
           </motion.div>
@@ -61,13 +61,13 @@ export default function ChatbotLandingClient() {
           >
             <Link
               href="/contact?service=AI%20Chatbot"
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap"
             >
               Book Free Consultation <ArrowRight size={20} />
             </Link>
             <Link
               href="/case-studies"
-              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-sm sm:text-lg whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-8 py-3 sm:py-4 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold rounded-lg hover:bg-[var(--glow-action)] transition-colors text-sm sm:text-lg whitespace-nowrap"
             >
               See Results
             </Link>
@@ -313,7 +313,7 @@ export default function ChatbotLandingClient() {
                 viewport={{ once: true }}
                 className={`glass-card p-8 border rounded-xl ${
                   tier.popular
-                    ? 'border-[var(--color-action-primary)] bg-[var(--glow-blue)]/10 ring-2 ring-[var(--color-action-primary)]/30'
+                    ? 'border-[var(--color-action-primary)] bg-[var(--glow-action)]/10 ring-2 ring-[var(--color-action-primary)]/30'
                     : 'border-[var(--border)]'
                 }`}
               >
@@ -337,8 +337,8 @@ export default function ChatbotLandingClient() {
                   href="/contact?service=AI%20Chatbot"
                   className={`block text-center py-3 rounded-lg font-bold transition-all ${
                     tier.popular
-                      ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white hover:scale-105'
-                      : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-blue)]'
+                      ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:scale-105'
+                      : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-action)]'
                   }`}
                 >
                   Get Started
@@ -436,7 +436,7 @@ export default function ChatbotLandingClient() {
             </p>
             <Link
               href="/contact?service=AI%20Chatbot"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform text-lg"
+              className="inline-flex items-center gap-2 px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-105 transition-transform text-lg"
             >
               Book Free Consultation <ArrowRight size={20} />
             </Link>

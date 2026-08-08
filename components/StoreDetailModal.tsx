@@ -16,7 +16,7 @@ export interface StoreDetailItem {
 
 const ACCENT_HEX: Record<AccentKey, string> = {
   gold: '#E8B84B',
-  blue: '#00C8FF',
+  blue: '#E8B84B',
   purple: '#9D6BFF',
   green: '#00FF88',
 };
@@ -119,7 +119,7 @@ export default function StoreDetailModal({
             <button
               type="button"
               onClick={() => onBook('full')}
-              className="w-full flex items-center justify-between gap-3 p-3.5 mb-2.5 rounded-xl bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white hover:scale-[1.02] transition-transform"
+              className="w-full flex items-center justify-between gap-3 p-3.5 mb-2.5 rounded-xl bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] hover:scale-[1.02] transition-transform"
             >
               <span className="text-left">
                 <span className="block font-bold font-sora">💳 Pay in full</span>

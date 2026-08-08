@@ -45,7 +45,7 @@ export default function PageHero({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="text-xs md:text-sm font-semibold font-sora tracking-[0.2em] uppercase text-[var(--accent-blue)]"
+              className="text-xs md:text-sm font-semibold font-sora tracking-[0.2em] uppercase text-[var(--color-action-primary)]"
             >
               {eyebrow}
             </motion.p>
@@ -74,7 +74,7 @@ export default function PageHero({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] border border-[var(--border)] rounded-full px-4 py-2 bg-[var(--glow-blue)]"
+              className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] border border-[var(--border)] rounded-full px-4 py-2 bg-[var(--glow-action)]"
             >
               <span className="text-[var(--accent-green)]">★</span>
               {trust}

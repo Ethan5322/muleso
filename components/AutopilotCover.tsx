@@ -10,7 +10,7 @@ import { Plane, CheckCircle2, Calendar, CreditCard, Bell, Users } from 'lucide-r
  */
 export default function AutopilotCover() {
   const stats = [
-    { icon: Calendar, label: 'Bookings today', value: '38', color: 'var(--accent-blue)' },
+    { icon: Calendar, label: 'Bookings today', value: '38', color: 'var(--color-action-primary)' },
     { icon: CreditCard, label: 'Payments in', value: '$ 699', color: 'var(--accent-green)' },
     { icon: Bell, label: 'Reminders sent', value: '126', color: 'var(--accent-gold)' },
     { icon: Users, label: 'New members', value: '14', color: 'var(--accent-purple)' },
@@ -24,7 +24,7 @@ export default function AutopilotCover() {
   ];
 
   return (
-    <div className="glass-card p-4 sm:p-5 border border-[var(--accent-blue)]/40 shadow-[0_20px_60px_-20px_var(--glow-blue)]">
+    <div className="glass-card p-4 sm:p-5 border border-[var(--color-action-primary)]/40 shadow-[0_20px_60px_-20px_var(--glow-action)]">
       {/* Window chrome + status */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -46,9 +46,9 @@ export default function AutopilotCover() {
       </div>
 
       {/* Autopilot toggle banner */}
-      <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-[var(--accent-blue)]/15 to-[var(--accent-purple)]/15 border border-[var(--accent-blue)]/30 px-4 py-3 mb-4">
+      <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-[var(--color-action-primary)]/15 to-[var(--accent-purple)]/15 border border-[var(--color-action-primary)]/30 px-4 py-3 mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center">
+          <div className="w-9 h-9 rounded-lg bg-[var(--color-action-primary)] flex items-center justify-center">
             <Plane className="text-white" size={18} />
           </div>
           <div>

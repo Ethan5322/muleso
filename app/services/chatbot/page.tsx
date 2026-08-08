@@ -35,7 +35,7 @@ export default function ChatbotPage() {
               { title: 'Supabase Logging', desc: 'Every conversation is saved and searchable' },
               { title: 'Easy to Embed', desc: 'One script tag on any website' },
             ].map((feature) => (
-              <motion.div key={feature.title} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)]">
+              <motion.div key={feature.title} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)]">
                 <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] mb-2">
                   {feature.title}
                 </h3>
@@ -132,7 +132,7 @@ export default function ChatbotPage() {
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <a
                     href="mailto:hello@mulesoo.com"
-                    className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
+                    className="inline-block px-6 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg shadow-lg hover:shadow-[0_8px_30px_var(--glow-action)] transition-shadow"
                   >
                     Email: hello@mulesoo.com
                   </a>
@@ -222,7 +222,7 @@ export default function ChatbotPage() {
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Automate?</h2>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Schedule Your Demo
           </Link>

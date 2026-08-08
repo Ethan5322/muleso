@@ -779,7 +779,7 @@ export default function ChatbotWidget() {
       {/* Chat Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-[var(--accent-blue)] via-[var(--accent-purple)] to-[var(--accent-blue)] text-white shadow-2xl z-40 flex items-center justify-center hover:shadow-3xl transition-shadow sm:w-16 sm:h-16"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-[var(--color-action-primary)] via-[var(--accent-purple)] to-[var(--color-action-primary)] text-white shadow-2xl z-40 flex items-center justify-center hover:shadow-3xl transition-shadow sm:w-16 sm:h-16"
         whileHover={{ scale: 1.04, boxShadow: '0 8px 22px rgba(68, 87, 232, 0.35)' }}
         whileTap={{ scale: 0.97 }}
         animate={{
@@ -789,7 +789,7 @@ export default function ChatbotWidget() {
         {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
         {!isOpen && (
           <motion.div
-            className="absolute inset-0 border-2 border-[var(--accent-blue)] rounded-full"
+            className="absolute inset-0 border-2 border-[var(--color-action-primary)] rounded-full"
             animate={{
               scale: [1, 1.2],
               opacity: [0.8, 0],
@@ -821,7 +821,7 @@ export default function ChatbotWidget() {
               <>
                 <div className="h-1 bg-[var(--bg-card)] overflow-hidden">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)]"
+                    className="h-full bg-[var(--color-action-primary)]"
                     initial={{ width: '0%' }}
                     animate={{ width: `${progressPercent}%` }}
                     transition={{ duration: 0.3 }}
@@ -831,7 +831,7 @@ export default function ChatbotWidget() {
             )}
 
             {/* Header */}
-            <div className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-4 rounded-t-3xl flex-shrink-0 flex items-center justify-between">
+            <div className="bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] p-4 rounded-t-3xl flex-shrink-0 flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 {stage !== 'greeting' && stage !== 'summary' && (
                   <>
@@ -858,7 +858,7 @@ export default function ChatbotWidget() {
                   </>
                 )}
                 <div className="text-2xl font-bold font-sora">
-                  <span className="text-[var(--accent-blue)]">MULE</span>
+                  <span className="text-[var(--color-action-primary)]">MULE</span>
                   <span>SOO</span>
                 </div>
               </div>
@@ -877,14 +877,14 @@ export default function ChatbotWidget() {
 
             {/* Estimated Time */}
             {stage !== 'greeting' && stage !== 'summary' && (
-              <div className="bg-[var(--glow-blue)] border-b border-[var(--accent-blue)] px-4 py-2 flex items-center gap-2">
-                <Clock size={14} className="text-[var(--accent-blue)]" />
-                <span className="text-xs text-[var(--accent-blue)] font-semibold">~5 min to complete</span>
+              <div className="bg-[var(--glow-action)] border-b border-[var(--color-action-primary)] px-4 py-2 flex items-center gap-2">
+                <Clock size={14} className="text-[var(--color-action-primary)]" />
+                <span className="text-xs text-[var(--color-action-primary)] font-semibold">~5 min to complete</span>
               </div>
             )}
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-[var(--accent-blue)] scrollbar-track-[var(--bg-card)]">
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-[var(--color-action-primary)] scrollbar-track-[var(--bg-card)]">
               {messages.map((msg) => (
                 <motion.div
                   key={msg.id}
@@ -903,7 +903,7 @@ export default function ChatbotWidget() {
                     <div
                       className={`max-w-sm px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                         msg.sender === 'user'
-                          ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white rounded-br-sm shadow-lg'
+                          ? 'bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] rounded-br-sm shadow-lg'
                           : 'bg-[var(--bg-card)] text-[var(--text-secondary)] rounded-bl-sm border border-[var(--border)]'
                       }`}
                     >
@@ -936,7 +936,7 @@ export default function ChatbotWidget() {
                         setStage('service');
                         handleServiceSelect(service.value);
                       }}
-                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-action)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] hover:from-[var(--glow-action)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                     >
                       <div className="flex justify-between items-center">
                         <span>{service.label}</span>
@@ -965,7 +965,7 @@ export default function ChatbotWidget() {
                       whileHover={{ scale: 1.02, x: 8 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleBudgetSelect(budget.value)}
-                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-purple)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-purple)] hover:from-[var(--glow-purple)] hover:to-[var(--glow-blue)] transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-purple)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-purple)] hover:from-[var(--glow-purple)] hover:to-[var(--glow-action)] transition-all duration-200 cursor-pointer"
                     >
                       💰 {budget.value}
                     </motion.button>
@@ -991,7 +991,7 @@ export default function ChatbotWidget() {
                       whileHover={{ scale: 1.02, x: 8 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleUsageTypeSelect(type)}
-                      className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-blue)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-blue)] hover:from-[var(--glow-blue)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-4 text-left font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-action)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--color-action-primary)] hover:from-[var(--glow-action)] hover:to-[var(--glow-purple)] transition-all duration-200 cursor-pointer"
                     >
                       {type === 'Personal' ? '👤 Personal' : '🏢 Company'}
                     </motion.button>
@@ -1017,7 +1017,7 @@ export default function ChatbotWidget() {
                       whileHover={{ scale: 1.02, x: 8 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => handleContactMethodSelect(method.value)}
-                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-gold)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-gold)] hover:from-[var(--glow-gold)] hover:to-[var(--glow-blue)] transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-3 text-left text-sm font-semibold bg-gradient-to-r from-[var(--bg-card)] to-[var(--glow-gold)] border-2 border-[var(--border)] text-[var(--text-primary)] rounded-xl hover:border-[var(--accent-gold)] hover:from-[var(--glow-gold)] hover:to-[var(--glow-action)] transition-all duration-200 cursor-pointer"
                     >
                       {method.label}
                     </motion.button>
@@ -1053,7 +1053,7 @@ export default function ChatbotWidget() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleReviewSubmit}
-                    className="w-full px-4 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                    className="w-full px-4 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-xl hover:shadow-lg transition-all text-base"
                   >
                     ✓ Looks Good, Continue
                   </motion.button>
@@ -1109,7 +1109,7 @@ export default function ChatbotWidget() {
                     </div>
 
                     {/* Confirmation Message */}
-                    <div className="bg-[var(--glow-blue)] border border-[var(--accent-blue)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
+                    <div className="bg-[var(--glow-action)] border border-[var(--color-action-primary)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
                       <p className="font-semibold">✅ Booking Confirmed!</p>
                       <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
                       <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ena Muluken will contact you within 2 hours</p>
@@ -1145,7 +1145,7 @@ export default function ChatbotWidget() {
                           whileTap={{ scale: 0.98 }}
                           onClick={handlePayDeposit}
                           disabled={paymentStatus === 'processing'}
-                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-xl hover:shadow-[0_0_20px_rgba(0,200,255,0.4)] transition-all text-base disabled:opacity-60"
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-xl hover:shadow-[0_0_20px_rgba(0,200,255,0.4)] transition-all text-base disabled:opacity-60"
                         >
                           {paymentStatus === 'processing' ? (
                             <>
@@ -1267,14 +1267,14 @@ export default function ChatbotWidget() {
                       }
                       autoFocus
                       maxLength={stage === 'details' ? 500 : undefined}
-                      className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--accent-blue)] text-base placeholder-[var(--text-secondary)] font-medium"
+                      className="flex-1 bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-primary)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] text-base placeholder-[var(--text-secondary)] font-medium"
                     />
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleInputSubmit}
                       disabled={!inputValue.trim()}
-                      className="bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white p-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+                      className="bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] p-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
                     >
                       <ArrowUp size={20} />
                     </motion.button>
@@ -1308,7 +1308,7 @@ export default function ChatbotWidget() {
                         setStage('client_id');
                       }, 300);
                     }}
-                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)]"
                   >
                     🪪 National ID
                   </motion.button>
@@ -1324,7 +1324,7 @@ export default function ChatbotWidget() {
                         setStage('client_id');
                       }, 300);
                     }}
-                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)]"
+                    className="px-4 py-3 rounded-lg font-semibold text-sm transition-all bg-[var(--bg-primary)] border-2 border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)]"
                   >
                     📕 Passport
                   </motion.button>
@@ -1357,7 +1357,7 @@ export default function ChatbotWidget() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={resetChat}
-                  className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] transition-all font-medium"
+                  className="w-full px-4 py-3 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] transition-all font-medium"
                 >
                   Start New Booking
                 </motion.button>

@@ -86,7 +86,7 @@ export default function ContactQRCodePage() {
                 <button
                   type="button"
                   onClick={copyURL}
-                  className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white text-sm font-semibold px-3 py-1.5 rounded-md hover:opacity-90 transition"
+                  className="inline-flex items-center gap-1.5 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] text-sm font-semibold px-3 py-1.5 rounded-md hover:opacity-90 transition"
                 >
                   {copied ? <Check size={15} /> : <Copy size={15} />}
                   {copied ? 'Copied' : 'Copy'}
@@ -115,7 +115,7 @@ export default function ContactQRCodePage() {
                 viewport={{ once: true }}
                 className="glass-card border border-[var(--border)] rounded-xl p-6 hover:border-[var(--color-action-primary)] transition-colors"
               >
-                <div className="w-10 h-10 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-lg bg-[var(--glow-action)] flex items-center justify-center mb-4">
                   <Icon className="text-[var(--color-action-primary)]" size={20} />
                 </div>
                 <h3 className="font-semibold text-[var(--text-primary)] mb-1.5">{u.title}</h3>
@@ -130,7 +130,7 @@ export default function ContactQRCodePage() {
           <p className="text-[var(--text-secondary)] mb-4">Want a custom-branded QR code for your own business?</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-3.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-8 py-3.5 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Talk to Us
           </Link>

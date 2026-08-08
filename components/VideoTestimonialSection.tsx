@@ -97,12 +97,12 @@ export default function VideoTestimonialSection({
                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/60 transition-all">
                   <motion.div
                     whileHover={{ scale: 1.2 }}
-                    className="w-16 h-16 rounded-full bg-[var(--accent-blue)] flex items-center justify-center"
+                    className="w-16 h-16 rounded-full bg-[var(--color-action-primary)] flex items-center justify-center"
                   >
                     <Play size={28} className="text-white ml-1" />
                   </motion.div>
                 </div>
-                <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-[var(--accent-blue)] text-white text-xs font-bold">
+                <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-[var(--color-action-primary)] text-white text-xs font-bold">
                   Video
                 </div>
               </motion.div>
@@ -110,7 +110,7 @@ export default function VideoTestimonialSection({
               {/* Client Info Card */}
               <motion.div
                 whileHover={{ translateY: -4 }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] transition-all flex-1"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-all flex-1"
               >
                 <p className="text-[var(--text-secondary)] italic mb-4 leading-relaxed">"{testimonial.quote}"</p>
                 <div className="border-t border-[var(--border)] pt-4">
@@ -164,7 +164,7 @@ export default function VideoTestimonialSection({
           <p className="text-[var(--text-secondary)] mb-4">Ready to become our next success story?</p>
           <a
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Schedule Your Consultation
           </a>
@@ -181,7 +181,7 @@ export function VideoTestimonialCard({ testimonial }: { testimonial: VideoTestim
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
-      className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] transition-all cursor-pointer"
+      className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-all cursor-pointer"
       onClick={() => setIsPlaying(!isPlaying)}
     >
       {isPlaying ? (

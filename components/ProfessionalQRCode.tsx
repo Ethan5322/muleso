@@ -99,9 +99,9 @@ export default function ProfessionalQRCode({
               padding: 0;
               box-sizing: border-box;
             }
-            .logo { font-size: 24px; font-weight: bold; letter-spacing: 2px; background: linear-gradient(135deg, #00C8FF, #7B2FFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+            .logo { font-size: 24px; font-weight: bold; letter-spacing: 2px; background: linear-gradient(135deg, #E8B84B, #7B2FFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
             .qr { width: 40mm; height: 40mm; }
-            .website { font-size: 12px; color: #00C8FF; letter-spacing: 1px; margin-top: 4px; }
+            .website { font-size: 12px; color: #E8B84B; letter-spacing: 1px; margin-top: 4px; }
             .tagline { font-size: 9px; color: #aaa; }
             @media print { body { background: none; margin: 0; padding: 0; } }
           </style>

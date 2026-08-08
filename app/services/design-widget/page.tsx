@@ -40,7 +40,7 @@ export default function DesignWidgetPage() {
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
               {['Answers in seconds', 'Captures every lead', 'Books & sells', 'Works 24/7'].map((b) => (
-                <span key={b} className="px-3 py-1.5 rounded-full text-sm font-semibold bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)]">
+                <span key={b} className="px-3 py-1.5 rounded-full text-sm font-semibold bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)]">
                   {b}
                 </span>
               ))}
@@ -52,7 +52,7 @@ export default function DesignWidgetPage() {
               <button
                 type="button"
                 onClick={() => openChatbot()}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
               >
                 <MessageCircle size={18} /> Try Our Live Widget
               </button>
@@ -126,7 +126,7 @@ export default function DesignWidgetPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
                 whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -187,7 +187,7 @@ export default function DesignWidgetPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300"
                 whileHover={{ translateY: -4 }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
@@ -213,7 +213,7 @@ export default function DesignWidgetPage() {
           </p>
           <a
             href="/contact?service=Design%20Widget"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Get Started →
           </a>

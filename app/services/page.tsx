@@ -113,10 +113,10 @@ export default function ServicesPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              whileHover={{ translateY: -6, boxShadow: "0 0 40px -4px var(--glow-blue)" }}
-              className="relative glass-card p-8 border border-[var(--color-action-primary)] shadow-[0_0_30px_-12px_var(--glow-blue)] transition-all duration-300 flex flex-col"
+              whileHover={{ translateY: -6, boxShadow: "0 0 40px -4px var(--glow-action)" }}
+              className="relative glass-card p-8 border border-[var(--color-action-primary)] shadow-[0_0_30px_-12px_var(--glow-action)] transition-all duration-300 flex flex-col"
             >
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(0,200,255,0.6)]">
+              <div className="w-14 h-14 rounded-xl bg-[var(--color-action-primary)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(0,200,255,0.6)]">
                 <Bot className="text-white" size={30} />
               </div>
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-3">
@@ -137,7 +137,7 @@ export default function ServicesPage() {
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <Link
                     href="/ai-automation"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow w-full text-center"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_8px_30px_var(--glow-action)] transition-shadow w-full text-center"
                   >
                     Explore the Library <ArrowRight size={17} />
                   </Link>
@@ -153,7 +153,7 @@ export default function ServicesPage() {
                 transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="glass-card p-8 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300 flex flex-col"
+                className="glass-card p-8 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 flex flex-col"
               >
                 <div className="text-5xl mb-4">{service.icon}</div>
                 <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-3">
@@ -174,7 +174,7 @@ export default function ServicesPage() {
                   <motion.div whileHover={{ scale: 1.05 }}>
                     <Link
                       href={service.href}
-                      className="inline-block px-8 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow w-full text-center"
+                      className="inline-block px-8 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_8px_30px_var(--glow-action)] transition-shadow w-full text-center"
                     >
                       View Full Details →
                     </Link>

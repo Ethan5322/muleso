@@ -15,8 +15,8 @@ interface Theme {
 }
 
 const THEMES: Record<ThemeKey, Theme> = {
-  blue: { from: '#00C8FF', to: '#1B3A8F', accent: '#E8B84B' },
-  gold: { from: '#E8B84B', to: '#6B4BA8', accent: '#00C8FF' },
+  blue: { from: '#E8B84B', to: '#1B3A8F', accent: '#E8B84B' },
+  gold: { from: '#E8B84B', to: '#6B4BA8', accent: '#E8B84B' },
   green: { from: '#00FF88', to: '#0A6E8F', accent: '#E8B84B' },
   dark: { from: '#2A3550', to: '#0A0F1E', accent: '#E8B84B' },
   purple: { from: '#7B2FFF', to: '#1B2A6B', accent: '#E8B84B' },

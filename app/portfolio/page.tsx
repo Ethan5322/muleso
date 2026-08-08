@@ -381,7 +381,7 @@ export default function PortfolioPage() {
                 transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] text-left transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-xl hover:shadow-[var(--glow-blue)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] text-left transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-xl hover:shadow-[var(--glow-action)]"
               >
                 <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--color-action-primary)] via-[var(--accent-purple)] to-[var(--accent-gold)]" />
 
@@ -431,7 +431,7 @@ export default function PortfolioPage() {
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="text-center">
           <h2 className="text-3xl font-bold font-sora mb-4 gradient-text">Ready to Build Your Next Project?</h2>
           <p className="text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">Let&apos;s create something amazing together. Start with a free consultation.</p>
-          <motion.a href="/contact" whileHover={{ scale: 1.05 }} className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow">Get Started</motion.a>
+          <motion.a href="/contact" whileHover={{ scale: 1.05 }} className="inline-block px-10 py-4 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_8px_30px_var(--glow-action)] transition-shadow">Get Started</motion.a>
         </motion.div>
       </div>
 
@@ -487,7 +487,7 @@ export default function PortfolioPage() {
                     href={selected.site}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-action-primary)]/40 bg-[var(--glow-blue)] px-4 py-3.5 hover:border-[var(--color-action-primary)] transition-colors"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-[var(--color-action-primary)]/40 bg-[var(--glow-action)] px-4 py-3.5 hover:border-[var(--color-action-primary)] transition-colors"
                   >
                     <span className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-semibold">
                       <Globe size={17} className="text-[var(--color-action-primary)]" />
@@ -515,7 +515,7 @@ export default function PortfolioPage() {
 
                 {/* Admin tracking */}
                 {selected.adminTracking && selected.adminTracking.length > 0 && (
-                  <div className="bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40 rounded-xl p-4">
+                  <div className="bg-[var(--glow-action)] border border-[var(--color-action-primary)]/40 rounded-xl p-4">
                     <h4 className="text-sm font-bold font-sora text-[var(--color-action-primary)] uppercase tracking-wide mb-3 flex items-center gap-2">
                       <Gauge size={15} /> What you can track (Admin Panel)
                     </h4>
@@ -553,7 +553,7 @@ export default function PortfolioPage() {
                   <ol className="space-y-3">
                     {BOOKING_STEPS.map((step, i) => (
                       <li key={step.title} className="flex gap-3">
-                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white text-xs font-bold flex items-center justify-center">
+                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] text-xs font-bold flex items-center justify-center">
                           {i + 1}
                         </span>
                         <div>
@@ -570,7 +570,7 @@ export default function PortfolioPage() {
                   <p className="text-center text-[var(--text-primary)] font-semibold mb-4">Want a project like this for your business?</p>
                   <Link
                     href={`/contact?service=${encodeURIComponent(`a project like "${selected.name}"`)}`}
-                    className="block w-full text-center px-6 py-3.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-[1.02] transition-transform"
+                    className="block w-full text-center px-6 py-3.5 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-lg hover:scale-[1.02] transition-transform"
                   >
                     Book a Free Consultation →
                   </Link>
