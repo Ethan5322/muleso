@@ -241,12 +241,12 @@ export default function Home() {
               className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
             >
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Link href="/services" className="btn-primary px-9 py-3.5 text-[15px]">
+                <Link href="/services" className="btn-primary px-8 py-3 text-base">
                   Explore Services
                 </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
+                <Link href="/portfolio" className="btn-secondary px-8 py-3 text-base">
                   View Our Work
                 </Link>
               </motion.div>
@@ -574,7 +574,7 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
-              <Link href="/portfolio" className="btn-secondary px-9 py-3.5 text-[15px]">
+              <Link href="/portfolio" className="btn-secondary px-8 py-3 text-base">
                 View Full Portfolio →
               </Link>
             </motion.div>
@@ -784,7 +784,7 @@ export default function Home() {
               <motion.div whileHover={{ scale: 1.05 }} className="w-full">
                 <a
                   href={`mailto:${settings.email}`}
-                  className="btn-primary w-full px-6 py-3 text-[15px] block"
+                  className="btn-primary w-full px-6 py-3 text-base block"
                 >
                   <Mail size={18} /> Email Us
                 </a>
@@ -933,7 +933,7 @@ export default function Home() {
           <motion.div whileHover={{ scale: 1.05 }}>
             <Link
               href="/ai-automation"
-              className="btn-primary px-9 py-3.5 text-base inline-block"
+              className="btn-primary px-8 py-3 text-base inline-block"
             >
               What do you want us to build for you? →
             </Link>
@@ -964,7 +964,7 @@ export default function Home() {
           <motion.div whileHover={{ scale: 1.05 }}>
             <Link
               href="/contact"
-              className="btn-primary px-10 py-3.5 text-base inline-block"
+              className="btn-primary px-8 py-3 text-base inline-block"
             >
               Start Your Project
             </Link>

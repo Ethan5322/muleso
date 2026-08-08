@@ -519,7 +519,7 @@ export default function ContactPage() {
                     href={`https://wa.me/${settings.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#25D366] hover:underline"
+                    className="text-[var(--accent-green)] hover:underline"
                   >
                     Message us on WhatsApp
                   </a>
