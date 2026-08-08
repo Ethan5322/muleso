@@ -64,7 +64,7 @@ export default function StoreClient() {
     setPending(product);
     setEmail('');
     setError(null);
-    analytics.productClick(product.title);
+    analytics.productClick(product.name);
   };
 
   const handleCheckout = async () => {
