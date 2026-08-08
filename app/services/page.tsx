@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Bot, ArrowRight, Zap } from 'lucide-react';
+import { Bot, ArrowRight } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import JsonLd from '@/components/JsonLd';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
@@ -116,9 +116,6 @@ export default function ServicesPage() {
               whileHover={{ translateY: -6, boxShadow: "0 0 40px -4px var(--glow-blue)" }}
               className="relative glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)] transition-all duration-300 flex flex-col"
             >
-              <span className="absolute top-5 right-5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold font-sora uppercase tracking-wide text-[var(--accent-blue)] bg-[var(--glow-blue)] border border-[var(--accent-blue)]/40">
-                <Zap size={11} /> Flagship
-              </span>
               <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(0,200,255,0.6)]">
                 <Bot className="text-white" size={30} />
               </div>
