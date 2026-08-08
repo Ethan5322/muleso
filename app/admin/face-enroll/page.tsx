@@ -74,7 +74,7 @@ export default function FaceEnrollPage() {
           <h3 className="text-xl font-bold">Face Enrolled</h3>
           <p className="text-[#7A8BA8]">
             {enrolledCount} samples saved. You can now sign in from{' '}
-            <span className="text-[#00C8FF]">/admin/face-login</span> (or scan the QR on the login page).
+            <span className="text-[var(--color-action-primary)]">/admin/face-login</span> (or scan the QR on the login page).
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <button
@@ -83,7 +83,7 @@ export default function FaceEnrollPage() {
                 setEnrolledCount(null);
                 setKey((k) => k + 1);
               }}
-              className="bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[#00C8FF] py-2 px-5 rounded-lg font-semibold"
+              className="bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[var(--color-action-primary)] py-2 px-5 rounded-lg font-semibold"
             >
               Re-enroll
             </button>

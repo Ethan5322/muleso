@@ -30,7 +30,7 @@ export default function ContactQRCodePage() {
         {/* Back to contact */}
         <Link
           href="/contact"
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--accent-blue)] transition-colors mb-10"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--color-action-primary)] transition-colors mb-10"
         >
           <ArrowLeft size={16} /> Back to Contact
         </Link>
@@ -42,7 +42,7 @@ export default function ContactQRCodePage() {
           transition={{ duration: 0.5 }}
           className="text-center mb-14"
         >
-          <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-blue)] border border-[var(--accent-blue)]/40 rounded-full px-3 py-1 mb-5">
+          <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 rounded-full px-3 py-1 mb-5">
             Marketing Toolkit
           </span>
           <h1 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-4">
@@ -82,11 +82,11 @@ export default function ContactQRCodePage() {
                 Links to
               </p>
               <div className="flex items-center gap-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-3">
-                <code className="flex-1 text-sm text-[var(--accent-blue)] truncate">{WEBSITE_URL}</code>
+                <code className="flex-1 text-sm text-[var(--color-action-primary)] truncate">{WEBSITE_URL}</code>
                 <button
                   type="button"
                   onClick={copyURL}
-                  className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white text-sm font-semibold px-3 py-1.5 rounded-md hover:opacity-90 transition"
+                  className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white text-sm font-semibold px-3 py-1.5 rounded-md hover:opacity-90 transition"
                 >
                   {copied ? <Check size={15} /> : <Copy size={15} />}
                   {copied ? 'Copied' : 'Copy'}
@@ -113,10 +113,10 @@ export default function ContactQRCodePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 viewport={{ once: true }}
-                className="glass-card border border-[var(--border)] rounded-xl p-6 hover:border-[var(--accent-blue)] transition-colors"
+                className="glass-card border border-[var(--border)] rounded-xl p-6 hover:border-[var(--color-action-primary)] transition-colors"
               >
                 <div className="w-10 h-10 rounded-lg bg-[var(--glow-blue)] flex items-center justify-center mb-4">
-                  <Icon className="text-[var(--accent-blue)]" size={20} />
+                  <Icon className="text-[var(--color-action-primary)]" size={20} />
                 </div>
                 <h3 className="font-semibold text-[var(--text-primary)] mb-1.5">{u.title}</h3>
                 <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{u.desc}</p>
@@ -130,7 +130,7 @@ export default function ContactQRCodePage() {
           <p className="text-[var(--text-secondary)] mb-4">Want a custom-branded QR code for your own business?</p>
           <Link
             href="/contact"
-            className="inline-block px-8 py-3.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-8 py-3.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Talk to Us
           </Link>

@@ -138,8 +138,8 @@ export default function PDFGuidesLanding() {
             transition={{ duration: 0.6 }}
             className="inline-block mb-6"
           >
-            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--glow-blue)] to-transparent border border-[var(--accent-blue)]">
-              <span className="text-[var(--accent-blue)] font-sora text-sm font-bold">Expert Knowledge on Demand</span>
+            <div className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--glow-blue)] to-transparent border border-[var(--color-action-primary)]">
+              <span className="text-[var(--color-action-primary)] font-sora text-sm font-bold">Expert Knowledge on Demand</span>
             </div>
           </motion.div>
 
@@ -169,12 +169,12 @@ export default function PDFGuidesLanding() {
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16"
           >
             <Link href="/store">
-              <button className="px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap">
+              <button className="px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-sm sm:text-lg whitespace-nowrap">
                 Browse Guides
                 <ArrowRight className="inline ml-2" size={20} />
               </button>
             </Link>
-            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--accent-blue)] text-[var(--accent-blue)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-sm sm:text-lg whitespace-nowrap">
+            <button className="px-4 sm:px-8 py-3 sm:py-4 border-2 border-[var(--color-action-primary)] text-[var(--color-action-primary)] font-bold font-sora rounded-lg hover:bg-[var(--glow-blue)] transition-colors text-sm sm:text-lg whitespace-nowrap">
               See What's Inside
             </button>
           </motion.div>
@@ -187,15 +187,15 @@ export default function PDFGuidesLanding() {
             className="flex flex-wrap justify-center gap-6 text-sm text-[var(--text-secondary)]"
           >
             <div className="flex items-center gap-2">
-              <BookOpen size={18} className="text-[var(--accent-blue)]" />
+              <BookOpen size={18} className="text-[var(--color-action-primary)]" />
               <span>5+ Guides Published</span>
             </div>
             <div className="flex items-center gap-2">
-              <Users size={18} className="text-[var(--accent-blue)]" />
+              <Users size={18} className="text-[var(--color-action-primary)]" />
               <span>2,000+ Readers</span>
             </div>
             <div className="flex items-center gap-2">
-              <TrendingUp size={18} className="text-[var(--accent-blue)]" />
+              <TrendingUp size={18} className="text-[var(--color-action-primary)]" />
               <span>Resale Rights Included</span>
             </div>
           </motion.div>
@@ -242,9 +242,9 @@ export default function PDFGuidesLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--accent-blue)] transition-all"
+                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--color-action-primary)] transition-all"
               >
-                <item.icon size={40} className="text-[var(--accent-blue)] mb-4" />
+                <item.icon size={40} className="text-[var(--color-action-primary)] mb-4" />
                 <h3 className="text-2xl font-bold font-sora mb-3">{item.title}</h3>
                 <p className="text-[var(--text-secondary)]">{item.desc}</p>
               </motion.div>
@@ -277,7 +277,7 @@ export default function PDFGuidesLanding() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--accent-blue)] transition-all group"
+                className="glass-card p-8 border border-[var(--border)] rounded-xl hover:border-[var(--color-action-primary)] transition-all group"
               >
                 {guide.bestseller && (
                   <div className="mb-4 inline-block px-3 py-1 bg-[var(--glow-gold)] border border-[var(--accent-gold)] rounded-full">
@@ -285,7 +285,7 @@ export default function PDFGuidesLanding() {
                   </div>
                 )}
 
-                <h3 className="text-2xl font-bold font-sora mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                <h3 className="text-2xl font-bold font-sora mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">
                   {guide.title}
                 </h3>
                 <p className="text-[var(--text-secondary)] mb-4">{guide.description}</p>
@@ -294,7 +294,7 @@ export default function PDFGuidesLanding() {
                   <span className="flex items-center gap-1">
                     <BookOpen size={16} /> {guide.pages} pages
                   </span>
-                  <span className="text-[var(--accent-blue)] font-bold">{guide.price}</span>
+                  <span className="text-[var(--color-action-primary)] font-bold">{guide.price}</span>
                 </div>
 
                 <div className="mb-6 space-y-2">
@@ -312,7 +312,7 @@ export default function PDFGuidesLanding() {
                 </div>
 
                 <Link href="/store">
-                  <button className="w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                  <button className="w-full py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
                     <Download size={18} /> Download Now
                   </button>
                 </Link>
@@ -346,20 +346,20 @@ export default function PDFGuidesLanding() {
                 viewport={{ once: true }}
                 className={`glass-card p-8 border rounded-xl transition-all ${
                   tier.highlighted
-                    ? 'border-[var(--accent-blue)] shadow-lg shadow-[var(--glow-blue)] scale-105'
-                    : 'border-[var(--border)] hover:border-[var(--accent-blue)]'
+                    ? 'border-[var(--color-action-primary)] shadow-lg shadow-[var(--glow-blue)] scale-105'
+                    : 'border-[var(--border)] hover:border-[var(--color-action-primary)]'
                 }`}
               >
                 {tier.popular && (
-                  <div className="mb-4 px-4 py-2 bg-[var(--glow-blue)] border border-[var(--accent-blue)] rounded-full w-fit">
-                    <span className="text-[var(--accent-blue)] font-bold text-sm">Most Popular</span>
+                  <div className="mb-4 px-4 py-2 bg-[var(--glow-blue)] border border-[var(--color-action-primary)] rounded-full w-fit">
+                    <span className="text-[var(--color-action-primary)] font-bold text-sm">Most Popular</span>
                   </div>
                 )}
 
                 <h3 className="text-3xl font-bold font-sora mb-2">{tier.name}</h3>
                 <p className="text-[var(--text-secondary)] mb-6">{tier.description}</p>
                 <div className="mb-8">
-                  <span className="text-5xl font-bold font-sora text-[var(--accent-blue)]">{tier.price}</span>
+                  <span className="text-5xl font-bold font-sora text-[var(--color-action-primary)]">{tier.price}</span>
                   <span className="text-[var(--text-secondary)] ml-2">one-time</span>
                 </div>
 
@@ -382,8 +382,8 @@ export default function PDFGuidesLanding() {
                   <button
                     className={`w-full py-3 rounded-lg font-bold font-sora transition-all ${
                       tier.highlighted
-                        ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white hover:scale-105'
-                        : 'border border-[var(--accent-blue)] text-[var(--accent-blue)] hover:bg-[var(--glow-blue)]'
+                        ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white hover:scale-105'
+                        : 'border border-[var(--color-action-primary)] text-[var(--color-action-primary)] hover:bg-[var(--glow-blue)]'
                     }`}
                   >
                     Get Access
@@ -441,7 +441,7 @@ export default function PDFGuidesLanding() {
             viewport={{ once: true }}
           >
             <Link href="/store">
-              <button className="px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora text-lg rounded-lg hover:scale-105 transition-transform">
+              <button className="px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora text-lg rounded-lg hover:scale-105 transition-transform">
                 Browse All Guides
               </button>
             </Link>

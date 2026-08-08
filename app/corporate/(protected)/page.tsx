@@ -45,7 +45,7 @@ export default async function CorporateDashboard() {
           ) : (
             <>
               {admin.role_title && (
-                <span className="inline-flex items-center gap-1 text-[#00C8FF] font-semibold">
+                <span className="inline-flex items-center gap-1 text-[var(--color-action-primary)] font-semibold">
                   <BadgeCheck size={14} /> {admin.role_title}
                 </span>
               )}
@@ -59,7 +59,7 @@ export default async function CorporateDashboard() {
       {/* Work at a glance */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: admin.is_super_admin ? 'Open tasks' : 'Dept. open tasks', value: kpis.open, color: '#00C8FF' },
+          { label: admin.is_super_admin ? 'Open tasks' : 'Dept. open tasks', value: kpis.open, color: 'var(--color-action-primary)' },
           { label: 'Assigned to me', value: kpis.mine, color: '#7B2FFF' },
           { label: 'In progress', value: kpis.inProgress, color: '#E8B84B' },
           { label: 'Overdue', value: kpis.overdue, color: kpis.overdue ? '#FF5C7C' : '#8FA0BE' },
@@ -72,7 +72,7 @@ export default async function CorporateDashboard() {
       </div>
       <Link
         href="/corporate/work"
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white text-sm font-semibold"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] text-white text-sm font-semibold"
       >
         <CheckSquare size={16} /> Go to My Work
       </Link>
@@ -110,7 +110,7 @@ export default async function CorporateDashboard() {
           const Icon = c.icon;
           return (
             <div key={c.title} className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-5">
-              <span className="w-10 h-10 rounded-lg bg-[#00C8FF]/10 text-[#00C8FF] flex items-center justify-center mb-3">
+              <span className="w-10 h-10 rounded-lg bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)] flex items-center justify-center mb-3">
                 <Icon size={20} />
               </span>
               <h3 className="font-semibold font-sora text-sm">{c.title}</h3>

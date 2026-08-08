@@ -190,7 +190,7 @@ export default function BookingsPage() {
   if (!isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="text-[#00C8FF] text-lg">Loading bookings...</div>
+        <div className="text-[var(--color-action-primary)] text-lg">Loading bookings...</div>
       </div>
     );
   }
@@ -200,7 +200,7 @@ export default function BookingsPage() {
       {/* Page heading */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold font-sora">Bookings Management</h1>
-        <p className="text-[#00C8FF] text-sm">{filteredBookings.length} bookings</p>
+        <p className="text-[var(--color-action-primary)] text-sm">{filteredBookings.length} bookings</p>
       </div>
 
       {/* Content */}
@@ -209,13 +209,13 @@ export default function BookingsPage() {
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           {/* Search */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 text-[#00C8FF]" size={20} />
+            <Search className="absolute left-3 top-3 text-[var(--color-action-primary)]" size={20} />
             <input
               type="text"
               placeholder="Search by name or email..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
-              className="w-full bg-[#1A2332] border border-[#00C8FF]/30 text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:border-[#00C8FF]"
+              className="w-full bg-[#1A2332] border border-[var(--color-action-primary)]/30 text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]"
             />
           </div>
 
@@ -240,8 +240,8 @@ export default function BookingsPage() {
               onClick={() => handleStatusFilter(s)}
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all border ${
                 statusFilter === s
-                  ? 'bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white border-transparent'
-                  : 'bg-[#1A2332] text-[#7A8BA8] border-[#1E3A5F] hover:text-[#00C8FF]'
+                  ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white border-transparent'
+                  : 'bg-[#1A2332] text-[#7A8BA8] border-[#1E3A5F] hover:text-[var(--color-action-primary)]'
               }`}
             >
               {s} <span className="opacity-70">({statusCounts[s]})</span>
@@ -250,19 +250,19 @@ export default function BookingsPage() {
         </div>
 
         {/* Table */}
-        <div className="bg-[#1A2332] border border-[#00C8FF]/30 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,191,255,0.2)]">
+        <div className="bg-[#1A2332] border border-[var(--color-action-primary)]/30 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,191,255,0.2)]">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#00C8FF]/20">
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('created_at')}>Date{arrow('created_at')}</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('name')}>Name{arrow('name')}</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Email</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Phone</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('service')}>Service{arrow('service')}</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('budget')}>Budget{arrow('budget')}</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF] cursor-pointer select-none" onClick={() => toggleSort('status')}>Status{arrow('status')}</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-[#00C8FF]">Action</th>
+                <tr className="border-b border-[var(--color-action-primary)]/20">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)] cursor-pointer select-none" onClick={() => toggleSort('created_at')}>Date{arrow('created_at')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)] cursor-pointer select-none" onClick={() => toggleSort('name')}>Name{arrow('name')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)]">Email</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)]">Phone</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)] cursor-pointer select-none" onClick={() => toggleSort('service')}>Service{arrow('service')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)] cursor-pointer select-none" onClick={() => toggleSort('budget')}>Budget{arrow('budget')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)] cursor-pointer select-none" onClick={() => toggleSort('status')}>Status{arrow('status')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-[var(--color-action-primary)]">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -270,7 +270,7 @@ export default function BookingsPage() {
                   sortedBookings.map((booking, idx) => (
                     <tr
                       key={booking.id}
-                      className={`border-b border-[#00C8FF]/10 hover:bg-[#0A0E17] transition-colors ${
+                      className={`border-b border-[var(--color-action-primary)]/10 hover:bg-[#0A0E17] transition-colors ${
                         idx % 2 === 0 ? 'bg-transparent' : 'bg-[#0A0E17]/50'
                       }`}
                     >
@@ -278,7 +278,7 @@ export default function BookingsPage() {
                         {new Date(booking.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 text-sm">{booking.name}</td>
-                      <td className="px-6 py-4 text-sm text-[#00C8FF]/60">{booking.email}</td>
+                      <td className="px-6 py-4 text-sm text-[var(--color-action-primary)]/60">{booking.email}</td>
                       <td className="px-6 py-4 text-sm">{booking.phone}</td>
                       <td className="px-6 py-4 text-sm">{booking.service}</td>
                       <td className="px-6 py-4 text-sm">{booking.budget}</td>
@@ -301,7 +301,7 @@ export default function BookingsPage() {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           onClick={() => handleSelectBooking(booking)}
-                          className="text-[#00C8FF] hover:text-[#a78bfa] transition-colors font-semibold"
+                          className="text-[var(--color-action-primary)] hover:text-[#a78bfa] transition-colors font-semibold"
                         >
                           View
                         </motion.button>
@@ -310,7 +310,7 @@ export default function BookingsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={8} className="px-6 py-8 text-center text-[#00C8FF]/60">
+                    <td colSpan={8} className="px-6 py-8 text-center text-[var(--color-action-primary)]/60">
                       No bookings found
                     </td>
                   </tr>
@@ -328,12 +328,12 @@ export default function BookingsPage() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-[#0A0E17] border border-[#00C8FF]/30 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8"
+            className="bg-[#0A0E17] border border-[var(--color-action-primary)]/30 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8"
           >
             {/* Close Button */}
             <button
               onClick={() => setSelectedBooking(null)}
-              className="absolute top-6 right-6 text-[#00C8FF]/60 hover:text-white"
+              className="absolute top-6 right-6 text-[var(--color-action-primary)]/60 hover:text-white"
             >
               <X size={28} />
             </button>
@@ -343,28 +343,28 @@ export default function BookingsPage() {
 
             <div className="space-y-6">
               {/* Client Info */}
-              <div className="bg-[#1A2332] rounded-lg p-6 border border-[#00C8FF]/20">
-                <h3 className="text-lg font-semibold mb-4 text-[#00C8FF]">Client Information</h3>
+              <div className="bg-[#1A2332] rounded-lg p-6 border border-[var(--color-action-primary)]/20">
+                <h3 className="text-lg font-semibold mb-4 text-[var(--color-action-primary)]">Client Information</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-[#00C8FF]/60">Name</p>
+                    <p className="text-[var(--color-action-primary)]/60">Name</p>
                     <p className="font-semibold">{selectedBooking.name}</p>
                   </div>
                   <div>
-                    <p className="text-[#00C8FF]/60">Email</p>
+                    <p className="text-[var(--color-action-primary)]/60">Email</p>
                     <p className="font-semibold">{selectedBooking.email}</p>
                   </div>
                   <div>
-                    <p className="text-[#00C8FF]/60">Phone</p>
+                    <p className="text-[var(--color-action-primary)]/60">Phone</p>
                     <p className="font-semibold">{selectedBooking.phone}</p>
                   </div>
                   <div>
-                    <p className="text-[#00C8FF]/60">Country</p>
+                    <p className="text-[var(--color-action-primary)]/60">Country</p>
                     <p className="font-semibold">{selectedBooking.country}</p>
                   </div>
                   {selectedBooking.company && (
                     <div>
-                      <p className="text-[#00C8FF]/60">Company</p>
+                      <p className="text-[var(--color-action-primary)]/60">Company</p>
                       <p className="font-semibold">{selectedBooking.company}</p>
                     </div>
                   )}
@@ -372,37 +372,37 @@ export default function BookingsPage() {
               </div>
 
               {/* Project Info */}
-              <div className="bg-[#1A2332] rounded-lg p-6 border border-[#00C8FF]/20">
-                <h3 className="text-lg font-semibold mb-4 text-[#00C8FF]">Project Details</h3>
+              <div className="bg-[#1A2332] rounded-lg p-6 border border-[var(--color-action-primary)]/20">
+                <h3 className="text-lg font-semibold mb-4 text-[var(--color-action-primary)]">Project Details</h3>
                 <div className="space-y-3 text-sm">
                   <div>
-                    <p className="text-[#00C8FF]/60">Service</p>
+                    <p className="text-[var(--color-action-primary)]/60">Service</p>
                     <p className="font-semibold">{selectedBooking.service}</p>
                   </div>
                   <div>
-                    <p className="text-[#00C8FF]/60">Budget</p>
+                    <p className="text-[var(--color-action-primary)]/60">Budget</p>
                     <p className="font-semibold">{selectedBooking.budget}</p>
                   </div>
                   <div>
-                    <p className="text-[#00C8FF]/60">Timeline</p>
+                    <p className="text-[var(--color-action-primary)]/60">Timeline</p>
                     <p className="font-semibold">{selectedBooking.timeline}</p>
                   </div>
                   <div>
-                    <p className="text-[#00C8FF]/60">Description</p>
+                    <p className="text-[var(--color-action-primary)]/60">Description</p>
                     <p className="font-semibold">{selectedBooking.project_description}</p>
                   </div>
                 </div>
               </div>
 
               {/* Status & Notes */}
-              <div className="bg-[#1A2332] rounded-lg p-6 border border-[#00C8FF]/20 space-y-4">
-                <h3 className="text-lg font-semibold text-[#00C8FF]">Status & Notes</h3>
+              <div className="bg-[#1A2332] rounded-lg p-6 border border-[var(--color-action-primary)]/20 space-y-4">
+                <h3 className="text-lg font-semibold text-[var(--color-action-primary)]">Status & Notes</h3>
                 <div>
-                  <label className="text-sm text-[#00C8FF]/60 font-semibold block mb-2">Status</label>
+                  <label className="text-sm text-[var(--color-action-primary)]/60 font-semibold block mb-2">Status</label>
                   <select
                     value={editingStatus}
                     onChange={(e) => setEditingStatus(e.target.value as Booking['status'])}
-                    className="w-full bg-[#0A0E17] border border-[#00C8FF]/30 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-[#00C8FF]"
+                    className="w-full bg-[#0A0E17] border border-[var(--color-action-primary)]/30 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]"
                   >
                     <option>Pending</option>
                     <option>Confirmed</option>
@@ -411,30 +411,30 @@ export default function BookingsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm text-[#00C8FF]/60 font-semibold block mb-2">Admin Notes</label>
+                  <label className="text-sm text-[var(--color-action-primary)]/60 font-semibold block mb-2">Admin Notes</label>
                   <textarea
                     value={editingNotes}
                     onChange={(e) => setEditingNotes(e.target.value)}
-                    className="w-full bg-[#0A0E17] border border-[#00C8FF]/30 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-[#00C8FF] h-24 resize-none"
+                    className="w-full bg-[#0A0E17] border border-[var(--color-action-primary)]/30 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] h-24 resize-none"
                     placeholder="Add notes about this booking..."
                   />
                 </div>
               </div>
 
               {/* Metadata */}
-              <div className="bg-[#1A2332] rounded-lg p-6 border border-[#00C8FF]/20">
-                <h3 className="text-lg font-semibold mb-4 text-[#00C8FF]">Metadata</h3>
+              <div className="bg-[#1A2332] rounded-lg p-6 border border-[var(--color-action-primary)]/20">
+                <h3 className="text-lg font-semibold mb-4 text-[var(--color-action-primary)]">Metadata</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-[#00C8FF]/60">ID</span>
+                    <span className="text-[var(--color-action-primary)]/60">ID</span>
                     <span className="font-mono">{selectedBooking.id}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#00C8FF]/60">Verification Code</span>
+                    <span className="text-[var(--color-action-primary)]/60">Verification Code</span>
                     <span className="font-mono text-[#00FF88]">{selectedBooking.verification_code}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#00C8FF]/60">Submitted</span>
+                    <span className="text-[var(--color-action-primary)]/60">Submitted</span>
                     <span>{new Date(selectedBooking.created_at).toLocaleString()}</span>
                   </div>
                 </div>
@@ -446,7 +446,7 @@ export default function BookingsPage() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleSaveBooking}
                 disabled={saving}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold py-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold py-3 rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
               >
                 <Save size={20} />
                 {saving ? 'Saving...' : 'Save Changes'}

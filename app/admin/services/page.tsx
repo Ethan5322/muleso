@@ -103,7 +103,7 @@ export default function ServicesManager() {
         <button
           type="button"
           onClick={() => openEditor({ ...EMPTY, order: items.length })}
-          className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition"
+          className="bg-[var(--color-action-primary)] hover:bg-[#00B3E6] text-black font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition"
         >
           <Plus size={18} /> Add Service
         </button>
@@ -163,19 +163,19 @@ export default function ServicesManager() {
             </div>
             <div className="space-y-4">
               <div className="grid grid-cols-4 gap-3">
-                <input value={editing.icon} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} placeholder="🌐" aria-label="Icon emoji" className="col-span-1 bg-[#1A2332] border border-[#1E3A5F] text-white px-3 py-2.5 rounded-lg text-center focus:outline-none focus:border-[#00C8FF]" />
-                <input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} placeholder="Service title *" className="col-span-3 bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
+                <input value={editing.icon} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} placeholder="🌐" aria-label="Icon emoji" className="col-span-1 bg-[#1A2332] border border-[#1E3A5F] text-white px-3 py-2.5 rounded-lg text-center focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} placeholder="Service title *" className="col-span-3 bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
               </div>
-              <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Description" rows={2} className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF] resize-none" />
+              <textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} placeholder="Description" rows={2} className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] resize-none" />
               <div className="grid grid-cols-2 gap-3">
-                <input value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} placeholder="Price (e.g. From $199)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
-                <input value={editing.href} onChange={(e) => setEditing({ ...editing, href: e.target.value })} placeholder="Link (e.g. /services/chatbot)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
+                <input value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} placeholder="Price (e.g. From $199)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={editing.href} onChange={(e) => setEditing({ ...editing, href: e.target.value })} placeholder="Link (e.g. /services/chatbot)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
               </div>
               <div>
                 <label className="block text-sm text-[#7A8BA8] mb-1.5">Features (comma-separated)</label>
-                <input value={featuresText} onChange={(e) => setFeaturesText(e.target.value)} placeholder="Responsive, SEO, Fast Loading" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
+                <input value={featuresText} onChange={(e) => setFeaturesText(e.target.value)} placeholder="Responsive, SEO, Fast Loading" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
               </div>
-              <button type="button" onClick={save} disabled={saving} className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold rounded-xl disabled:opacity-60">
+              <button type="button" onClick={save} disabled={saving} className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold rounded-xl disabled:opacity-60">
                 {saving ? <Loader2 className="animate-spin" size={18} /> : null}
                 {saving ? 'Saving…' : 'Save'}
               </button>

@@ -44,7 +44,7 @@ export default function AiAutomationLibrary() {
       {/* ===== CORPORATE COVER ===== */}
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full bg-[var(--accent-blue)] opacity-[0.07] blur-[120px]" />
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full bg-[var(--color-action-primary)] opacity-[0.07] blur-[120px]" />
           <div className="absolute top-20 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--accent-purple)] opacity-[0.08] blur-[120px]" />
           <div
             className="absolute inset-0 opacity-[0.15]"
@@ -62,7 +62,7 @@ export default function AiAutomationLibrary() {
           <motion.span
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--accent-blue)] border border-[var(--accent-blue)]/40 bg-[var(--glow-blue)]"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold font-sora text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 bg-[var(--glow-blue)]"
           >
             <Bot size={14} /> AI Automation · Pretoria, South Africa
           </motion.span>
@@ -96,7 +96,7 @@ export default function AiAutomationLibrary() {
             transition={{ delay: 0.25 }}
             className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-[var(--text-secondary)]"
           >
-            <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--accent-blue)]" /> 200 systems</span>
+            <span className="inline-flex items-center gap-1.5"><Zap size={15} className="text-[var(--color-action-primary)]" /> 200 systems</span>
             <span className="inline-flex items-center gap-1.5"><Clock size={15} className="text-[var(--accent-green)]" /> Works 24/7</span>
             <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[var(--accent-gold)]" /> You own everything</span>
             <span className="inline-flex items-center gap-1.5"><TrendingUp size={15} className="text-[var(--accent-purple)]" /> No commission, ever</span>
@@ -114,7 +114,7 @@ export default function AiAutomationLibrary() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search 200 systems… (e.g. salon, hotel, dentist, invoice)"
-              className="w-full bg-[var(--bg-card)]/80 backdrop-blur border border-[var(--border)] text-[var(--text-primary)] pl-11 pr-4 py-3.5 rounded-xl focus:outline-none focus:border-[var(--accent-blue)]"
+              className="w-full bg-[var(--bg-card)]/80 backdrop-blur border border-[var(--border)] text-[var(--text-primary)] pl-11 pr-4 py-3.5 rounded-xl focus:outline-none focus:border-[var(--color-action-primary)]"
             />
           </motion.div>
         </div>
@@ -131,8 +131,8 @@ export default function AiAutomationLibrary() {
                 onClick={() => setCategory(c)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                   category === c
-                    ? 'bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white border-transparent'
-                    : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:text-[var(--accent-blue)]'
+                    ? 'bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white border-transparent'
+                    : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:text-[var(--color-action-primary)]'
                 }`}
               >
                 {c === 'All' ? 'All departments' : c}

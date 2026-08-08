@@ -85,7 +85,7 @@ export default function HomepageAdmin() {
                   name="hero_badge"
                   value={formData.hero_badge}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
                 <p className="text-xs text-[var(--text-secondary)] mt-1">This badge is clickable and links to /ai-automation</p>
               </div>
@@ -100,7 +100,7 @@ export default function HomepageAdmin() {
                   name="hero_title"
                   value={formData.hero_title}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
 
@@ -114,7 +114,7 @@ export default function HomepageAdmin() {
                   value={formData.hero_subtitle}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
             </div>
@@ -134,7 +134,7 @@ export default function HomepageAdmin() {
                   value={formData.stat1_value}
                   onChange={handleChange}
                   placeholder="e.g. 50+"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
               <div>
@@ -145,7 +145,7 @@ export default function HomepageAdmin() {
                   value={formData.stat1_label}
                   onChange={handleChange}
                   placeholder="e.g. Projects Delivered"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
 
@@ -158,7 +158,7 @@ export default function HomepageAdmin() {
                   value={formData.stat2_value}
                   onChange={handleChange}
                   placeholder="e.g. 100%"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
               <div>
@@ -169,7 +169,7 @@ export default function HomepageAdmin() {
                   value={formData.stat2_label}
                   onChange={handleChange}
                   placeholder="e.g. Client Satisfaction"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
 
@@ -182,7 +182,7 @@ export default function HomepageAdmin() {
                   value={formData.stat3_value}
                   onChange={handleChange}
                   placeholder="e.g. 3+"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
               <div>
@@ -193,7 +193,7 @@ export default function HomepageAdmin() {
                   value={formData.stat3_label}
                   onChange={handleChange}
                   placeholder="e.g. Years Experience"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
 
@@ -206,7 +206,7 @@ export default function HomepageAdmin() {
                   value={formData.stat4_value}
                   onChange={handleChange}
                   placeholder="e.g. 24/7"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
               <div>
@@ -217,7 +217,7 @@ export default function HomepageAdmin() {
                   value={formData.stat4_label}
                   onChange={handleChange}
                   placeholder="e.g. Support Available"
-                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors"
+                  className="w-full px-4 py-3 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-action-primary)] transition-colors"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function HomepageAdmin() {
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full px-6 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full px-6 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <Save size={20} />
             {isSaving ? 'Saving...' : 'Save Changes'}

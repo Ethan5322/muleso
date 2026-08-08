@@ -10,7 +10,7 @@ type AccentKey = 'gold' | 'blue' | 'purple' | 'green';
 
 const ACCENTS: Record<AccentKey, { from: string; to: string; accent: string }> = {
   gold: { from: '#E8B84B', to: '#1B2A6B', accent: '#E8B84B' },
-  blue: { from: '#00C8FF', to: '#1B2A6B', accent: '#00C8FF' },
+  blue: { from: '#D4A940', to: '#1B2A6B', accent: '#D4A940' },
   purple: { from: '#7B2FFF', to: '#101A40', accent: '#9D6BFF' },
   green: { from: '#00FF88', to: '#0A3A5F', accent: '#00FF88' },
 };

@@ -41,12 +41,12 @@ export default function QrLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 text-center">
       <div>
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
           {failed ? <QrCode className="text-white" size={26} /> : <Loader2 className="text-white animate-spin" size={26} />}
         </div>
         <p className="text-[#F0F2FA] font-semibold">{status}</p>
         {failed && (
-          <a href="/corporate/login" className="text-[#00C8FF] text-sm hover:underline mt-3 inline-block">
+          <a href="/corporate/login" className="text-[var(--color-action-primary)] text-sm hover:underline mt-3 inline-block">
             Go to sign-in →
           </a>
         )}

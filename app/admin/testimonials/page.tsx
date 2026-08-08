@@ -92,7 +92,7 @@ export default function TestimonialsManager() {
         <button
           type="button"
           onClick={() => setEditing({ ...EMPTY, order: items.length })}
-          className="bg-[#00C8FF] hover:bg-[#00B3E6] text-black font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition"
+          className="bg-[var(--color-action-primary)] hover:bg-[#00B3E6] text-black font-bold py-2.5 px-5 rounded-lg flex items-center gap-2 transition"
         >
           <Plus size={18} /> Add Testimonial
         </button>
@@ -141,17 +141,17 @@ export default function TestimonialsManager() {
                 onChange={(e) => setEditing({ ...editing, quote: e.target.value })}
                 placeholder="The review / quote *"
                 rows={3}
-                className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF] resize-none"
+                className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] resize-none"
               />
               <div className="grid grid-cols-2 gap-3">
-                <input value={editing.author} onChange={(e) => setEditing({ ...editing, author: e.target.value })} placeholder="Author name *" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
-                <input value={editing.role} onChange={(e) => setEditing({ ...editing, role: e.target.value })} placeholder="Role (e.g. CEO)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
-                <input value={editing.company} onChange={(e) => setEditing({ ...editing, company: e.target.value })} placeholder="Company" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]" />
-                <select value={editing.rating} onChange={(e) => setEditing({ ...editing, rating: Number(e.target.value) })} aria-label="Rating" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]">
+                <input value={editing.author} onChange={(e) => setEditing({ ...editing, author: e.target.value })} placeholder="Author name *" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={editing.role} onChange={(e) => setEditing({ ...editing, role: e.target.value })} placeholder="Role (e.g. CEO)" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <input value={editing.company} onChange={(e) => setEditing({ ...editing, company: e.target.value })} placeholder="Company" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]" />
+                <select value={editing.rating} onChange={(e) => setEditing({ ...editing, rating: Number(e.target.value) })} aria-label="Rating" className="bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]">
                   {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{n} stars</option>)}
                 </select>
               </div>
-              <button type="button" onClick={save} disabled={saving} className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold rounded-xl disabled:opacity-60">
+              <button type="button" onClick={save} disabled={saving} className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold rounded-xl disabled:opacity-60">
                 {saving ? <Loader2 className="animate-spin" size={18} /> : null}
                 {saving ? 'Saving…' : 'Save'}
               </button>

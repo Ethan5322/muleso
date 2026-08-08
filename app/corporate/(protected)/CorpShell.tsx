@@ -123,7 +123,7 @@ export default function CorpShell({
             >
               <ArrowLeft size={18} />
             </button>
-            <span className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center">
+            <span className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center">
               <Building2 className="text-white" size={18} />
             </span>
             <div className="leading-tight">
@@ -138,7 +138,7 @@ export default function CorpShell({
             <button
               type="button"
               onClick={signOut}
-              className="flex items-center gap-1.5 text-xs font-semibold text-[#A8B2D0] hover:text-[#00C8FF] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-[#A8B2D0] hover:text-[var(--color-action-primary)] transition-colors"
             >
               <LogOut size={15} /> Sign out
             </button>
@@ -162,12 +162,12 @@ export default function CorpShell({
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-                  active ? 'bg-[#00C8FF]/15 text-[#00C8FF]' : 'text-[#A8B2D0] bg-[#0D1528]'
+                  active ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)]' : 'text-[#A8B2D0] bg-[#0D1528]'
                 }`}
               >
                 <Icon size={14} /> {item.label}
                 {count > 0 && (
-                  <span className="text-[9px] font-bold bg-[#00C8FF] text-black rounded-full px-1">{count}</span>
+                  <span className="text-[9px] font-bold bg-[var(--color-action-primary)] text-black rounded-full px-1">{count}</span>
                 )}
               </Link>
             );
@@ -183,7 +183,7 @@ export default function CorpShell({
             const active = pathname === item.href;
             const cls = `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               active
-                ? 'bg-[#00C8FF]/10 text-[#00C8FF]'
+                ? 'bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)]'
                 : 'text-[#A8B2D0] hover:bg-[#0D1528] hover:text-[#F0F2FA]'
             }`;
             const count =
@@ -193,7 +193,7 @@ export default function CorpShell({
               : 0;
             const badge =
               count > 0 ? (
-                <span className="ml-auto text-[10px] font-bold bg-[#00C8FF] text-black rounded-full px-1.5 py-0.5">
+                <span className="ml-auto text-[10px] font-bold bg-[var(--color-action-primary)] text-black rounded-full px-1.5 py-0.5">
                   {count}
                 </span>
               ) : null;

@@ -35,7 +35,7 @@ export default function ChatbotPage() {
               { title: 'Supabase Logging', desc: 'Every conversation is saved and searchable' },
               { title: 'Easy to Embed', desc: 'One script tag on any website' },
             ].map((feature) => (
-              <motion.div key={feature.title} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]">
+              <motion.div key={feature.title} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)]">
                 <h3 className="text-lg font-bold font-sora text-[var(--text-primary)] mb-2">
                   {feature.title}
                 </h3>
@@ -106,7 +106,7 @@ export default function ChatbotPage() {
           </div>
           <p className="text-sm text-[var(--text-secondary)] mt-6">
             Live proof: our booking systems already run for Tsedi Catering and Shime Events.{' '}
-            <Link href="/contact" className="text-[var(--accent-blue)] font-semibold hover:underline">
+            <Link href="/contact" className="text-[var(--color-action-primary)] font-semibold hover:underline">
               Get a restaurant booking system →
             </Link>
           </p>
@@ -117,7 +117,7 @@ export default function ChatbotPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mb-20 glass-card p-12 text-center border border-[var(--accent-blue)]"
+          className="mb-20 glass-card p-12 text-center border border-[var(--color-action-primary)]"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Custom Pricing for Every Budget</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
@@ -125,14 +125,14 @@ export default function ChatbotPage() {
           </p>
           <div className="mb-8 space-y-4">
             <div>
-              <p className="text-lg text-[var(--accent-blue)] font-sora font-bold mb-2">
+              <p className="text-lg text-[var(--color-action-primary)] font-sora font-bold mb-2">
                 Contact Ena Muluken Directly for Custom Pricing
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <a
                     href="mailto:hello@mulesoo.com"
-                    className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
+                    className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
                   >
                     Email: hello@mulesoo.com
                   </a>
@@ -203,7 +203,7 @@ export default function ChatbotPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all duration-300 border border-[var(--border)]"
+                className="glass-card p-6 hover:border-[var(--color-action-primary)] transition-all duration-300 border border-[var(--border)]"
               >
                 <h3 className="font-bold text-[var(--text-primary)] mb-3 text-lg">{item.q}</h3>
                 <p className="text-[var(--text-secondary)] leading-relaxed">{item.a}</p>
@@ -222,7 +222,7 @@ export default function ChatbotPage() {
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Automate?</h2>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Schedule Your Demo
           </Link>

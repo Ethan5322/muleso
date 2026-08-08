@@ -44,7 +44,7 @@ export default function FaceLoginPage() {
       <Toaster position="top-center" />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
             <ShieldCheck className="text-white" size={24} />
           </div>
           <h1 className="text-2xl font-bold font-sora">Face Login</h1>
@@ -57,7 +57,7 @@ export default function FaceLoginPage() {
 
         <p className="text-center text-sm text-[#7A8BA8] mt-6">
           Prefer a password?{' '}
-          <Link href="/admin/login" className="text-[#00C8FF] hover:underline">
+          <Link href="/admin/login" className="text-[var(--color-action-primary)] hover:underline">
             Use password + 2FA
           </Link>
         </p>

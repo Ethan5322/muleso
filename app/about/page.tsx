@@ -10,7 +10,7 @@ import { parseTeam, type TeamAccent } from '@/lib/siteSettings';
 
 // The team is fully editable from the admin panel (Site Content → Team).
 const ACCENT: Record<TeamAccent, string> = {
-  blue: 'var(--accent-blue)',
+  blue: 'var(--color-action-primary)',
   purple: 'var(--accent-purple)',
   green: 'var(--accent-green)',
   gold: 'var(--accent-gold)',
@@ -71,13 +71,13 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-5">
-            <p className="text-sm font-sora font-bold text-[var(--accent-blue)] uppercase tracking-wide">Meet the Founder</p>
+            <p className="text-sm font-sora font-bold text-[var(--color-action-primary)] uppercase tracking-wide">Meet the Founder</p>
             <h2 className="text-4xl font-bold font-sora text-[var(--text-primary)] -mt-2">Hi, I&apos;m Ena Muluken.</h2>
             <p className="text-[var(--text-secondary)] leading-relaxed text-lg">
               I founded <span className="text-[var(--text-primary)] font-semibold">MuleSoo Digital Services</span> to give
               African businesses the same world-class websites, AI chatbots and automation the biggest brands use — built
               by a team that understands both the <span className="text-[var(--accent-gold)]">culture</span> and the{' '}
-              <span className="text-[var(--accent-blue)]">code</span>.
+              <span className="text-[var(--color-action-primary)]">code</span>.
             </p>
             <p className="text-[var(--text-secondary)] leading-relaxed">
               Based in Pretoria, South Africa, I also run Habesha Celebration Events and share what we learn on YouTube.
@@ -92,7 +92,7 @@ export default function AboutPage() {
                 {['MuleSoo.com 🛠️', 'Habesha Events 🎊', 'YouTube AI Channel 🎥'].map((item) => (
                   <span
                     key={item}
-                    className="px-4 py-2 bg-[var(--glow-blue)] text-[var(--accent-blue)] rounded-full text-sm"
+                    className="px-4 py-2 bg-[var(--glow-blue)] text-[var(--color-action-primary)] rounded-full text-sm"
                   >
                     {item}
                   </span>
@@ -109,7 +109,7 @@ export default function AboutPage() {
                 <motion.div key={link.name} whileHover={{ scale: 1.05 }}>
                   <Link
                     href={link.url}
-                    className="inline-block px-4 py-2 border border-[var(--accent-blue)] text-[var(--accent-blue)] rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all"
+                    className="inline-block px-4 py-2 border border-[var(--color-action-primary)] text-[var(--color-action-primary)] rounded-lg hover:bg-[var(--glow-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all"
                   >
                     {link.name}
                   </Link>
@@ -133,9 +133,9 @@ export default function AboutPage() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((m, i) => {
-              const color = ACCENT[m.accent] || 'var(--accent-blue)';
+              const color = ACCENT[m.accent] || 'var(--color-action-primary)';
               return (
-                <motion.div key={`${m.name}-${i}`} whileHover={{ translateY: -4 }} className="glass-card p-6 flex flex-col items-center text-center border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
+                <motion.div key={`${m.name}-${i}`} whileHover={{ translateY: -4 }} className="glass-card p-6 flex flex-col items-center text-center border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
                   <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border-2 shrink-0" style={{ borderColor: color }}>
                     {m.photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -217,7 +217,7 @@ export default function AboutPage() {
           </h2>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Schedule a Call
           </Link>

@@ -369,7 +369,7 @@ export default function AdminLogin() {
               className="space-y-6"
             >
               <div className="relative">
-                <label className="block text-sm font-bold text-[#00C8FF] mb-2">
+                <label className="block text-sm font-bold text-[var(--color-action-primary)] mb-2">
                   Step 1: Enter Admin Password
                 </label>
                 <div className="relative">
@@ -452,7 +452,7 @@ export default function AdminLogin() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-10 text-[#E8B84B] hover:text-[#00C8FF]"
+                    className="absolute right-3 top-10 text-[#E8B84B] hover:text-[var(--color-action-primary)]"
                   >
                     {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -534,7 +534,7 @@ export default function AdminLogin() {
               </div>
 
               <div className="relative">
-                <label className="block text-sm font-bold text-[#00C8FF] mb-2">
+                <label className="block text-sm font-bold text-[var(--color-action-primary)] mb-2">
                   Step 3: Enter 6-Digit 2FA Code
                 </label>
                 <input
@@ -546,9 +546,9 @@ export default function AdminLogin() {
                   maxLength={6}
                   autoComplete="off"
                   inputMode="numeric"
-                  className="w-full bg-[#1a1a2e] border border-[#00C8FF]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
+                  className="w-full bg-[#1a1a2e] border border-[var(--color-action-primary)]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] focus:ring-2 focus:ring-[var(--color-action-primary)]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
                 />
-                <p className="text-[#00C8FF]/60 text-xs mt-2">
+                <p className="text-[var(--color-action-primary)]/60 text-xs mt-2">
                   Check your email ({ADMIN_EMAIL}) for the code. It expires in 10 minutes.
                 </p>
               </div>
@@ -622,11 +622,11 @@ export default function AdminLogin() {
                   <div className="inline-block bg-white p-2 rounded-xl mb-3">
                     <Image src={faceQr} alt="Scan to open Face Login on your phone" width={140} height={140} />
                   </div>
-                  <p className="text-[#00C8FF]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
+                  <p className="text-[var(--color-action-primary)]/50 text-xs mb-3">📱 Scan with your phone to capture your face</p>
                   <a
                     href={faceQr}
                     download="mulesoo-admin-face-login-qr.png"
-                    className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-lg bg-[#00C8FF]/15 border border-[#00C8FF]/40 text-[#00C8FF] hover:bg-[#00C8FF]/25 text-sm font-semibold transition-all"
+                    className="inline-flex items-center gap-2 mb-3 px-4 py-2 rounded-lg bg-[var(--color-action-primary)]/15 border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)] hover:bg-[var(--color-action-primary)]/25 text-sm font-semibold transition-all"
                   >
                     ⬇ Download QR Code
                   </a>
@@ -634,7 +634,7 @@ export default function AdminLogin() {
               )}
               <Link
                 href="/admin/face-login"
-                className="inline-block text-[#00C8FF] hover:underline text-sm font-semibold"
+                className="inline-block text-[var(--color-action-primary)] hover:underline text-sm font-semibold"
               >
                 Use Face Login on this device →
               </Link>

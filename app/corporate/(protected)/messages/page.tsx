@@ -160,7 +160,7 @@ export default function MessagesPage() {
                 key={c.id}
                 onClick={() => openThread(c.id)}
                 className={`w-full text-left px-4 py-3 border-b border-[#101a30] transition-colors ${
-                  selected === c.id ? 'bg-[#00C8FF]/10' : 'hover:bg-[#0D1528]'
+                  selected === c.id ? 'bg-[var(--color-action-primary)]/10' : 'hover:bg-[#0D1528]'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -168,7 +168,7 @@ export default function MessagesPage() {
                     {c.display_name || 'Admin'}
                   </span>
                   {unread > 0 && (
-                    <span className="text-[10px] font-bold bg-[#00C8FF] text-black rounded-full px-1.5 py-0.5">
+                    <span className="text-[10px] font-bold bg-[var(--color-action-primary)] text-black rounded-full px-1.5 py-0.5">
                       {unread}
                     </span>
                   )}
@@ -221,7 +221,7 @@ export default function MessagesPage() {
                     <div
                       className={`max-w-[75%] px-3.5 py-2 text-sm rounded-2xl ${
                         mine
-                          ? 'bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white rounded-br-sm'
+                          ? 'bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] text-white rounded-br-sm'
                           : 'bg-[#0D1528] text-[#F0F2FA] border border-[#1A2640] rounded-bl-sm'
                       }`}
                     >
@@ -247,13 +247,13 @@ export default function MessagesPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send())}
                 placeholder="Type a private message…"
-                className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
               />
               <button
                 type="button"
                 onClick={send}
                 disabled={sending || !input.trim()}
-                className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50"
+                className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50"
               >
                 {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
               </button>

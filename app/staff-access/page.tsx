@@ -33,7 +33,7 @@ export default function StaffAccessPage() {
     <div className="min-h-screen bg-[#050810] text-[#F0F2FA] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
             <Building2 className="text-white" size={28} />
           </div>
           <h1 className="text-2xl font-bold font-sora">MuleSoo Staff Access</h1>
@@ -44,9 +44,9 @@ export default function StaffAccessPage() {
           {/* Option A */}
           <a
             href="/"
-            className="flex items-center gap-4 p-5 rounded-2xl glass-card border border-[var(--border)] hover:border-[var(--accent-blue)] transition-colors"
+            className="flex items-center gap-4 p-5 rounded-2xl glass-card border border-[var(--border)] hover:border-[var(--color-action-primary)] transition-colors"
           >
-            <span className="w-11 h-11 rounded-xl bg-[var(--glow-blue)] text-[var(--accent-blue)] flex items-center justify-center">
+            <span className="w-11 h-11 rounded-xl bg-[var(--glow-blue)] text-[var(--color-action-primary)] flex items-center justify-center">
               <Globe size={22} />
             </span>
             <span>

@@ -127,7 +127,7 @@ export default function TermsPage() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleDownloadTerms}
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[var(--accent-blue)] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-[var(--accent-gold)] to-[var(--color-action-primary)] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
               >
                 <Download size={20} />
                 {isLoading ? 'Generating...' : 'Download Terms PDF'}
@@ -237,13 +237,13 @@ export default function TermsPage() {
             </h2>
             <p className="text-[var(--text-secondary)] mb-6 max-w-2xl mx-auto">
               We're happy to discuss any concerns. Reach out to us at{' '}
-              <span className="text-[var(--accent-blue)] font-semibold">
+              <span className="text-[var(--color-action-primary)] font-semibold">
                 hello@mulesoo.com
               </span>
             </p>
             <a
               href="mailto:hello@mulesoo.com"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent-blue)] text-white font-bold rounded-lg hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-action-primary)] text-white font-bold rounded-lg hover:opacity-90 transition-opacity"
             >
               Send us a Message
             </a>

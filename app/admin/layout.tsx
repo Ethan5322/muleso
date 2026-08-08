@@ -176,12 +176,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   aria-current={active ? 'page' : undefined}
                   className={`group relative flex items-center gap-3 pl-3.5 pr-3 py-2.5 rounded-lg font-medium text-sm transition-all ${
                     active
-                      ? 'bg-[#00C8FF]/10 text-white'
+                      ? 'bg-[var(--color-action-primary)]/10 text-white'
                       : 'text-[#8A9AB8] hover:text-white hover:bg-[#141d2e]'
                   }`}
                 >
-                  {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-gradient-to-b from-[#00C8FF] to-[#7B2FFF]" />}
-                  <Icon size={18} className={active ? 'text-[#00C8FF]' : 'text-[#8FA0BE] group-hover:text-[#00C8FF]'} />
+                  {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-gradient-to-b from-[var(--color-action-primary)] to-[#7B2FFF]" />}
+                  <Icon size={18} className={active ? 'text-[var(--color-action-primary)]' : 'text-[#8FA0BE] group-hover:text-[var(--color-action-primary)]'} />
                   <span>{item.label}</span>
                 </Link>
               );
@@ -221,12 +221,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden p-2 rounded-lg hover:bg-[#1A2332] text-[#00C8FF]"
+              className="lg:hidden p-2 rounded-lg hover:bg-[#1A2332] text-[var(--color-action-primary)]"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center">
               <span className="text-white font-bold">M</span>
             </div>
             <div>
@@ -246,7 +246,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={() => setProfileOpen((v) => !v)}
                 className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg hover:bg-[#141d2e] transition-colors"
               >
-                <span className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center text-sm font-bold">
+                <span className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center text-sm font-bold">
                   M
                 </span>
                 <span className="hidden sm:block text-left leading-tight">
@@ -329,7 +329,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={item.href}
               href={item.href}
               className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-                active ? 'text-[#00C8FF]' : 'text-[#8FA0BE]'
+                active ? 'text-[var(--color-action-primary)]' : 'text-[#8FA0BE]'
               }`}
             >
               <Icon size={20} />

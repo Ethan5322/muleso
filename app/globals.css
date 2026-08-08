@@ -26,6 +26,11 @@
   --brand-indigo: #1D4ED8;
   --brand-indigo-hover: #1E40AF;
   --hairline: rgba(168, 178, 208, 0.22);
+
+  /* Action color system: replaces neon blue with warm gold for premium feel */
+  --color-action-primary: #E8B84B;
+  --color-action-hover: #D4A940;
+  --color-action-active: #C19D38;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

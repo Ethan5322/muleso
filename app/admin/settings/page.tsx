@@ -80,7 +80,7 @@ export default function AdminSettingsPage() {
           disabled
           aria-label="Admin email"
           value={ADMIN_EMAIL}
-          className="w-full bg-[#1A2332] border border-[#1E3A5F] text-[#00C8FF] py-2 px-4 rounded-lg text-sm"
+          className="w-full bg-[#1A2332] border border-[#1E3A5F] text-[var(--color-action-primary)] py-2 px-4 rounded-lg text-sm"
         />
         <p className="text-xs text-[#7A8BA8] mt-3">
           🔐 Protected by email 2FA. Change your password below — it&apos;s stored securely (hashed) and
@@ -92,14 +92,14 @@ export default function AdminSettingsPage() {
       <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
         <h3 className="text-lg font-bold text-white mb-4">🔑 Change Password</h3>
         <div className="space-y-3 max-w-md">
-          <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} placeholder="Current password" autoComplete="current-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]" />
-          <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="New password (min 8 chars)" autoComplete="new-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]" />
-          <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="Confirm new password" autoComplete="new-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]" />
+          <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} placeholder="Current password" autoComplete="current-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[var(--color-action-primary)]" />
+          <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="New password (min 8 chars)" autoComplete="new-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[var(--color-action-primary)]" />
+          <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="Confirm new password" autoComplete="new-password" className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white py-2.5 px-4 rounded-lg text-sm focus:outline-none focus:border-[var(--color-action-primary)]" />
           <button
             type="button"
             onClick={changePassword}
             disabled={changing || !currentPw || !newPw}
-            className="bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold py-2.5 px-6 rounded-lg text-sm disabled:opacity-50"
+            className="bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold py-2.5 px-6 rounded-lg text-sm disabled:opacity-50"
           >
             {changing ? 'Changing…' : 'Change Password'}
           </button>
@@ -114,7 +114,7 @@ export default function AdminSettingsPage() {
         </p>
         <a
           href="/admin/face-enroll"
-          className="inline-block bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[#00C8FF] py-2 px-4 rounded-lg font-semibold transition-all"
+          className="inline-block bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[var(--color-action-primary)] py-2 px-4 rounded-lg font-semibold transition-all"
         >
           Set up / Re-enroll Face
         </a>
@@ -130,7 +130,7 @@ export default function AdminSettingsPage() {
             <motion.button
               whileHover={{ scale: 1.04 }}
               onClick={loadLogs}
-              className="flex items-center gap-2 bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[#00C8FF] py-2 px-3 rounded-lg text-sm font-semibold"
+              className="flex items-center gap-2 bg-[#1A2332] hover:bg-[#253345] border border-[#1E3A5F] text-[var(--color-action-primary)] py-2 px-3 rounded-lg text-sm font-semibold"
             >
               <RefreshCw size={15} /> Refresh
             </motion.button>
@@ -180,7 +180,7 @@ export default function AdminSettingsPage() {
       <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-lg p-6">
         <h3 className="text-lg font-bold text-white mb-4">ℹ️ System Information</h3>
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between text-[#7A8BA8]"><span>Version</span><span className="text-[#00C8FF]">1.0.0</span></div>
+          <div className="flex justify-between text-[#7A8BA8]"><span>Version</span><span className="text-[var(--color-action-primary)]">1.0.0</span></div>
           <div className="flex justify-between text-[#7A8BA8]"><span>Two-Factor Auth</span><span className="text-emerald-400">✓ Enabled</span></div>
           <div className="flex justify-between text-[#7A8BA8]"><span>Admin Writes</span><span className="text-emerald-400">✓ Server-guarded</span></div>
         </div>

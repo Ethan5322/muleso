@@ -180,7 +180,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold font-sora text-sm"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold font-sora text-sm"
       >
         <UserPlus size={16} /> Register new admin
       </button>
@@ -191,7 +191,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
     <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold font-sora flex items-center gap-2">
-          <UserPlus size={18} className="text-[#00C8FF]" /> Register department admin
+          <UserPlus size={18} className="text-[var(--color-action-primary)]" /> Register department admin
         </h2>
         <button onClick={() => { setOpen(false); reset(); }} className="text-[#8FA0BE] hover:text-white">
           <X size={18} />
@@ -236,9 +236,9 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                 <input
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="flex-1 px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                  className="flex-1 px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
                 />
-                <button type="button" onClick={genPassword} className="px-3 rounded-lg border border-[#1A2640] text-xs text-[#00C8FF]">
+                <button type="button" onClick={genPassword} className="px-3 rounded-lg border border-[#1A2640] text-xs text-[var(--color-action-primary)]">
                   Generate
                 </button>
               </div>
@@ -249,7 +249,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                 value={deptId}
                 onChange={(e) => pickDept(e.target.value)}
                 title="Assign to a department"
-                className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
               >
                 <option value="">Select a department…</option>
                 {departments.map((d) => (
@@ -261,13 +261,13 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                   value={newDept}
                   onChange={(e) => setNewDept(e.target.value)}
                   placeholder="…or add a new department"
-                  className="flex-1 px-3 py-1.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-xs text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                  className="flex-1 px-3 py-1.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-xs text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
                 />
                 <button
                   type="button"
                   onClick={createDept}
                   disabled={addingDept || !newDept.trim()}
-                  className="px-3 rounded-lg border border-[#1A2640] text-xs text-[#00C8FF] disabled:opacity-50"
+                  className="px-3 rounded-lg border border-[#1A2640] text-xs text-[var(--color-action-primary)] disabled:opacity-50"
                 >
                   {addingDept ? '…' : 'Add'}
                 </button>
@@ -283,13 +283,13 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                     value={roleTitle}
                     onChange={(e) => setRoleTitle(e.target.value)}
                     placeholder="e.g. Sales Representative"
-                    className="flex-1 px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                    className="flex-1 px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
                   />
                   <select
                     value=""
                     onChange={(e) => e.target.value && applyPreset(e.target.value)}
                     title="Apply a role preset"
-                    className="px-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-xs text-[#00C8FF]"
+                    className="px-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-xs text-[var(--color-action-primary)]"
                   >
                     <option value="">Preset…</option>
                     {ROLE_PRESETS.map((p) => (
@@ -309,7 +309,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                   type="button"
                   onClick={() => setIsVisitor(false)}
                   className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
-                    !isVisitor ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                    !isVisitor ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] border-[var(--color-action-primary)]/50' : 'border-[#1A2640] text-[#8A9AB8]'
                   }`}
                 >
                   Department admin
@@ -339,7 +339,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                 value={expiresAt}
                 onChange={(e) => setExpiresAt(e.target.value)}
                 title="Access expiry date"
-                className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
               />
               <p className="text-[11px] text-[#8A9AB8] mt-1">Leave blank for permanent access. You can revoke anytime.</p>
             </div>
@@ -367,7 +367,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                 type="button"
                 onClick={() => setPhotoMode('capture')}
                 className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
-                  photoMode === 'capture' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                  photoMode === 'capture' ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] border-[var(--color-action-primary)]/50' : 'border-[#1A2640] text-[#8A9AB8]'
                 }`}
               >
                 Live face capture
@@ -376,7 +376,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                 type="button"
                 onClick={() => setPhotoMode('upload')}
                 className={`flex-1 py-2 rounded-lg text-xs font-semibold border transition-colors ${
-                  photoMode === 'upload' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'
+                  photoMode === 'upload' ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] border-[var(--color-action-primary)]/50' : 'border-[#1A2640] text-[#8A9AB8]'
                 }`}
               >
                 Upload photo
@@ -398,7 +398,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
                   accept="image/*"
                   onChange={(e) => handleFile(e.target.files?.[0])}
                   title="Upload ID photo"
-                  className="block w-full text-xs text-[#A8B2D0] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#00C8FF]/15 file:text-[#00C8FF] file:font-semibold"
+                  className="block w-full text-xs text-[#A8B2D0] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[var(--color-action-primary)]/15 file:text-[var(--color-action-primary)] file:font-semibold"
                 />
                 <p className="text-[11px] text-[#8A9AB8] mt-2">
                   For remote staff. No biometric is set — they enrol their own face later in Settings; until then they log in by password, code, or QR.
@@ -416,7 +416,7 @@ export default function RegisterAdmin({ onDone }: { onDone: () => void }) {
             <button
               onClick={submit}
               disabled={busy}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold font-sora text-sm disabled:opacity-60"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold font-sora text-sm disabled:opacity-60"
             >
               {busy ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />}
               Register & issue ID
@@ -440,7 +440,7 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+        className="w-full px-3 py-2 bg-[#0D1528] border border-[#1A2640] rounded-lg text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
       />
     </div>
   );

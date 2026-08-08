@@ -39,7 +39,7 @@ export default function AutopilotPage() {
               {['Works 24/7', 'No manual admin', 'You fully own it', 'Runs on autopilot'].map((b) => (
                 <span
                   key={b}
-                  className="px-3 py-1.5 rounded-full text-sm font-semibold bg-[var(--glow-blue)] border border-[var(--accent-blue)]/40 text-[var(--accent-blue)]"
+                  className="px-3 py-1.5 rounded-full text-sm font-semibold bg-[var(--glow-blue)] border border-[var(--color-action-primary)]/40 text-[var(--color-action-primary)]"
                 >
                   {b}
                 </span>
@@ -75,14 +75,14 @@ export default function AutopilotPage() {
                 business you already run.
               </p>
               <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
-                <li className="flex gap-2"><span className="text-[var(--accent-blue)]">•</span> Modular — add one system at a time</li>
-                <li className="flex gap-2"><span className="text-[var(--accent-blue)]">•</span> Automates a <em>task</em> (e.g. a chatbot, a lead capture)</li>
-                <li className="flex gap-2"><span className="text-[var(--accent-blue)]">•</span> Best when you already have systems in place</li>
-                <li className="flex gap-2"><span className="text-[var(--accent-blue)]">•</span> Plug into your existing workflow</li>
+                <li className="flex gap-2"><span className="text-[var(--color-action-primary)]">•</span> Modular — add one system at a time</li>
+                <li className="flex gap-2"><span className="text-[var(--color-action-primary)]">•</span> Automates a <em>task</em> (e.g. a chatbot, a lead capture)</li>
+                <li className="flex gap-2"><span className="text-[var(--color-action-primary)]">•</span> Best when you already have systems in place</li>
+                <li className="flex gap-2"><span className="text-[var(--color-action-primary)]">•</span> Plug into your existing workflow</li>
               </ul>
             </motion.div>
 
-            <motion.div whileHover={{ translateY: -4 }} className="glass-card p-8 border border-[var(--accent-blue)] shadow-[0_0_30px_-12px_var(--glow-blue)] hover:shadow-[0_0_30px_var(--glow-blue)] transition-all duration-300">
+            <motion.div whileHover={{ translateY: -4 }} className="glass-card p-8 border border-[var(--color-action-primary)] shadow-[0_0_30px_-12px_var(--glow-blue)] hover:shadow-[0_0_30px_var(--glow-blue)] transition-all duration-300">
               <div className="text-4xl mb-3">🛫</div>
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-2">Auto Pilot System</h3>
               <p className="text-[var(--text-secondary)] mb-4">
@@ -125,8 +125,8 @@ export default function AutopilotPage() {
               { num: 5, title: 'Remind & Follow Up', desc: 'Automatic WhatsApp/SMS reminders cut no-shows and bring customers back.' },
               { num: 6, title: 'Report to You', desc: 'You get a clean admin dashboard — bookings, income, members and trends, updated live.' },
             ].map((item) => (
-              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+              <motion.div key={item.num} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora">{item.num}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -144,7 +144,7 @@ export default function AutopilotPage() {
           viewport={{ once: true }}
           className="mb-24"
         >
-          <div className="glass-card overflow-hidden grid grid-cols-1 lg:grid-cols-2 border border-[var(--accent-blue)]/40">
+          <div className="glass-card overflow-hidden grid grid-cols-1 lg:grid-cols-2 border border-[var(--color-action-primary)]/40">
             <div className="relative min-h-[260px] lg:min-h-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -158,7 +158,7 @@ export default function AutopilotPage() {
               </span>
             </div>
             <div className="p-8 sm:p-10">
-              <p className="text-sm font-bold uppercase tracking-wider text-[var(--accent-blue)] mb-2">See It Live</p>
+              <p className="text-sm font-bold uppercase tracking-wider text-[var(--color-action-primary)] mb-2">See It Live</p>
               <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-3">
                 Yoyo Gym runs on Auto Pilot
               </h2>
@@ -184,13 +184,13 @@ export default function AutopilotPage() {
                   href="https://yoyogym.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+                  className="inline-block px-6 py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
                 >
                   Visit the Live System →
                 </a>
                 <a
                   href="/portfolio"
-                  className="inline-block px-6 py-3 border border-[var(--border)] text-[var(--text-primary)] font-bold rounded-lg hover:border-[var(--accent-blue)] transition-colors"
+                  className="inline-block px-6 py-3 border border-[var(--border)] text-[var(--text-primary)] font-bold rounded-lg hover:border-[var(--color-action-primary)] transition-colors"
                 >
                   See in Portfolio
                 </a>
@@ -229,7 +229,7 @@ export default function AutopilotPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+                className="glass-card p-6 hover:border-[var(--color-action-primary)] transition-all"
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -297,7 +297,7 @@ export default function AutopilotPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all"
+                className="glass-card p-6 hover:border-[var(--color-action-primary)] transition-all"
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -313,7 +313,7 @@ export default function AutopilotPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="glass-card p-12 text-center border border-[var(--accent-blue)]"
+          className="glass-card p-12 text-center border border-[var(--color-action-primary)]"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready to Build Your Next Project?</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
@@ -322,7 +322,7 @@ export default function AutopilotPage() {
           </p>
           <a
             href="/contact?service=Auto%20Pilot%20System"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform"
           >
             Get Started →
           </a>

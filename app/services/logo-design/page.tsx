@@ -43,7 +43,7 @@ export default function LogoDesignPage() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -4 }}
-                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
+                className="glass-card p-6 border border-[var(--border)] hover:border-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)] transition-all duration-300"
               >
                 <h3 className="font-bold text-[var(--text-primary)] mb-2 text-lg">✓ {item.title}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.desc}</p>
@@ -99,7 +99,7 @@ export default function LogoDesignPage() {
                 whileHover={{ translateY: -4 }}
                 className="glass-card p-6 border border-[var(--border)] hover:border-[var(--accent-purple)] hover:shadow-lg hover:shadow-[var(--glow-purple)] transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] flex items-center justify-center mb-4">
                   <span className="text-white font-bold font-sora text-lg">{item.step}</span>
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.title}</h3>
@@ -115,7 +115,7 @@ export default function LogoDesignPage() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mb-20 glass-card p-12 text-center border border-[var(--accent-blue)]"
+          className="mb-20 glass-card p-12 text-center border border-[var(--color-action-primary)]"
         >
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Custom Logo Package</h2>
           <p className="text-xl text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto">
@@ -124,7 +124,7 @@ export default function LogoDesignPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="mailto:hello@mulesoo.com"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
+              className="inline-block px-8 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg hover:scale-105 transition-transform"
             >
               📧 Email: hello@mulesoo.com
             </a>
@@ -153,7 +153,7 @@ export default function LogoDesignPage() {
               { q: 'What if I don\'t like any concept?', a: 'We\'ll create new directions. Your satisfaction is guaranteed.' },
               { q: 'Do I get all file types?', a: 'Yes! PNG, SVG, PDF, AI, and more - ready for any use.' },
             ].map((item, i) => (
-              <div key={i} className="glass-card p-6 hover:border-[var(--accent-blue)] transition-all">
+              <div key={i} className="glass-card p-6 hover:border-[var(--color-action-primary)] transition-all">
                 <h3 className="font-bold text-[var(--text-primary)] mb-2">{item.q}</h3>
                 <p className="text-[var(--text-secondary)] text-sm">{item.a}</p>
               </div>
@@ -172,7 +172,7 @@ export default function LogoDesignPage() {
           <h2 className="text-4xl font-bold font-sora mb-6 gradient-text">Ready for Your Logo?</h2>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold font-sora rounded-lg hover:scale-105 transition-transform text-lg"
           >
             Book Your Design Session
           </Link>

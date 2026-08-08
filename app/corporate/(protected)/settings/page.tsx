@@ -97,7 +97,7 @@ export default function CorporateSettings() {
       {/* Biometric */}
       <div className="bg-[#0A0F1E] border border-[#1A2640] rounded-xl p-6">
         <div className="flex items-center gap-3 mb-4">
-          <span className="w-10 h-10 rounded-lg bg-[#00C8FF]/10 text-[#00C8FF] flex items-center justify-center">
+          <span className="w-10 h-10 rounded-lg bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)] flex items-center justify-center">
             <ScanFace size={20} />
           </span>
           <div>
@@ -120,7 +120,7 @@ export default function CorporateSettings() {
           <button
             type="button"
             onClick={() => { setEnrolling(true); setMsg(null); setErr(null); }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold font-sora text-sm"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold font-sora text-sm"
           >
             <ScanFace size={16} /> {enrolled ? 'Re-enrol my face' : 'Enrol my face'}
           </button>
@@ -130,14 +130,14 @@ export default function CorporateSettings() {
               <button
                 type="button"
                 onClick={() => setMode('capture')}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${mode === 'capture' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'}`}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${mode === 'capture' ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] border-[var(--color-action-primary)]/50' : 'border-[#1A2640] text-[#8A9AB8]'}`}
               >
                 Live camera
               </button>
               <button
                 type="button"
                 onClick={() => setMode('upload')}
-                className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${mode === 'upload' ? 'bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/50' : 'border-[#1A2640] text-[#8A9AB8]'}`}
+                className={`flex-1 py-2 rounded-lg text-xs font-semibold border ${mode === 'upload' ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] border-[var(--color-action-primary)]/50' : 'border-[#1A2640] text-[#8A9AB8]'}`}
               >
                 From gallery
               </button>
@@ -154,12 +154,12 @@ export default function CorporateSettings() {
                 accept="image/*"
                 onChange={(e) => onFile(e.target.files?.[0])}
                 title="Upload a clear front-facing photo"
-                className="block w-full text-xs text-[#A8B2D0] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[#00C8FF]/15 file:text-[#00C8FF] file:font-semibold"
+                className="block w-full text-xs text-[#A8B2D0] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-[var(--color-action-primary)]/15 file:text-[var(--color-action-primary)] file:font-semibold"
               />
             )}
 
             {saving && (
-              <p className="text-xs text-[#00C8FF] flex items-center gap-1"><Loader2 className="animate-spin" size={12} /> Saving…</p>
+              <p className="text-xs text-[var(--color-action-primary)] flex items-center gap-1"><Loader2 className="animate-spin" size={12} /> Saving…</p>
             )}
             <button type="button" onClick={() => setEnrolling(false)} className="text-xs text-[#8FA0BE] hover:text-white">
               Cancel

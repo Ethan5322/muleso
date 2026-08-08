@@ -127,7 +127,7 @@ export default function CorporateLoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] flex items-center justify-center mx-auto mb-4">
             <Building2 className="text-white" size={28} />
           </div>
           <h1 className="text-2xl font-bold font-sora">MuleSoo Corporate</h1>
@@ -157,7 +157,7 @@ export default function CorporateLoginPage() {
                 type="button"
                 onClick={() => { setMethod(t.id); setError(null); }}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-semibold transition-colors ${
-                  method === t.id ? 'bg-[#00C8FF]/15 text-[#00C8FF]' : 'text-[#A8B2D0] hover:text-white'
+                  method === t.id ? 'bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)]' : 'text-[#A8B2D0] hover:text-white'
                 }`}
               >
                 <Icon size={14} /> {t.label}
@@ -171,13 +171,13 @@ export default function CorporateLoginPage() {
             <form onSubmit={passwordLogin} className="space-y-4">
               <input
                 type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email"
-                className="w-full px-4 py-2.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                className="w-full px-4 py-2.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
               />
               <input
                 type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password"
-                className="w-full px-4 py-2.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+                className="w-full px-4 py-2.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
               />
-              <button type="submit" disabled={loading} className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold font-sora flex items-center justify-center gap-2 disabled:opacity-60">
+              <button type="submit" disabled={loading} className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold font-sora flex items-center justify-center gap-2 disabled:opacity-60">
                 {loading ? <Loader2 className="animate-spin" size={18} /> : 'Sign in'}
               </button>
             </form>
@@ -188,7 +188,7 @@ export default function CorporateLoginPage() {
               <p className="text-xs text-[#A8B2D0]">Look at the camera and scan your face to sign in.</p>
               <FaceCapture mode="login" onCapture={faceLogin} />
               {loading && (
-                <p className="text-xs text-[#00C8FF] flex items-center gap-1"><Loader2 className="animate-spin" size={12} /> Recognising…</p>
+                <p className="text-xs text-[var(--color-action-primary)] flex items-center gap-1"><Loader2 className="animate-spin" size={12} /> Recognising…</p>
               )}
             </div>
           )}
@@ -198,9 +198,9 @@ export default function CorporateLoginPage() {
               <p className="text-xs text-[#A8B2D0]">Enter the verification code printed on your ID card.</p>
               <input
                 type="text" placeholder="XXXX-XXXX-XXXX" value={code} onChange={(e) => setCode(e.target.value)} required
-                className="w-full px-4 py-2.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-[#F0F2FA] tracking-widest font-mono focus:outline-none focus:border-[#00C8FF]"
+                className="w-full px-4 py-2.5 bg-[#0D1528] border border-[#1A2640] rounded-lg text-[#F0F2FA] tracking-widest font-mono focus:outline-none focus:border-[var(--color-action-primary)]"
               />
-              <button type="submit" disabled={loading} className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold font-sora flex items-center justify-center gap-2 disabled:opacity-60">
+              <button type="submit" disabled={loading} className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold font-sora flex items-center justify-center gap-2 disabled:opacity-60">
                 {loading ? <Loader2 className="animate-spin" size={18} /> : 'Sign in with code'}
               </button>
             </form>

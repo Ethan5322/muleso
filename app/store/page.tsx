@@ -157,7 +157,7 @@ export default function StorePage() {
               whileHover={{ translateY: -6 }}
               className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-[0_24px_60px_-15px_rgba(232,184,75,0.5)]"
             >
-              <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[var(--accent-blue)]" />
+              <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[var(--color-action-primary)]" />
 
               <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                 <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -225,7 +225,7 @@ export default function StorePage() {
         {/* Done-for-you systems */}
         <div className="mb-16">
           <div className="text-center mb-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-blue)] mb-2">🛫 Department 2</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-action-primary)] mb-2">🛫 Department 2</p>
             <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Auto Pilot Systems</h2>
             <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
               Proven, ready-to-brand platforms that run your business on autopilot. Pay in full, or subscribe monthly —
@@ -241,21 +241,21 @@ export default function StorePage() {
                 transition={{ duration: 0.6, delay: (i % 2) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
               >
                 <div className="relative w-full h-40 sm:h-52 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                     <EmojiCover emoji={s.emoji} title={systemDisplayName(s)} label="AUTO PILOT SYSTEM" category={s.category} accent={s.accent} />
                   </div>
                   {s.enterprise && (
-                    <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--accent-blue)] to-[#7DE0FF] shadow-lg whitespace-nowrap">
+                    <span className="absolute top-2 right-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold font-sora text-black bg-gradient-to-r from-[var(--color-action-primary)] to-[#7DE0FF] shadow-lg whitespace-nowrap">
                       ★ ENTERPRISE
                     </span>
                   )}
                 </div>
 
                 <div className="p-5 sm:p-8 flex flex-col flex-1">
-                  <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">
                     {systemDisplayName(s)}
                   </h3>
                   <p className="text-[var(--text-secondary)] mb-4">{s.description}</p>
@@ -264,7 +264,7 @@ export default function StorePage() {
                     {s.features.map((f) => (
                       <span
                         key={f}
-                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--accent-blue)]/50 transition-colors"
+                        className="text-xs px-2.5 py-1 bg-[var(--bg-card)] border border-[var(--border)] text-[var(--text-secondary)] rounded-md group-hover:border-[var(--color-action-primary)]/50 transition-colors"
                       >
                         {f}
                       </span>
@@ -280,7 +280,7 @@ export default function StorePage() {
                       <button
                         type="button"
                         onClick={() => openSystemDetail(s)}
-                        className="w-full py-3 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
+                        className="w-full py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_30px_var(--glow-blue)] transition-shadow"
                       >
                         View &amp; Book →
                       </button>
@@ -295,7 +295,7 @@ export default function StorePage() {
         {/* Essential AI automations */}
         <div className="mb-16">
           <div className="text-center mb-10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--accent-blue)] mb-2">🤖 Department 3</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-action-primary)] mb-2">🤖 Department 3</p>
             <h2 className="text-3xl sm:text-4xl font-bold font-sora gradient-text mb-3">Essential AI Automations</h2>
             <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
               The most-in-demand AI system from every industry — affordable to start, working for you 24/7.
@@ -311,7 +311,7 @@ export default function StorePage() {
                 transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
                 viewport={{ once: true }}
                 whileHover={{ translateY: -6 }}
-                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--accent-blue)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
+                className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-primary)] hover:shadow-[0_24px_60px_-15px_var(--glow-blue)]"
               >
                 <div className="relative w-full h-36 sm:h-40 overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
@@ -320,7 +320,7 @@ export default function StorePage() {
                 </div>
 
                 <div className="p-4 sm:p-6 flex flex-col flex-1">
-                  <h3 className="text-base sm:text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-blue)] transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold font-sora text-[var(--text-primary)] mb-2 group-hover:text-[var(--color-action-primary)] transition-colors">
                     {a.name}
                   </h3>
                   <p className="text-[var(--text-secondary)] text-sm mb-4">{a.desc}</p>
@@ -343,7 +343,7 @@ export default function StorePage() {
                         <button
                           type="button"
                           onClick={() => openAutomationDetail(a)}
-                          className="w-full py-2.5 bg-gradient-to-r from-[var(--accent-blue)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] transition-shadow text-sm"
+                          className="w-full py-2.5 bg-gradient-to-r from-[var(--color-action-primary)] to-[var(--accent-purple)] text-white font-bold rounded-lg shadow-lg hover:shadow-[0_0_20px_var(--glow-blue)] transition-shadow text-sm"
                         >
                           View &amp; Book
                         </button>
@@ -351,7 +351,7 @@ export default function StorePage() {
                       <motion.div whileHover={{ scale: 1.05 }}>
                         <Link
                           href={`/ai-automation/${a.slug}`}
-                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--accent-blue)] hover:text-[var(--accent-blue)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all text-sm font-semibold flex items-center justify-center"
+                          className="block px-3 py-2.5 border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-primary)] hover:text-[var(--color-action-primary)] hover:shadow-lg hover:shadow-[var(--glow-blue)]/50 transition-all text-sm font-semibold flex items-center justify-center"
                         >
                           Details
                         </Link>
@@ -363,7 +363,7 @@ export default function StorePage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href="/ai-automation" className="text-[var(--accent-blue)] hover:underline font-semibold">
+            <Link href="/ai-automation" className="text-[var(--color-action-primary)] hover:underline font-semibold">
               See all 200 AI automation systems →
             </Link>
           </div>
@@ -378,7 +378,7 @@ export default function StorePage() {
         >
           <p className="text-[var(--text-secondary)] text-sm mb-4">
             Need a custom guide or bulk licence?{' '}
-            <Link href="/contact" className="text-[var(--accent-blue)] hover:underline">
+            <Link href="/contact" className="text-[var(--color-action-primary)] hover:underline">
               Contact us
             </Link>
           </p>

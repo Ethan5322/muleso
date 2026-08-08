@@ -182,7 +182,7 @@ export default function ControlPanel() {
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="text-[#00C8FF]" size={22} />
+          <ShieldCheck className="text-[var(--color-action-primary)]" size={22} />
           <h1 className="text-2xl font-bold font-sora">Super Admin Control Panel</h1>
         </div>
         <RegisterAdmin onDone={load} />
@@ -226,7 +226,7 @@ export default function ControlPanel() {
                         </span>
                       )}
                     </div>
-                    {a.role_title && <div className="text-[11px] text-[#00C8FF] mt-0.5">{a.role_title}</div>}
+                    {a.role_title && <div className="text-[11px] text-[var(--color-action-primary)] mt-0.5">{a.role_title}</div>}
                     <div className="text-xs text-[#8FA0BE] flex items-center gap-2 mt-0.5 flex-wrap">
                       <span>{a.department_name || `Dept ${a.department_id ?? ''}`}</span>
                       {a.status === 'suspended' && (
@@ -251,7 +251,7 @@ export default function ControlPanel() {
                           disabled={busy === key || a.status === 'suspended'}
                           onClick={() => toggle(a.id, c.key, !on)}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors disabled:opacity-40 ${
-                            on ? 'bg-[#00C8FF]' : 'bg-[#1A2640]'
+                            on ? 'bg-[var(--color-action-primary)]' : 'bg-[#1A2640]'
                           }`}
                           title={`${on ? 'Disable' : 'Enable'} ${c.label} for ${a.display_name || 'admin'}`}
                         >
@@ -271,7 +271,7 @@ export default function ControlPanel() {
                         disabled={busy === `card:${a.id}`}
                         onClick={() => downloadCard(a.id)}
                         title="Download / re-issue ID card"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#00C8FF] hover:text-[#a78bfa] disabled:opacity-40"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-action-primary)] hover:text-[#a78bfa] disabled:opacity-40"
                       >
                         {busy === `card:${a.id}` ? <Loader2 size={14} className="animate-spin" /> : <IdCard size={14} />}
                       </button>
@@ -329,7 +329,7 @@ export default function ControlPanel() {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-[#F0F2FA] flex items-center gap-2">
                     {a.display_name || 'Unnamed'}
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#00C8FF]/15 text-[#00C8FF] uppercase tracking-wide">Super</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] uppercase tracking-wide">Super</span>
                   </p>
                   <p className="text-xs text-[#8FA0BE] truncate">{a.role_title || a.department_name || `Dept ${a.department_id ?? ''}`}</p>
                 </div>

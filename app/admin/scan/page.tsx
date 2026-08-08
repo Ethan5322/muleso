@@ -180,14 +180,14 @@ export default function ScanPage() {
   return (
     <div className="max-w-lg text-white">
       <div className="flex items-center gap-2 mb-6">
-        <ScanBarcode className="text-[#00C8FF]" size={24} />
+        <ScanBarcode className="text-[var(--color-action-primary)]" size={24} />
         <h1 className="text-2xl font-bold font-sora">Scan Staff ID</h1>
       </div>
 
       {/* Scanner input (works with any USB/Bluetooth barcode scanner) */}
       <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-xl p-5 space-y-3">
         <label className="block text-xs font-semibold text-[#7A8BA8]">
-          Scan the barcode <span className="text-[#00C8FF]">or QR</span> on the ID (or type the verification code) and press Enter
+          Scan the barcode <span className="text-[var(--color-action-primary)]">or QR</span> on the ID (or type the verification code) and press Enter
         </label>
         <div className="flex gap-2">
           <input
@@ -196,13 +196,13 @@ export default function ScanPage() {
             onChange={(e) => setCode(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && lookup(code)}
             placeholder="e.g. 7K4M-9QX2-P3RT"
-            className="flex-1 bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF] font-mono tracking-wider"
+            className="flex-1 bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)] font-mono tracking-wider"
           />
           <button
             type="button"
             onClick={() => lookup(code)}
             disabled={loading}
-            className="px-4 rounded-lg bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold disabled:opacity-50"
+            className="px-4 rounded-lg bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold disabled:opacity-50"
           >
             {loading ? <Loader2 className="animate-spin" size={18} /> : 'Look up'}
           </button>
@@ -212,7 +212,7 @@ export default function ScanPage() {
           <button
             type="button"
             onClick={startCam}
-            className="inline-flex items-center gap-2 text-sm text-[#00C8FF] hover:underline"
+            className="inline-flex items-center gap-2 text-sm text-[var(--color-action-primary)] hover:underline"
           >
             <Camera size={15} /> Scan with camera
           </button>
@@ -220,7 +220,7 @@ export default function ScanPage() {
           <div className="relative rounded-lg overflow-hidden border border-[#1E3A5F]">
             <video ref={videoRef} autoPlay playsInline muted className="w-full h-56 object-cover" />
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="w-4/5 h-16 border-2 border-[#00C8FF]/70 rounded-lg" />
+              <div className="w-4/5 h-16 border-2 border-[var(--color-action-primary)]/70 rounded-lg" />
             </div>
             <button type="button" onClick={stopCam} className="absolute top-2 right-2 bg-black/60 rounded-full p-1">
               <X size={16} />
@@ -250,10 +250,10 @@ export default function ScanPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="text-lg font-bold font-sora">{s?.display_name || 'Staff'}</h2>
-                    {s?.is_super_admin && <Badge color="#00C8FF">Super Admin</Badge>}
+                    {s?.is_super_admin && <Badge color="var(--color-action-primary)">Super Admin</Badge>}
                     {s?.is_visitor && <Badge color="#E8B84B">Visitor</Badge>}
                   </div>
-                  <p className="text-sm text-[#00C8FF] font-mono">{s?.staff_number}</p>
+                  <p className="text-sm text-[var(--color-action-primary)] font-mono">{s?.staff_number}</p>
                   {s?.role_title && <p className="text-sm text-[#F0F2FA] font-semibold">{s.role_title}</p>}
                   <p className="text-sm text-[#7A8BA8]">{s?.department_name}</p>
                   {s?.email && <p className="text-xs text-[#7A8BA8] mt-1">{s.email}</p>}
@@ -303,7 +303,7 @@ export default function ScanPage() {
                     type="button"
                     disabled={acting}
                     onClick={() => reissueCard(s.id!)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#00C8FF]/15 text-[#00C8FF] border border-[#00C8FF]/40 disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-action-primary)]/15 text-[var(--color-action-primary)] border border-[var(--color-action-primary)]/40 disabled:opacity-50"
                   >
                     <IdCard size={14} /> Re-download ID
                   </button>
@@ -313,7 +313,7 @@ export default function ScanPage() {
                   >
                     <Users size={14} /> Team Admins
                   </Link>
-                  {acting && <Loader2 className="animate-spin text-[#00C8FF]" size={16} />}
+                  {acting && <Loader2 className="animate-spin text-[var(--color-action-primary)]" size={16} />}
                 </div>
               )}
             </div>

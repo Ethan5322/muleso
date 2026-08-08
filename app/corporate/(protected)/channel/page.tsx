@@ -120,7 +120,7 @@ export default function ChannelPage() {
         if (match) {
           const isMe = match === nameById[me];
           nodes.push(
-            <span key={idx} className={`font-semibold ${isMe ? 'bg-[#00C8FF]/20 text-[#00C8FF] rounded px-0.5' : 'text-[#00C8FF]'}`}>
+            <span key={idx} className={`font-semibold ${isMe ? 'bg-[var(--color-action-primary)]/20 text-[var(--color-action-primary)] rounded px-0.5' : 'text-[var(--color-action-primary)]'}`}>
               @{match}
             </span>
           );
@@ -236,8 +236,8 @@ export default function ChannelPage() {
                   onClick={() => react(m.id, e)}
                   className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
                     g?.mine
-                      ? 'border-[#00C8FF] bg-[#00C8FF]/10 text-[#00C8FF]'
-                      : 'border-[#1A2640] text-[#A8B2D0] hover:border-[#00C8FF]'
+                      ? 'border-[var(--color-action-primary)] bg-[var(--color-action-primary)]/10 text-[var(--color-action-primary)]'
+                      : 'border-[#1A2640] text-[#A8B2D0] hover:border-[var(--color-action-primary)]'
                   }`}
                 >
                   {e} {g?.count ? g.count : ''}
@@ -247,7 +247,7 @@ export default function ChannelPage() {
             {!isReply && (
               <button
                 onClick={() => setReplyTo(replyTo === m.id ? null : m.id)}
-                className="text-xs text-[#8FA0BE] hover:text-[#00C8FF] inline-flex items-center gap-1"
+                className="text-xs text-[#8FA0BE] hover:text-[var(--color-action-primary)] inline-flex items-center gap-1"
               >
                 <CornerDownRight size={12} /> Reply
               </button>
@@ -274,12 +274,12 @@ export default function ChannelPage() {
               onChange={(e) => setReplyText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), send(replyText, m.id))}
               placeholder="Reply…"
-              className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-1.5 text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+              className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-1.5 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
             />
             <button
               onClick={() => send(replyText, m.id)}
               disabled={sending || !replyText.trim()}
-              className="w-8 h-8 rounded-lg bg-[#00C8FF] text-black flex items-center justify-center disabled:opacity-50"
+              className="w-8 h-8 rounded-lg bg-[var(--color-action-primary)] text-black flex items-center justify-center disabled:opacity-50"
             >
               <Send size={14} />
             </button>
@@ -300,7 +300,7 @@ export default function ChannelPage() {
   return (
     <div className="h-[calc(100vh-160px)] flex flex-col bg-[#0A0F1E] border border-[#1A2640] rounded-xl">
       <div className="px-5 py-3 border-b border-[#1A2640] flex items-center gap-2">
-        <Hash size={16} className="text-[#00C8FF]" />
+        <Hash size={16} className="text-[var(--color-action-primary)]" />
         <h1 className="font-semibold font-sora text-sm">{channel?.name?.replace('#', '') || 'team-updates'}</h1>
         <span className="text-xs text-[#8FA0BE]">· share what you&apos;re building</span>
       </div>
@@ -367,12 +367,12 @@ export default function ChannelPage() {
           onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send(input))}
           placeholder={target ? `Message ${deptNameById[Number(target)] || 'department'}…` : 'Share an update…  @ to mention'}
-          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[#00C8FF]"
+          className="flex-1 bg-[#0D1528] border border-[#1A2640] rounded-lg px-3 py-2 text-sm text-[#F0F2FA] focus:outline-none focus:border-[var(--color-action-primary)]"
         />
         <button
           onClick={() => send(input)}
           disabled={sending || !input.trim()}
-          className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#00C8FF] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50"
+          className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--color-action-primary)] to-[#7B2FFF] text-white flex items-center justify-center disabled:opacity-50"
         >
           {sending ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
         </button>

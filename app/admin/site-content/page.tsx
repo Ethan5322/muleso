@@ -127,13 +127,13 @@ export default function SiteContentPage() {
               <div className={group === 'Homepage Stats' ? 'grid grid-cols-1 sm:grid-cols-2 gap-4' : 'space-y-4'}>
                 {FIELDS.filter((f) => f.group === group).map((f) => (
                   <div key={f.key}>
-                    <label className="block text-sm font-semibold text-[#00C8FF] mb-1.5">{f.label}</label>
+                    <label className="block text-sm font-semibold text-[var(--color-action-primary)] mb-1.5">{f.label}</label>
                     <input
                       type="text"
                       value={form[f.key]}
                       placeholder={f.placeholder}
                       onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                      className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[#00C8FF]"
+                      className="w-full bg-[#1A2332] border border-[#1E3A5F] text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--color-action-primary)]"
                     />
                     {f.hint && <p className="text-xs text-[#7A8BA8] mt-1">{f.hint}</p>}
                   </div>
@@ -146,7 +146,7 @@ export default function SiteContentPage() {
           <div className="bg-[#0A0E17] border border-[#1E3A5F] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-lg font-bold text-white">Team (About page)</h3>
-              <button type="button" onClick={addMember} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#00C8FF] hover:underline">
+              <button type="button" onClick={addMember} className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-action-primary)] hover:underline">
                 <Plus size={14} /> Add member
               </button>
             </div>
@@ -170,7 +170,7 @@ export default function SiteContentPage() {
                       accept="image/*"
                       aria-label={`Photo for ${m.name || 'team member'}`}
                       onChange={(e) => onMemberPhoto(i, e.target.files?.[0])}
-                      className="block w-full text-[10px] text-[#7A8BA8] file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:bg-[#00C8FF]/15 file:text-[#00C8FF] file:text-[10px] file:font-semibold"
+                      className="block w-full text-[10px] text-[#7A8BA8] file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:bg-[var(--color-action-primary)]/15 file:text-[var(--color-action-primary)] file:text-[10px] file:font-semibold"
                     />
                     {m.photo && (
                       <button type="button" onClick={() => updateMember(i, { photo: '' })} className="text-[10px] text-red-400 mt-1 hover:underline">
@@ -187,14 +187,14 @@ export default function SiteContentPage() {
                         onChange={(e) => updateMember(i, { name: e.target.value })}
                         placeholder="Full name"
                         aria-label="Name"
-                        className="w-full bg-[#0A0E17] border border-[#1E3A5F] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]"
+                        className="w-full bg-[#0A0E17] border border-[#1E3A5F] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[var(--color-action-primary)]"
                       />
                       <input
                         value={m.role}
                         onChange={(e) => updateMember(i, { role: e.target.value })}
                         placeholder="Role / responsibility"
                         aria-label="Role"
-                        className="w-full bg-[#0A0E17] border border-[#1E3A5F] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF]"
+                        className="w-full bg-[#0A0E17] border border-[#1E3A5F] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[var(--color-action-primary)]"
                       />
                     </div>
                     <textarea
@@ -203,14 +203,14 @@ export default function SiteContentPage() {
                       placeholder="Short bio / details about this person…"
                       rows={2}
                       aria-label="Bio"
-                      className="w-full bg-[#0A0E17] border border-[#1E3A5F] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[#00C8FF] resize-none"
+                      className="w-full bg-[#0A0E17] border border-[#1E3A5F] text-white px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[var(--color-action-primary)] resize-none"
                     />
                     <div className="flex items-center justify-between">
                       <select
                         value={m.accent}
                         onChange={(e) => updateMember(i, { accent: e.target.value as TeamAccent })}
                         aria-label="Accent colour"
-                        className="bg-[#0A0E17] border border-[#1E3A5F] text-[#A8B2D0] px-2 py-1.5 rounded-lg text-xs focus:outline-none focus:border-[#00C8FF]"
+                        className="bg-[#0A0E17] border border-[#1E3A5F] text-[#A8B2D0] px-2 py-1.5 rounded-lg text-xs focus:outline-none focus:border-[var(--color-action-primary)]"
                       >
                         {ACCENTS.map((a) => (
                           <option key={a} value={a}>{a}</option>
@@ -230,7 +230,7 @@ export default function SiteContentPage() {
             type="button"
             onClick={save}
             disabled={saving}
-            className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[#00C8FF] to-[#7B2FFF] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-60"
+            className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--color-action-primary)] to-[#7B2FFF] text-white font-bold rounded-xl hover:shadow-lg transition-all disabled:opacity-60"
           >
             {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
             {saving ? 'Saving…' : 'Save Changes'}
