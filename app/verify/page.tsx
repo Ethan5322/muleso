@@ -35,7 +35,7 @@ export default function VerifyPage() {
       setSearched(true);
 
       if (queryError || !data) {
-        setError('❌ Invalid verification code. Please check and try again.');
+        setError('Invalid verification code. Please check and try again.');
         setBooking(null);
         toast.error('Verification code not found');
         return;
@@ -44,7 +44,7 @@ export default function VerifyPage() {
       setBooking(data);
       toast.success('✅ Booking found!');
     } catch (err) {
-      setError('❌ Invalid verification code. Please check and try again.');
+      setError('Invalid verification code. Please check and try again.');
       setBooking(null);
       console.error('Error verifying code:', err);
     } finally {

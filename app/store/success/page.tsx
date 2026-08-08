@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Loader2, Download, XCircle } from 'lucide-react';
+import { Loader2, Download, XCircle, CheckCircle2, KeyRound } from 'lucide-react';
 import { buyerPassword, HIDE_PASSWORD_FROM_BUYER } from '@/lib/maskSecret';
 
 export default function SuccessPage() {
@@ -71,10 +71,18 @@ export default function SuccessPage() {
 
         {state === 'done' && (
           <>
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 0.6, delay: 0.2 }} className="text-7xl mb-8">
-              ✅
+            {/* A drawn mark that settles once, rather than an emoji that pulses.
+                The buyer has spent money and wants certainty; a bouncing party
+                popper reads as the site celebrating itself. */}
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 18 }}
+              className="flex justify-center mb-8"
+            >
+              <CheckCircle2 size={72} strokeWidth={1.5} className="text-[var(--accent-green)]" />
             </motion.div>
-            <h1 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">Payment Confirmed! 🎉</h1>
+            <h1 className="text-5xl md:text-6xl font-bold gradient-text font-sora mb-6">Paid. It&apos;s yours.</h1>
             <p className="text-xl text-[var(--text-secondary)] mb-2">
               Thank you for buying <strong className="text-[var(--text-primary)]">{productName}</strong>.
             </p>
@@ -82,7 +90,10 @@ export default function SuccessPage() {
 
             {password && (
               <div className="max-w-md mx-auto mb-8 rounded-xl border border-[var(--accent-gold)]/50 bg-[var(--bg-card)] p-4">
-                <p className="text-xs text-[var(--text-secondary)] mb-1">🔒 Your PDF opens with this password:</p>
+                <p className="text-xs text-[var(--text-secondary)] mb-1 inline-flex items-center gap-1.5">
+                  <KeyRound size={13} className="text-[var(--color-premium)]" />
+                  Your PDF opens with this password:
+                </p>
                 {/* Both this and the buyer's email read HIDE_PASSWORD_FROM_BUYER,
                     so they always agree. See lib/maskSecret.ts. */}
                 <p className="text-2xl font-bold font-sora gold-text tracking-widest">{buyerPassword(password)}</p>

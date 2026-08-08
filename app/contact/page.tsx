@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Mail, MessageCircle, MapPin, QrCode, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import PageHero from '@/components/PageHero';
 import { getRecaptchaToken } from '@/lib/captcha';
+import { replyWindow, type ReplyWindow } from '@/lib/replyWindow';
 import { useSiteSettings } from '@/lib/useSiteSettings';
 import { analytics } from '@/lib/analytics';
 
@@ -62,6 +63,11 @@ export default function ContactPage() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  /* formData is cleared the moment the POST succeeds, so the confirmation
+     needs its own copy of what was sent — otherwise it can only greet an
+     empty string. Computed once at submit, not at render, so the quoted
+     reply time is the one the visitor actually earned. */
+  const [receipt, setReceipt] = useState<{ name: string; email: string; window: ReplyWindow } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Pre-fill the enquiry when arriving from a service page (?service=Name).
@@ -150,6 +156,11 @@ export default function ContactPage() {
       const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
+        setReceipt({
+          name: formData.name.trim().split(/\s+/)[0] || '',
+          email: formData.email.trim(),
+          window: replyWindow(),
+        });
         setSubmitted(true);
         setFormData({ name: '', email: '', company: '', service: '', budget: '', details: '', source: '', website: '' });
         setFieldErrors({});
@@ -204,13 +215,43 @@ export default function ContactPage() {
                   <CheckCircle size={64} className="text-[var(--accent-green)]" />
                 </div>
                 <h2 className="text-3xl font-bold font-sora text-[var(--text-primary)] mb-4">
-                  Message Received!
+                  {receipt?.name ? `We've got it, ${receipt.name}.` : "We've got it."}
                 </h2>
+
+                {/* The promise was already "within 2 hours on business days", which
+                    leaves the visitor doing the arithmetic — and at 21:00 on a
+                    Saturday it reads as a promise the business never made. Resolving
+                    it against real Pretoria hours turns the wait into a time you can
+                    look at a clock and check. */}
                 <p className="text-[var(--text-secondary)] mb-2">
-                  Thanks for reaching out. Our team will contact you within <strong className="text-[var(--accent-green)]">2 hours</strong>.
+                  {receipt ? (
+                    receipt.window.openNow ? (
+                      <>
+                        It&apos;s {receipt.window.localNow} in Pretoria. You&apos;ll have a reply by{' '}
+                        <strong className="text-[var(--accent-green)]">{receipt.window.time} today</strong>.
+                      </>
+                    ) : (
+                      <>
+                        It&apos;s {receipt.window.localNow} in Pretoria, so the desk is closed. You&apos;ll have a
+                        reply by{' '}
+                        <strong className="text-[var(--accent-green)]">
+                          {receipt.window.time} {receipt.window.day}
+                        </strong>
+                        .
+                      </>
+                    )
+                  ) : (
+                    <>
+                      You&apos;ll have a reply within{' '}
+                      <strong className="text-[var(--accent-green)]">2 hours</strong> on business days.
+                    </>
+                  )}
                 </p>
+
                 <p className="text-sm text-[var(--text-secondary)] mb-6">
-                  In the meantime, explore our services or check out our portfolio.
+                  {receipt?.email
+                    ? `It goes to ${receipt.email} — worth checking spam if it's quiet.`
+                    : 'Worth checking your spam folder if it stays quiet.'}
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
