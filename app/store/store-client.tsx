@@ -70,7 +70,7 @@ export default function StoreClient() {
   const handleCheckout = async () => {
     if (!pending) return;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Please enter a valid email — that's where your guide is delivered.');
+      setError("Please enter a valid email — that's where your guide is delivered.");
       analytics.errorOccurred('invalid_email', 'Email validation failed on store checkout');
       return;
     }

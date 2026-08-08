@@ -9,7 +9,7 @@ import FaqSection from '@/components/FaqSection';
 const LOGO_FAQS = [
   {
     q: 'How many logo concepts do I get?',
-    a: 'Starter: 3 concepts. Business: 5 concepts with revisions. Enterprise: unlimited concepts until you\'re happy.',
+    a: "Starter: 3 concepts. Business: 5 concepts with revisions. Enterprise: unlimited concepts until you're happy.",
   },
   {
     q: 'Can I use my logo everywhere?',
@@ -21,11 +21,11 @@ const LOGO_FAQS = [
   },
   {
     q: 'What if I don\'t like the designs?',
-    a: 'We keep refining until it\'s perfect. Business and Enterprise tiers include unlimited revisions.',
+    a: "We keep refining until it's perfect. Business and Enterprise tiers include unlimited revisions.",
   },
   {
     q: 'Do you design logos for established brands?',
-    a: 'Absolutely! We redesign and rebrand established businesses. Just tell us your vision.',
+    a: "Absolutely! We redesign and rebrand established businesses. Just tell us your vision.",
   },
 ];
 
