@@ -77,7 +77,7 @@ export default function StoreClient() {
     setLoading(true);
     setError(null);
     try {
-      analytics.checkoutStart(pending.price);
+      analytics.checkoutStart(pending.priceUSD);
 
       const res = await fetch('/api/store/checkout', {
         method: 'POST',
