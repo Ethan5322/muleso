@@ -1,16 +1,22 @@
-import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/seo';
-import StoreClient from './store-client';
+'use client';
 
-export const metadata: Metadata = pageMetadata({
-  title: 'PDF Guides & Automation Systems | MuleSoo Store',
-  description: 'Expert digital products: PDF guides, AI automation systems, and complete business platforms. Buy once, use forever.',
-  path: '/store',
-  keywords: ['pdf guides', 'digital products', 'AI automation', 'business systems'],
-});
+import { useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Loader2, ShieldCheck, X, Mail } from 'lucide-react';
+import PageHero from '@/components/PageHero';
+import EmojiCover from '@/components/EmojiCover';
+import StoreDetailModal, { type StoreDetailItem } from '@/components/StoreDetailModal';
+import JsonLd from '@/components/JsonLd';
+import { STORE_PRODUCTS, type StoreProduct } from '@/lib/storeProducts';
+import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/storeSystems';
+import { AUTOMATION_PICKS, AUTOMATION_FEATURES, type AutomationPick } from '@/lib/storeAutomations';
+import { useChatbot } from '@/context/ChatbotContext';
+import { analytics } from '@/lib/analytics';
 
-export default function StorePage() {
-  return <StoreClient />;
+type Plan = 'full' | 'monthly';
+
+export default function StoreClient() {
   const { openChatbot } = useChatbot();
   const [pending, setPending] = useState<StoreProduct | null>(null);
   const [email, setEmail] = useState('');
@@ -58,38 +64,36 @@ export default function StorePage() {
     setPending(product);
     setEmail('');
     setError(null);
-    // Track product click
     analytics.productClick(product.title);
   };
 
   const handleCheckout = async () => {
     if (!pending) return;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError(‘Please enter a valid email — that’s where your guide is delivered.’);
-      analytics.errorOccurred(‘invalid_email’, ‘Email validation failed on store checkout’);
+      setError('Please enter a valid email — that's where your guide is delivered.');
+      analytics.errorOccurred('invalid_email', 'Email validation failed on store checkout');
       return;
     }
     setLoading(true);
     setError(null);
     try {
-      // Track checkout start
       analytics.checkoutStart(pending.price);
 
-      const res = await fetch(‘/api/store/checkout’, {
-        method: ‘POST’,
-        headers: { ‘Content-Type’: ‘application/json’ },
+      const res = await fetch('/api/store/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug: pending.slug, email }),
       });
       const data = await res.json();
       if (res.ok && data.url) {
-        window.location.href = data.url; // Paystack hosted checkout
+        window.location.href = data.url;
         return;
       }
-      setError(data.error || ‘Could not start the payment. Please try again.’);
-      analytics.errorOccurred(‘checkout_failed’, data.error || ‘Unknown error’);
+      setError(data.error || 'Could not start the payment. Please try again.');
+      analytics.errorOccurred('checkout_failed', data.error || 'Unknown error');
     } catch {
-      setError(‘Could not reach the payment service. Please try again.’);
-      analytics.errorOccurred(‘checkout_error’, ‘Network error during checkout’);
+      setError('Could not reach the payment service. Please try again.');
+      analytics.errorOccurred('checkout_error', 'Network error during checkout');
     } finally {
       setLoading(false);
     }
@@ -423,9 +427,6 @@ export default function StorePage() {
             >
               {loading ? <><Loader2 size={18} className="animate-spin" /> Opening payment…</> : `Pay $${pending.priceUSD} securely →`}
             </button>
-            {/* Prices are shown in USD but the Paystack account settles in ZAR, so
-                the hosted checkout will quote rands. Saying so here keeps that from
-                reading as a pricing error mid-payment. */}
             <p className="text-[11px] text-[var(--text-secondary)] text-center mt-3">
               Billed as R{pending.priceZAR} at checkout (our processor settles in ZAR).
             </p>

@@ -1,17 +1,12 @@
-import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/seo';
-import CaseStudiesClient from './case-studies-client';
+'use client';
 
-export const metadata: Metadata = pageMetadata({
-  title: 'Case Studies & Client Success Stories | MuleSoo',
-  description: 'Real results from real clients. See how MuleSoo transformed businesses with AI automation, custom software, and digital solutions.',
-  path: '/case-studies',
-  keywords: ['case studies', 'client success', 'project results', 'business transformation', 'AI implementation'],
-});
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { ArrowRight, Clock } from 'lucide-react';
+import PageHero from '@/components/PageHero';
 
-export default function CaseStudiesPage() {
-  return <CaseStudiesClient />;
-}
+export default function CaseStudiesClient() {
   const caseStudies = [
     {
       id: 'yoyo-gym',
@@ -87,13 +82,11 @@ export default function CaseStudiesPage() {
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Hero */}
         <PageHero
           title="Case Studies"
           subtitle="Real businesses, real results. See how MuleSoo transformed operations and revenue for clients like Yoyo Gym, Shime Events, and Tsedi Catering."
         />
 
-        {/* Case Studies Grid */}
         <div className="space-y-20 mt-16">
           {caseStudies.map((study, idx) => (
             <motion.div
@@ -104,7 +97,6 @@ export default function CaseStudiesPage() {
               viewport={{ once: true }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
             >
-              {/* Content (reversed on alternate items) */}
               <div className={idx % 2 === 1 ? 'lg:order-2' : ''}>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -123,7 +115,6 @@ export default function CaseStudiesPage() {
                   {study.highlight}
                 </p>
 
-                {/* Challenge → Solution → Results */}
                 <div className="space-y-6 mb-8">
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
@@ -174,7 +165,6 @@ export default function CaseStudiesPage() {
                   </div>
                 </div>
 
-                {/* Tech Stack */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -195,7 +185,6 @@ export default function CaseStudiesPage() {
                   </div>
                 </motion.div>
 
-                {/* Testimonial */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -209,7 +198,6 @@ export default function CaseStudiesPage() {
                 </motion.div>
               </div>
 
-              {/* Image */}
               <div className={idx % 2 === 1 ? 'lg:order-1' : ''}>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -240,7 +228,6 @@ export default function CaseStudiesPage() {
           ))}
         </div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

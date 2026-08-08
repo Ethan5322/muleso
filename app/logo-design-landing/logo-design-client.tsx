@@ -1,17 +1,35 @@
-import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/seo';
-import LogoDesignClient from './logo-design-client';
+'use client';
 
-export const metadata: Metadata = pageMetadata({
-  title: 'Professional Logo Design | Brand Identity | MuleSoo',
-  description: 'Professional logo design that makes your brand unforgettable. Unlimited revisions, all file formats included. Starting from R800.',
-  path: '/logo-design-landing',
-  keywords: ['logo design', 'brand identity', 'professional branding', 'logo creation', 'brand design'],
-});
+import { useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Check, X, ArrowRight, Palette, Sparkles, Clock, Zap, Award } from 'lucide-react';
+import FaqSection from '@/components/FaqSection';
 
-export default function LogoDesignLanding() {
-  return <LogoDesignClient />;
-}
+const LOGO_FAQS = [
+  {
+    q: 'How many logo concepts do I get?',
+    a: 'Starter: 3 concepts. Business: 5 concepts with revisions. Enterprise: unlimited concepts until you\'re happy.',
+  },
+  {
+    q: 'Can I use my logo everywhere?',
+    a: 'Yes! You get full ownership and all file formats (PNG, SVG, PDF, AI) for web, print, and merchandise.',
+  },
+  {
+    q: 'How long does logo design take?',
+    a: 'Starter: 5-7 days. Business: 3-5 days. Enterprise: 2-3 days with priority turnaround.',
+  },
+  {
+    q: 'What if I don\'t like the designs?',
+    a: 'We keep refining until it\'s perfect. Business and Enterprise tiers include unlimited revisions.',
+  },
+  {
+    q: 'Do you design logos for established brands?',
+    a: 'Absolutely! We redesign and rebrand established businesses. Just tell us your vision.',
+  },
+];
+
+export default function LogoDesignClient() {
   const tiers = [
     {
       name: 'Starter',
@@ -65,9 +83,7 @@ export default function LogoDesignLanding() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
-      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Animated background gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--glow-gold)] to-transparent opacity-20 blur-3xl" />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
@@ -120,7 +136,6 @@ export default function LogoDesignLanding() {
             </button>
           </motion.div>
 
-          {/* Trust Badges */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -143,7 +158,6 @@ export default function LogoDesignLanding() {
         </div>
       </section>
 
-      {/* Why Logo Matters */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -194,7 +208,6 @@ export default function LogoDesignLanding() {
         </div>
       </section>
 
-      {/* Our Process */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.h2
@@ -238,7 +251,6 @@ export default function LogoDesignLanding() {
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--bg-secondary)]">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -311,7 +323,6 @@ export default function LogoDesignLanding() {
         </div>
       </section>
 
-      {/* FAQ Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <motion.h2
@@ -327,7 +338,6 @@ export default function LogoDesignLanding() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--bg-secondary)] to-[var(--bg-primary)] border-y border-[var(--border)]">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
