@@ -26,8 +26,8 @@ export const ROLE_PRESETS: { title: string; caps: string[] }[] = [
 
 /** Work/task system — statuses & priorities each department moves work through. */
 export const TASK_STATUS: { key: string; label: string; color: string }[] = [
-  { key: 'open', label: 'Open', color: '#00C8FF' },
-  { key: 'in_progress', label: 'In progress', color: '#E8B84B' },
+  { key: 'open', label: 'Open', color: '#7FB3FF' },
+  { key: 'in_progress', label: 'In progress', color: '#D97645' },
   { key: 'blocked', label: 'Blocked', color: '#FF5C7C' },
   { key: 'done', label: 'Done', color: '#00FF88' },
 ];
@@ -35,7 +35,7 @@ export const TASK_STATUS: { key: string; label: string; color: string }[] = [
 export const TASK_PRIORITY: { key: string; label: string; color: string }[] = [
   { key: 'low', label: 'Low', color: '#6E7A91' },
   { key: 'normal', label: 'Normal', color: '#A8B2D0' },
-  { key: 'high', label: 'High', color: '#E8B84B' },
+  { key: 'high', label: 'High', color: '#D97645' },
   { key: 'urgent', label: 'Urgent', color: '#FF5C7C' },
 ];
 

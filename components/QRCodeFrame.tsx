@@ -37,7 +37,7 @@ export default function QRCodeFrame({
           {/* Outer notebook border */}
           <div className="bg-gradient-to-br from-[#1A2332] to-[#0F1624] border-4 border-[#7FB3FF] rounded-2xl p-8 shadow-2xl"
             style={{
-              boxShadow: '0 0 30px rgba(232, 184, 75, 0.3), inset 0 0 20px rgba(232, 184, 75, 0.1)'
+              boxShadow: '0 0 30px rgba(217, 118, 69, 0.3), inset 0 0 20px rgba(217, 118, 69, 0.1)'
             }}>
             {/* Inner white section for QR */}
             <div className="bg-white rounded-xl p-6 flex flex-col items-center gap-6">
@@ -74,7 +74,7 @@ export default function QRCodeFrame({
       {/* Elegant Frame */}
       {frameStyle === 'elegant' && (
         <div className="bg-gradient-to-br from-[#0A0E17] to-[#0F1624] border-2 border-[#7FB3FF] rounded-xl p-8 shadow-xl"
-          style={{ boxShadow: '0 0 40px rgba(0, 200, 255, 0.2)' }}>
+          style={{ boxShadow: '0 0 40px rgba(127, 179, 255, 0.2)' }}>
           <div className="bg-white rounded-lg p-6 flex flex-col items-center gap-4">
             <div ref={qrRef} className="bg-white p-4">
               <QRCodeCanvas

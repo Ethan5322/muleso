@@ -44,12 +44,12 @@ export const generateFramedQRCode = async (
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw decorative frame (outer cyan border - doesn't interfere with QR)
-    ctx.strokeStyle = '#00C8FF';
+    ctx.strokeStyle = '#7FB3FF';
     ctx.lineWidth = 6;
     ctx.strokeRect(15, 15, frameWidth - 30, size - 30);
 
     // Draw inner gold accent line
-    ctx.strokeStyle = '#E8B84B';
+    ctx.strokeStyle = '#D97645';
     ctx.lineWidth = 2;
     ctx.strokeRect(25, 25, frameWidth - 50, size - 50);
 
@@ -81,13 +81,13 @@ export const generateFramedQRCode = async (
     });
 
     // "SCAN ME" text - prominently displayed below QR
-    ctx.fillStyle = '#00C8FF';
+    ctx.fillStyle = '#7FB3FF';
     ctx.font = 'bold 56px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('↓ SCAN ME ↓', frameWidth / 2, size + padding + 80);
 
     // Website URL at very bottom
-    ctx.fillStyle = '#E8B84B';
+    ctx.fillStyle = '#D97645';
     ctx.font = 'bold 20px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('www.mulesoo.com', frameWidth / 2, frameHeight - 15);
@@ -135,7 +135,7 @@ export const generateCleanQRCode = async (
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Minimal frame (just two thin lines at corners for elegance)
-    ctx.strokeStyle = '#00C8FF';
+    ctx.strokeStyle = '#7FB3FF';
     ctx.lineWidth = 3;
     ctx.strokeRect(8, 8, size - 16, size - 16);
 
@@ -154,7 +154,7 @@ export const generateCleanQRCode = async (
     });
 
     // Scan me text
-    ctx.fillStyle = '#00C8FF';
+    ctx.fillStyle = '#7FB3FF';
     ctx.font = 'bold 28px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('Scan to visit', size / 2, size + 50);

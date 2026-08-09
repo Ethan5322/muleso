@@ -21,7 +21,7 @@ export const generateProfessionalQR = (options: QROptions): Promise<string> => {
           margin: 1,
           width: size,
           color: {
-            dark: '#00C8FF',
+            dark: '#7FB3FF',
             light: '#FFFFFF',
           },
         },

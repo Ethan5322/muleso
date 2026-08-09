@@ -122,7 +122,7 @@ export default function SuccessPage() {
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <a
                     href={downloadUrl}
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] text-black font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(232,184,75,0.5)] transition-shadow"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-[var(--accent-gold)] to-[#FFD777] text-black font-bold font-sora rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(217,118,69,0.5)] transition-shadow"
                   >
                     <Download size={18} /> Download Your Guide
                   </a>

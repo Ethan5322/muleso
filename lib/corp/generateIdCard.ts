@@ -339,8 +339,8 @@ function promptIdFormat(): Promise<IdCardFormat | null> {
       const b = document.createElement('button');
       b.style.cssText =
         `width:100%;text-align:left;margin-bottom:10px;padding:13px 15px;border-radius:11px;cursor:pointer;` +
-        `border:1px solid ${primary ? '#00C8FF' : '#1A2640'};` +
-        `background:${primary ? 'linear-gradient(135deg,rgba(0,200,255,0.16),rgba(123,47,255,0.16))' : '#0A0F1E'};` +
+        `border:1px solid ${primary ? '#7FB3FF' : '#1A2640'};` +
+        `background:${primary ? 'linear-gradient(135deg,rgba(127, 179, 255,0.16),rgba(123,47,255,0.16))' : '#0A0F1E'};` +
         `color:#F0F2FA;font-size:14px;font-weight:600;transition:transform .12s ease;`;
       b.innerHTML = `${label}<div style="font-size:11px;font-weight:400;color:#A8B2D0;margin-top:2px;">${note}</div>`;
       b.onmouseenter = () => (b.style.transform = 'translateY(-1px)');

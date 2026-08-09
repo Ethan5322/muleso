@@ -419,8 +419,8 @@ const OWN = 'You own the system, the customers and the data — nobody else can 
 export const DEPARTMENT_META: Record<string, DeptMeta> = {
   'Business, Booking & Hospitality': {
     icon: 'hotel',
-    color: '#00C8FF',
-    glow: 'rgba(0,200,255,0.14)',
+    color: '#7FB3FF',
+    glow: 'rgba(127, 179, 255,0.14)',
     usesToday: 'even the latest booking platforms and property-management software',
     rows: [
       { dim: 'Who owns the guest', theirs: 'Your guests and their details live on someone else’s platform.', ours: 'You own every guest contact and can re-market to them for free, forever.' },
@@ -461,8 +461,8 @@ export const DEPARTMENT_META: Record<string, DeptMeta> = {
   },
   'Food, Restaurants & Catering': {
     icon: 'food',
-    color: '#E8B84B',
-    glow: 'rgba(232,184,75,0.14)',
+    color: '#D97645',
+    glow: 'rgba(217, 118, 69,0.14)',
     usesToday: 'even modern reservation and ordering systems',
     rows: [
       { dim: 'What it costs you', theirs: 'Fees and commission on covers and delivery.', ours: 'Direct reservations, orders and catering quotes — commission-free.' },

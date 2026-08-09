@@ -28,12 +28,12 @@ export async function sendTwoFactorEmail(
           <head>
             <style>
               body { font-family: Arial, sans-serif; background: #050810; color: #F0F2FA; }
-              .container { max-width: 500px; margin: 0 auto; background: #0A0F1E; border: 1px solid #00C8FF; border-radius: 12px; padding: 40px; }
+              .container { max-width: 500px; margin: 0 auto; background: #0A0F1E; border: 1px solid #7FB3FF; border-radius: 12px; padding: 40px; }
               .header { text-align: center; margin-bottom: 30px; }
               .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-              .logo span { color: #00C8FF; }
-              .code { background: #1A2640; border: 2px solid #00C8FF; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
-              .code-text { font-size: 48px; font-weight: bold; color: #00C8FF; letter-spacing: 8px; font-family: 'Courier New', monospace; }
+              .logo span { color: #7FB3FF; }
+              .code { background: #1A2640; border: 2px solid #7FB3FF; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
+              .code-text { font-size: 48px; font-weight: bold; color: #7FB3FF; letter-spacing: 8px; font-family: 'Courier New', monospace; }
               .note { font-size: 12px; color: #A8B2D0; text-align: center; margin: 20px 0; }
               .warning { background: #7B2FFF; background-opacity: 0.2; border-left: 4px solid #7B2FFF; padding: 15px; margin: 20px 0; font-size: 13px; }
               .footer { text-align: center; font-size: 11px; color: #A8B2D0; margin-top: 30px; padding-top: 20px; border-top: 1px solid #1A2640; }
@@ -45,7 +45,7 @@ export async function sendTwoFactorEmail(
                 <div class="logo">
                   <span>MULE</span>SOO
                 </div>
-                <p style="color: #00C8FF; margin: 10px 0; font-size: 12px;">Admin Panel Security</p>
+                <p style="color: #7FB3FF; margin: 10px 0; font-size: 12px;">Admin Panel Security</p>
               </div>
 
               <h2 style="text-align: center; margin: 20px 0;">Two-Factor Authentication Code</h2>
@@ -66,7 +66,7 @@ export async function sendTwoFactorEmail(
               </div>
 
               <div style="background: #0D1528; border-radius: 8px; padding: 20px; margin: 20px 0; font-size: 13px;">
-                <h4 style="margin-top: 0; color: #00C8FF;">Next Steps:</h4>
+                <h4 style="margin-top: 0; color: #7FB3FF;">Next Steps:</h4>
                 <ol style="margin: 10px 0; padding-left: 20px;">
                   <li>Return to your login page</li>
                   <li>Enter your password</li>

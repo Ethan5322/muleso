@@ -764,7 +764,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="glass-card p-6 hover:border-[rgba(0,200,255,0.28)] transition-all"
+                className="glass-card p-6 hover:border-[rgba(127,179,255,0.28)] transition-all"
               >
                 <h3 className="font-bold text-[var(--text-primary)] mb-3 text-lg">{item.q}</h3>
                 <p className="text-[var(--text-secondary)] leading-relaxed">{item.a}</p>
@@ -777,7 +777,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             viewport={{ once: true }}
-            className="mt-12 p-8 glass-card border border-[rgba(0,200,255,0.22)] text-center"
+            className="mt-12 p-8 glass-card border border-[rgba(127,179,255,0.22)] text-center"
           >
             <p className="text-[var(--text-secondary)] mb-4">Still have questions?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -917,7 +917,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto text-center glass-card rounded-2xl border border-[rgba(0,200,255,0.22)] p-10 md:p-14"
+          className="max-w-4xl mx-auto text-center glass-card rounded-2xl border border-[rgba(127,179,255,0.22)] p-10 md:p-14"
         >
           <span className="inline-flex items-center gap-2 pill-soft px-4 py-2 rounded-full mb-6">
             <Zap size={16} className="text-[var(--color-action-on-dark)]" />

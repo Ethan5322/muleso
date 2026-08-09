@@ -116,7 +116,7 @@ export default function ServicesPage() {
               whileHover={{ translateY: -6, boxShadow: "0 0 40px -4px var(--glow-action)" }}
               className="relative glass-card p-8 border border-[var(--color-action-on-dark)] shadow-[0_0_30px_-12px_var(--glow-action)] transition-all duration-300 flex flex-col"
             >
-              <div className="w-14 h-14 rounded-xl bg-[var(--color-action-primary)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(0,200,255,0.6)]">
+              <div className="w-14 h-14 rounded-xl bg-[var(--color-action-primary)] flex items-center justify-center mb-4 shadow-[0_10px_25px_-10px_rgba(127,179,255,0.6)]">
                 <Bot className="text-white" size={30} />
               </div>
               <h3 className="text-2xl font-bold font-sora text-[var(--text-primary)] mb-3">

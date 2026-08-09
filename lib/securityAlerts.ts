@@ -73,16 +73,16 @@ function getAlertMessage(alert: SecurityAlert): string {
       <head>
         <style>
           body { font-family: Arial, sans-serif; background: #050810; color: #F0F2FA; }
-          .container { max-width: 600px; margin: 0 auto; background: #0A0F1E; border: 1px solid #00C8FF; border-radius: 12px; padding: 40px; }
+          .container { max-width: 600px; margin: 0 auto; background: #0A0F1E; border: 1px solid #7FB3FF; border-radius: 12px; padding: 40px; }
           .header { text-align: center; margin-bottom: 30px; }
           .alert-badge { display: inline-block; background: #FF6B6B; color: white; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-bottom: 20px; }
-          .details-box { background: #1A2640; border: 1px solid #00C8FF; border-radius: 8px; padding: 20px; margin: 20px 0; }
+          .details-box { background: #1A2640; border: 1px solid #7FB3FF; border-radius: 8px; padding: 20px; margin: 20px 0; }
           .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #0D1528; }
           .detail-row:last-child { border-bottom: none; }
           .detail-label { color: #A8B2D0; font-weight: bold; }
           .detail-value { color: #F0F2FA; }
           .warning-box { background: #7B2FFF; background-color: rgba(123, 47, 255, 0.2); border-left: 4px solid #7B2FFF; padding: 15px; margin: 20px 0; }
-          .action-button { display: inline-block; background: #00C8FF; color: #050810; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; }
+          .action-button { display: inline-block; background: #7FB3FF; color: #050810; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; }
           .footer { text-align: center; font-size: 11px; color: #A8B2D0; margin-top: 30px; padding-top: 20px; border-top: 1px solid #1A2640; }
         </style>
       </head>

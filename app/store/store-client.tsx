@@ -200,7 +200,7 @@ export default function StoreClient() {
                       <button
                         type="button"
                         onClick={() => startBuy(product)}
-                        className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(232,184,75,0.5)] transition-shadow"
+                        className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-lg shadow-lg hover:shadow-[0_0_25px_rgba(217,118,69,0.5)] transition-shadow"
                       >
                         Buy Now
                       </button>

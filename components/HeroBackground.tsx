@@ -74,7 +74,7 @@ function HeroScene() {
   return (
     <>
       <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1.2} color={0x00c8ff} />
+      <pointLight position={[10, 10, 10]} intensity={1.2} color={0x7fb3ff} />
       <pointLight position={[-10, -10, 10]} intensity={1} color={0x7b2fff} />
 
       {/* Background Particles */}
@@ -88,8 +88,8 @@ function HeroScene() {
           <mesh position={[0, 2, 0]}>
             <sphereGeometry args={[1.2, 32, 32]} />
             <meshStandardMaterial
-              color={0x00c8ff}
-              emissive={0x00c8ff}
+              color={0x7fb3ff}
+              emissive={0x7fb3ff}
               emissiveIntensity={0.3}
             />
           </mesh>
@@ -98,8 +98,8 @@ function HeroScene() {
           <mesh position={[0, 0.5, 0]}>
             <boxGeometry args={[1.8, 0.5, 1]} />
             <meshStandardMaterial
-              color={0x00c8ff}
-              emissive={0x00c8ff}
+              color={0x7fb3ff}
+              emissive={0x7fb3ff}
               emissiveIntensity={0.2}
             />
           </mesh>
@@ -110,8 +110,8 @@ function HeroScene() {
               <mesh key={i} position={[0, -0.8 - i * 0.6, 0]}>
                 <sphereGeometry args={[0.35, 16, 16]} />
                 <meshStandardMaterial
-                  color={0x00c8ff}
-                  emissive={0x00c8ff}
+                  color={0x7fb3ff}
+                  emissive={0x7fb3ff}
                   emissiveIntensity={0.2}
                 />
               </mesh>
@@ -121,7 +121,7 @@ function HeroScene() {
           {/* Ribcage */}
           <mesh position={[0, -1.5, 0]}>
             <boxGeometry args={[1.5, 2, 1.2]} />
-            <meshBasicMaterial wireframe color={0x00c8ff} transparent opacity={0.4} />
+            <meshBasicMaterial wireframe color={0x7fb3ff} transparent opacity={0.4} />
           </mesh>
         </group>
 
@@ -131,8 +131,8 @@ function HeroScene() {
           <mesh>
             <sphereGeometry args={[1, 32, 32]} />
             <meshStandardMaterial
-              color={0x00c8ff}
-              emissive={0x00c8ff}
+              color={0x7fb3ff}
+              emissive={0x7fb3ff}
               emissiveIntensity={0.5}
               metalness={0.6}
               roughness={0.2}
@@ -163,7 +163,7 @@ function HeroScene() {
             <group key={i} rotation={[rotation, 0, 0]}>
               <mesh>
                 <torusGeometry args={[2, 0.1, 16, 100]} />
-                <meshBasicMaterial color={0x00c8ff} opacity={0.3} transparent />
+                <meshBasicMaterial color={0x7fb3ff} opacity={0.3} transparent />
               </mesh>
             </group>
           ))}
@@ -173,7 +173,7 @@ function HeroScene() {
         <group position={[8, 0, 0]}>
           <mesh>
             <sphereGeometry args={[2, 32, 32]} />
-            <meshBasicMaterial wireframe color={0x00c8ff} opacity={0.4} transparent />
+            <meshBasicMaterial wireframe color={0x7fb3ff} opacity={0.4} transparent />
           </mesh>
 
           {/* Globe Glow */}

@@ -1145,7 +1145,7 @@ export default function ChatbotWidget() {
                           whileTap={{ scale: 0.98 }}
                           onClick={handlePayDeposit}
                           disabled={paymentStatus === 'processing'}
-                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-xl hover:shadow-[0_0_20px_rgba(0,200,255,0.4)] transition-all text-base disabled:opacity-60"
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-xl hover:shadow-[0_0_20px_rgba(127,179,255,0.4)] transition-all text-base disabled:opacity-60"
                         >
                           {paymentStatus === 'processing' ? (
                             <>

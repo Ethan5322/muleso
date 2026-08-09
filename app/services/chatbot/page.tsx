@@ -62,7 +62,7 @@ export default function ChatbotPage() {
               { type: 'Medical Practice', use: 'Books appointments and answers FAQ' },
               { type: 'Services', use: 'Qualifies leads before handing to sales team' },
             ].map((item) => (
-              <motion.div key={item.type} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-lg hover:shadow-[rgba(232,184,75,0.3)]">
+              <motion.div key={item.type} whileHover={{ translateY: -4 }} className="glass-card p-6 border border-[var(--border)] transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-lg hover:shadow-[rgba(217,118,69,0.3)]">
                 <p className="text-lg font-bold font-sora text-[var(--accent-gold)] mb-2">
                   {item.type}
                 </p>
@@ -98,7 +98,7 @@ export default function ChatbotPage() {
               { t: 'Answers menu questions', d: 'Dietary, pricing and opening hours, answered instantly.' },
               { t: 'Confirms every guest', d: 'Automatic WhatsApp or email confirmation and reminders.' },
             ].map((f) => (
-              <motion.div key={f.t} whileHover={{ translateY: -3 }} className="glass-card p-5 border border-[var(--border)] transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-md hover:shadow-[rgba(232,184,75,0.25)]">
+              <motion.div key={f.t} whileHover={{ translateY: -3 }} className="glass-card p-5 border border-[var(--border)] transition-all duration-300 hover:border-[var(--accent-gold)] hover:shadow-md hover:shadow-[rgba(217,118,69,0.25)]">
                 <h3 className="font-bold font-sora text-[var(--text-primary)] mb-1">{f.t}</h3>
                 <p className="text-sm text-[var(--text-secondary)]">{f.d}</p>
               </motion.div>

@@ -51,7 +51,7 @@ export default function AboutPage() {
               <div className="relative w-full rounded-2xl overflow-hidden border-2 border-[var(--accent-gold)] glow-gold shadow-2xl mb-5"
                 style={{
                   aspectRatio: '4/5',
-                  boxShadow: '0 0 40px rgba(232, 184, 75, 0.3), 0 0 80px rgba(232, 184, 75, 0.15)'
+                  boxShadow: '0 0 40px rgba(217, 118, 69, 0.3), 0 0 80px rgba(217, 118, 69, 0.15)'
                 }}>
                 <Image
                   src="/CEO.jpg"

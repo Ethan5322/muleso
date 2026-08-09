@@ -87,7 +87,7 @@ export default function AutomationDetailPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <div className="flex items-center gap-3 mb-5">
                 <span
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-[0_10px_30px_-8px_rgba(0,200,255,0.5)]"
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-[0_10px_30px_-8px_rgba(127,179,255,0.5)]"
                   style={{ background: `linear-gradient(135deg, ${meta.color}, var(--accent-purple))` }}
                 >
                   <AutomationIcon iconKey={iconKeyFor(automation.name)} size={26} />
