@@ -21,6 +21,11 @@ const SERVICE_FAQS: Faq[] = [
   { q: 'Do you build AI chatbots and automation?', a: 'Yes. Our AI chatbots start from R2,500 and answer customers 24/7 on your website and WhatsApp, capture leads, book appointments and take deposits. Full AI automation systems start from R4,500.' },
   { q: 'Where is MuleSoo based and do you work remotely?', a: 'MuleSoo is based in Pretoria, South Africa, and serves businesses across South Africa and Africa, working remotely worldwide.' },
   { q: 'How do I get a quote?', a: 'Message us on WhatsApp at +27 68 852 9333 or fill in the free quote form on our contact page. We usually reply within 2 hours.' },
+  /* Answered from the service cards already on this page, so the FAQ stays a
+     description of what is offered rather than a set of new claims. */
+  { q: 'Do you build QR code products and digital verification systems?', a: 'Yes. QR Code Design covers custom branded codes with analytics and dynamic links, and the Digital ID Service issues branded ID cards with a unique QR and verification number — scan with any camera to reveal the holder’s details, with a barcode for hardware scanners and optional face or PIN security.' },
+  { q: 'Can MuleSoo build a complete Auto Pilot system that runs my institution?', a: 'Yes. The Auto Pilot System is one platform that runs a small institution end to end — bookings, Paystack payments, members, digital IDs and QR check-in, WhatsApp and SMS reminders, and a live admin dashboard — working 24/7 without anyone driving it.' },
+  { q: 'Can you combine websites, AI chatbots and automation into one package?', a: 'Yes, and it is the most common way we work. A website, an AI chatbot that answers on your site and WhatsApp, and the automation behind it are quoted as one build so they share the same data and branding instead of being bolted together later.' },
 ];
 
 interface Service {
@@ -92,9 +97,34 @@ export default function ServicesPage() {
     }),
   };
 
+  /* Complements the ItemList above rather than repeating it: the ItemList
+     describes each offering individually, this describes the practice as a
+     whole and is what a local or answer-engine query tends to match. */
+  const practiceLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Digital Services',
+    serviceType:
+      'AI automation, AI chatbots, website design, QR code design, digital ID and verification, Auto Pilot business systems',
+    description:
+      'Websites, AI chatbots, AI automation systems, QR code products, digital ID and verification, and complete Auto Pilot systems for businesses in South Africa and across Africa.',
+    provider: {
+      '@type': 'Organization',
+      '@id': SITE,
+      name: 'MuleSoo Digital Services',
+      url: SITE,
+    },
+    areaServed: [
+      { '@type': 'Country', name: 'South Africa' },
+      { '@type': 'Place', name: 'Africa' },
+    ],
+    url: `${SITE}/services`,
+  };
+
   return (
     <div className="min-h-screen">
       <JsonLd data={serviceLd} />
+      <JsonLd data={practiceLd} />
       {/* Lives on the page, not the layout: app/services/layout.tsx also wraps
           the ten service pages, which publish their own longer Home › Services ›
           X trail. Emitting this there would give each of them two trails. */}
@@ -123,7 +153,12 @@ export default function ServicesPage() {
                 AI Automation
               </h3>
               <p className="text-[var(--text-secondary)] mb-6">
-                200 AI systems across 9 industries — engineered to outperform the latest software your competitors use.
+                200 AI systems across 9 industries — engineered to outperform the latest software your competitors
+                use. Includes{' '}
+                <Link href="/ai-automation" className="text-[var(--color-action-on-dark)] hover:underline">
+                  AI booking systems for restaurants, spas and gyms
+                </Link>
+                , built for businesses in South Africa and across Africa.
               </p>
               <ul className="space-y-2 mb-6">
                 {['200 systems, 9 industries', 'Works 24/7 on web & WhatsApp', 'Beats the latest industry tools', 'No commission — you own it', 'Custom-built to your workflow'].map((feature) => (
@@ -187,6 +222,15 @@ export default function ServicesPage() {
       </section>
 
       <section className="px-4 sm:px-6 lg:px-8 pb-10">
+        {/* Local signal in the page's own voice, placed where it reads as
+            context for the FAQ rather than as a keyword line. */}
+        <p className="max-w-3xl mx-auto text-center text-[var(--text-secondary)] mb-10">
+          MuleSoo is based in Pretoria and builds websites,{' '}
+          <Link href="/ai-automation" className="text-[var(--color-action-on-dark)] hover:underline">
+            AI chatbot development and automation
+          </Link>{' '}
+          for businesses across South Africa and the rest of Africa.
+        </p>
         <FaqSection title="Services — FAQ" items={SERVICE_FAQS} />
       </section>
     </div>

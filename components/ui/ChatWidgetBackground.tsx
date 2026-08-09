@@ -12,7 +12,7 @@ function Shape({
   className,
   delay = 0,
   size = 160,
-  gradient = 'from-cyan-500/[0.18]',
+  gradient = 'from-[rgba(127,179,255,0.18)]',
 }: {
   className?: string;
   delay?: number;
@@ -36,14 +36,22 @@ function Shape({
   );
 }
 
+/* This sits behind the chat widget on every page, so it was carrying Tailwind's
+   own cyan/indigo/violet/amber ramp sitewide — a set of colours the palette does
+   not contain. Named utilities like `from-cyan-500` are a syntax no hex or rgba
+   search finds, which is how they survived the colour passes.
+
+   Values are literal rather than var(): Tailwind's opacity modifier does not
+   apply to a custom property, so the alpha is baked in here. No spaces inside
+   the brackets — a space terminates an arbitrary value. */
 export default function ChatWidgetBackground() {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.06] via-transparent to-cyan-500/[0.06]" />
-      <Shape delay={0.1} size={200} gradient="from-cyan-500/[0.18]" className="top-[-10%] left-[-10%]" />
-      <Shape delay={0.3} size={170} gradient="from-violet-500/[0.18]" className="bottom-[-12%] right-[-8%]" />
-      <Shape delay={0.5} size={120} gradient="from-amber-500/[0.14]" className="top-[40%] right-[-6%]" />
-      <Shape delay={0.7} size={110} gradient="from-indigo-500/[0.16]" className="bottom-[25%] left-[-6%]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[rgba(29,78,216,0.08)] via-transparent to-[rgba(123,47,255,0.06)]" />
+      <Shape delay={0.1} size={200} gradient="from-[rgba(127,179,255,0.18)]" className="top-[-10%] left-[-10%]" />
+      <Shape delay={0.3} size={170} gradient="from-[rgba(123,47,255,0.18)]" className="bottom-[-12%] right-[-8%]" />
+      <Shape delay={0.5} size={120} gradient="from-[rgba(217,118,69,0.14)]" className="top-[40%] right-[-6%]" />
+      <Shape delay={0.7} size={110} gradient="from-[rgba(29,78,216,0.16)]" className="bottom-[25%] left-[-6%]" />
     </div>
   );
 }

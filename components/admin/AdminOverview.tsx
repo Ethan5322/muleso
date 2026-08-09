@@ -81,11 +81,16 @@ export default function AdminOverview() {
   }, [bookings, leads]);
 
   const kpis = [
-    { icon: Inbox, label: 'Leads', value: leads.length, sub: `${newLeads} new`, color: 'from-cyan-600 to-blue-500', href: '/admin/leads' },
-    { icon: BookOpen, label: 'Bookings', value: bookings.length, sub: `${pending} pending`, color: 'from-blue-600 to-cyan-500', href: '/admin/bookings' },
-    { icon: Activity, label: 'Conversion', value: `${conversion}%`, sub: `${won} won`, color: 'from-emerald-600 to-teal-500', href: '/admin/bookings' },
-    { icon: Users, label: 'Visitors', value: visitors.length, sub: `${visitorsToday} today`, color: 'from-purple-600 to-pink-500', href: '/admin/visitors' },
-    { icon: QrCode, label: 'QR Scans', value: scans.length, sub: `${portfolioCount} projects`, color: 'from-amber-600 to-orange-500', href: '/admin/qr-scans' },
+    /* Was a five-colour rainbow (cyan, blue, purple, emerald, amber) drawn from
+       Tailwind's own ramp rather than the palette. In an admin surface colour
+       should encode state, not decorate five equivalent tiles, so these now sit
+       on the action azure and only Conversion keeps a distinct hue — it is the
+       one number that reports health rather than a count. */
+    { icon: Inbox, label: 'Leads', value: leads.length, sub: `${newLeads} new`, color: 'from-[#1D4ED8] to-[#7FB3FF]', href: '/admin/leads' },
+    { icon: BookOpen, label: 'Bookings', value: bookings.length, sub: `${pending} pending`, color: 'from-[#1D4ED8] to-[#7FB3FF]', href: '/admin/bookings' },
+    { icon: Activity, label: 'Conversion', value: `${conversion}%`, sub: `${won} won`, color: 'from-[#0F9D6B] to-[#00FF88]', href: '/admin/bookings' },
+    { icon: Users, label: 'Visitors', value: visitors.length, sub: `${visitorsToday} today`, color: 'from-[#1D4ED8] to-[#7FB3FF]', href: '/admin/visitors' },
+    { icon: QrCode, label: 'QR Scans', value: scans.length, sub: `${portfolioCount} projects`, color: 'from-[#B87333] to-[#F0A46B]', href: '/admin/qr-scans' },
   ];
 
   const quickActions = [

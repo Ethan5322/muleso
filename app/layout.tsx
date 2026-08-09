@@ -115,7 +115,8 @@ export default function RootLayout({
               name: "MuleSoo Digital Services",
               url: "https://mulesoo.com",
               logo: "https://mulesoo.com/mulesoo-logo.png",
-              description: "Professional web design, AI chatbots, logos, and digital solutions for South African businesses.",
+              description:
+                "MuleSoo builds AI chatbots and AI automation systems — 200 systems across 9 industries — plus QR code design, digital ID and verification, complete Auto Pilot business systems and websites, for businesses in South Africa and across Africa.",
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Pretoria",
@@ -158,7 +159,10 @@ export default function RootLayout({
               name: "MuleSoo Digital Services",
               url: "https://mulesoo.com",
               logo: "https://mulesoo.com/mulesoo-logo.png",
-              description: "Award-winning digital agency providing web design, AI chatbots, and custom digital solutions.",
+              // Kept factual: an unverifiable superlative in structured data is a
+              // Google policy risk, and the visible site makes no such claim.
+              description:
+                "Digital agency in Pretoria providing websites, AI chatbots, AI automation systems, QR code design, digital ID verification and Auto Pilot business systems across South Africa and Africa.",
               foundingDate: "2022",
               founders: [
                 {

@@ -7,6 +7,42 @@ import { Search, ArrowRight, Sparkles, Bot, Zap, ShieldCheck, Clock, TrendingUp 
 import { AUTOMATIONS, CATEGORIES, getDeptMeta, emojiFor } from '@/lib/aiAutomations';
 import AutomationIcon from '@/components/AutomationIcon';
 import PageBreadcrumb from '@/components/PageBreadcrumb';
+import FaqSection, { type Faq } from '@/components/FaqSection';
+
+/* Answers stay short and name the systems that are already listed above, so the
+   FAQ describes the page rather than making claims of its own. FaqSection emits
+   the FAQPage JSON-LD from exactly this array, so the markup can never drift
+   from what a visitor reads. */
+const AI_AUTOMATION_FAQS: Faq[] = [
+  {
+    q: 'Do you build AI chatbots and automation systems for South African businesses?',
+    a: 'Yes. MuleSoo is based in Pretoria and builds AI chatbots and automation systems for businesses across South Africa and the rest of Africa. Every system is built to your workflow and you own it outright — there is no per-booking commission.',
+  },
+  {
+    q: 'Can MuleSoo create a spa or salon management booking system?',
+    a: 'Yes. The spa and salon booking systems in the Beauty, Fitness & Lifestyle category handle appointments, staff schedules, deposits and automatic reminders, so no-shows drop and your front desk stops fielding the same calls.',
+  },
+  {
+    q: 'Do you offer restaurant booking and food ordering systems in South Africa?',
+    a: 'Yes. Our Food, Restaurants & Catering systems cover table reservations, food ordering, menu questions and order tracking. They answer customers on WhatsApp and on your website, 24 hours a day.',
+  },
+  {
+    q: 'Can you automate invoice reminders and debt collection for my business?',
+    a: 'Yes. The Legal, Finance & Professional Services systems send invoice reminders, chase overdue accounts and follow a polite escalation schedule automatically, so collections keep moving without anyone chasing them by hand.',
+  },
+  {
+    q: 'Can your AI systems run on WhatsApp and my website at the same time?',
+    a: 'Yes. The same system answers on both, sharing one set of information about your prices, availability and policies — so a customer gets the same answer whichever channel they use.',
+  },
+  {
+    q: 'What industries do your 200 AI systems cover?',
+    a: 'Nine: Business, Booking & Hospitality; Healthcare & Wellness; Beauty, Fitness & Lifestyle; Food, Restaurants & Catering; Real Estate & Property; Legal, Finance & Professional Services; Education & Training; Home Services, Repairs & Local Businesses; and Logistics, Sales & Operations.',
+  },
+  {
+    q: 'Can you build a custom AI system if I don’t see my exact workflow?',
+    a: 'Yes. The 200 systems are a starting point, not a limit. Describe how your business actually runs and we build the system around it — bookings, payments, support, lead handling, internal admin or reporting.',
+  },
+];
 
 export default function AiAutomationLibrary() {
   const [query, setQuery] = useState('');
@@ -231,6 +267,8 @@ export default function AiAutomationLibrary() {
           )}
         </div>
 
+        <FaqSection title="AI Automation — FAQ" items={AI_AUTOMATION_FAQS} />
+
         {/* custom request */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -243,7 +281,12 @@ export default function AiAutomationLibrary() {
           <h2 className="text-3xl font-bold font-sora gold-text mb-3">Need something custom?</h2>
           <p className="text-[var(--text-secondary)] max-w-2xl mx-auto mb-6">
             Don’t see the exact fit? Tell us your workflow. We build fully custom AI systems for bookings,
-            payments, support, lead handling, internal admin, reporting — anything your business needs.
+            payments, support, lead handling, internal admin, reporting — anything your business needs. Built in
+            Pretoria for businesses across South Africa and the rest of Africa, alongside our{' '}
+            <Link href="/services" className="text-[var(--color-action-on-dark)] hover:underline">
+              websites, QR code products and digital ID verification
+            </Link>
+            .
           </p>
           <Link
             href="/contact"
