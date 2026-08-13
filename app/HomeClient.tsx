@@ -286,18 +286,31 @@ export default function Home() {
           <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-secondary)] mb-8 font-bold">
             Trusted by businesses across the world
           </p>
+          {/* THE canonical client roster. There used to be a second one 300 lines
+              below with a different membership and two clients spelled differently
+              ("YoYo Gym" / "Yoyo Gym", "Habesha Events" / "Habesha Celebration
+              Events") — a client list that contradicts itself reads as invented,
+              which is the opposite of what it is here to do. That section is gone;
+              this list is the union of both, spelled the way the testimonials and
+              the rest of the codebase spell them. Add a client here and nowhere else.
+              No hover response: these are not links, and a scale-plus-colour
+              reaction promised a click that never existed. */}
           <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-5">
-            {['Habesha Celebration Events', 'Shime Events', 'YoYo Gym', 'Tsedi Catering', 'DR. Hospital'].map(
-              (brand) => (
-                <motion.span
-                  key={brand}
-                  whileHover={{ scale: 1.05 }}
-                  className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-60 hover:opacity-100 hover:text-[var(--color-action-on-dark)] transition-all duration-200 cursor-default"
-                >
-                  {brand}
-                </motion.span>
-              )
-            )}
+            {[
+              'Habesha Celebration Events',
+              'Shime Events',
+              'Yoyo Gym',
+              'Tsedi Catering',
+              'X-Boss Photography',
+              'DR. Hospital',
+            ].map((brand) => (
+              <span
+                key={brand}
+                className="font-sora font-bold text-base sm:text-lg text-[var(--text-secondary)] opacity-75"
+              >
+                {brand}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -558,7 +571,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { img: 'mulesoo-website.jpg', title: 'MuleSoo Platform', category: 'Flagship', benefit: 'Captures leads, books clients with AI, and runs the whole business 24/7.' },
-              { img: 'yoyo-gym.jpg', title: 'YoYo Gym', category: 'Gym Platform', benefit: 'Memberships, recurring billing and face check-in — on autopilot.' },
+              { img: 'yoyo-gym.jpg', title: 'Yoyo Gym', category: 'Gym Platform', benefit: 'Memberships, recurring billing and face check-in — on autopilot.' },
               { img: 'shime-events.jpg', title: 'Shime Events', category: 'Events', benefit: 'Bilingual AI bookings with online deposits and PDF contracts.' },
             ].map((p, i) => (
               <motion.div
@@ -589,49 +602,6 @@ export default function Home() {
                 View Full Portfolio →
               </Link>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 4.8 - TRUSTED BY */}
-      <section className="section-tight px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-secondary)]">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <p className="text-sm uppercase tracking-wider font-semibold text-[var(--color-action-on-dark)] mb-3">Trusted By Industry Leaders</p>
-            <h3 className="text-2xl md:text-3xl font-bold font-sora text-[var(--text-primary)]">
-              Businesses That Trust MuleSoo
-            </h3>
-          </motion.div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-            {[
-              { name: 'Yoyo Gym', category: 'Fitness' },
-              { name: 'Shime Events', category: 'Events' },
-              { name: 'Tsedi Catering', category: 'Catering' },
-              { name: 'X-Boss Photography', category: 'Photography' },
-              { name: 'Habesha Events', category: 'Wedding Planning' },
-            ].map((client, i) => (
-              <motion.div
-                key={client.name}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05 }}
-                className="glass-card p-6 flex flex-col items-center justify-center text-center min-h-[140px] border border-[var(--border)] hover:border-[var(--color-action-on-dark)] hover:shadow-lg hover:shadow-[var(--glow-action)] transition-all duration-300 rounded-xl"
-              >
-                <div className="w-12 h-12 rounded-lg bg-[var(--color-action-primary)] flex items-center justify-center mb-3 flex-shrink-0">
-                  <span className="text-white font-bold font-sora text-lg">{client.name.charAt(0)}</span>
-                </div>
-                <h4 className="font-bold font-sora text-[var(--text-primary)] text-sm mb-1">{client.name}</h4>
-                <p className="text-xs text-[var(--text-secondary)]">{client.category}</p>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
@@ -831,8 +801,13 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold heading-section font-sora mb-5">
               What it costs
             </h2>
-            <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
+            <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-4">
               Starting prices, published up front. Enterprise builds are quoted on scope.
+            </p>
+            {/* The guarantee below promises the deposit back. It can only reassure
+                once the reader knows what the deposit is, so it is stated here. */}
+            <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-8">
+              You pay 50% to start, the balance on delivery.
             </p>
             <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
               <Link href="/contact" className="btn-primary px-8 py-3 text-base">
@@ -989,8 +964,13 @@ export default function Home() {
             <h3 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-4">
               100% Satisfaction or Your Money Back
             </h3>
+            {/* The headline and this paragraph used to disagree: "your money back"
+                against "refund your deposit", with deposit never defined. They were
+                always the same promise — the deposit is all you have paid at that
+                point — but the reader had no way to know that. Spelling out the
+                50/50 model makes the guarantee checkable instead of ambiguous. */}
             <p className="text-lg text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto leading-relaxed">
-              If you're not 100% happy with the final deliverable, we'll refund your deposit in full. No questions asked. We only get paid when you're thrilled with the results. That's how confident we are in our work.
+              You pay 50% to start and the balance only on delivery. If you're not 100% happy with the final deliverable, we refund that deposit in full and the balance is never invoiced — so you walk away having paid nothing. No questions asked. That's how confident we are in our work.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
               {[
