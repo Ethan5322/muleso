@@ -3,7 +3,9 @@ import type { AccentKey } from './storeProducts';
 // The most-demanded AI automation from each of the 9 departments, surfaced in
 // the store. Like the systems, these are booked through the chatbot widget
 // (deposit via Paystack) — they're built for the client, not downloaded.
-// Prices are quoted in USD, the agency's official currency.
+// Prices are quoted in ZAR, the agency's currency and what Paystack settles.
+// The USD figure is kept only as a smaller secondary line for overseas clients,
+// converted at R16.60 — the rate implied by the guide catalogue in storeProducts.
 
 export interface AutomationPick {
   slug: string; // matches /ai-automation/[slug]
@@ -11,8 +13,10 @@ export interface AutomationPick {
   category: string; // department
   emoji: string; // represents the system on its cover
   desc: string;
-  fromPrice: number; // setup, USD
-  monthly: number; // monthly, USD
+  fromPrice: number; // setup, USD — secondary figure
+  fromPriceZAR: number; // setup, ZAR — what we lead with
+  monthly: number; // monthly, USD — secondary figure
+  monthlyZAR: number; // monthly, ZAR — what we lead with
   accent: AccentKey;
 }
 
@@ -24,7 +28,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Booking & Hospitality',
     desc: 'Guests ask about rooms, check availability, book and get confirmations — automatically, 24/7.',
     fromPrice: 229,
+    fromPriceZAR: 3800,
     monthly: 35,
+    monthlyZAR: 580,
     accent: 'blue',
   },
   {
@@ -34,7 +40,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Healthcare & Wellness',
     desc: 'Schedules consultations, collects patient details and sends reminders that cut no-shows.',
     fromPrice: 199,
+    fromPriceZAR: 3300,
     monthly: 29,
+    monthlyZAR: 480,
     accent: 'green',
   },
   {
@@ -44,7 +52,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Beauty, Fitness & Lifestyle',
     desc: 'Books salon services, upsells add-ons and sends reminders so chairs stay full.',
     fromPrice: 169,
+    fromPriceZAR: 2800,
     monthly: 25,
+    monthlyZAR: 420,
     accent: 'purple',
   },
   {
@@ -54,7 +64,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Food, Restaurants & Catering',
     desc: 'Takes table reservations, manages the waitlist and answers menu questions instantly.',
     fromPrice: 169,
+    fromPriceZAR: 2800,
     monthly: 25,
+    monthlyZAR: 420,
     accent: 'gold',
   },
   {
@@ -64,7 +76,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Real Estate & Property',
     desc: 'Captures buyer/renter leads, qualifies serious ones and follows up fast — before competitors do.',
     fromPrice: 229,
+    fromPriceZAR: 3800,
     monthly: 35,
+    monthlyZAR: 580,
     accent: 'blue',
   },
   {
@@ -74,7 +88,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Legal, Finance & Professional',
     desc: 'Collects case details, screens clients and books consultations — professional intake on autopilot.',
     fromPrice: 229,
+    fromPriceZAR: 3800,
     monthly: 35,
+    monthlyZAR: 580,
     accent: 'gold',
   },
   {
@@ -84,7 +100,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Education & Training',
     desc: 'Schedules tutoring sessions, handles rescheduling and keeps students and parents updated.',
     fromPrice: 169,
+    fromPriceZAR: 2800,
     monthly: 25,
+    monthlyZAR: 420,
     accent: 'green',
   },
   {
@@ -94,7 +112,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Home Services & Local',
     desc: 'Books home and office cleaning jobs, confirms details and sends reminders automatically.',
     fromPrice: 169,
+    fromPriceZAR: 2800,
     monthly: 25,
+    monthlyZAR: 420,
     accent: 'purple',
   },
   {
@@ -104,7 +124,9 @@ export const AUTOMATION_PICKS: AutomationPick[] = [
     category: 'Logistics, Sales & Operations',
     desc: 'Chases unpaid invoices with polite, automatic reminders so you get paid faster.',
     fromPrice: 169,
+    fromPriceZAR: 2800,
     monthly: 25,
+    monthlyZAR: 420,
     accent: 'blue',
   },
 ];

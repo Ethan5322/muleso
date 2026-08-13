@@ -19,7 +19,8 @@ interface BookingData {
   clientID?: string;
   clientIDType?: 'national_id' | 'passport' | '';
   verificationCode?: string;
-  /** Deposit (50%) amount in USD to secure the booking. */
+  /** Deposit (50%) amount in ZAR to secure the booking — the currency the
+   *  client is quoted in and the one Paystack actually charges. */
   deposit?: number;
   /** 'paid' once the deposit is confirmed, otherwise 'pending'. */
   paymentStatus?: 'paid' | 'pending';
@@ -267,7 +268,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     doc.setLineWidth(0.4);
     doc.roundedRect(margin, yPos, contentWidth, payBoxH, 1.5, 1.5, 'FD');
     let pr = yPos + 6;
-    field('Deposit (50%):', depositAmount ? `$ ${depositAmount.toLocaleString('en-US')}` : 'To be confirmed', col1X, pr, 30);
+    field('Deposit (50%):', depositAmount ? `R ${depositAmount.toLocaleString('en-US')}` : 'To be confirmed', col1X, pr, 30);
 
     // Status pill (right-aligned)
     const pillW = 30;
@@ -401,7 +402,7 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     addSection('6. REVISIONS & MODIFICATIONS', [
       '6.1 The project fee includes up to 3 rounds of revisions on the agreed deliverables.',
       '6.2 Revisions cover modifications to agreed work; major redesigns or scope changes are not "revisions".',
-      '6.3 Additional revisions are billed at $15/hour or as mutually agreed.',
+      '6.3 Additional revisions are billed at R250/hour or as mutually agreed.',
       '6.4 Revision requests must be submitted in writing with specific details.',
     ]);
 

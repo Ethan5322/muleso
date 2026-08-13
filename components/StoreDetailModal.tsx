@@ -2,14 +2,17 @@
 
 import { X, Check, Zap, ArrowRight } from 'lucide-react';
 import type { AccentKey } from '@/lib/storeProducts';
+import { zar, usd } from '@/lib/money';
 
 export interface StoreDetailItem {
   title: string;
   category: string;
   description: string;
   features: string[];
-  fromPrice: number;
-  monthly: number;
+  fromPrice: number; // USD — secondary figure only
+  fromPriceZAR: number; // ZAR — what we lead with, and what Paystack charges
+  monthly: number; // USD — secondary figure only
+  monthlyZAR: number; // ZAR — what we lead with
   accent: AccentKey;
   kind: 'system' | 'automation';
 }
@@ -126,7 +129,8 @@ export default function StoreDetailModal({
                 <span className="block text-xs opacity-90">Deposit now, balance on delivery — you own it outright</span>
               </span>
               <span className="text-right shrink-0">
-                <span className="block text-lg font-bold font-sora">From ${item.fromPrice.toLocaleString('en-US')}</span>
+                <span className="block text-lg font-bold font-sora">From {zar(item.fromPriceZAR)}</span>
+                <span className="block text-[11px] opacity-80">≈ {usd(item.fromPrice)}</span>
               </span>
             </button>
 
@@ -141,7 +145,8 @@ export default function StoreDetailModal({
                 <span className="block text-xs text-[var(--text-secondary)]">Spread the cost — low monthly, cancel anytime</span>
               </span>
               <span className="text-right shrink-0">
-                <span className="block text-lg font-bold font-sora text-[var(--accent-green)]">${item.monthly.toLocaleString('en-US')}/mo</span>
+                <span className="block text-lg font-bold font-sora text-[var(--accent-green)]">{zar(item.monthlyZAR)}/mo</span>
+                <span className="block text-[11px] text-[var(--text-secondary)]">≈ {usd(item.monthly)}/mo</span>
               </span>
             </button>
 

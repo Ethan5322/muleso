@@ -11,8 +11,10 @@ export interface SystemProduct {
   brand: string; // elegant product name
   tagline: string; // what it is
   category: string;
-  fromPrice: number; // USD — "From $…" setup
-  monthly: number; // USD — monthly care plan
+  fromPrice: number; // USD — secondary figure shown beside the Rand price
+  fromPriceZAR: number; // ZAR — what the client actually pays, and what we lead with
+  monthly: number; // USD — secondary figure
+  monthlyZAR: number; // ZAR — the care-plan price we lead with
   accent: AccentKey;
   description: string;
   features: string[];
@@ -27,7 +29,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: 'AI Gym & Membership Platform',
     category: 'Gym Platform',
     fromPrice: 2199,
+    fromPriceZAR: 36500,
     monthly: 89,
+    monthlyZAR: 1480,
     accent: 'purple',
     description: 'A complete gym on autopilot — AI join-flow, live membership tiers, recurring billing and face/QR check-in.',
     features: ['AI join-flow + screening', 'Memberships & recurring billing', 'Face & QR check-in', 'Full admin dashboard'],
@@ -39,7 +43,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: 'Catering & Events Booking Suite',
     category: 'Catering',
     fromPrice: 549,
+    fromPriceZAR: 9100,
     monthly: 39,
+    monthlyZAR: 650,
     accent: 'gold',
     description: 'Turn enquiries into paid bookings automatically — AI quotes, deposit payments and calendar sync.',
     features: ['AI enquiry & quotes', 'Deposit payments', 'Calendar sync', 'WhatsApp confirmations'],
@@ -51,7 +57,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: 'Events Booking & Deposit Platform',
     category: 'Events',
     fromPrice: 599,
+    fromPriceZAR: 9900,
     monthly: 39,
+    monthlyZAR: 650,
     accent: 'purple',
     description: 'A polished events platform that books clients and takes deposits while you sleep.',
     features: ['AI bookings', 'Online deposits', 'Package selection', 'Instant owner alerts'],
@@ -63,7 +71,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: 'Studio & Booking Website',
     category: 'Photography',
     fromPrice: 449,
+    fromPriceZAR: 7500,
     monthly: 29,
+    monthlyZAR: 480,
     accent: 'blue',
     description: 'A stunning portfolio site that lets clients view your work and book a shoot with a deposit.',
     features: ['Portfolio gallery', 'Online booking', 'Deposit payments', 'Mobile-first design'],
@@ -75,7 +85,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: 'Event Planning Website',
     category: 'Website',
     fromPrice: 499,
+    fromPriceZAR: 8300,
     monthly: 29,
+    monthlyZAR: 480,
     accent: 'gold',
     description: 'An elegant, high-converting website for event planners — beautiful, fast and enquiry-ready.',
     features: ['Elegant design', 'Enquiry bookings', 'Gallery', 'Fast & SEO-ready'],
@@ -87,7 +99,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: '24/7 AI Booking Assistant',
     category: 'AI Chatbot',
     fromPrice: 319,
+    fromPriceZAR: 5300,
     monthly: 29,
+    monthlyZAR: 480,
     accent: 'green',
     description: 'An AI assistant that answers, qualifies and books your customers around the clock — on web and WhatsApp.',
     features: ['Natural conversation', 'Lead capture', 'Books appointments', 'WhatsApp integration'],
@@ -99,7 +113,9 @@ export const SYSTEM_PRODUCTS: SystemProduct[] = [
     tagline: 'AI Clinic & Patient System',
     category: 'Healthcare · Enterprise',
     fromPrice: 3699,
+    fromPriceZAR: 61400,
     monthly: 199,
+    monthlyZAR: 3300,
     accent: 'blue',
     description: 'An enterprise clinic system: patient intake, AI triage support, live queue and secure records.',
     features: ['QR patient intake', 'AI triage support', 'Queue & records', 'Secure & POPIA-ready'],

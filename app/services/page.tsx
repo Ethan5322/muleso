@@ -38,13 +38,13 @@ interface Service {
 }
 
 const FALLBACK_SERVICES: Service[] = [
-  { title: 'Website Design', href: '/services/website-design', description: 'Stunning websites that convert visitors into paying customers.', features: ['Responsive Design', 'SEO Optimized', 'Fast Loading', '30-Day Support', 'Source Code Included'], icon: '🌐', price: 'From $199' },
-  { title: 'AI Chatbots', href: '/services/chatbot', description: '24/7 AI assistants that handle customer service automatically.', features: ['Natural Language', 'Lead Collection', 'WhatsApp Integration', 'Analytics', 'Custom Training'], icon: '🤖', price: 'From $149' },
-  { title: 'Design Widget', href: '/services/design-widget', description: 'A beautiful support & sales widget for your site that greets, answers and books customers 24/7.', features: ['Answers Instantly', 'Captures Every Lead', 'Books & Takes Deposits', 'WhatsApp Handoff', 'Fully On-Brand'], icon: '💬', price: 'From $199' },
-  { title: 'Logo Design', href: '/services/logo-design', description: 'Professional brand identity that stands out.', features: ['Original Design', 'Multiple Concepts', 'All Formats', 'Brand Guidelines', 'Unlimited Revisions'], icon: '🎨', price: 'From $49' },
-  { title: 'PDF Guides', href: '/services/pdf-guides', description: 'Sell expert knowledge as downloadable digital products.', features: ['Professional Layout', 'SEO Optimized', 'Secure Distribution', 'Analytics', 'Evergreen Income'], icon: '📄', price: 'From $6' },
-  { title: 'QR Code Design', href: '/services/qr-codes', description: 'Custom branded QR codes with built-in tracking.', features: ['Custom Design', 'Analytics', 'Dynamic Links', 'Multiple Formats', 'Lifetime Support'], icon: '📱', price: 'From $19' },
-  { title: 'Custom Email Setup', href: '/services/email-setup', description: 'Professional @yourdomain.com email for instant credibility.', features: ['Domain Setup', 'Email Configuration', 'Security', 'Backups', 'Technical Support'], icon: '📧', price: 'From $25' },
+  { title: 'Website Design', href: '/services/website-design', description: 'Stunning websites that convert visitors into paying customers.', features: ['Responsive Design', 'SEO Optimized', 'Fast Loading', '30-Day Support', 'Source Code Included'], icon: '🌐', price: 'From R3,500' },
+  { title: 'AI Chatbots', href: '/services/chatbot', description: '24/7 AI assistants that handle customer service automatically.', features: ['Natural Language', 'Lead Collection', 'WhatsApp Integration', 'Analytics', 'Custom Training'], icon: '🤖', price: 'From R2,500' },
+  { title: 'Design Widget', href: '/services/design-widget', description: 'A beautiful support & sales widget for your site that greets, answers and books customers 24/7.', features: ['Answers Instantly', 'Captures Every Lead', 'Books & Takes Deposits', 'WhatsApp Handoff', 'Fully On-Brand'], icon: '💬', price: 'From R3,500' },
+  { title: 'Logo Design', href: '/services/logo-design', description: 'Professional brand identity that stands out.', features: ['Original Design', 'Multiple Concepts', 'All Formats', 'Brand Guidelines', 'Unlimited Revisions'], icon: '🎨', price: 'From R800' },
+  { title: 'PDF Guides', href: '/services/pdf-guides', description: 'Sell expert knowledge as downloadable digital products.', features: ['Professional Layout', 'SEO Optimized', 'Secure Distribution', 'Analytics', 'Evergreen Income'], icon: '📄', price: 'From R149' },
+  { title: 'QR Code Design', href: '/services/qr-codes', description: 'Custom branded QR codes with built-in tracking.', features: ['Custom Design', 'Analytics', 'Dynamic Links', 'Multiple Formats', 'Lifetime Support'], icon: '📱', price: 'From R300' },
+  { title: 'Custom Email Setup', href: '/services/email-setup', description: 'Professional @yourdomain.com email for instant credibility.', features: ['Domain Setup', 'Email Configuration', 'Security', 'Backups', 'Technical Support'], icon: '📧', price: 'From R400' },
   { title: 'Custom Apps Building', href: '/services/custom-apps', description: 'We build bespoke web & mobile applications tailored to your exact business workflow.', features: ['Web & Mobile Apps', 'Custom Dashboards', 'API & Database Integration', 'Scalable Architecture', 'Ongoing Maintenance'], icon: '📲', price: 'Custom quote' },
   { title: 'Digital ID Service', href: '/services/digital-id', description: 'Branded digital ID cards with a unique QR & verification number — scan to instantly reveal the holder’s details.', features: ['Unique QR + Verification Number', 'Scan-to-Verify Any Camera', 'Barcode for Hardware Scanners', 'Face / PIN Security Add-ons', 'For Any Institution'], icon: '🪪', price: 'Custom quote' },
   { title: 'Auto Pilot System', href: '/services/autopilot', description: 'One complete system that runs your whole small institution — bookings, payments, members, reminders & reports, automatically.', features: ['Runs Your Whole Operation 24/7', 'AI Bookings + Paystack Payments', 'Digital IDs & QR Check-in', 'WhatsApp/SMS Reminders', 'Live Admin Dashboard'], icon: '🛫', price: 'Custom quote' },
@@ -77,7 +77,7 @@ export default function ServicesPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: [
-      { title: 'AI Automation', href: '/ai-automation', description: '200 AI systems across 9 industries, custom-built to your workflow.', price: 'From $299' },
+      { title: 'AI Automation', href: '/ai-automation', description: '200 AI systems across 9 industries, custom-built to your workflow.', price: 'From R4,500' },
       ...services,
     ].map((s, i) => {
       const price = priceNum((s as { price?: string }).price || '');
@@ -168,7 +168,7 @@ export default function ServicesPage() {
                 ))}
               </ul>
               <div className="mt-auto">
-                <p className="text-lg font-bold gold-text font-sora mb-4">From $299</p>
+                <p className="text-lg font-bold gold-text font-sora mb-4">From R4,500</p>
                 <motion.div whileHover={{ scale: 1.05 }}>
                   <Link
                     href="/ai-automation"

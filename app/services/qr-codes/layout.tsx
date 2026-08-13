@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Custom QR Code Services in South Africa',
   description:
-    'Custom branded QR code products for menus, packaging & campaigns — your logo, live scan tracking. Made in Pretoria from $19. Get yours today.',
+    'Custom branded QR code products for menus, packaging & campaigns — your logo, live scan tracking. Made in Pretoria from R300. Get yours today.',
   path: '/services/qr-codes',
   keywords: [
     'custom qr code services',

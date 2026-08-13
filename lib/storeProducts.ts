@@ -9,11 +9,13 @@ export interface StoreProduct {
   slug: string;
   emoji: string;
   /**
-   * What the buyer is charged. Paystack still settles in ZAR, so this stays the
-   * authoritative amount for checkout — never show it to the buyer.
+   * What the buyer is charged AND what the storefront displays. Paystack
+   * settles in ZAR, so this is both the authoritative checkout amount and the
+   * price we advertise — the two used to disagree, which meant a buyer saw
+   * "$19" and then met "R299" on the payment page.
    */
   priceZAR: number;
-  /** What the storefront displays. USD is the official currency of the site. */
+  /** Secondary "≈ $…" courtesy line for overseas buyers. Never shown alone. */
   priceUSD: number;
   pages: string;
   difficulty: string;
@@ -33,7 +35,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     priceUSD: 19,
     pages: '30+',
     difficulty: 'Beginner-Friendly',
-    description: 'Start a chatbot business and land $300+ clients — even if you can’t code. The exact playbook we use.',
+    description: 'Start a chatbot business and land R5,000+ clients — even if you can’t code. The exact playbook we use.',
     features: ['Pick a profitable niche', 'Build without coding', 'Pricing & retainers', 'Find & close clients', '90-day plan'],
     accent: 'purple',
     available: true,

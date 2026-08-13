@@ -77,25 +77,30 @@ const COUNTRY_CODES: { [key: string]: string } = {
   'spain': '+34',
 };
 
-// `price` is what the visitor sees (USD, the agency's official currency).
-// `zar` is what the deposit is actually charged in, because Paystack settles
-// this account in rands — never derive the charge from the displayed string.
+// `price` is what the visitor sees, and it is the SAME currency Paystack
+// charges. It used to be a USD string while the deposit was taken in rands,
+// so a client agreed to "$199" and then met a rand amount on the payment
+// popup. `zar` remains the authoritative charge — never derive it from the
+// displayed string. `usd` survives only as the smaller "≈ $…" courtesy line.
 const SERVICES = [
-  { id: '1', label: '💻 Design Website', value: 'Design Website', price: '$199', usd: 199, zar: 3500 },
-  { id: '2', label: '🔧 Fix Website', value: 'Fix Website', price: '$199', usd: 199, zar: 3500 },
-  { id: '3', label: '🎨 Design Widget', value: 'Design Widget', price: '$199', usd: 199, zar: 3500 },
-  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: '$199', usd: 199, zar: 3500 },
-  { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: '$299', usd: 299, zar: 5000 },
-  { id: '6', label: '🌐 All in One Website', value: 'All in One Website', price: '$449', usd: 449, zar: 7500 },
+  { id: '1', label: '💻 Design Website', value: 'Design Website', price: 'R3,500', usd: 199, zar: 3500 },
+  { id: '2', label: '🔧 Fix Website', value: 'Fix Website', price: 'R3,500', usd: 199, zar: 3500 },
+  { id: '3', label: '🎨 Design Widget', value: 'Design Widget', price: 'R3,500', usd: 199, zar: 3500 },
+  { id: '4', label: '🤖 Build AI Chatbot', value: 'Build AI Chatbot', price: 'R3,500', usd: 199, zar: 3500 },
+  { id: '5', label: '⚙️ Build AI Automation', value: 'Build AI Automation', price: 'R5,000', usd: 299, zar: 5000 },
+  { id: '6', label: '🌐 All in One Website', value: 'All in One Website', price: 'R7,500', usd: 449, zar: 7500 },
   { id: '7', label: '📲 Build Custom App', value: 'Custom Apps Building', price: 'Custom', usd: null, zar: null },
   { id: '8', label: '📝 Other', value: 'Other', price: 'Custom', usd: null, zar: null },
 ];
 
+// Converted at R16.60 and rounded to the nearest R100, matching the rest of
+// the site. These are the client's own budget bands, so they must be quoted
+// in the currency they will actually be invoiced in.
 const BUDGET_RANGES = [
-  { id: '1', label: '$199 - $299', value: '$199 - $299' },
-  { id: '2', label: '$299 - $599', value: '$299 - $599' },
-  { id: '3', label: '$599 - $1,199', value: '$599 - $1,199' },
-  { id: '4', label: '$1,199+', value: '$1,199+' },
+  { id: '1', label: 'R3,300 - R5,000', value: 'R3,300 - R5,000' },
+  { id: '2', label: 'R5,000 - R9,900', value: 'R5,000 - R9,900' },
+  { id: '3', label: 'R9,900 - R19,900', value: 'R9,900 - R19,900' },
+  { id: '4', label: 'R19,900+', value: 'R19,900+' },
   { id: '5', label: 'Not sure yet', value: 'Not sure yet' },
 ];
 
@@ -757,9 +762,10 @@ export default function ChatbotWidget() {
       toast.loading('📄 Generating PDF...');
       await generateCleanBookingPDF({
         ...bookingData,
-        // The agreement is a client-facing document, so it carries the USD
-        // figure the client was quoted — not the ZAR amount Paystack settles.
-        deposit: getServiceDepositUSD(bookingData.service),
+        // The agreement is a client-facing document and must state the figure
+        // the client actually pays. Quote, popup and signed PDF now all read
+        // the same rand amount.
+        deposit: getServiceDeposit(bookingData.service),
         paymentStatus: paymentStatus === 'paid' ? 'paid' : 'pending',
       });
       toast.dismiss();
@@ -1132,13 +1138,14 @@ export default function ChatbotWidget() {
                             🔒 Secure Your Booking
                           </p>
                           <p className="text-lg font-bold text-[var(--accent-gold)]">
-                            ${getServiceDepositUSD(bookingData.service).toLocaleString('en-US')}
+                            R{getServiceDeposit(bookingData.service).toLocaleString('en-US')}
+                            <span className="ml-1.5 text-xs font-medium text-[var(--text-secondary)]">
+                              ≈ ${getServiceDepositUSD(bookingData.service).toLocaleString('en-US')}
+                            </span>
                           </p>
                         </div>
                         <p className="text-xs text-[var(--text-secondary)] mb-3">
                           Pay a deposit now to lock in your slot. The balance is invoiced on delivery.
-                          {' '}Billed as R{getServiceDeposit(bookingData.service).toLocaleString('en-ZA')} at
-                          checkout — our payment processor settles in ZAR.
                         </p>
                         <motion.button
                           whileHover={{ scale: paymentStatus === 'processing' ? 1 : 1.02 }}
@@ -1153,7 +1160,7 @@ export default function ChatbotWidget() {
                               Opening payment…
                             </>
                           ) : (
-                            <>💳 Pay ${getServiceDepositUSD(bookingData.service).toLocaleString('en-US')} Deposit</>
+                            <>💳 Pay R{getServiceDeposit(bookingData.service).toLocaleString('en-US')} Deposit</>
                           )}
                         </motion.button>
                         <p className="text-[10px] text-[var(--text-secondary)] text-center mt-2">

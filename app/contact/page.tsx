@@ -426,10 +426,10 @@ export default function ContactPage() {
                       } text-[var(--text-primary)]`}
                     >
                       <option value="">Select budget</option>
-                      <option value="under-100">Under $100</option>
-                      <option value="100-300">$100 to $300</option>
-                      <option value="300-600">$300 to $600</option>
-                      <option value="600-plus">$600+</option>
+                      <option value="under-2000">Under R2,000</option>
+                      <option value="2000-5000">R2,000 to R5,000</option>
+                      <option value="5000-10000">R5,000 to R10,000</option>
+                      <option value="10000-plus">R10,000+</option>
                       <option value="unsure">Not sure yet</option>
                     </select>
                     {fieldErrors.budget && (

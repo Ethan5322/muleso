@@ -13,6 +13,7 @@ import { SYSTEM_PRODUCTS, systemDisplayName, type SystemProduct } from '@/lib/st
 import { AUTOMATION_PICKS, AUTOMATION_FEATURES, type AutomationPick } from '@/lib/storeAutomations';
 import { useChatbot } from '@/context/ChatbotContext';
 import { analytics } from '@/lib/analytics';
+import { zar, usd } from '@/lib/money';
 
 type Plan = 'full' | 'monthly';
 
@@ -26,16 +27,18 @@ export default function StoreClient() {
   // Rich "exaggerated detail" modal for systems + automations.
   const [detail, setDetail] = useState<{ item: StoreDetailItem; book: (plan: Plan) => void } | null>(null);
 
-  const priceLine = (fromPrice: number, monthly: number, plan: Plan) =>
+  // Rand leads: it is what Paystack charges. The dollar figure trails in
+  // brackets for overseas clients and is never the number quoted alone.
+  const priceLine = (fromZAR: number, monthlyZAR: number, plan: Plan) =>
     plan === 'monthly'
-      ? `$${monthly.toLocaleString('en-US')}/month (subscription)`
-      : `From $${fromPrice.toLocaleString('en-US')} (pay in full)`;
+      ? `${zar(monthlyZAR)}/month (subscription)`
+      : `From ${zar(fromZAR)} (pay in full)`;
 
   // Systems are custom builds — booking opens the chatbot with the chosen plan.
   const bookSystem = (s: SystemProduct, plan: Plan) => {
     openChatbot({
       service: systemDisplayName(s),
-      price: priceLine(s.fromPrice, s.monthly, plan),
+      price: priceLine(s.fromPriceZAR, s.monthlyZAR, plan),
       details: `I'd like to build ${systemDisplayName(s)} (${s.category}) — ${plan === 'monthly' ? 'Monthly subscription' : 'Full payment'}. ${s.description}`,
     });
   };
@@ -43,20 +46,20 @@ export default function StoreClient() {
   const bookAutomation = (a: AutomationPick, plan: Plan) => {
     openChatbot({
       service: a.name,
-      price: priceLine(a.fromPrice, a.monthly, plan),
+      price: priceLine(a.fromPriceZAR, a.monthlyZAR, plan),
       details: `I'd like the ${a.name} (${a.category}) — ${plan === 'monthly' ? 'Monthly subscription' : 'Full payment'}. ${a.desc}`,
     });
   };
 
   const openSystemDetail = (s: SystemProduct) =>
     setDetail({
-      item: { title: systemDisplayName(s), category: s.category, description: s.description, features: s.features, fromPrice: s.fromPrice, monthly: s.monthly, accent: s.accent, kind: 'system' },
+      item: { title: systemDisplayName(s), category: s.category, description: s.description, features: s.features, fromPrice: s.fromPrice, fromPriceZAR: s.fromPriceZAR, monthly: s.monthly, monthlyZAR: s.monthlyZAR, accent: s.accent, kind: 'system' },
       book: (plan) => { setDetail(null); bookSystem(s, plan); },
     });
 
   const openAutomationDetail = (a: AutomationPick) =>
     setDetail({
-      item: { title: a.name, category: a.category, description: a.desc, features: AUTOMATION_FEATURES, fromPrice: a.fromPrice, monthly: a.monthly, accent: a.accent, kind: 'automation' },
+      item: { title: a.name, category: a.category, description: a.desc, features: AUTOMATION_FEATURES, fromPrice: a.fromPrice, fromPriceZAR: a.fromPriceZAR, monthly: a.monthly, monthlyZAR: a.monthlyZAR, accent: a.accent, kind: 'automation' },
       book: (plan) => { setDetail(null); bookAutomation(a, plan); },
     });
 
@@ -77,7 +80,8 @@ export default function StoreClient() {
     setLoading(true);
     setError(null);
     try {
-      analytics.checkoutStart(pending.priceUSD);
+      // Track the amount actually charged, in the currency actually charged.
+      analytics.checkoutStart(pending.priceZAR);
 
       const res = await fetch('/api/store/checkout', {
         method: 'POST',
@@ -112,8 +116,10 @@ export default function StoreClient() {
         brand: { '@type': 'Brand', name: 'MuleSoo' },
         offers: {
           '@type': 'Offer',
-          price: String(p.priceUSD),
-          priceCurrency: 'USD',
+          // Must match the amount Paystack charges, or Google's rich result
+          // advertises a price the buyer never sees at checkout.
+          price: String(p.priceZAR),
+          priceCurrency: 'ZAR',
           availability: p.available ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
         },
       },
@@ -192,8 +198,8 @@ export default function StoreClient() {
 
                 <div className="mt-auto">
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="text-3xl font-bold font-sora gold-text">${product.priceUSD}</span>
-                    <span className="text-xs text-[var(--text-secondary)]">once-off</span>
+                    <span className="text-3xl font-bold font-sora gold-text">{zar(product.priceZAR)}</span>
+                    <span className="text-xs text-[var(--text-secondary)]">≈ {usd(product.priceUSD)} · once-off</span>
                   </div>
                   {product.available ? (
                     <motion.div whileHover={{ scale: 1.05 }}>
@@ -271,8 +277,9 @@ export default function StoreClient() {
 
                   <div className="mt-auto">
                     <div className="flex items-baseline gap-2 mb-4 flex-wrap">
-                      <span className="text-3xl font-bold font-sora gradient-text">From ${s.fromPrice.toLocaleString('en-US')}</span>
-                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ ${s.monthly.toLocaleString('en-US')}/mo</span>
+                      <span className="text-3xl font-bold font-sora gradient-text">From {zar(s.fromPriceZAR)}</span>
+                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ {zar(s.monthlyZAR)}/mo</span>
+                      <span className="w-full text-xs text-[var(--text-secondary)]">≈ {usd(s.fromPrice)} + {usd(s.monthly)}/mo</span>
                     </div>
                     <motion.div whileHover={{ scale: 1.05 }}>
                       <button
@@ -333,8 +340,9 @@ export default function StoreClient() {
 
                   <div className="mt-auto">
                     <div className="flex items-baseline gap-2 mb-4 flex-wrap">
-                      <span className="text-2xl font-bold font-sora gradient-text">From ${a.fromPrice.toLocaleString('en-US')}</span>
-                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ ${a.monthly.toLocaleString('en-US')}/mo</span>
+                      <span className="text-2xl font-bold font-sora gradient-text">From {zar(a.fromPriceZAR)}</span>
+                      <span className="text-sm font-semibold text-[var(--accent-green)]">+ {zar(a.monthlyZAR)}/mo</span>
+                      <span className="w-full text-xs text-[var(--text-secondary)]">≈ {usd(a.fromPrice)} + {usd(a.monthly)}/mo</span>
                     </div>
                     <div className="flex gap-2">
                       <motion.div whileHover={{ scale: 1.05 }} className="flex-1">
@@ -394,7 +402,7 @@ export default function StoreClient() {
               <div>
                 <h3 className="text-xl font-bold font-sora text-[var(--text-primary)]">Buy {pending.name}</h3>
                 <p className="text-sm text-[var(--text-secondary)] mt-1">
-                  <span className="gold-text font-bold">${pending.priceUSD}</span> once-off — instant download after payment.
+                  <span className="gold-text font-bold">{zar(pending.priceZAR)}</span> once-off (≈ {usd(pending.priceUSD)}) — instant download after payment.
                 </p>
               </div>
               <button type="button" onClick={() => !loading && setPending(null)} className="text-[var(--text-secondary)] hover:text-white" aria-label="Close">
@@ -425,11 +433,11 @@ export default function StoreClient() {
               disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 mt-2 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-lg hover:scale-[1.02] transition-transform disabled:opacity-60"
             >
-              {loading ? <><Loader2 size={18} className="animate-spin" /> Opening payment…</> : `Pay $${pending.priceUSD} securely →`}
+              {loading ? <><Loader2 size={18} className="animate-spin" /> Opening payment…</> : `Pay ${zar(pending.priceZAR)} securely →`}
             </button>
-            <p className="text-[11px] text-[var(--text-secondary)] text-center mt-3">
-              Billed as R{pending.priceZAR} at checkout (our processor settles in ZAR).
-            </p>
+            {/* The old note here apologised for charging Rand after quoting dollars.
+                The quote is now in Rand, so the checkout page matches this button
+                exactly and the disclaimer is gone. */}
             <p className="text-[11px] text-[var(--text-secondary)] text-center mt-1.5 inline-flex items-center gap-1 justify-center w-full">
               <ShieldCheck size={12} className="text-[var(--accent-green)]" /> Secured by Paystack • Card &amp; Instant EFT
             </p>

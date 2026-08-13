@@ -360,21 +360,21 @@ export default function Home() {
               icon={FileText}
               title="PDF Guides"
               description="Expert knowledge packaged as downloadable products you sell forever."
-              price="Quoted on scope"
+              price="From R149"
               delay={0.24}
             />
             <ServiceCard
               icon={QrCode}
               title="QR Code Design"
               description="Custom branded QR codes with built-in analytics tracking."
-              price="Quoted on scope"
+              price="From R300"
               delay={0.32}
             />
             <ServiceCard
               icon={Mail}
               title="Custom Email"
               description="Professional @yourdomain.com email that builds instant credibility."
-              price="Quoted on scope"
+              price="From R400"
               delay={0.4}
             />
             <ServiceCard

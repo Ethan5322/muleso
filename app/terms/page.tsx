@@ -179,7 +179,7 @@ export default function TermsPage() {
               content: [
                 '30 days of FREE support for bug fixes',
                 'Up to 3 revision rounds included',
-                'Additional support available at $15/hour',
+                'Additional support available at R250/hour',
               ],
             },
             {
