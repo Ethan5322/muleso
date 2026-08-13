@@ -163,7 +163,13 @@ Then create app/globals.css with this exact content:
   --glow-gold: rgba(232, 184, 75, 0.12);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* MUST be wrapped in @layer base. Tailwind v4 puts every utility in
+   @layer utilities, and unlayered CSS beats layered CSS regardless of
+   specificity — an unlayered `*` reset silently kills every px-*, py-*,
+   m-* and space-y-* on the site. */
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+}
 html { scroll-behavior: smooth; }
 body {
   background-color: var(--bg-primary);

@@ -82,7 +82,14 @@
   --brand-indigo-hover: var(--color-action-hover);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* MUST stay inside @layer base. Tailwind v4 emits every utility into
+   @layer utilities, and unlayered CSS beats layered CSS no matter the
+   specificity — so an unlayered `*` reset silently overrides every px-*,
+   py-*, m-* and space-y-* on the site. It shipped unlayered and cost us
+   26px-tall buttons and sub-44px tap targets sitewide. Do not unwrap it. */
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+}
 html {
   scroll-behavior: smooth;
   /* The whole site is dark. Without this, the browser paints every NATIVE

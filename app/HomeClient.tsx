@@ -98,11 +98,13 @@ const ServiceCard = ({
   icon: IconComponent,
   title,
   description,
+  price,
   delay,
 }: {
   icon: any;
   title: string;
   description: string;
+  price: string;
   delay: number;
 }) => {
   const ref = useRef(null);
@@ -129,12 +131,14 @@ const ServiceCard = ({
       <h3 className="text-xl font-bold font-sora text-[var(--text-primary)] mb-3">
         {title}
       </h3>
-      <p className="text-base text-[var(--text-secondary)] mb-6 leading-relaxed">{description}</p>
+      <p className="text-base text-[var(--text-secondary)] mb-5 leading-relaxed">{description}</p>
+      <p className="font-sora text-base font-semibold text-[var(--color-premium)] mb-5">{price}</p>
       <Link
         href="/services"
-        className="text-[var(--color-action-on-dark)] text-base font-medium hover:gap-2 inline-flex items-center transition-all"
+        className="text-[var(--color-action-on-dark)] text-base font-medium inline-flex items-center gap-1 hover:gap-2 transition-all"
       >
-        Learn more →
+        <span>Learn more</span>
+        <span aria-hidden="true">→</span>
       </Link>
     </motion.div>
   );
@@ -241,8 +245,8 @@ export default function Home() {
               className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
             >
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Link href="/services" className="btn-secondary px-8 py-3 text-base">
-                  Explore Services
+                <Link href="/contact" className="btn-primary px-8 py-3 text-base">
+                  Get a Free Quote
                 </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }}>
@@ -335,42 +339,49 @@ export default function Home() {
               icon={Globe}
               title="Website Design"
               description="Stunning, fast websites built to convert visitors into clients."
+              price="From R3,500"
               delay={0}
             />
             <ServiceCard
               icon={Bot}
               title="AI Chatbots"
               description="24/7 intelligent assistants that handle your customer service."
+              price="From R2,500"
               delay={0.08}
             />
             <ServiceCard
               icon={Palette}
               title="Logo Design"
               description="Professional brand identity that makes you unforgettable."
+              price="From R800"
               delay={0.16}
             />
             <ServiceCard
               icon={FileText}
               title="PDF Guides"
               description="Expert knowledge packaged as downloadable products you sell forever."
+              price="Quoted on scope"
               delay={0.24}
             />
             <ServiceCard
               icon={QrCode}
               title="QR Code Design"
               description="Custom branded QR codes with built-in analytics tracking."
+              price="Quoted on scope"
               delay={0.32}
             />
             <ServiceCard
               icon={Mail}
               title="Custom Email"
               description="Professional @yourdomain.com email that builds instant credibility."
+              price="Quoted on scope"
               delay={0.4}
             />
             <ServiceCard
               icon={AppWindow}
               title="Custom Apps Building"
               description="Bespoke web & mobile applications engineered to run your business end-to-end."
+              price="Quoted on scope"
               delay={0.48}
             />
           </div>
@@ -804,47 +815,58 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 6.3 - GUARANTEE */}
-      <section className="section-tight px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--color-action-primary)]/5 to-[var(--accent-purple)]/5 border-t border-b border-[var(--border)]">
-        <div className="max-w-4xl mx-auto">
+      {/* SECTION 6.3 - PRICING
+          Starting prices belong on the homepage. They previously appeared only
+          inside a collapsed <details> in the FAQ, so a buyer could read the whole
+          page and never meet a number. Every figure here is quoted from the
+          site's existing copy (HOME_FAQS + /services) — nothing new is claimed. */}
+      <section className="section-tight px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
+        <div className="max-w-5xl mx-auto grid gap-12 lg:grid-cols-[0.85fr_1fr] lg:items-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center"
           >
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-[var(--accent-green)]/10 border border-[var(--accent-green)]/30">
-              <span className="text-lg">🛡️</span>
-              <span className="text-sm font-bold text-[var(--accent-green)]">OUR GUARANTEE</span>
-            </div>
-            <h3 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-4">
-              100% Satisfaction or Your Money Back
-            </h3>
-            <p className="text-lg text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto leading-relaxed">
-              If you're not 100% happy with the final deliverable, we'll refund your deposit in full. No questions asked. We only get paid when you're thrilled with the results. That's how confident we are in our work.
+            <h2 className="text-4xl md:text-5xl font-bold heading-section font-sora mb-5">
+              What it costs
+            </h2>
+            <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8">
+              Starting prices, published up front. Enterprise builds are quoted on scope.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-              {[
-                { icon: '✓', label: 'Unlimited Revisions', desc: 'We refine until perfect.' },
-                { icon: '✓', label: '30-Day Support', desc: 'Free fixes post-launch.' },
-                { icon: '✓', label: 'You Own Everything', desc: 'Full source code included.' },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
-                  viewport={{ once: true }}
-                  className="text-center"
-                >
-                  <div className="text-3xl font-bold text-[var(--accent-green)] mb-2">{item.icon}</div>
-                  <p className="font-bold text-[var(--text-primary)] mb-1">{item.label}</p>
-                  <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
+              <Link href="/contact" className="btn-primary px-8 py-3 text-base">
+                Get a Free Quote
+              </Link>
+            </motion.div>
           </motion.div>
+
+          <dl className="border-t border-[var(--border)]">
+            {[
+              { label: 'Starter website', detail: 'Everything a small business needs to be found', price: 'R3,500' },
+              { label: 'Business website', detail: 'More pages, animations, an AI chatbot', price: 'R7,500' },
+              { label: 'AI chatbot', detail: 'Answers customers on your site and WhatsApp, 24/7', price: 'R2,500' },
+              { label: 'AI automation system', detail: 'Booking, payment and workflow systems', price: 'R4,500' },
+            ].map((tier, i) => (
+              <motion.div
+                key={tier.label}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: i * 0.07 }}
+                viewport={{ once: true }}
+                className="flex items-baseline justify-between gap-6 border-b border-[var(--border)] py-5"
+              >
+                <div>
+                  <dt className="font-sora text-lg font-semibold text-[var(--text-primary)]">{tier.label}</dt>
+                  <p className="text-sm text-[var(--text-secondary)] mt-1">{tier.detail}</p>
+                </div>
+                <dd className="font-sora text-xl md:text-2xl font-bold text-[var(--color-premium)] whitespace-nowrap">
+                  <span className="text-sm font-medium text-[var(--text-secondary)] mr-1">from</span>
+                  {tier.price}
+                </dd>
+              </motion.div>
+            ))}
+          </dl>
         </div>
       </section>
 
@@ -944,6 +966,54 @@ export default function Home() {
       {/* FAQ — visible + FAQPage schema (helps Google & AI answer engines) */}
       <section className="section-tight px-4 sm:px-6 lg:px-8">
         <FaqSection items={HOME_FAQS} />
+      </section>
+
+      {/* SECTION 6.9 - GUARANTEE
+          Moved down from 6.3: a money-back promise is reassurance, and reassurance
+          belongs against the ask, not three sections away from it. Order is now
+          price -> proof -> FAQ -> guarantee -> ask. No border-b, so it does not
+          stack a second hairline against the final CTA's border-y. */}
+      <section className="section-tight px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[var(--color-action-primary)]/5 to-[var(--accent-purple)]/5 border-t border-[var(--border)]">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-[var(--accent-green)]/10 border border-[var(--accent-green)]/30">
+              <ShieldCheck size={18} className="text-[var(--accent-green)]" />
+              <span className="text-sm font-bold text-[var(--accent-green)]">OUR GUARANTEE</span>
+            </div>
+            <h3 className="text-4xl md:text-5xl font-bold font-sora text-[var(--text-primary)] mb-4">
+              100% Satisfaction or Your Money Back
+            </h3>
+            <p className="text-lg text-[var(--text-secondary)] mb-8 max-w-2xl mx-auto leading-relaxed">
+              If you're not 100% happy with the final deliverable, we'll refund your deposit in full. No questions asked. We only get paid when you're thrilled with the results. That's how confident we are in our work.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+              {[
+                { label: 'Unlimited Revisions', desc: 'We refine until perfect.' },
+                { label: '30-Day Support', desc: 'Free fixes post-launch.' },
+                { label: 'You Own Everything', desc: 'Full source code included.' },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  viewport={{ once: true }}
+                  className="text-center"
+                >
+                  <Check size={28} className="text-[var(--accent-green)] mx-auto mb-2" strokeWidth={2.5} />
+                  <p className="font-bold text-[var(--text-primary)] mb-1">{item.label}</p>
+                  <p className="text-sm text-[var(--text-secondary)]">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* SECTION 7 - FINAL CTA */}
