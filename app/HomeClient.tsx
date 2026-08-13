@@ -208,7 +208,7 @@ export default function Home() {
                 className="inline-block px-6 py-3 rounded-full w-fit mx-auto border-2 border-[var(--color-action-on-dark)] bg-[var(--glow-action)] hover:bg-[var(--color-action-primary)] hover:text-[var(--bg-primary)] transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-[var(--glow-action)] cursor-pointer"
               >
                 <span className="text-[var(--color-action-on-dark)] hover:text-[var(--bg-primary)] font-sora text-sm font-bold transition-colors duration-300">
-                  ⚡ {settings.hero_badge}
+                  {settings.hero_badge}
                 </span>
               </motion.div>
             </Link>
@@ -241,7 +241,7 @@ export default function Home() {
               className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
             >
               <motion.div whileHover={{ scale: 1.05 }}>
-                <Link href="/services" className="btn-primary px-8 py-3 text-base">
+                <Link href="/services" className="btn-secondary px-8 py-3 text-base">
                   Explore Services
                 </Link>
               </motion.div>
