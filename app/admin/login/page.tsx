@@ -45,6 +45,13 @@ export default function AdminLogin() {
       .catch(() => {});
   }, []);
 
+  // Warm the dashboard while the user is reading their email and typing the
+  // code. Without this the redirect after login starts fetching /admin from
+  // cold, and that wait lands entirely inside the "Logging in…" spinner.
+  useEffect(() => {
+    if (step === 'twofa') router.prefetch('/admin');
+  }, [step, router]);
+
   // Disable form autocomplete and cache
   useEffect(() => {
     // Clear any cached admin sessions on page load
@@ -190,7 +197,6 @@ export default function AdminLogin() {
     }
 
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
       // Ask the server for a code. It generates it, stores it and emails it
@@ -232,7 +238,6 @@ export default function AdminLogin() {
     }
 
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
       // One round trip, one authority. The browser used to verify the code
@@ -266,7 +271,9 @@ export default function AdminLogin() {
         setStep('success');
         toast.success('✅ Logged in successfully!');
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        // Navigate straight away. The success panel still renders — it stays
+        // on screen for however long the transition genuinely takes — but it
+        // no longer costs a deliberate 1.5s wait on top of that.
         router.push('/admin');
         return;
       }

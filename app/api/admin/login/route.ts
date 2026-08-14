@@ -1,13 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyTwoFactorCode } from '@/lib/twoFactorUtils';
 import { verifyAdminPassword } from '@/lib/adminPassword';
+// Imported statically and resolved once when the module loads. These used to be
+// awaited dynamic imports inside the handler, which put module resolution on
+// the request path — paid on every cold start, inside the "Logging in…" spinner.
+import { supabase } from '@/lib/supabase';
+import { signSession } from '@/lib/sessionCrypto';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 
 export async function POST(request: NextRequest) {
   try {
     const { password, twoFactorCode } = await request.json();
-    const { valid, configured } = await verifyAdminPassword(password);
+
+    // Trim once, here, so the lookup and the "mark used" update below always
+    // agree. A code pasted from the email often arrives with a trailing space.
+    const submittedCode = typeof twoFactorCode === 'string' ? twoFactorCode.trim() : '';
+
+    // Two independent database reads. Run together they cost one round trip
+    // instead of two, and that saving lands directly in the login spinner.
+    // Checking the code before the password is not a leak: the failures are
+    // reported in a fixed order below, so the response never reveals which of
+    // the two was wrong beyond what it already did.
+    const [{ valid, configured }, verifyResult] = await Promise.all([
+      verifyAdminPassword(password),
+      submittedCode
+        ? verifyTwoFactorCode(ADMIN_EMAIL, submittedCode)
+        : Promise.resolve({ success: false, error: '2FA code required' }),
+    ]);
 
     // Server misconfiguration guard
     if (!configured) {
@@ -27,18 +47,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: Verify 2FA code
-    if (!twoFactorCode) {
+    if (!submittedCode) {
       return NextResponse.json(
         { success: false, error: '2FA code required' },
         { status: 401 }
       );
     }
 
-    // Trim once, here, so the lookup and the "mark used" update below always
-    // agree. A code pasted from the email often arrives with a trailing space.
-    const submittedCode = String(twoFactorCode).trim();
-
-    const verifyResult = await verifyTwoFactorCode(ADMIN_EMAIL, submittedCode);
     if (!verifyResult.success) {
       return NextResponse.json(
         { success: false, error: verifyResult.error || 'Invalid 2FA code' },
@@ -46,13 +61,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Mark 2FA code as used (only after successful verification)
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
+    // Mark 2FA code as used (only after successful verification). Reuses the
+    // shared client rather than constructing a second one per request.
     try {
       await supabase
         .from('two_factor_codes')
@@ -66,7 +76,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 3: Create and sign session
-    const { signSession } = await import('@/lib/sessionCrypto');
     const session = {
       authenticated: true,
       timestamp: Date.now(),
