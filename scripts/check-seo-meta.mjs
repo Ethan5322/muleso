@@ -27,6 +27,7 @@ const SKIP_SEGMENTS = ['admin', 'corporate', 'api'];
 const SKIP_ROUTES = new Set([
   '/store/success',
   '/booking-confirmation',
+  '/booking/pay',
   '/verify',
   '/staff-access',
 ]);

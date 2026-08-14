@@ -7,6 +7,114 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const hasSupabase = !!supabaseUrl && !!supabaseKey;
 const supabase = hasSupabase ? createClient(supabaseUrl, supabaseKey) : null;
 
+const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || ''));
+
+/**
+ * Deposit pricing, kept deliberately in sync with the `SERVICES` table and
+ * `getServiceDeposit()` in components/ChatbotWidget.tsx (50% of the ZAR
+ * starting price; a flat fee for Custom/Other). It is duplicated here rather
+ * than imported because that file is a client component — importing it would
+ * pull the entire chat widget into this server route's bundle. If a price
+ * changes in one place, it must change in the other.
+ */
+const SERVICE_ZAR_PRICE: Record<string, number> = {
+  'Design Website': 3500,
+  'Fix Website': 3500,
+  'Design Widget': 3500,
+  'Build AI Chatbot': 3500,
+  'Build AI Automation': 5000,
+  'All in One Website': 7500,
+};
+const DEPOSIT_PERCENT = 0.5;
+const CUSTOM_DEPOSIT_ZAR = 1500;
+
+function depositForService(serviceName: string): number {
+  const price = SERVICE_ZAR_PRICE[serviceName];
+  return price ? Math.round(price * DEPOSIT_PERCENT) : CUSTOM_DEPOSIT_ZAR;
+}
+
+/**
+ * Starts a Paystack transaction for a booking's deposit and emails the client
+ * a direct link to Paystack's hosted checkout — pre-filled with their email
+ * and the exact deposit amount for this booking, so paying is one click with
+ * no extra steps. Mirrors the pattern already proven in
+ * app/api/store/checkout/route.ts. Best-effort: a failure here must never
+ * fail the booking itself, since the booking and WhatsApp alerts are already
+ * confirmed by the time this runs.
+ */
+async function sendPaymentLinkEmail(opts: {
+  origin: string;
+  email: string;
+  fullName: string;
+  service: string;
+  bookingId: string | null;
+  verificationCode: string;
+}): Promise<{ sent: boolean; reason?: string }> {
+  const secret = process.env.PAYSTACK_SECRET_KEY;
+  if (!secret) return { sent: false, reason: 'PAYSTACK_SECRET_KEY not set' };
+  if (!process.env.RESEND_API_KEY) return { sent: false, reason: 'RESEND_API_KEY not set' };
+
+  const deposit = depositForService(opts.service);
+  const callbackUrl = `${opts.origin}/booking/pay?bookingId=${encodeURIComponent(opts.bookingId || '')}&ref=${encodeURIComponent(opts.verificationCode)}`;
+
+  const initRes = await fetch('https://api.paystack.co/transaction/initialize', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: opts.email,
+      amount: Math.round(deposit * 100), // Paystack expects the smallest unit (cents)
+      currency: 'ZAR',
+      reference: `MULE-BOOKING-${opts.verificationCode}`,
+      callback_url: callbackUrl,
+      metadata: {
+        booking_id: opts.bookingId,
+        verification_code: opts.verificationCode,
+        service: opts.service,
+        custom_fields: [{ display_name: 'Booking', variable_name: 'booking', value: opts.verificationCode }],
+      },
+    }),
+  });
+  const initData = await initRes.json();
+  const payUrl = initData?.data?.authorization_url;
+  if (!initData?.status || !payUrl) {
+    return { sent: false, reason: `Paystack initialize failed: ${JSON.stringify(initData).slice(0, 300)}` };
+  }
+
+  const emailRes = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.RESEND_API_KEY}` },
+    body: JSON.stringify({
+      from: 'chatbot@mulesoo.com',
+      to: opts.email,
+      subject: `Complete your ${opts.service} booking — pay your deposit`,
+      html: `
+        <div style="font-family:Arial,sans-serif;color:#0A0F1E;max-width:520px;margin:0 auto">
+          <h2 style="color:#7FB3FF">Hi ${escapeHtml(opts.fullName)}, you're almost booked in!</h2>
+          <p>Your <b>${escapeHtml(opts.service)}</b> booking is saved. Reference: <b>${escapeHtml(opts.verificationCode)}</b></p>
+          <p>Pay your deposit of <b>R${deposit.toLocaleString('en-ZA')}</b> to confirm your slot:</p>
+          <p style="margin:24px 0">
+            <a href="${payUrl}" style="background:#00C8FF;color:#050810;padding:14px 28px;border-radius:8px;
+              text-decoration:none;font-weight:bold;display:inline-block">Pay Deposit Now</a>
+          </p>
+          <p style="font-size:13px;color:#666">Or paste this link in your browser: ${payUrl}</p>
+          <p style="font-size:13px;color:#666">This link is unique to your booking — no need to re-enter your details.</p>
+        </div>`,
+    }),
+  });
+  if (!emailRes.ok) {
+    return { sent: false, reason: `Resend rejected send: ${emailRes.status} ${(await emailRes.text()).slice(0, 300)}` };
+  }
+  return { sent: true };
+}
+
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function generateVerificationCode(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let code = '';
@@ -138,6 +246,31 @@ export async function POST(req: NextRequest) {
       console.error('⚠️ Failed to send admin notification:', error);
     }
 
+    // Email the client a direct Paystack payment link for their deposit.
+    // This was missing entirely — the only payment path was the inline
+    // Paystack popup inside the chat widget, which only works if the client
+    // stays in that browser tab. Anyone who closed the chat and came back
+    // later had no way to pay. Best-effort: never fail the booking over it.
+    let paymentEmailSent = false;
+    if (email && validateEmail(email)) {
+      try {
+        const origin = process.env.NEXT_PUBLIC_URL || new URL(req.url).origin;
+        const result = await sendPaymentLinkEmail({
+          origin,
+          email,
+          fullName,
+          service,
+          bookingId,
+          verificationCode,
+        });
+        paymentEmailSent = result.sent;
+        if (result.sent) console.log('✅ Payment link emailed to client');
+        else console.error('⚠️ Payment link email not sent:', result.reason);
+      } catch (error) {
+        console.error('⚠️ Payment link email threw:', error);
+      }
+    }
+
     return NextResponse.json(
       {
         message: 'Booking received! Check your WhatsApp for confirmation. Ena Muluken will contact you within 2 hours.',
@@ -151,6 +284,7 @@ export async function POST(req: NextRequest) {
           timeline,
         },
         whatsappSent: true,
+        paymentEmailSent,
       },
       { status: 200 }
     );
