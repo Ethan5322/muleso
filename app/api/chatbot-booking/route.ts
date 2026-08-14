@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { sendBookingConfirmation, sendAdminNotification } from '@/lib/sendWhatsAppMessage';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const hasSupabase = !!supabaseUrl && !!supabaseKey;
-const supabase = hasSupabase ? createClient(supabaseUrl, supabaseKey) : null;
+const hasSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
 const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || ''));
 
@@ -154,10 +151,23 @@ export async function POST(req: NextRequest) {
     // Generate verification code
     const verificationCode = generateVerificationCode();
 
-    // Save to Supabase if configured
+    // Save to Supabase if configured.
+    //
+    // This previously ran through a plain anon-key client and every insert
+    // was silently rejected: `bookings` has row-level security enabled with
+    // no policy allowing the anon role to write, so Postgres returned
+    // 42501 "new row violates row-level security policy" on every booking.
+    // The route only logged that error and moved on (by design — a DB hiccup
+    // must never block a client's booking), so the client always saw success,
+    // got their WhatsApp confirmation, and the booking simply never existed
+    // in bookings: no admin dashboard record, and (before this fix) nothing
+    // for the payment-link email below to reconcile against once paid.
+    // supabaseAdmin uses the service-role key and bypasses RLS, matching the
+    // pattern already used for privileged writes in contact/route.ts and
+    // paystack/verify/route.ts.
     let bookingId: string | null = null;
-    if (hasSupabase && supabase) {
-      const { data: inserted, error } = await supabase
+    if (hasSupabase) {
+      const { data: inserted, error } = await supabaseAdmin
         .from('bookings')
         .insert({
           name: fullName,
