@@ -1,6 +1,24 @@
 import { supabase } from './supabase';
 
 /**
+ * How long an issued code stays valid, in minutes.
+ *
+ * 20, not the previous 10, because the practical window is much smaller than
+ * the nominal one: the code must clear Resend and Gmail (10–30s observed) before
+ * it can be read, and on an unstable connection a submission that never returns
+ * still consumes the code, forcing a fresh one. Twenty minutes leaves room for a
+ * retry without turning a short outage into a lockout.
+ *
+ * Override with TWO_FACTOR_TTL_MINUTES — an env var rather than a constant so
+ * the window can be changed from the Vercel dashboard in seconds, without a
+ * rebuild.
+ */
+export const TWO_FACTOR_TTL_MINUTES = (() => {
+  const raw = Number(process.env.TWO_FACTOR_TTL_MINUTES);
+  return Number.isFinite(raw) && raw > 0 ? raw : 20;
+})();
+
+/**
  * Generate a random 6-digit 2FA code
  */
 export function generateTwoFactorCode(): string {
@@ -31,8 +49,8 @@ export async function storeTwoFactorCode(
   code: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // Calculate expiration 10 minutes from now (server-side UTC)
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    // Expiry is computed server-side in UTC and written as an ISO string.
+    const expiresAt = new Date(Date.now() + TWO_FACTOR_TTL_MINUTES * 60 * 1000).toISOString();
 
     const { error } = await supabase
       .from('two_factor_codes')

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { generateTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
+import {
+  generateTwoFactorCode,
+  storeTwoFactorCode,
+  TWO_FACTOR_TTL_MINUTES,
+} from '@/lib/twoFactorUtils';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -57,7 +61,8 @@ export async function POST(_req: NextRequest) {
               <div class="code">
                 <div class="code-text">${code}</div>
               </div>
-              <p class="note">Code expires in 10 minutes</p>
+              <p class="note">Code expires in ${TWO_FACTOR_TTL_MINUTES} minutes</p>
+              <p class="note">Sent ${new Date().toUTCString()}</p>
               <div class="footer">
                 <p>If you didn't request this code, please contact support immediately.</p>
               </div>

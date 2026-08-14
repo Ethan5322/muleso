@@ -45,9 +45,10 @@ export default function AdminLogin() {
       .catch(() => {});
   }, []);
 
-  // Warm the dashboard while the user is reading their email and typing the
-  // code. Without this the redirect after login starts fetching /admin from
-  // cold, and that wait lands entirely inside the "Logging in…" spinner.
+  // Warm /admin while the user is reading their email and typing the code, so
+  // its serverless function is already up when we hand the browser over. The
+  // navigation itself is a full page load (see handleTwoFactorSubmit), so this
+  // only saves the cold start, not the render.
   useEffect(() => {
     if (step === 'twofa') router.prefetch('/admin');
   }, [step, router]);
@@ -245,14 +246,24 @@ export default function AdminLogin() {
       // timezone difference could reject a code the server would have accepted,
       // and it always reported the failure as "Invalid code" whatever the real
       // reason was. The server is now the only thing that decides.
-      const loginResponse = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: password,
-          twoFactorCode: twoFactorCode.trim(),
-        }),
-      });
+      // 20s ceiling. Without one, a connection that dies mid-flight leaves this
+      // promise pending forever and the button spins with nothing to report.
+      const ac = new AbortController();
+      const killer = setTimeout(() => ac.abort(), 20000);
+      let loginResponse: Response;
+      try {
+        loginResponse = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: password,
+            twoFactorCode: twoFactorCode.trim(),
+          }),
+          signal: ac.signal,
+        });
+      } finally {
+        clearTimeout(killer);
+      }
 
       const loginData = await loginResponse.json();
 
@@ -271,10 +282,13 @@ export default function AdminLogin() {
         setStep('success');
         toast.success('✅ Logged in successfully!');
 
-        // Navigate straight away. The success panel still renders — it stays
-        // on screen for however long the transition genuinely takes — but it
-        // no longer costs a deliberate 1.5s wait on top of that.
-        router.push('/admin');
+        // A full document load, not router.push(). Client-side navigation
+        // fetches an RSC payload, and on an unstable connection that fetch can
+        // stall with nothing watching it — which stranded this screen on
+        // "Admin panel is loading…" indefinitely. A hard navigation gets the
+        // browser's own timeout and error page instead of an eternal spinner,
+        // and guarantees the new session cookie is read fresh by the server.
+        window.location.href = '/admin';
         return;
       }
 
@@ -308,8 +322,21 @@ export default function AdminLogin() {
         setTwoFactorCode('');
       }
     } catch (error) {
+      // The request never completed — ERR_NETWORK_CHANGED, a dropped connection,
+      // or our own timeout. The server may well have accepted the code and
+      // consumed it before the reply was lost, in which case retyping the same
+      // digits returns "Invalid code" and looks like the code was wrong. Say so
+      // plainly and send them back for a fresh one rather than letting them
+      // burn attempts on a code that is already spent.
       console.error('Error verifying 2FA code:', error);
-      toast.error('❌ Error verifying code');
+      toast.error(
+        '📡 Connection dropped before we got an answer. That code may already be used — go back and request a new one.',
+        { duration: 8000 }
+      );
+      setStep('password');
+      setPassword('');
+      setConfirmPassword('');
+      setTwoFactorCode('');
     }
 
     setLoading(false);
@@ -549,7 +576,9 @@ export default function AdminLogin() {
                   className="w-full bg-[#1a1a2e] border border-[var(--color-action-on-dark)]/30 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--color-action-on-dark)] focus:ring-2 focus:ring-[var(--color-action-on-dark)]/50 transition-all text-center text-2xl tracking-widest disabled:opacity-50 font-mono"
                 />
                 <p className="text-[var(--color-action-on-dark)]/60 text-xs mt-2">
-                  Check your email ({ADMIN_EMAIL}) for the code. It expires in 10 minutes.
+                  Check your email ({ADMIN_EMAIL}) for the code. Gmail groups these
+                  into one thread — open the <strong>newest</strong> message, and check
+                  its send time before typing the code.
                 </p>
               </div>
 
