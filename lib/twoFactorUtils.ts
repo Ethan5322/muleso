@@ -8,6 +8,22 @@ export function generateTwoFactorCode(): string {
 }
 
 /**
+ * Parse a Postgres timestamp as the UTC instant it actually represents.
+ *
+ * `two_factor_codes.expires_at` is `timestamp WITHOUT time zone`, so PostgREST
+ * returns it bare — "2026-08-14T05:48:15.383", no Z and no offset. JavaScript
+ * parses a bare date-time as *local* time, so in Johannesburg (UTC+2) every
+ * code was read as expiring two hours before it was issued, and looked expired
+ * the moment it arrived. We write these values with toISOString(), so they are
+ * always UTC — label them as such before parsing.
+ */
+function parseUtc(value: string | Date): Date {
+  if (value instanceof Date) return value;
+  const hasZone = /(?:Z|[+-]\d{2}:?\d{2})$/.test(value.trim());
+  return new Date(hasZone ? value : `${value.trim().replace(' ', 'T')}Z`);
+}
+
+/**
  * Store 2FA code in database
  */
 export async function storeTwoFactorCode(
@@ -87,9 +103,11 @@ export async function verifyTwoFactorCode(
     console.log('Current time:', new Date());
     console.log('Expires at:', new Date(codeRecord.expires_at));
 
-    // Check if the 2FA code has expired. Both timestamps are UTC.
+    // Check if the 2FA code has expired. Both sides are compared as UTC
+    // instants — see parseUtc for why the raw column value cannot be trusted
+    // to new Date() directly.
     const now = new Date();
-    const expiresAt = new Date(codeRecord.expires_at);
+    const expiresAt = parseUtc(codeRecord.expires_at);
     if (now > expiresAt) {
       console.log('2FA code has expired');
       return { success: false, error: '2FA code has expired. Please request a new one.' };

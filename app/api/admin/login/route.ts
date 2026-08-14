@@ -34,7 +34,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const verifyResult = await verifyTwoFactorCode(ADMIN_EMAIL, twoFactorCode);
+    // Trim once, here, so the lookup and the "mark used" update below always
+    // agree. A code pasted from the email often arrives with a trailing space.
+    const submittedCode = String(twoFactorCode).trim();
+
+    const verifyResult = await verifyTwoFactorCode(ADMIN_EMAIL, submittedCode);
     if (!verifyResult.success) {
       return NextResponse.json(
         { success: false, error: verifyResult.error || 'Invalid 2FA code' },
@@ -54,7 +58,7 @@ export async function POST(request: NextRequest) {
         .from('two_factor_codes')
         .update({ used: true })
         .eq('email', ADMIN_EMAIL)
-        .eq('code', twoFactorCode)
+        .eq('code', submittedCode)
         .eq('used', false);
     } catch (error) {
       console.error('Error marking 2FA code as used:', error);

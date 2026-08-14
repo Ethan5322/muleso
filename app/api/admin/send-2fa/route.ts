@@ -1,22 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { generateTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(req: NextRequest) {
-  try {
-    const { email, code } = await req.json();
+// The one identity that matters. The browser used to pass its own address in,
+// which meant a code could be stored under one email and verified against
+// another (NEXT_PUBLIC_ADMIN_EMAIL drifting from ADMIN_EMAIL) — the server then
+// found no row and reported a correct code as invalid. The client no longer has
+// a say: the code is generated, stored and sent against this address alone.
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 
-    if (!email || !code) {
+export async function POST(_req: NextRequest) {
+  try {
+    // Generated server-side. When the browser generated it, whoever held the
+    // page already knew the code, so 2FA proved nothing; and this endpoint
+    // would email any string to any address for any caller.
+    const code = generateTwoFactorCode();
+
+    const stored = await storeTwoFactorCode(ADMIN_EMAIL, code);
+    if (!stored.success) {
+      console.error('Failed to store 2FA code:', stored.error);
       return NextResponse.json(
-        { error: 'Missing email or code' },
-        { status: 400 }
+        { error: 'Could not issue a code. Please try again.' },
+        { status: 500 }
       );
     }
 
     const { error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: email,
+      to: ADMIN_EMAIL,
       subject: '🔐 MuleSoo Admin - Two-Factor Code',
       html: `
         <!DOCTYPE html>

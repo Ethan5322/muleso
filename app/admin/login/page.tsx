@@ -6,14 +6,17 @@ import { motion } from 'framer-motion';
 import { Lock, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAdmin } from '@/context/AdminContext';
-import { generateTwoFactorCode, verifyTwoFactorCode, storeTwoFactorCode } from '@/lib/twoFactorUtils';
+// No 2FA helpers here on purpose. The code is generated, stored and verified
+// entirely on the server — see app/api/admin/send-2fa and app/api/admin/login.
 import QRCode from 'qrcode';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// 2FA identity. MUST stay in lockstep with the server's ADMIN_EMAIL env var.
-// To switch inboxes, set BOTH NEXT_PUBLIC_ADMIN_EMAIL and ADMIN_EMAIL in Vercel
-// to the same address and redeploy once — they then flip together atomically.
+// Display only — "check your email (x)" on the 2FA step. Login no longer
+// depends on this value: the server issues and verifies the code against its
+// own ADMIN_EMAIL, so the two drifting apart can no longer reject a valid code.
+// Setting NEXT_PUBLIC_ADMIN_EMAIL to match ADMIN_EMAIL only keeps the hint text
+// accurate.
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'mulukenendashaw68@gmail.com';
 const MAX_ATTEMPTS = 5;
 const MAX_2FA_ATTEMPTS = 3;
@@ -190,22 +193,11 @@ export default function AdminLogin() {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
-      // Generate 2FA code
-      const code = generateTwoFactorCode();
-
-      // Store code in database
-      const storeResult = await storeTwoFactorCode(ADMIN_EMAIL, code);
-      if (!storeResult.success) {
-        toast.error('❌ Failed to store 2FA code');
-        setLoading(false);
-        return;
-      }
-
-      // Send 2FA code to admin email via API
+      // Ask the server for a code. It generates it, stores it and emails it
+      // against its own ADMIN_EMAIL — the browser never sees or chooses it.
       const sendResponse = await fetch('/api/admin/send-2fa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: ADMIN_EMAIL, code }),
       });
 
       const sendResult = await sendResponse.json();
@@ -243,69 +235,70 @@ export default function AdminLogin() {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
-      // Verify 2FA code
-      const result = await verifyTwoFactorCode(ADMIN_EMAIL, twoFactorCode);
+      // One round trip, one authority. The browser used to verify the code
+      // itself first and only then call the server — so a client-side clock or
+      // timezone difference could reject a code the server would have accepted,
+      // and it always reported the failure as "Invalid code" whatever the real
+      // reason was. The server is now the only thing that decides.
+      const loginResponse = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: password,
+          twoFactorCode: twoFactorCode.trim(),
+        }),
+      });
 
-      if (result.success) {
-        // 2FA code verified, now send login request to API
-        try {
-          const loginResponse = await fetch('/api/admin/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              password: password,
-              twoFactorCode: twoFactorCode,
-            }),
-          });
+      const loginData = await loginResponse.json();
 
-          const loginData = await loginResponse.json();
+      if (loginData.success) {
+        // Clear lockout/attempt counters
+        localStorage.removeItem('admin_attempts');
+        localStorage.removeItem('admin_lockout');
 
-          if (loginData.success) {
-            // Clear lockout/attempt counters
-            localStorage.removeItem('admin_attempts');
-            localStorage.removeItem('admin_lockout');
+        // Set a client-side session marker so admin pages can render.
+        // Real protection is the HTTP-only cookie validated by middleware.
+        localStorage.setItem(
+          'admin_session',
+          JSON.stringify({ authenticated: true, timestamp: Date.now() })
+        );
 
-            // Set a client-side session marker so admin pages can render.
-            // Real protection is the HTTP-only cookie validated by middleware.
-            localStorage.setItem(
-              'admin_session',
-              JSON.stringify({ authenticated: true, timestamp: Date.now() })
-            );
+        setStep('success');
+        toast.success('✅ Logged in successfully!');
 
-            setStep('success');
-            toast.success('✅ Logged in successfully!');
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        router.push('/admin');
+        return;
+      }
 
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            router.push('/admin');
-          } else {
-            toast.error(`❌ ${loginData.error || 'Login failed'}`);
-            setStep('password');
-            setPassword('');
-            setConfirmPassword('');
-            setTwoFactorCode('');
-          }
-        } catch (error) {
-          console.error('Login API error:', error);
-          toast.error('❌ Login failed');
-        }
+      // A wrong password is not a wrong code — send the user back a step
+      // instead of burning a 2FA attempt on it.
+      if (loginResponse.status === 401 && /password/i.test(loginData.error || '')) {
+        toast.error(`❌ ${loginData.error}`);
+        setStep('password');
+        setPassword('');
+        setConfirmPassword('');
+        setTwoFactorCode('');
+        return;
+      }
+
+      const newAttempts = twoFactorAttempts + 1;
+      setTwoFactorAttempts(newAttempts);
+
+      if (newAttempts >= MAX_2FA_ATTEMPTS) {
+        toast.error('❌ Too many failed attempts. Please try again later.');
+        setStep('password');
+        setPassword('');
+        setConfirmPassword('');
+        setTwoFactorCode('');
       } else {
-        // Code verification failed
-        const newAttempts = twoFactorAttempts + 1;
-        setTwoFactorAttempts(newAttempts);
-
-        if (newAttempts >= MAX_2FA_ATTEMPTS) {
-          toast.error('❌ Too many failed attempts. Please try again later.');
-          setStep('password');
-          setPassword('');
-          setConfirmPassword('');
-          setTwoFactorCode('');
-        } else {
-          const remaining = MAX_2FA_ATTEMPTS - newAttempts;
-          toast.error(
-            `❌ Invalid code. ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`
-          );
-          setTwoFactorCode('');
-        }
+        const remaining = MAX_2FA_ATTEMPTS - newAttempts;
+        // Show what actually went wrong. "Invalid code" for an expired code
+        // sent people hunting for a typo that was never there.
+        toast.error(
+          `❌ ${loginData.error || 'Invalid code'} — ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`
+        );
+        setTwoFactorCode('');
       }
     } catch (error) {
       console.error('Error verifying 2FA code:', error);
