@@ -179,11 +179,24 @@ export async function POST(req: NextRequest) {
           budget: budget || null,
           timeline: timeline,
           contact_method: contactMethod || null,
-          project_description: projectDetails || '',
           verification_code: verificationCode,
-          client_id: clientID || null,
-          client_id_type: clientIDType || null,
           status: 'Pending',
+          // client_id, client_id_type and usage_type are collected by the chat
+          // widget but have no columns on `bookings`. Sending them made
+          // PostgREST reject the whole insert with PGRST204 ("Could not find
+          // the 'client_id' column"), so every booking failed on this too —
+          // independently of the RLS problem above. They are folded into
+          // project_description instead of being dropped, so the detail the
+          // client typed still reaches whoever works the booking. Add real
+          // columns later if this needs to be queryable.
+          project_description: [
+            projectDetails || '',
+            usageType ? `Usage type: ${usageType}` : '',
+            clientIDType ? `ID type: ${clientIDType}` : '',
+            clientID ? `ID: ${clientID}` : '',
+          ]
+            .filter(Boolean)
+            .join('\n'),
         })
         .select();
 
