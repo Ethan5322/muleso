@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, ArrowLeft, ArrowRight, Download, CheckCircle, Clock, Save } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, ArrowLeft, ArrowRight, Download, CheckCircle, Clock, Save, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
@@ -43,12 +43,20 @@ interface BookingData {
   bookingId?: string;
 }
 
-// Deposit charged at booking time = this share of the service starting price.
-// (Balance is invoiced on delivery.) Custom / "Other" jobs use a flat secure fee.
+// The FIRST payment, made right here in the chat: a flat, non-refundable fee
+// to hold the slot. It is what unlocks everything past it — the owner's
+// WhatsApp alert, the PDF, and the email carrying the SECOND payment below.
+// Mirrors BOOKING_FEE_ZAR in lib/bookingPayment.ts — duplicated because that
+// module also imports server-only code (Resend) that must not ship to the
+// browser; if this number changes, it must change in both places.
+const BOOKING_FEE_ZAR = 100;
+
+// The SECOND payment, made later via the emailed link, not in this widget:
+// this share of the service's starting price. (Balance is invoiced on
+// delivery.) Custom / "Other" jobs use a flat quote-pending fee instead.
 const DEPOSIT_PERCENT = 0.5;
-// Flat secure fee for Custom/Other jobs, in each currency.
+// Flat placeholder shown for Custom/Other jobs, before the real quote is scoped.
 const CUSTOM_DEPOSIT_ZAR = 1500;
-const CUSTOM_DEPOSIT_USD = 89;
 
 const COUNTRY_CODES: { [key: string]: string } = {
   'south africa': '+27',
@@ -225,13 +233,6 @@ export default function ChatbotWidget() {
     return Math.round(service.zar * DEPOSIT_PERCENT);
   };
 
-  // The same deposit expressed in USD — this is the figure shown to the client.
-  const getServiceDepositUSD = (serviceName: string): number => {
-    const service = SERVICES.find(s => s.value === serviceName);
-    if (!service?.usd) return CUSTOM_DEPOSIT_USD;
-    return Math.round(service.usd * DEPOSIT_PERCENT);
-  };
-
   // Load Paystack's inline popup script once. We call this early (on open) so
   // the script is already in memory by the time the client taps "Pay" — that
   // removes the "searching…" delay before the popup appears.
@@ -285,13 +286,21 @@ export default function ChatbotWidget() {
   // Instant EFT / Bank Transfer channels. We mark the client "paid" the moment
   // Paystack's callback fires (optimistic), then confirm server-side in the
   // background — so the success screen is instant, not gated on our API.
-  const handlePayDeposit = async () => {
+  //
+  // This charges the flat, non-refundable BOOKING_FEE_ZAR — not the project
+  // deposit. The booking fee is what happens here, in the chat, right now;
+  // the 50% project deposit is a separate, later payment the client completes
+  // afterward via the emailed link (app/booking/pay), once this fee has
+  // cleared and app/api/paystack/verify has told the owner the booking is
+  // real. metadata.payment_type is how that route tells the two apart — it
+  // reads Paystack's own verified transaction data, never anything the
+  // browser claims, so a client cannot mislabel one payment as the other.
+  const handlePayBookingFee = async () => {
     const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
     if (!publicKey) {
       toast.error('Online payment is not set up yet. Ena Muluken will send you a payment link.');
       return;
     }
-    const deposit = getServiceDeposit(bookingData.service);
     const email =
       bookingData.email?.trim() ||
       `${bookingData.phoneNumber.replace(/\D/g, '') || 'client'}@mulesoo.booking`;
@@ -303,12 +312,13 @@ export default function ChatbotWidget() {
       const handler = PaystackPop.setup({
         key: publicKey,
         email,
-        amount: deposit * 100, // Paystack expects the smallest unit (cents)
+        amount: BOOKING_FEE_ZAR * 100, // Paystack expects the smallest unit (cents)
         currency: 'ZAR',
-        ref: `MULE-${Date.now()}`,
-        label: `MuleSoo — ${bookingData.service || 'Project'} deposit`,
+        ref: `MULE-FEE-${Date.now()}`,
+        label: `MuleSoo — booking fee (${bookingData.service || 'Project'})`,
         channels: ['card', 'eft', 'bank', 'bank_transfer', 'mobile_money', 'ussd', 'qr'],
         metadata: {
+          payment_type: 'booking_fee',
           custom_fields: [
             { display_name: 'Client', variable_name: 'client', value: bookingData.fullName },
             { display_name: 'Service', variable_name: 'service', value: bookingData.service },
@@ -1117,7 +1127,8 @@ export default function ChatbotWidget() {
                 >
                   <h3 className="font-bold text-lg text-[var(--text-primary)]">📋 Terms & Conditions</h3>
                   <div className="bg-[var(--bg-primary)] p-4 rounded-lg border border-[var(--border)] text-xs text-[var(--text-secondary)] space-y-2 max-h-32 overflow-y-auto">
-                    <p>✓ 50% deposit required to begin work</p>
+                    <p>✓ R{BOOKING_FEE_ZAR} booking fee to hold your slot — flat, non-refundable</p>
+                    <p>✓ 50% project deposit follows by email once the booking fee clears</p>
                     <p>✓ Remaining 50% due before final delivery</p>
                     <p>✓ 30 days free support included</p>
                     <p>✓ You own all work after full payment</p>
@@ -1155,43 +1166,46 @@ export default function ChatbotWidget() {
                       <p className="text-lg font-sora letter-spacing-wide">{bookingData.bookingReference}</p>
                     </div>
 
-                    {/* Confirmation Message */}
+                    {/* Confirmation Message — this is a receipt of the FORM, not
+                        of a confirmed booking. Nothing is confirmed, no PDF
+                        exists, and the owner has not been told yet: all of
+                        that waits on the booking fee below. */}
                     <div className="bg-[var(--glow-action)] border border-[var(--color-action-on-dark)] p-4 rounded-lg text-[var(--text-primary)] text-sm">
-                      <p className="font-semibold">✅ Booking Confirmed!</p>
-                      <p className="text-xs text-[var(--text-secondary)] mt-1">📧 PDF sent to {bookingData.email}</p>
-                      <p className="text-xs text-[var(--accent-green)] mt-1">⏰ Ena Muluken will contact you within 2 hours</p>
+                      <p className="font-semibold">📝 Details received — one step left</p>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1">Pay the booking fee below to confirm your slot.</p>
                     </div>
 
-                    {/* Deposit Payment */}
+                    {/* Booking Fee — the first, non-refundable payment. Nothing
+                        past this point (PDF, owner alert, deposit email) fires
+                        until it clears. */}
                     {paymentStatus === 'paid' ? (
                       <div className="bg-[rgba(0,255,136,0.08)] border border-[var(--accent-green)] p-4 rounded-lg text-center">
                         <p className="text-[var(--accent-green)] font-bold flex items-center justify-center gap-2">
-                          <CheckCircle size={18} /> Deposit Paid — Booking Secured!
+                          <CheckCircle size={18} /> Booking Fee Paid — Slot Secured!
                         </p>
                         <p className="text-xs text-[var(--text-secondary)] mt-1">
-                          A receipt has been sent to your email by Paystack.
+                          A receipt has been sent to your email by Paystack. Check your inbox for the
+                          next step — your project deposit.
                         </p>
                       </div>
                     ) : (
                       <div className="bg-[var(--bg-primary)] border border-[var(--accent-gold)] p-4 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
                           <p className="text-sm font-semibold text-[var(--text-primary)]">
-                            🔒 Secure Your Booking
+                            🔒 Pay Your Booking Fee
                           </p>
                           <p className="text-lg font-bold text-[var(--accent-gold)]">
-                            R{getServiceDeposit(bookingData.service).toLocaleString('en-US')}
-                            <span className="ml-1.5 text-xs font-medium text-[var(--text-secondary)]">
-                              ≈ ${getServiceDepositUSD(bookingData.service).toLocaleString('en-US')}
-                            </span>
+                            R{BOOKING_FEE_ZAR}
                           </p>
                         </div>
                         <p className="text-xs text-[var(--text-secondary)] mb-3">
-                          Pay a deposit now to lock in your slot. The balance is invoiced on delivery.
+                          A flat, non-refundable fee to hold your slot. Your project deposit
+                          (50% of {getServicePrice(bookingData.service)}) follows by email once this clears.
                         </p>
                         <motion.button
                           whileHover={{ scale: paymentStatus === 'processing' ? 1 : 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          onClick={handlePayDeposit}
+                          onClick={handlePayBookingFee}
                           disabled={paymentStatus === 'processing'}
                           className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-xl hover:shadow-[0_0_20px_rgba(127,179,255,0.4)] transition-all text-base disabled:opacity-60"
                         >
@@ -1201,7 +1215,7 @@ export default function ChatbotWidget() {
                               Opening payment…
                             </>
                           ) : (
-                            <>💳 Pay R{getServiceDeposit(bookingData.service).toLocaleString('en-US')} Deposit</>
+                            <>💳 Pay R{BOOKING_FEE_ZAR} Booking Fee</>
                           )}
                         </motion.button>
                         <p className="text-[10px] text-[var(--text-secondary)] text-center mt-2">
@@ -1239,16 +1253,21 @@ export default function ChatbotWidget() {
                     </div>
                   </div>
 
-                  {/* Download Button */}
+                  {/* Download Button — locked until the booking fee clears. The
+                      PDF states the agreed terms and figures; handing it out
+                      before there is a real, paid booking behind it would let
+                      it be produced for a booking that was never confirmed. */}
                   <div className="space-y-2">
                     <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={generatePDF}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base"
+                      whileHover={{ scale: paymentStatus === 'paid' ? 1.02 : 1 }}
+                      whileTap={{ scale: paymentStatus === 'paid' ? 0.98 : 1 }}
+                      onClick={paymentStatus === 'paid' ? generatePDF : undefined}
+                      disabled={paymentStatus !== 'paid'}
+                      title={paymentStatus === 'paid' ? undefined : `Pay the R${BOOKING_FEE_ZAR} booking fee above to unlock this`}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[var(--accent-gold)] via-[#FFC107] to-[#1D4ED8] text-black font-bold rounded-xl hover:shadow-lg transition-all text-base disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale disabled:hover:shadow-none"
                     >
-                      <Download size={18} />
-                      Download Booking Agreement PDF
+                      {paymentStatus === 'paid' ? <Download size={18} /> : <Lock size={18} />}
+                      {paymentStatus === 'paid' ? 'Download Booking Agreement PDF' : `Pay R${BOOKING_FEE_ZAR} Fee to Unlock PDF`}
                     </motion.button>
                   </div>
 

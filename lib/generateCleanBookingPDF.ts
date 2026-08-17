@@ -26,6 +26,13 @@ interface BookingData {
   paymentStatus?: 'paid' | 'pending';
 }
 
+// The flat, non-refundable fee paid in the widget before this PDF can even be
+// generated. Mirrors BOOKING_FEE_ZAR in lib/bookingPayment.ts and
+// components/ChatbotWidget.tsx — this file can't import the widget's client
+// component, so the figure is duplicated; if it changes, it must change in
+// all three places.
+const BOOKING_FEE_ZAR = 100;
+
 // Brand palette (matches website CSS variables)
 const BLUE: [number, number, number] = [0, 200, 255];
 const PURPLE: [number, number, number] = [123, 47, 255];
@@ -262,12 +269,17 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     const statusLabel = isPaid ? 'PAID' : 'PENDING';
 
     sectionHeading('PAYMENT & DEPOSIT', GOLD);
-    const payBoxH = 25;
+    // This document is only ever generated once the booking fee has cleared —
+    // ChatbotWidget's download button is disabled until paymentStatus is
+    // 'paid' — so stating it as paid here is a fact, not an assumption.
+    const payBoxH = 32;
     doc.setFillColor(255, 251, 240);
     doc.setDrawColor(...GOLD);
     doc.setLineWidth(0.4);
     doc.roundedRect(margin, yPos, contentWidth, payBoxH, 1.5, 1.5, 'FD');
     let pr = yPos + 6;
+    field('Booking Fee:', `R ${BOOKING_FEE_ZAR} — PAID (non-refundable)`, col1X, pr, 30);
+    pr += 7;
     field('Deposit (50%):', depositAmount ? `R ${depositAmount.toLocaleString('en-US')}` : 'To be confirmed', col1X, pr, 30);
 
     // Status pill (right-aligned)
@@ -369,20 +381,21 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     ]);
 
     addSection('2. PAYMENT TERMS & SCHEDULE', [
-      '2.1 A 50% deposit is required to commence work. This secures your timeline and allows resources to be allocated.',
-      '2.2 The 50% deposit is credited in full toward the total project fee. Upon delivery of the completed service, the client pays only the remaining 50% balance.',
-      '2.3 The remaining 50% is due upon project completion, before final delivery of all files and access.',
-      '2.4 Accepted payment methods: card and Instant EFT via Paystack, and direct bank transfer (EFT).',
-      '2.5 All pricing is quoted in US Dollars (USD) unless otherwise agreed in writing.',
-      '2.6 Ownership and access to the completed project transfer only after payment is received in full.',
-      '2.7 Late payments overdue by more than 7 days accrue 2% interest per month.',
+      '2.1 A flat, non-refundable booking fee (see the figure stated on the summary page of this agreement) is payable to hold the client\'s slot. This fee is separate from, and does not count toward, the project deposit below.',
+      '2.2 Following the booking fee, a 50% project deposit is required to commence work. This secures the client\'s timeline and allows resources to be allocated.',
+      '2.3 The 50% deposit is credited in full toward the total project fee. Upon delivery of the completed service, the client pays only the remaining 50% balance.',
+      '2.4 The remaining 50% is due upon project completion, before final delivery of all files and access.',
+      '2.5 Accepted payment methods: card and Instant EFT via Paystack, and direct bank transfer (EFT).',
+      '2.6 All pricing is quoted in US Dollars (USD) unless otherwise agreed in writing.',
+      '2.7 Ownership and access to the completed project transfer only after payment is received in full.',
+      '2.8 Late payments overdue by more than 7 days accrue 2% interest per month.',
     ]);
 
     addSection('3. PROJECT TIMELINE & DELIVERY', [
       '3.1 Timelines are estimates based on the agreed scope. The Service Provider will make reasonable efforts to meet stated deadlines.',
       '3.2 Delays may result from unclear feedback, scope changes, client unavailability, or circumstances beyond the Service Provider\'s control.',
       '3.3 The Service Provider is not liable for delays caused by client-side delays in materials, feedback, or approvals.',
-      '3.4 Delivery dates commence from the signed agreement date and receipt of the 50% deposit.',
+      '3.4 Delivery dates commence from the signed agreement date and receipt of the 50% project deposit — not from the booking fee alone.',
     ]);
 
     addSection('4. INTELLECTUAL PROPERTY & OWNERSHIP', [
@@ -426,11 +439,12 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     ]);
 
     addSection('10. CANCELLATION & REFUND POLICY', [
-      '10.1 The 50% deposit secures the client\'s booking, timeline, and allocated resources, and is credited in full toward the total project fee.',
-      '10.2 Where the client proceeds with the booking and the service is delivered as specified, the deposit is applied to the final balance — the client pays only the remaining 50%. In this sense the deposit is never lost: it forms part of the fee for the service received.',
-      '10.3 If the client cancels the booking after the deposit has been paid, the deposit is non-refundable and is forfeited in full, to compensate for the reserved time, capacity, and resources already committed to the project.',
-      '10.4 Where cancellation occurs once work has progressed beyond the value of the deposit, any completed work is billed pro-rata in addition to the forfeited deposit.',
-      '10.5 No refunds are issued for dissatisfaction where the delivered work meets the agreed specifications.',
+      '10.1 The booking fee is non-refundable under all circumstances, including cancellation before work begins. It compensates for the slot held on the Service Provider\'s schedule from the moment of booking.',
+      '10.2 The 50% project deposit secures the client\'s timeline and allocated resources, and is credited in full toward the total project fee.',
+      '10.3 Where the client proceeds with the booking and the service is delivered as specified, the deposit is applied to the final balance — the client pays only the remaining 50%. In this sense the deposit is never lost: it forms part of the fee for the service received.',
+      '10.4 If the client cancels the booking after the deposit has been paid, the deposit is non-refundable and is forfeited in full, to compensate for the reserved time, capacity, and resources already committed to the project.',
+      '10.5 Where cancellation occurs once work has progressed beyond the value of the deposit, any completed work is billed pro-rata in addition to the forfeited deposit.',
+      '10.6 No refunds are issued for dissatisfaction where the delivered work meets the agreed specifications.',
     ]);
 
     addSection('11. DISPUTE RESOLUTION', [

@@ -52,7 +52,8 @@ the next:
 2. [[Bookings Never Saved]] — RLS silently rejected every insert
 3. [[Booking Schema Mismatch]] — a second, independent insert failure once the first was fixed
 4. [[Payment Link Never Sent]] — the email trigger never existed at all
-5. [[Promised PDF Agreement Never Sent]] — still open, a separate broken promise on the same path
+5. [[Two-Stage Booking Payment]] — a real R100 fee, verified server-side, now gates the owner alert, the deposit email and the PDF, none of which fired on anything before this
+6. [[Promised PDF Agreement Never Sent]] — still open, a separate broken promise on the same path
 
 The alternate path — the **in-chat inline Paystack popup** — worked the whole
 time, because it never touched the booking row or an email. That is precisely
