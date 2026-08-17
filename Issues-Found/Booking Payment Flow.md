@@ -13,6 +13,8 @@ and the chain of fixes it took to make that true end to end.
 ```
 Client fills chat widget (components/ChatbotWidget.tsx)
         │
+        ├─→ Back arrow to correct an answer ────────── [[Back Button Did Not Allow Editing]]
+        │
         ▼
 POST /api/chatbot-booking
         │
@@ -46,10 +48,11 @@ POST /api/chatbot-booking
 Four separate faults sat on this one path, and fixing the first only exposed
 the next:
 
-1. [[Bookings Never Saved]] — RLS silently rejected every insert
-2. [[Booking Schema Mismatch]] — a second, independent insert failure once the first was fixed
-3. [[Payment Link Never Sent]] — the email trigger never existed at all
-4. [[Promised PDF Agreement Never Sent]] — still open, a separate broken promise on the same path
+1. [[Back Button Did Not Allow Editing]] — clients couldn't correct a mistake before submitting
+2. [[Bookings Never Saved]] — RLS silently rejected every insert
+3. [[Booking Schema Mismatch]] — a second, independent insert failure once the first was fixed
+4. [[Payment Link Never Sent]] — the email trigger never existed at all
+5. [[Promised PDF Agreement Never Sent]] — still open, a separate broken promise on the same path
 
 The alternate path — the **in-chat inline Paystack popup** — worked the whole
 time, because it never touched the booking row or an email. That is precisely

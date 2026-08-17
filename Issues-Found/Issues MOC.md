@@ -35,6 +35,7 @@ client codebases that were moved out.
 | [[Bookings Never Saved]] | Every chatbot booking silently lost |
 | [[Booking Schema Mismatch]] | Second, independent cause of the same loss |
 | [[Payment Link Never Sent]] | Clients had no way to pay after leaving the chat |
+| [[Back Button Did Not Allow Editing]] | Clients could not correct an earlier answer mid-booking |
 
 ---
 

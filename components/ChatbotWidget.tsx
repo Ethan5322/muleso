@@ -200,6 +200,11 @@ export default function ChatbotWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isNavigating = useRef(false);
   const prevStage = useRef<StageType>('greeting');
+  // How many chat bubbles existed the moment each stage was first entered
+  // (right after its bot question was asked, before the client answered).
+  // goBack() rewinds the transcript to this count so an old answer doesn't
+  // stay on screen looking unchanged once a corrected one is saved beneath it.
+  const stageEntryMsgCount = useRef<Partial<Record<StageType, number>>>({});
 
   const currentStageIndex = STAGE_ORDER.indexOf(stage);
   const progressPercent = stage === 'greeting' ? 0 : ((currentStageIndex + 1) / STAGE_ORDER.length) * 100;
@@ -392,6 +397,17 @@ export default function ChatbotWidget() {
     scrollToBottom();
   }, [messages]);
 
+  // Mirrors messages.length outside React state so the stage-tracking effect
+  // below can read the live count without depending on `messages` itself.
+  // Some stages (e.g. 'details') fire several addMessage calls — an answer,
+  // then an async "Processing…" step — before transitioning; depending on
+  // `messages` directly would let the snapshot keep growing mid-stage and
+  // undercut how far goBack() can rewind the transcript.
+  const messagesCountRef = useRef(0);
+  useEffect(() => {
+    messagesCountRef.current = messages.length;
+  }, [messages]);
+
   // Track stage transitions so the user can step back through the booking.
   useEffect(() => {
     if (isNavigating.current) {
@@ -409,7 +425,27 @@ export default function ChatbotWidget() {
       setFuture([]);
     }
     prevStage.current = stage;
+    // Snapshot on every real arrival, not just the first — an edited answer
+    // re-enters this stage's next transition with a different message count
+    // than the original path had, and the snapshot must reflect that.
+    stageEntryMsgCount.current[stage] = messagesCountRef.current;
   }, [stage]);
+
+  // The value already on file for a text-input stage, so returning to it
+  // shows what the client actually typed instead of an empty box.
+  const valueForStage = (s: StageType, data: BookingData): string => {
+    switch (s) {
+      case 'name': return data.fullName;
+      case 'email': return data.email;
+      case 'phone': return data.phoneNumber;
+      case 'company': return data.company;
+      case 'nationality': return data.nationality;
+      case 'client_id': return data.clientID;
+      case 'timeline': return data.timeline;
+      case 'details': return data.projectDetails;
+      default: return '';
+    }
+  };
 
   const goBack = () => {
     if (history.length === 0) return;
@@ -417,7 +453,12 @@ export default function ChatbotWidget() {
     isNavigating.current = true;
     setHistory((h) => h.slice(0, -1));
     setFuture((f) => [stage, ...f]);
-    setInputValue('');
+    // Rewind the transcript to how it looked when `prev` was first entered —
+    // otherwise the old answer's bubble stays on screen forever, so editing
+    // never visibly "took" even though bookingData was updated correctly.
+    const cutoff = stageEntryMsgCount.current[prev];
+    if (typeof cutoff === 'number') setMessages((m) => m.slice(0, cutoff));
+    setInputValue(valueForStage(prev, bookingData));
     setValidationError('');
     setStage(prev);
   };
@@ -428,7 +469,7 @@ export default function ChatbotWidget() {
     isNavigating.current = true;
     setFuture((f) => f.slice(1));
     setHistory((h) => [...h, stage]);
-    setInputValue('');
+    setInputValue(valueForStage(next, bookingData));
     setValidationError('');
     setStage(next);
   };
