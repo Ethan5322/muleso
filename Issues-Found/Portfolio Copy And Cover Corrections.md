@@ -72,6 +72,7 @@ platform.
 
 - [[Added Three Portfolio Projects]]
 - [[Telga Portfolio Concept]]
+- [[Generic Steps Shown For Every Project]]
 - [[Verification Method]]
 
 ---

@@ -45,6 +45,7 @@ client codebases that were moved out.
 | [[Telga Portfolio Concept]] | A new venture concept, not an existing project — clearly labelled as such |
 | [[Two-Stage Booking Payment]] | R100 booking fee gates the owner alert, deposit email and PDF — none fire until Paystack confirms it |
 | [[Portfolio Copy And Cover Corrections]] | Wrong QR stamp, a toy-looking Telga terminal, and spec-sheet copy where warm copy belonged — all corrected |
+| [[Generic Steps Shown For Every Project]] | Every project's modal claimed the same QR-chatbot booking flow, even projects with no chat, no QR, or no booking at all |
 
 ---
 

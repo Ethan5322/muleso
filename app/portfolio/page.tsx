@@ -28,6 +28,18 @@ interface Project {
   adminTracking?: string[];
   boosts?: string[];
   upcoming?: boolean;
+  /** This project's own real flow, in its own words. Falls back to the
+   *  generic BOOKING_STEPS (a chatbot: QR → chat → deposit → confirmation)
+   *  only for projects actually built on that architecture — MuleSoo, YoYo
+   *  Gym, X-Boss, Shime, Tsedi, TSI. Everything else — a content site, a
+   *  card-payment device, a clinic, a fundraising platform — has its own
+   *  mechanism and needs its own steps; the generic flow was previously
+   *  shown unconditionally for every project regardless of fit. */
+  howItWorks?: { title: string; text: string }[];
+  /** Heading above howItWorks. Only meaningful when howItWorks is set — the
+   *  generic path's own heading ("How your customers book") doesn't fit a
+   *  church site with no customers or a fundraiser with no booking. */
+  howItWorksTitle?: string;
 }
 
 const fallbackProjects: Project[] = [
@@ -266,6 +278,13 @@ const fallbackProjects: Project[] = [
       'A dignified, corporate-level presentation that matches the institution',
       'One accurate source of truth in both languages, instead of two out-of-sync ones',
     ],
+    howItWorksTitle: 'How the church keeps it current',
+    howItWorks: [
+      { title: 'A visitor opens the site', text: 'In English or Amharic — service times, sermons, saints, gallery and the calendar, correct in either language.' },
+      { title: 'The church logs into Admin', text: 'A secure panel, separate from the code — no developer needed to change a service time or add a sermon.' },
+      { title: 'Content is edited directly', text: 'Posts, events and sermons are written once, in both languages, from the same screen.' },
+      { title: 'It appears live, instantly', text: 'No rebuild, no deploy, no waiting — the congregation sees the update the moment it is saved.' },
+    ],
   },
   {
     name: 'Yewogen Derash (ወገን ደራሽ)',
@@ -293,6 +312,13 @@ const fallbackProjects: Project[] = [
       'Makes it easy for the diaspora to help family and community back home',
       'Donors give with confidence, knowing who they are supporting',
       'A platform built to serve the community, not just process payments',
+    ],
+    howItWorksTitle: 'How giving works',
+    howItWorks: [
+      { title: 'Someone starts a cause', text: 'They explain the need and go through identity verification, so donors know it is real.' },
+      { title: 'The cause goes live', text: 'Shareable with family and community, in Ethiopia or with the diaspora abroad.' },
+      { title: 'Anyone can give', text: 'From home or from abroad — no account needed, just a cause worth supporting.' },
+      { title: 'Funds are kept separate', text: 'Every cause has its own record, so what was raised for it is what it receives.' },
     ],
   },
   {
@@ -356,6 +382,13 @@ const fallbackProjects: Project[] = [
       'Works anywhere — no fixed shop or location required',
       'Vendors earn commission on every card transaction, with no stock or cash risk',
     ],
+    howItWorksTitle: 'How a vendor earns from it',
+    howItWorks: [
+      { title: 'An entrepreneur sets up a device', text: 'A POS terminal, or just the Android app on a phone they already own — no shop or fixed location required.' },
+      { title: 'A customer wants airtime or a bill paid', text: 'They walk up wherever the vendor is standing — a counter, a stall, a market, an event.' },
+      { title: 'The card is tapped or swiped', text: 'The vendor selects the amount and confirms — no cash changes hands.' },
+      { title: 'Payment processes instantly', text: 'The customer gets what they paid for on the spot, and the vendor earns commission, logged automatically to their account.' },
+    ],
   },
   {
     name: 'DR. Hospital — AI Clinic System',
@@ -388,6 +421,14 @@ const fallbackProjects: Project[] = [
       'Doctors start every consultation with context, not a blank page',
       'Management sees revenue, wait times & no-shows live — no month-end spreadsheet scramble',
       'Fewer no-shows, faster throughput, and a discharge that actually follows up',
+    ],
+    howItWorksTitle: 'A patient\'s journey through the clinic',
+    howItWorks: [
+      { title: 'The patient scans a QR code and pays the booking fee', text: 'No queueing at reception just to start — booking begins on their own phone.' },
+      { title: 'AI-guided intake takes their symptoms', text: 'Pain mapping, severity, history and red-flag screening — captured once, structured, before they see anyone.' },
+      { title: 'They\'re placed in the queue automatically', text: 'With WhatsApp and SMS updates, so there\'s no guessing how long the wait is.' },
+      { title: 'A doctor or nurse reviews the organised summary', text: 'Vitals are captured, a note is written, and prescriptions are issued — AI drafts, the clinician always approves.' },
+      { title: 'Discharge is drafted and followed up', text: 'A patient-friendly summary, a completion checklist, and a same-day check-in to see how they\'re doing.' },
     ],
   },
 ];
@@ -644,13 +685,14 @@ export default function PortfolioPage() {
                   </div>
                 )}
 
-                {/* How customers book */}
+                {/* How it works — each project's own flow, falling back to the
+                    generic booking journey only for projects actually built on it */}
                 <div className="border-t border-[var(--border)] pt-5">
                   <h4 className="text-sm font-bold font-sora text-[var(--accent-purple)] uppercase tracking-wide mb-4">
-                    How your customers book — end to end
+                    {selected.howItWorksTitle || 'How your customers book — end to end'}
                   </h4>
                   <ol className="space-y-3">
-                    {BOOKING_STEPS.map((step, i) => (
+                    {(selected.howItWorks && selected.howItWorks.length > 0 ? selected.howItWorks : BOOKING_STEPS).map((step, i) => (
                       <li key={step.title} className="flex gap-3">
                         <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] text-xs font-bold flex items-center justify-center">
                           {i + 1}
