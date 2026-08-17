@@ -263,6 +263,104 @@ const fallbackProjects: Project[] = [
     ],
   },
   {
+    name: 'Hamere Noh Kidane Mihret Church',
+    category: 'Church Website',
+    client: 'Pretoria Hamere Noh Kidane Mihret Church',
+    description: 'A dignified, fully bilingual home for an Ethiopian Orthodox Tewahedo parish — service times, sermons, saints and the liturgical calendar, in English and Amharic side by side, editable by the church itself.',
+    image: 'kidane-mihret-portfolio.jpg',
+    result: 'Live bilingual parish website',
+    tech: ['Next.js', 'Supabase', 'Bilingual CMS', 'RLS Security'],
+    theme: 'gold',
+    purpose:
+      'A complete, production website for an Ethiopian Orthodox Tewahedo church in Pretoria — built so the parish never depends on a developer to keep it current. Every piece of content, from service times to the priest’s details to a new sermon, is edited from a secure admin panel and shown correctly in both English and Amharic.',
+    capabilities: [
+      'Full bilingual site — English and Amharic treated as equals throughout, not a translated afterthought',
+      'A 13-table content system: posts, events, saints & feast days, sermons, gallery, calendar and pages',
+      'Liturgical calendar with recurring feast days and services',
+      'Sermon library with audio/video and bilingual summaries',
+      'Saints & feast-day pages with bilingual biographies',
+      'Row-level security on every table, audit logging and role-based admin access',
+    ],
+    adminTracking: [
+      'Edit service times, priest, address and contact — live, no code touched',
+      'Publish posts, events and sermons in both languages from one screen',
+      'Manage the gallery and saints/feast content directly',
+      'Every admin action audit-logged, with role-based permissions',
+    ],
+    boosts: [
+      'The congregation always finds correct service times — no more outdated WhatsApp forwards',
+      'Content stays current because the church updates it directly, in minutes',
+      'A dignified, corporate-level presentation that matches the institution',
+      'One accurate source of truth in both languages, instead of two out-of-sync ones',
+    ],
+  },
+  {
+    name: 'Yewogen Derash (ወገን ደራሽ)',
+    category: 'Crowdfunding',
+    client: 'Crowdfunding Platform for Ethiopia',
+    description: 'A secure, corporate-grade crowdfunding platform for Ethiopia — every campaign owner identity-verified, every campaign its own QR and ledger, no payment confirmed without a verified gateway webhook.',
+    image: 'yewogen-derash-portfolio.jpg',
+    result: 'Upcoming — in active development',
+    tech: ['Next.js', 'Prisma', 'Supabase', 'Chapa'],
+    theme: 'blue',
+    upcoming: true,
+    purpose:
+      'A crowdfunding platform built on one idea: donors give more when they can trust who they are giving to. Every campaign owner is identity-verified with documents and a live face capture before a campaign can raise a single Birr, funds from different campaigns are never allowed to mix, and no payment is ever marked successful without the payment gateway’s own webhook confirming it.',
+    capabilities: [
+      'Campaign owner identity verification — ID documents, live face capture, manual admin review',
+      'One QR code per campaign — scanning it opens exactly that campaign, never a generic homepage',
+      'One campaign = one donation ledger = one payout summary, funds never mixed',
+      'Payments verified server-side against the gateway’s webhook — never trusted from the browser',
+      'Role-based access for donors, campaign owners and admins',
+      'Every admin action audit-logged',
+    ],
+    adminTracking: [
+      'Review queue for campaign owner identity verification',
+      'Per-campaign ledger and payout summary',
+      'Full audit log of every admin action',
+      'Donor, owner and admin roles managed centrally',
+    ],
+    boosts: [
+      'Donors give with confidence because every campaign owner is actually verified',
+      'Each campaign’s funds are fully traceable — nothing commingled, nothing to dispute',
+      'A QR code on a poster or flyer takes a donor straight to one specific cause',
+      'Built to survive scrutiny, not just to collect payments',
+    ],
+  },
+  {
+    name: 'Sena — AI Voice Receptionist',
+    category: 'Hospitality AI',
+    client: 'Hotel Front Desk Automation',
+    description: 'An autonomous AI voice receptionist for hotels. A guest clicks Call Reception; Sena answers, says plainly she is an AI, checks live availability, quotes real rates, takes payment, and issues a single-use QR guest ID.',
+    image: 'sena-portfolio.jpg',
+    result: 'Upcoming — in active development',
+    tech: ['LiveKit', 'faster-whisper', 'Piper', 'Claude API'],
+    theme: 'purple',
+    upcoming: true,
+    purpose:
+      'A voice receptionist that answers the phone the moment a guest clicks Call Reception — no hold music, no night-shift gap. Sena states plainly that she is an AI, checks real availability, quotes the actual rate, takes the guest’s details, sends a payment link during the call itself, and issues a booking confirmation with a single-use QR guest ID. Anything she is unsure of, she hands to a human.',
+    capabilities: [
+      'Answers instantly, any hour, and always discloses she is an AI first',
+      'Checks live room availability and quotes real rates — never invented ones',
+      'Takes the deposit or payment during the call, with a Paystack webhook verified server-side',
+      'Issues a single-use QR guest ID — cancelled the moment it is scanned at the door',
+      'Cancellations free the room immediately; scheduled jobs expire holds automatically',
+      'Escalates to a human the moment she is unsure, rather than guessing',
+      'The entire voice stack is self-hosted — no per-minute voice vendor',
+    ],
+    adminTracking: [
+      'Every booking, hold and cancellation tracked against a real ledger',
+      'Front-desk scanner verifies and consumes each guest’s single-use QR',
+      'Payment link and guest ID delivered by email — no extra apps for the guest',
+    ],
+    boosts: [
+      'Answers the phone at 3am without a night shift on payroll',
+      'Collects payment during the call instead of chasing it afterwards',
+      'A guest never has to queue to prove who they are — the QR does it',
+      'No Vapi, no ElevenLabs, no Twilio — the only running cost is the thinking',
+    ],
+  },
+  {
     name: 'DR. Hospital — AI Clinic System',
     category: 'Healthcare',
     client: 'Clinic & Hospital Management',
@@ -310,7 +408,8 @@ const BOOKING_STEPS: { title: string; text: string }[] = [
   { title: 'You track & deliver', text: 'You get the verification code and track the payment, event, or project in your dashboard — then deliver your service, all in one place.' },
 ];
 
-// Portfolio order — projects with a live public site first; Habesha (no site yet) last.
+// Portfolio order — live, finished projects first; "in active development"
+// projects grouped together near the end; Habesha (no site yet) always last.
 const rankOf = (name: string): number => {
   const n = name.toLowerCase();
   if (n.includes('mulesoo')) return 0;
@@ -319,7 +418,10 @@ const rankOf = (name: string): number => {
   if (n.includes('catering')) return 3;
   if (n.includes('tsi') || n.includes('booking assistant')) return 4;
   if (n.includes('shime')) return 5;
-  if (n.includes('hospital') || n.includes('dr.')) return 6;
+  if (n.includes('kidane') || n.includes('hamere')) return 6;
+  if (n.includes('hospital') || n.includes('dr.')) return 7;
+  if (n.includes('yewogen')) return 8;
+  if (n.includes('sena')) return 9;
   if (n.includes('habesha')) return 99; // no live site yet — always last
   return 50;
 };

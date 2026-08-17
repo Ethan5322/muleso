@@ -37,6 +37,12 @@ client codebases that were moved out.
 | [[Payment Link Never Sent]] | Clients had no way to pay after leaving the chat |
 | [[Back Button Did Not Allow Editing]] | Clients could not correct an earlier answer mid-booking |
 
+## 🆕 Changes — not bugs, logged for the record
+
+| Change | Note |
+|---|---|
+| [[Added Three Portfolio Projects]] | Kidane Mihret, Yewogen Derash, Sena — with a real invented-text mistake caught before shipping |
+
 ---
 
 ## How these connect
