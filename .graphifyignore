@@ -1,0 +1,48 @@
+node_modules/
+.next/
+graphify-out/
+.git/
+.obsidian/
+
+# Separate projects that happen to live inside this folder. They are their own
+# codebases with their own node_modules and must be graphed on their own —
+# including them here only manufactures permanently disconnected islands.
+Yoyo GYM/
+shime/
+tsedi/
+wogen/
+ai/
+orthodox/
+photographer/
+sena/
+yewogen-derash/
+
+# The social posts, calendars and rendered cards are MuleSoo's own finished
+# marketing output and are deliberately left alone — not read, not extracted,
+# not turned into notes. The SCRIPTS that generate them (scripts/make-social-*,
+# scripts/make-marketing2-*) are still in the graph, which is where the actual
+# code relationships live.
+marketing/
+marketing2/
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.ico
+*.mp4
+*.woff2
+*.ttf
+
+# Static assets and vendored model weights — binary, no relationships to extract.
+public/
+assets/
+.backup/
+.claude/
+.impeccable/
+
+# Third-party tooling docs (the `impeccable` skill ships 46 reference files).
+# They describe that tool, not this codebase, so nothing in the graph can ever
+# link to them — they would be pure orphan notes.
+.github/
+
+# (MuleSoo's own marketing copy is kept — see the note above.)
