@@ -44,6 +44,7 @@ client codebases that were moved out.
 | [[Added Three Portfolio Projects]] | Kidane Mihret, Yewogen Derash, Sena — with a real invented-text mistake caught before shipping |
 | [[Telga Portfolio Concept]] | A new venture concept, not an existing project — clearly labelled as such |
 | [[Two-Stage Booking Payment]] | R100 booking fee gates the owner alert, deposit email and PDF — none fire until Paystack confirms it |
+| [[Portfolio Copy And Cover Corrections]] | Wrong QR stamp, a toy-looking Telga terminal, and spec-sheet copy where warm copy belonged — all corrected |
 
 ---
 

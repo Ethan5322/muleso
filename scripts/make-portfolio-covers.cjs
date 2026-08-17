@@ -65,7 +65,13 @@ const fontFaces = () =>
       src:url(data:${mime};base64,${b64(p)}) format('${fmt}');}`;
   }).join('\n');
 
-const LOCKUP = `data:image/png;base64,${b64(path.join(ROOT, 'public', 'brand', 'mulesoo-credit-stamp-on-dark.png'))}`;
+// The plain wordmark lockup — deliberately NOT mulesoo-credit-stamp-on-dark.png,
+// which bundles a QR code reading "Scan · mulesoo.com". That stamp belongs on
+// marketing pieces that are themselves meant to be scanned; on a portfolio
+// cover it reads as if the PROJECT has a scan feature, which none of these
+// four do — confirmed confusing on the Kidane Mihret and Telga covers, fixed
+// here for all four rather than leaving two inconsistent with the others.
+const LOCKUP = `data:image/png;base64,${b64(path.join(ROOT, 'public', 'brand', 'mulesoo-credit-compact-on-dark.png'))}`;
 const SENA_CARD_URI = `data:image/png;base64,${b64(SENA_CARD)}`;
 
 const BASE_CSS = `
@@ -77,7 +83,7 @@ body{font-family:'DM Sans',sans-serif;color:#F0F2FA;position:relative;-webkit-fo
   background-size:64px 64px;}
 .wordmark{font-family:'Sora';font-weight:800;letter-spacing:2px;}
 .wordmark .dot{color:#E8B84B;}
-.stamp{position:absolute;left:64px;bottom:48px;width:420px;opacity:0.92;}
+.stamp{position:absolute;left:64px;bottom:52px;width:480px;opacity:0.85;}
 `;
 
 // ── 1. Yewogen Derash ────────────────────────────────────────────────────────
@@ -99,8 +105,10 @@ body{background:
 h1{font-family:'Sora';font-weight:800;font-size:78px;color:#fff;margin-top:14px;line-height:1.05;}
 .sub{font-size:24px;color:#A8B2D0;max-width:620px;margin-top:22px;line-height:1.55;}
 
-/* A campaign card mockup — the actual product, not a decoration */
-.card{position:absolute;right:64px;top:170px;width:520px;background:#0D1528;border:1px solid #1A2640;
+/* A campaign card mockup — the actual product, simply shown: a cause, a
+   goal, progress toward it. No technical language, nothing to "scan" — this
+   is a fundraising card, not a spec sheet. */
+.card{position:absolute;right:64px;top:190px;width:500px;background:#0D1528;border:1px solid #1A2640;
   border-radius:20px;padding:32px;box-shadow:0 40px 100px rgba(0,0,0,0.55);z-index:3;}
 .card .verified{display:inline-flex;align-items:center;gap:8px;font-family:'Sora';font-weight:700;font-size:13px;
   letter-spacing:1.5px;color:#00FF88;background:#00FF8814;border:1px solid #00FF8855;border-radius:99px;padding:6px 14px;}
@@ -110,34 +118,26 @@ h1{font-family:'Sora';font-weight:800;font-size:78px;color:#fff;margin-top:14px;
 .card .bar-fill{height:100%;width:68%;border-radius:99px;background:linear-gradient(90deg,${accent},#7B2FFF);}
 .card .stats{display:flex;justify-content:space-between;margin-top:14px;font-size:14px;color:#A8B2D0;}
 .card .stats b{color:#fff;font-family:'Sora';}
-.card .qr-row{display:flex;align-items:center;gap:14px;margin-top:26px;padding-top:22px;border-top:1px solid #1A2640;}
-.card .qr{width:56px;height:56px;border-radius:8px;background:
-  repeating-conic-gradient(#fff 0deg 90deg, #0D1528 90deg 180deg) ;
-  background-size: 10px 10px; border:3px solid #fff;}
-.card .qr-text{font-size:12px;color:#8A93A8;line-height:1.5;}
-.card .qr-text b{color:${accent};font-family:'Sora';}
+.card .give-btn{margin-top:24px;text-align:center;font-family:'Sora';font-weight:700;font-size:14px;
+  letter-spacing:1px;color:#050810;background:linear-gradient(90deg,${accent},#7B2FFF);border-radius:12px;padding:14px;}
 </style></head><body>
   <div class="grid"></div>
   <div class="top">
     <div>
-      <div class="badge">🇪🇹 CROWDFUNDING</div>
+      <div class="badge">🇪🇹 COMMUNITY FUNDRAISING</div>
       <div class="amharic">ወገን ደራሽ</div>
       <h1>Yewogen Derash</h1>
-      <p class="sub">Identity-verified crowdfunding for Ethiopia — every campaign owner
-      KYC-checked, every campaign its own QR and ledger, no payment confirmed without
-      a verified gateway webhook.</p>
+      <p class="sub">A trusted way for Ethiopians — at home and abroad — to help one
+      another. Free to start a cause, free to give, built for the community.</p>
     </div>
   </div>
   <div class="card">
-    <span class="verified">✓ IDENTITY VERIFIED</span>
+    <span class="verified">✓ VERIFIED CAUSE</span>
     <h2>Rebuild After the Flood</h2>
     <p class="goal">Addis Ababa · Emergency Relief</p>
     <div class="bar-track"><div class="bar-fill"></div></div>
     <div class="stats"><span><b>ETB 340,000</b> raised</span><span>of <b>ETB 500,000</b></span></div>
-    <div class="qr-row">
-      <div class="qr"></div>
-      <div class="qr-text">Scan opens <b>this campaign only</b><br/>— never a generic homepage</div>
-    </div>
+    <div class="give-btn">GIVE NOW</div>
   </div>
   <img class="stamp" src="${LOCKUP}"/>
   <div class="wordmark" style="position:absolute;right:64px;bottom:48px;font-size:24px;color:#fff;z-index:2;">
@@ -239,11 +239,14 @@ h1{font-family:'Sora';font-weight:800;font-size:76px;color:#fff;margin-top:22px;
 }
 
 // ── 4. Telga ──────────────────────────────────────────────────────────────────
-// A physical card-swipe terminal, not a phone screen — bright yellow casing
-// (the user's explicit direction: "like a new Flash swiping machine, but
-// yellow"), a real swipe slot with a card mid-drag through it, and a molded
-// keypad, since that silhouette is what actually reads as "vending machine"
-// rather than "app on a phone."
+// Second pass. First version modelled an old-style keypad card machine —
+// wrong reference entirely. Real Flash/Kazang-class terminals (Flash
+// TouchGo2, and the PAX-style hardware that class of device is built on) are
+// handheld ANDROID TOUCHSCREEN devices: the screen fills nearly the whole
+// front face, there is no physical keypad, a magstripe swipe slot sits along
+// the top edge, and a chip-card insert slot sits along the bottom edge. This
+// redraws the device around that real silhouette — yellow casing per
+// direction, tall handheld proportions, screen-dominant front face.
 function telgaHtml() {
   const yellow = '#FFC72C';
   const yellowDeep = '#D9A400';
@@ -256,7 +259,7 @@ body{background:
   radial-gradient(ellipse 900px 800px at 10% 90%, ${yellow}14 0%, transparent 55%),
   #050810;
   padding:72px 80px;display:flex;align-items:center;}
-.left{position:relative;z-index:2;max-width:560px;}
+.left{position:relative;z-index:2;max-width:540px;}
 .badge{display:inline-flex;align-items:center;gap:10px;font-family:'Sora';font-weight:700;font-size:18px;
   letter-spacing:3px;color:${yellow};border:2px solid ${yellow}88;background:${yellow}1C;
   border-radius:99px;padding:10px 22px;}
@@ -266,64 +269,72 @@ h1{font-family:'Sora';font-weight:800;font-size:88px;color:#fff;margin-top:22px;
 .formfactor span{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.5px;color:${ink};
   background:${yellow};border-radius:99px;padding:8px 18px;}
 
-/* The terminal — molded yellow plastic body, swipe slot, keypad. This is the
-   silhouette of a real handheld card machine, not a phone with a yellow tint. */
-.terminal{position:absolute;right:150px;top:50%;transform:translateY(-50%) rotate(-4deg);
-  width:340px;background:linear-gradient(160deg,${yellow},${yellowDeep});
-  border-radius:26px;padding:16px 16px 22px;box-shadow:0 50px 120px rgba(0,0,0,0.65), inset 0 2px 0 rgba(255,255,255,0.4);
-  z-index:3;}
-.terminal .brandrow{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 12px;}
-.terminal .brandrow .name{font-family:'Sora';font-weight:800;font-size:16px;letter-spacing:1px;color:${ink};}
-.terminal .brandrow .signal{font-size:10px;color:${ink};opacity:0.65;letter-spacing:1px;}
+/* The terminal — a tall handheld Android POS unit, yellow casing, screen
+   dominating the front face. Swipe slot along the top edge, chip-insert slot
+   along the bottom edge: the two physical tells of a real card machine. */
+.terminal{position:absolute;right:180px;top:50%;transform:translateY(-50%) rotate(-3deg);
+  width:280px;height:560px;background:linear-gradient(155deg,${yellow},${yellowDeep});
+  border-radius:34px;padding:20px 18px;box-shadow:0 55px 130px rgba(0,0,0,0.65), inset 0 2px 0 rgba(255,255,255,0.45);
+  z-index:3;display:flex;flex-direction:column;}
 
-/* Swipe slot: a dark recessed groove with a card caught mid-drag through it */
-.slot{position:relative;height:34px;background:${ink};border-radius:8px;
-  box-shadow:inset 0 3px 6px rgba(0,0,0,0.6);margin-bottom:14px;overflow:visible;}
-.slot .card{position:absolute;left:58%;top:-14px;width:150px;height:60px;border-radius:7px;
+/* Top edge: speaker grille + the swipe slot, with a card caught mid-drag */
+.top-edge{display:flex;flex-direction:column;align-items:center;margin-bottom:14px;}
+.speaker{width:44px;height:5px;border-radius:3px;background:${ink};opacity:0.3;margin-bottom:10px;}
+.swipe-slot{position:relative;width:100%;height:16px;background:${ink};border-radius:8px;
+  box-shadow:inset 0 2px 5px rgba(0,0,0,0.6);}
+.swipe-slot .card{position:absolute;right:-10px;top:-22px;width:132px;height:52px;border-radius:6px;
   background:linear-gradient(135deg,#2A3350,#161B2E);border:1px solid #3A4560;
-  box-shadow:0 10px 26px rgba(0,0,0,0.5);transform:rotate(-4deg);}
-.slot .card .chip{position:absolute;left:14px;top:14px;width:22px;height:16px;border-radius:3px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.55);transform:rotate(-8deg);}
+.swipe-slot .card .chip{position:absolute;left:12px;top:12px;width:18px;height:13px;border-radius:2.5px;
   background:linear-gradient(135deg,#E8B84B,#C9962E);}
-.slot .card .stripe{position:absolute;left:0;top:6px;width:100%;height:9px;background:#0A0D14;opacity:0.7;}
+.swipe-slot .card .stripe{position:absolute;left:0;top:5px;width:100%;height:7px;background:#0A0D14;opacity:0.65;}
 
-.screen{background:${ink};border-radius:14px;padding:20px 18px;}
+/* The screen — this is most of the device, matching a real touchscreen unit */
+.screen{flex:1;background:${ink};border-radius:18px;padding:18px 16px;display:flex;flex-direction:column;
+  box-shadow:inset 0 0 0 3px rgba(0,0,0,0.35);}
+.screen .statusbar{display:flex;justify-content:space-between;align-items:center;font-size:10px;
+  color:#8A93A8;letter-spacing:0.5px;margin-bottom:16px;}
+.screen .statusbar .brand{font-family:'Sora';font-weight:800;font-size:14px;color:#fff;letter-spacing:1px;}
 .screen .op{font-size:12px;color:#8A93A8;letter-spacing:0.5px;}
-.screen .amount{font-family:'Sora';font-weight:800;font-size:44px;color:#fff;margin-top:4px;}
-.screen .amount span{font-size:20px;color:${yellow};}
-.screen .prompt{margin-top:16px;background:${yellow}1A;border:1.5px dashed ${yellow}AA;border-radius:12px;
-  padding:12px;text-align:center;}
-.screen .prompt .txt{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.8px;color:${yellow};}
-.screen .foot{display:flex;justify-content:space-between;margin-top:14px;font-size:10px;color:#5A6480;}
+.screen .amount{font-family:'Sora';font-weight:800;font-size:52px;color:#fff;margin-top:4px;line-height:1;}
+.screen .amount span{font-size:22px;color:${yellow};}
+.screen .prompt{margin-top:22px;background:${yellow}1A;border:1.5px dashed ${yellow}AA;border-radius:14px;
+  padding:16px 10px;text-align:center;}
+.screen .prompt .card-icon{width:46px;height:32px;margin:0 auto 10px;border-radius:5px;
+  background:linear-gradient(135deg,${yellow},${yellowDeep});position:relative;}
+.screen .prompt .card-icon::after{content:'';position:absolute;left:0;top:9px;width:100%;height:6px;background:${ink};opacity:0.4;}
+.screen .prompt .txt{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.6px;color:${yellow};}
+.screen .foot{margin-top:auto;display:flex;justify-content:space-between;font-size:9px;color:#4A5468;padding-top:14px;}
 
-/* Molded keypad below the screen — the detail that reads as "real device" */
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px;padding:0 4px;}
-.keypad span{background:${yellowDeep};border-radius:7px;height:26px;box-shadow:inset 0 -2px 0 rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.25);}
+/* Bottom edge: the chip-card insert slot */
+.insert-slot{margin-top:14px;width:70%;align-self:center;height:6px;border-radius:3px;
+  background:${ink};opacity:0.55;box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);}
 </style></head><body>
   <div class="grid"></div>
   <div class="left">
-    <div class="badge">📶 AIRTIME &amp; BILL PAYMENTS</div>
+    <div class="badge">💳 CARD-PAYMENT VENDING</div>
     <h1>Telga</h1>
-    <p class="sub">A vending network for Ethiopia's corner shops — airtime and bill
-    payments sold on the same proven networked-reseller model that made platforms
-    like Flash and Kazang ubiquitous across South Africa's informal retail.</p>
+    <p class="sub">A card-payment vending business for Ethiopia — airtime and bill
+    payments sold anywhere a card can be tapped or swiped: any shop, any market
+    stall, any location, run by an entrepreneur with one device.</p>
     <div class="formfactor"><span>POS TERMINAL</span><span>ANDROID APP</span></div>
   </div>
   <div class="terminal">
-    <div class="brandrow"><span class="name">TELGA</span><span class="signal">●●●● 4G</span></div>
-    <div class="slot">
-      <div class="card"><div class="chip"></div><div class="stripe"></div></div>
+    <div class="top-edge">
+      <div class="speaker"></div>
+      <div class="swipe-slot"><div class="card"><div class="chip"></div><div class="stripe"></div></div></div>
     </div>
     <div class="screen">
+      <div class="statusbar"><span class="brand">TELGA</span><span>●●●● 4G</span></div>
       <div class="op">Ethio Telecom Airtime</div>
       <div class="amount">50<span>ETB</span></div>
-      <div class="prompt"><div class="txt">SWIPE TO PAY</div></div>
+      <div class="prompt">
+        <div class="card-icon"></div>
+        <div class="txt">TAP OR SWIPE CARD</div>
+      </div>
       <div class="foot"><span>VENDOR #0412</span><span>REF TG-88213</span></div>
     </div>
-    <div class="keypad">
-      <span></span><span></span><span></span>
-      <span></span><span></span><span></span>
-      <span></span><span></span><span></span>
-    </div>
+    <div class="insert-slot"></div>
   </div>
   <img class="stamp" src="${LOCKUP}"/>
   <div class="wordmark" style="position:absolute;right:64px;bottom:48px;font-size:24px;color:#fff;z-index:2;">
