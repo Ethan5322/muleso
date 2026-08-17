@@ -3,6 +3,7 @@ title: Added Three Portfolio Projects
 type: change
 status: in-progress
 found: 2026-08-17
+updated: 2026-08-17
 tags: [change, portfolio, covers]
 ---
 
@@ -10,11 +11,14 @@ tags: [change, portfolio, covers]
 
 Not a bug — a feature addition, logged here because it followed the same
 verify-before-shipping standard as every fix in this vault, and because one
-real mistake was caught mid-work that's worth keeping a record of.
+real mistake was caught mid-work that's worth keeping a record of. Title kept
+as-is for link stability even though a fourth card, [[Telga Portfolio Concept]],
+was added in a later pass — that one has its own note since it's a materially
+different kind of entry (a new venture concept, not an existing project).
 
 ## What was added
 
-Three cards in `app/portfolio/page.tsx`'s `fallbackProjects` array, each with
+Four cards in `app/portfolio/page.tsx`'s `fallbackProjects` array, each with
 a purpose-built cover image (not the generic `PortfolioCover` monogram
 fallback), rendered the same way every other branded artefact in this
 codebase is — headless Chrome, real brand fonts, `scripts/make-portfolio-covers.cjs`:
@@ -22,8 +26,16 @@ codebase is — headless Chrome, real brand fonts, `scripts/make-portfolio-cover
 | Project | Status | Cover |
 |---|---|---|
 | Hamere Noh Kidane Mihret Church | Live | real Orthodox cross + bilingual EN/AM headline |
-| Yewogen Derash (ወገን ደራሽ) | `upcoming: true` | campaign card mockup with verified badge + progress bar |
+| Yewogen Derash (ወገን ደራሽ) | **Live** — corrected from `upcoming: true` after the user confirmed it's complete | campaign card mockup with verified badge + progress bar |
 | Sena — AI Voice Receptionist | `upcoming: true` | the project's own real rendered guest-ID-card asset, tilted |
+| [[Telga Portfolio Concept]] | `upcoming: true` — new concept, not yet built | POS terminal mockup mid-swipe |
+
+Yewogen Derash was marked `upcoming: true` on first pass — the folder on
+Desktop has no `.vercel` config and no live URL evidence, which was the
+honest read of what was actually on disk. The user then stated directly that
+the project is complete and live. Corrected immediately: `upcoming: true`
+removed, `result` updated. No `site` link yet — same as the church card,
+pending a URL.
 
 ## The mistake caught before shipping
 

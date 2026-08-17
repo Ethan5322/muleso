@@ -300,10 +300,9 @@ const fallbackProjects: Project[] = [
     client: 'Crowdfunding Platform for Ethiopia',
     description: 'A secure, corporate-grade crowdfunding platform for Ethiopia — every campaign owner identity-verified, every campaign its own QR and ledger, no payment confirmed without a verified gateway webhook.',
     image: 'yewogen-derash-portfolio.jpg',
-    result: 'Upcoming — in active development',
+    result: 'Live — identity-verified crowdfunding',
     tech: ['Next.js', 'Prisma', 'Supabase', 'Chapa'],
     theme: 'blue',
-    upcoming: true,
     purpose:
       'A crowdfunding platform built on one idea: donors give more when they can trust who they are giving to. Every campaign owner is identity-verified with documents and a live face capture before a campaign can raise a single Birr, funds from different campaigns are never allowed to mix, and no payment is ever marked successful without the payment gateway’s own webhook confirming it.',
     capabilities: [
@@ -358,6 +357,35 @@ const fallbackProjects: Project[] = [
       'Collects payment during the call instead of chasing it afterwards',
       'A guest never has to queue to prove who they are — the QR does it',
       'No Vapi, no ElevenLabs, no Twilio — the only running cost is the thinking',
+    ],
+  },
+  {
+    name: 'Telga',
+    category: 'Fintech / POS',
+    client: 'Airtime & Bill-Payment Vending — Ethiopia',
+    description: 'A vending network for Ethiopia’s corner shops — airtime and bill payments sold through a POS terminal or Android app, on the same networked-reseller model that made platforms like Flash and Kazang ubiquitous across South African informal retail.',
+    image: 'telga-portfolio.jpg',
+    result: 'Upcoming — in active development',
+    tech: ['Android', 'POS Terminal SDK', 'Next.js', 'Supabase'],
+    theme: 'green',
+    upcoming: true,
+    purpose:
+      'Telga brings a proven model to a new market: in South Africa, small shop owners became airtime and bill-payment agents overnight with a POS terminal or an Android phone, no bank card needed from the customer, a small commission on every sale. Telga adapts that same networked-reseller playbook for Ethiopia — a vendor swipes or taps, the customer walks away with airtime, and the vendor earns on volume without carrying stock.',
+    capabilities: [
+      'Two ways to sell: a dedicated POS terminal for busier shops, an Android app for lighter vendors',
+      'Airtime and bill-payment vending in one flow — tap or swipe, select amount, done',
+      'Per-vendor accounts, commission tracking and a running transaction ledger',
+      'Built for the realities of informal retail — fast transactions, low friction, works on modest hardware',
+    ],
+    adminTracking: [
+      'Vendor network management — onboarding, commission rates, activity',
+      'Every transaction logged against a vendor reference for reconciliation',
+      'Live view of network-wide sales volume',
+    ],
+    boosts: [
+      'Turns any corner shop into an airtime & bill-payment point — no stock, no risk',
+      'Vendors earn commission on volume they already have foot traffic for',
+      'A model already proven at scale in South Africa, brought to an underserved market',
     ],
   },
   {
@@ -419,9 +447,10 @@ const rankOf = (name: string): number => {
   if (n.includes('tsi') || n.includes('booking assistant')) return 4;
   if (n.includes('shime')) return 5;
   if (n.includes('kidane') || n.includes('hamere')) return 6;
-  if (n.includes('hospital') || n.includes('dr.')) return 7;
-  if (n.includes('yewogen')) return 8;
+  if (n.includes('yewogen')) return 7; // live, completed
+  if (n.includes('hospital') || n.includes('dr.')) return 8;
   if (n.includes('sena')) return 9;
+  if (n.includes('telga')) return 10;
   if (n.includes('habesha')) return 99; // no live site yet — always last
   return 50;
 };

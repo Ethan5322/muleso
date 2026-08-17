@@ -42,6 +42,7 @@ client codebases that were moved out.
 | Change | Note |
 |---|---|
 | [[Added Three Portfolio Projects]] | Kidane Mihret, Yewogen Derash, Sena — with a real invented-text mistake caught before shipping |
+| [[Telga Portfolio Concept]] | A new venture concept, not an existing project — clearly labelled as such |
 
 ---
 

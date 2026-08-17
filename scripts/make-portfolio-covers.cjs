@@ -21,10 +21,18 @@
  *     a dark purple ground with a waveform motif for "voice". In build, not
  *     yet deployed — "Coming Soon".
  *
+ *   Telga — a new venture-stage concept, not yet built. An airtime and bill-
+ *     payment vending network for Ethiopia, in the mould of the proven
+ *     networked-reseller model South African platforms like Kazang and Flash
+ *     run — small POS terminals and an Android app carried by corner-shop
+ *     vendors. The cover shows the one moment that model runs on: the
+ *     terminal screen mid-swipe, selling airtime.
+ *
  * Run: node scripts/make-portfolio-covers.cjs
  * Out: public/yewogen-derash-portfolio.jpg
  *      public/kidane-mihret-portfolio.jpg
  *      public/sena-portfolio.jpg
+ *      public/telga-portfolio.jpg
  */
 const fs = require('fs');
 const path = require('path');
@@ -230,6 +238,78 @@ h1{font-family:'Sora';font-weight:800;font-size:76px;color:#fff;margin-top:22px;
 </body></html>`;
 }
 
+// ── 4. Telga ──────────────────────────────────────────────────────────────────
+function telgaHtml() {
+  const green = '#00C46B'; // Ethiopian-market accent, used tastefully — not the flag itself
+  const gold = '#E8B84B';
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+${fontFaces()}
+${BASE_CSS}
+body{background:
+  radial-gradient(ellipse 1100px 900px at 85% 15%, ${green}26 0%, transparent 55%),
+  radial-gradient(ellipse 900px 800px at 10% 90%, ${gold}1E 0%, transparent 55%),
+  #050810;
+  padding:72px 80px;display:flex;align-items:center;}
+.left{position:relative;z-index:2;max-width:560px;}
+.badge{display:inline-flex;align-items:center;gap:10px;font-family:'Sora';font-weight:700;font-size:18px;
+  letter-spacing:3px;color:${green};border:2px solid ${green}77;background:${green}18;
+  border-radius:99px;padding:10px 22px;}
+h1{font-family:'Sora';font-weight:800;font-size:88px;color:#fff;margin-top:22px;line-height:1;}
+.sub{font-size:23px;color:#A8B2D0;margin-top:22px;line-height:1.6;}
+.formfactor{display:flex;gap:12px;margin-top:30px;}
+.formfactor span{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.5px;color:#0A0D14;
+  background:${gold};border-radius:99px;padding:8px 18px;}
+
+/* A POS terminal, mid-transaction — the actual product moment, not decoration */
+.terminal{position:absolute;right:120px;top:50%;transform:translateY(-50%) rotate(-3deg);
+  width:380px;background:#161B2E;border-radius:32px;padding:18px;box-shadow:0 50px 120px rgba(0,0,0,0.6);
+  border:1px solid #2A3350;z-index:3;}
+.terminal .cam{width:50px;height:6px;background:#0A0D14;border-radius:4px;margin:0 auto 14px;}
+.screen{background:#050810;border-radius:18px;padding:26px 22px;}
+.screen .row1{display:flex;justify-content:space-between;align-items:center;}
+.screen .brand{font-family:'Sora';font-weight:800;font-size:20px;color:#fff;letter-spacing:1px;}
+.screen .brand b{color:${green};}
+.screen .signal{font-size:11px;color:#8A93A8;}
+.screen .op{font-size:13px;color:#A8B2D0;margin-top:22px;}
+.screen .amount{font-family:'Sora';font-weight:800;font-size:52px;color:#fff;margin-top:6px;}
+.screen .amount span{font-size:24px;color:${gold};}
+.screen .prompt{margin-top:26px;background:${green}1A;border:1.5px dashed ${green}88;border-radius:14px;
+  padding:16px;text-align:center;}
+.screen .prompt .icon{font-size:26px;}
+.screen .prompt .txt{font-family:'Sora';font-weight:700;font-size:14px;letter-spacing:2px;color:${green};margin-top:6px;}
+.screen .foot{display:flex;justify-content:space-between;margin-top:20px;font-size:11px;color:#5A6480;}
+.terminal .home{width:70px;height:5px;background:#2A3350;border-radius:4px;margin:16px auto 0;}
+</style></head><body>
+  <div class="grid"></div>
+  <div class="left">
+    <div class="badge">📶 AIRTIME &amp; BILL PAYMENTS</div>
+    <h1>Telga</h1>
+    <p class="sub">A vending network for Ethiopia's corner shops — airtime and bill
+    payments sold on the same proven networked-reseller model that made platforms
+    like Flash and Kazang ubiquitous across South Africa's informal retail.</p>
+    <div class="formfactor"><span>POS TERMINAL</span><span>ANDROID APP</span></div>
+  </div>
+  <div class="terminal">
+    <div class="cam"></div>
+    <div class="screen">
+      <div class="row1"><span class="brand">TEL<b>GA</b></span><span class="signal">●●●● 4G</span></div>
+      <div class="op">Ethio Telecom Airtime</div>
+      <div class="amount">50<span>ETB</span></div>
+      <div class="prompt">
+        <div class="icon">💳</div>
+        <div class="txt">SWIPE OR TAP TO PAY</div>
+      </div>
+      <div class="foot"><span>VENDOR #0412</span><span>REF TG-88213</span></div>
+    </div>
+    <div class="home"></div>
+  </div>
+  <img class="stamp" src="${LOCKUP}"/>
+  <div class="wordmark" style="position:absolute;right:64px;bottom:48px;font-size:24px;color:#fff;z-index:2;">
+    MULE<span class="dot">●</span>SOO
+  </div>
+</body></html>`;
+}
+
 function findChrome() {
   const c = [
     process.env.PUPPETEER_EXECUTABLE_PATH,
@@ -252,6 +332,7 @@ function findChrome() {
     ['yewogen-derash-portfolio.jpg', yewogenHtml()],
     ['kidane-mihret-portfolio.jpg', kidaneMihretHtml()],
     ['sena-portfolio.jpg', senaHtml()],
+    ['telga-portfolio.jpg', telgaHtml()],
   ];
 
   const browser = await puppeteer.launch({
