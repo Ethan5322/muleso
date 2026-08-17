@@ -68,34 +68,6 @@ const fallbackProjects: Project[] = [
     ],
   },
   {
-    name: 'Habesha Celebration Events',
-    category: 'Website',
-    client: 'Ethiopian Wedding & Event Planning',
-    description: 'An elegant events platform that turns wedding dreams into confirmed bookings — working for you 24/7, even mid-event.',
-    image: 'habesha-celebration-portfolio.png',
-    result: 'Live booking platform',
-    tech: ['Next.js', 'React', 'Framer Motion', 'Netlify'],
-    theme: 'rose',
-    purpose:
-      'A refined online home for a wedding & events business — designed to make couples fall in love with the brand and book with confidence.',
-    capabilities: [
-      'Elegant photo galleries and package showcases',
-      'Instant enquiry form + WhatsApp booking',
-      'Mobile-first, fast-loading design',
-      'Testimonials that build trust',
-    ],
-    adminTracking: [
-      'Every enquiry captured and organised',
-      'See which packages get the most interest',
-      'Follow up leads with status tracking',
-    ],
-    boosts: [
-      'Turns browsers into booked events',
-      'Handles enquiries 24/7 — even during events',
-      'Elevates the brand above local competitors',
-    ],
-  },
-  {
     name: 'YoYo Gym — AI Membership Platform',
     category: 'Gym Platform',
     client: 'Premium Fitness Brand',
@@ -271,6 +243,7 @@ const fallbackProjects: Project[] = [
     result: 'Live bilingual parish website',
     tech: ['Next.js', 'Supabase', 'Bilingual CMS', 'RLS Security'],
     theme: 'gold',
+    site: 'https://pretoriakidanemihretchurch-beta.vercel.app',
     purpose:
       'A complete, production website for an Ethiopian Orthodox Tewahedo church in Pretoria — built so the parish never depends on a developer to keep it current. Every piece of content, from service times to the priest’s details to a new sermon, is edited from a secure admin panel and shown correctly in both English and Amharic.',
     capabilities: [
@@ -303,6 +276,7 @@ const fallbackProjects: Project[] = [
     result: 'Live — identity-verified crowdfunding',
     tech: ['Next.js', 'Prisma', 'Supabase', 'Chapa'],
     theme: 'blue',
+    site: 'https://yewogenderash.vercel.app',
     purpose:
       'A crowdfunding platform built on one idea: donors give more when they can trust who they are giving to. Every campaign owner is identity-verified with documents and a live face capture before a campaign can raise a single Birr, funds from different campaigns are never allowed to mix, and no payment is ever marked successful without the payment gateway’s own webhook confirming it.',
     capabilities: [
@@ -367,7 +341,7 @@ const fallbackProjects: Project[] = [
     image: 'telga-portfolio.jpg',
     result: 'Upcoming — in active development',
     tech: ['Android', 'POS Terminal SDK', 'Next.js', 'Supabase'],
-    theme: 'green',
+    theme: 'gold',
     upcoming: true,
     purpose:
       'Telga brings a proven model to a new market: in South Africa, small shop owners became airtime and bill-payment agents overnight with a POS terminal or an Android phone, no bank card needed from the customer, a small commission on every sale. Telga adapts that same networked-reseller playbook for Ethiopia — a vendor swipes or taps, the customer walks away with airtime, and the vendor earns on volume without carrying stock.',
@@ -437,7 +411,7 @@ const BOOKING_STEPS: { title: string; text: string }[] = [
 ];
 
 // Portfolio order — live, finished projects first; "in active development"
-// projects grouped together near the end; Habesha (no site yet) always last.
+// projects grouped together near the end.
 const rankOf = (name: string): number => {
   const n = name.toLowerCase();
   if (n.includes('mulesoo')) return 0;
@@ -451,7 +425,6 @@ const rankOf = (name: string): number => {
   if (n.includes('hospital') || n.includes('dr.')) return 8;
   if (n.includes('sena')) return 9;
   if (n.includes('telga')) return 10;
-  if (n.includes('habesha')) return 99; // no live site yet — always last
   return 50;
 };
 

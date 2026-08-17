@@ -53,13 +53,21 @@ A second, smaller slip: the Amharic in Yewogen Derash's card `name` field in
 cover image itself having the correct text from the start. Caught by
 re-grepping the source README, fixed before commit.
 
-## Still open
+## Resolved
 
-**The church site's live URL.** Confirmed via `AskUserQuestion` that a public
-URL exists; the user is providing it. Until then the card has no `site` link
-(same pattern the existing Habesha Celebration Events card already uses —
-real project, live site, just not yet wired with a clickable badge). Small,
-contained follow-up once the URL arrives — not a rebuild.
+Both pending live URLs arrived and were wired in, each verified with a real
+`fetch` returning `200` before being shipped as a clickable link:
+
+- Kidane Mihret — `pretoriakidanemihretchurch-beta.vercel.app`
+- Yewogen Derash — `yewogenderash.vercel.app`
+
+**The Habesha Celebration Events card was removed from the portfolio
+entirely** — the user stated the site is not actually working, despite it
+returning `200` on a raw status check (which proves nothing about whether it
+works for its purpose). Its cover image was *not* deleted from `public/` —
+still referenced by `app/about/page.tsx` and `app/HomeClient.tsx`, checked
+before touching anything. Removing it there was never asked for and would
+have been scope creep.
 
 ## Related
 

@@ -239,46 +239,65 @@ h1{font-family:'Sora';font-weight:800;font-size:76px;color:#fff;margin-top:22px;
 }
 
 // ── 4. Telga ──────────────────────────────────────────────────────────────────
+// A physical card-swipe terminal, not a phone screen — bright yellow casing
+// (the user's explicit direction: "like a new Flash swiping machine, but
+// yellow"), a real swipe slot with a card mid-drag through it, and a molded
+// keypad, since that silhouette is what actually reads as "vending machine"
+// rather than "app on a phone."
 function telgaHtml() {
-  const green = '#00C46B'; // Ethiopian-market accent, used tastefully — not the flag itself
-  const gold = '#E8B84B';
+  const yellow = '#FFC72C';
+  const yellowDeep = '#D9A400';
+  const ink = '#0A0D14';
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 ${fontFaces()}
 ${BASE_CSS}
 body{background:
-  radial-gradient(ellipse 1100px 900px at 85% 15%, ${green}26 0%, transparent 55%),
-  radial-gradient(ellipse 900px 800px at 10% 90%, ${gold}1E 0%, transparent 55%),
+  radial-gradient(ellipse 1100px 900px at 85% 15%, ${yellow}22 0%, transparent 55%),
+  radial-gradient(ellipse 900px 800px at 10% 90%, ${yellow}14 0%, transparent 55%),
   #050810;
   padding:72px 80px;display:flex;align-items:center;}
 .left{position:relative;z-index:2;max-width:560px;}
 .badge{display:inline-flex;align-items:center;gap:10px;font-family:'Sora';font-weight:700;font-size:18px;
-  letter-spacing:3px;color:${green};border:2px solid ${green}77;background:${green}18;
+  letter-spacing:3px;color:${yellow};border:2px solid ${yellow}88;background:${yellow}1C;
   border-radius:99px;padding:10px 22px;}
 h1{font-family:'Sora';font-weight:800;font-size:88px;color:#fff;margin-top:22px;line-height:1;}
 .sub{font-size:23px;color:#A8B2D0;margin-top:22px;line-height:1.6;}
 .formfactor{display:flex;gap:12px;margin-top:30px;}
-.formfactor span{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.5px;color:#0A0D14;
-  background:${gold};border-radius:99px;padding:8px 18px;}
+.formfactor span{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.5px;color:${ink};
+  background:${yellow};border-radius:99px;padding:8px 18px;}
 
-/* A POS terminal, mid-transaction — the actual product moment, not decoration */
-.terminal{position:absolute;right:120px;top:50%;transform:translateY(-50%) rotate(-3deg);
-  width:380px;background:#161B2E;border-radius:32px;padding:18px;box-shadow:0 50px 120px rgba(0,0,0,0.6);
-  border:1px solid #2A3350;z-index:3;}
-.terminal .cam{width:50px;height:6px;background:#0A0D14;border-radius:4px;margin:0 auto 14px;}
-.screen{background:#050810;border-radius:18px;padding:26px 22px;}
-.screen .row1{display:flex;justify-content:space-between;align-items:center;}
-.screen .brand{font-family:'Sora';font-weight:800;font-size:20px;color:#fff;letter-spacing:1px;}
-.screen .brand b{color:${green};}
-.screen .signal{font-size:11px;color:#8A93A8;}
-.screen .op{font-size:13px;color:#A8B2D0;margin-top:22px;}
-.screen .amount{font-family:'Sora';font-weight:800;font-size:52px;color:#fff;margin-top:6px;}
-.screen .amount span{font-size:24px;color:${gold};}
-.screen .prompt{margin-top:26px;background:${green}1A;border:1.5px dashed ${green}88;border-radius:14px;
-  padding:16px;text-align:center;}
-.screen .prompt .icon{font-size:26px;}
-.screen .prompt .txt{font-family:'Sora';font-weight:700;font-size:14px;letter-spacing:2px;color:${green};margin-top:6px;}
-.screen .foot{display:flex;justify-content:space-between;margin-top:20px;font-size:11px;color:#5A6480;}
-.terminal .home{width:70px;height:5px;background:#2A3350;border-radius:4px;margin:16px auto 0;}
+/* The terminal — molded yellow plastic body, swipe slot, keypad. This is the
+   silhouette of a real handheld card machine, not a phone with a yellow tint. */
+.terminal{position:absolute;right:150px;top:50%;transform:translateY(-50%) rotate(-4deg);
+  width:340px;background:linear-gradient(160deg,${yellow},${yellowDeep});
+  border-radius:26px;padding:16px 16px 22px;box-shadow:0 50px 120px rgba(0,0,0,0.65), inset 0 2px 0 rgba(255,255,255,0.4);
+  z-index:3;}
+.terminal .brandrow{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 12px;}
+.terminal .brandrow .name{font-family:'Sora';font-weight:800;font-size:16px;letter-spacing:1px;color:${ink};}
+.terminal .brandrow .signal{font-size:10px;color:${ink};opacity:0.65;letter-spacing:1px;}
+
+/* Swipe slot: a dark recessed groove with a card caught mid-drag through it */
+.slot{position:relative;height:34px;background:${ink};border-radius:8px;
+  box-shadow:inset 0 3px 6px rgba(0,0,0,0.6);margin-bottom:14px;overflow:visible;}
+.slot .card{position:absolute;left:58%;top:-14px;width:150px;height:60px;border-radius:7px;
+  background:linear-gradient(135deg,#2A3350,#161B2E);border:1px solid #3A4560;
+  box-shadow:0 10px 26px rgba(0,0,0,0.5);transform:rotate(-4deg);}
+.slot .card .chip{position:absolute;left:14px;top:14px;width:22px;height:16px;border-radius:3px;
+  background:linear-gradient(135deg,#E8B84B,#C9962E);}
+.slot .card .stripe{position:absolute;left:0;top:6px;width:100%;height:9px;background:#0A0D14;opacity:0.7;}
+
+.screen{background:${ink};border-radius:14px;padding:20px 18px;}
+.screen .op{font-size:12px;color:#8A93A8;letter-spacing:0.5px;}
+.screen .amount{font-family:'Sora';font-weight:800;font-size:44px;color:#fff;margin-top:4px;}
+.screen .amount span{font-size:20px;color:${yellow};}
+.screen .prompt{margin-top:16px;background:${yellow}1A;border:1.5px dashed ${yellow}AA;border-radius:12px;
+  padding:12px;text-align:center;}
+.screen .prompt .txt{font-family:'Sora';font-weight:700;font-size:13px;letter-spacing:1.8px;color:${yellow};}
+.screen .foot{display:flex;justify-content:space-between;margin-top:14px;font-size:10px;color:#5A6480;}
+
+/* Molded keypad below the screen — the detail that reads as "real device" */
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px;padding:0 4px;}
+.keypad span{background:${yellowDeep};border-radius:7px;height:26px;box-shadow:inset 0 -2px 0 rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.25);}
 </style></head><body>
   <div class="grid"></div>
   <div class="left">
@@ -290,18 +309,21 @@ h1{font-family:'Sora';font-weight:800;font-size:88px;color:#fff;margin-top:22px;
     <div class="formfactor"><span>POS TERMINAL</span><span>ANDROID APP</span></div>
   </div>
   <div class="terminal">
-    <div class="cam"></div>
+    <div class="brandrow"><span class="name">TELGA</span><span class="signal">●●●● 4G</span></div>
+    <div class="slot">
+      <div class="card"><div class="chip"></div><div class="stripe"></div></div>
+    </div>
     <div class="screen">
-      <div class="row1"><span class="brand">TEL<b>GA</b></span><span class="signal">●●●● 4G</span></div>
       <div class="op">Ethio Telecom Airtime</div>
       <div class="amount">50<span>ETB</span></div>
-      <div class="prompt">
-        <div class="icon">💳</div>
-        <div class="txt">SWIPE OR TAP TO PAY</div>
-      </div>
+      <div class="prompt"><div class="txt">SWIPE TO PAY</div></div>
       <div class="foot"><span>VENDOR #0412</span><span>REF TG-88213</span></div>
     </div>
-    <div class="home"></div>
+    <div class="keypad">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
   </div>
   <img class="stamp" src="${LOCKUP}"/>
   <div class="wordmark" style="position:absolute;right:64px;bottom:48px;font-size:24px;color:#fff;z-index:2;">

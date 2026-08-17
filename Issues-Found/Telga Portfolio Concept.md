@@ -40,10 +40,14 @@ either — Telga is a new idea, not a claimed clone.
 Confirmed on Desktop first: no `Telga` folder exists anywhere, so there was
 no real screenshot or asset to build from — this cover is a designed mockup,
 same treatment `scripts/make-portfolio-covers.cjs` gives every other
-concept-stage card. It shows exactly what was asked for: a POS terminal
-screen mid-transaction — "Ethio Telecom Airtime," an amount, a "SWIPE OR TAP
-TO PAY" prompt — tilted, on a dark green/gold ground distinct from the other
-three covers' palettes.
+concept-stage card.
+
+First version showed a slim phone-like screen. The user's direction: it
+should look like "a new Flash swiping machine, but yellow" — a real
+handheld card terminal, not an app on a phone. Redesigned around that
+silhouette: molded yellow plastic body, a recessed swipe slot with a card
+mid-drag through it, a small dark screen, and a physical keypad below —
+the details that read as "device" rather than "screenshot."
 
 ## Related
 
