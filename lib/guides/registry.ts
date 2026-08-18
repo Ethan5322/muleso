@@ -5,6 +5,7 @@ import { buildProWebsiteClaudeCode } from './content/buildProWebsiteClaudeCode';
 import { claudeCodeMcpMaster } from './content/claudeCodeMcpMaster';
 import { githubWebsitePublishing } from './content/githubWebsitePublishing';
 import { growthPlaybook } from './content/growthPlaybook';
+import { obsidianClaudeCode } from './content/obsidianClaudeCode';
 
 /**
  * Slug → book content. A guide is deliverable only if it appears here.
@@ -17,6 +18,7 @@ export const GUIDES: Record<string, Guide> = {
   'claude-code-mcp-master': claudeCodeMcpMaster,
   'github-website-publishing': githubWebsitePublishing,
   'mulesoo-growth-playbook': growthPlaybook,
+  'obsidian-claude-code-guide': obsidianClaudeCode,
 };
 
 export const getGuide = (slug: string): Guide | undefined => GUIDES[slug];

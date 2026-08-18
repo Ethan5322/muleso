@@ -105,6 +105,19 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     accent: 'gold',
     available: true,
   },
+  {
+    name: 'Obsidian + Claude Code Master Guide',
+    slug: 'obsidian-claude-code-guide',
+    emoji: '🧠',
+    priceZAR: 300,
+    priceUSD: 18,
+    pages: '8',
+    difficulty: 'Beginner-Friendly',
+    description: 'A click-by-click setup for Obsidian and the exact workflow for connecting it to a project you\'re already building with Claude Code — plan and link ideas visually, then hand them straight to Claude Code to build.',
+    features: ['Zero-to-installed setup', 'Connect it to any Claude Code project', 'Notes, linking & search basics', 'The real Obsidian ↔ Claude Code loop'],
+    accent: 'purple',
+    available: true,
+  },
 ];
 
 export const findProductBySlug = (slug: string) => STORE_PRODUCTS.find((p) => p.slug === slug);
