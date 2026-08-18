@@ -13,6 +13,9 @@ const ADMIN_PHONE = process.env.ADMIN_WHATSAPP || '27688529333'; // Owner's What
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '';
 
+// Where every owner alert's email backup goes — see sendAdminEmailBackup below.
+const ADMIN_ALERT_EMAIL = process.env.ADMIN_ALERT_EMAIL || 'hello@mulesoo.com';
+
 /** Send an alert to the owner's Telegram (only if configured). */
 export async function sendTelegramMessage(message: string): Promise<void> {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
@@ -28,6 +31,35 @@ export async function sendTelegramMessage(message: string): Promise<void> {
     clearTimeout(timeoutId);
   } catch (e) {
     console.error('Telegram send failed:', e);
+  }
+}
+
+/**
+ * Back up every owner WhatsApp alert with an email.
+ *
+ * CallMeBot (the free WhatsApp bridge used below) can return HTTP 200 and a
+ * "Message queued" body while never actually delivering — a known limitation
+ * of the free tier (silent throttling, a stale registration, etc.) with no
+ * machine-readable failure signal to catch. `sendWhatsAppMessage`'s
+ * `response.ok` check cannot see that, so a booking alert can silently vanish
+ * even though the code path ran correctly end to end. Resend, on this
+ * project, has a proven delivery record (see Issues-Found/Resend Domain
+ * Verification.md) — so every alert fires here too, always, not just when
+ * the WhatsApp send reports failure. Never blocks or fails the caller.
+ */
+async function sendAdminEmailBackup(subject: string, message: string): Promise<void> {
+  if (!process.env.RESEND_API_KEY) return;
+  try {
+    const escaped = message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const html = `<pre style="font-family:'Segoe UI',Helvetica,Arial,sans-serif;white-space:pre-wrap;font-size:14px;line-height:1.6;color:#0A0F1E;margin:0;">${escaped}</pre>`;
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.RESEND_API_KEY}` },
+      body: JSON.stringify({ from: 'chatbot@mulesoo.com', to: ADMIN_ALERT_EMAIL, subject, html }),
+    });
+    if (!res.ok) console.error('Admin email backup rejected:', res.status, (await res.text()).slice(0, 300));
+  } catch (e) {
+    console.error('Admin email backup failed:', e);
   }
 }
 
@@ -296,6 +328,7 @@ Verification Code: ${verificationCode}
   }
 
   await sendTelegramMessage(message);
+  await sendAdminEmailBackup(`🔔 New Booking — ${clientName} (${service})`, message);
   return result;
 }
 
@@ -346,6 +379,7 @@ The booking is now secured. View it in Admin → Bookings.`;
   }
 
   await sendTelegramMessage(message);
+  await sendAdminEmailBackup(`💰 Deposit Paid — ${details.clientName || 'Client'}`, message);
 }
 
 /**
@@ -404,6 +438,7 @@ ${details?.projectDetails || 'No message provided'}
   }
 
   await sendTelegramMessage(message);
+  await sendAdminEmailBackup(`🔔 New Enquiry — ${name}`, message);
 }
 
 /**
@@ -467,6 +502,7 @@ ${passwordSection}`;
   }
 
   await sendTelegramMessage(message);
+  await sendAdminEmailBackup(`🛒 New Store Purchase — ${details.productName || 'Guide'}`, message);
 }
 
 /**

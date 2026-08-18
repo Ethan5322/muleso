@@ -88,6 +88,7 @@ than folded silently into this one.
 - [[Payment Link Never Sent]]
 - [[Promised PDF Agreement Never Sent]]
 - [[Booking Payment Flow]]
+- [[Booking Fixes — WhatsApp Backup, Unsure Budget, Cancel Resume]]
 - [[Verification Method]]
 
 ---

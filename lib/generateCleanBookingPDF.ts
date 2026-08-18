@@ -267,6 +267,11 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     const depositAmount = bookingData.deposit && bookingData.deposit > 0 ? bookingData.deposit : null;
     const statusColor = isPaid ? GREEN : AMBER;
     const statusLabel = isPaid ? 'PAID' : 'PENDING';
+    // The client told us in the chat they don't know their budget yet. A
+    // computed 50%-of-list-price figure would still be a real number, but
+    // stating it here as due, with no discussion, is exactly what was asked
+    // not to do — this client's deposit is agreed with the team, not assumed.
+    const budgetUnsure = (bookingData.budget || '').trim().toLowerCase() === 'not sure yet';
 
     sectionHeading('PAYMENT & DEPOSIT', GOLD);
     // This document is only ever generated once the booking fee has cleared —
@@ -280,7 +285,11 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     let pr = yPos + 6;
     field('Booking Fee:', `R ${BOOKING_FEE_ZAR} — PAID (non-refundable)`, col1X, pr, 30);
     pr += 7;
-    field('Deposit (50%):', depositAmount ? `R ${depositAmount.toLocaleString('en-US')}` : 'To be confirmed', col1X, pr, 30);
+    field(
+      budgetUnsure ? 'Deposit:' : 'Deposit (50%):',
+      budgetUnsure ? 'To be agreed with MuleSoo team' : depositAmount ? `R ${depositAmount.toLocaleString('en-US')}` : 'To be confirmed',
+      col1X, pr, 30
+    );
 
     // Status pill (right-aligned)
     const pillW = 30;
@@ -293,12 +302,14 @@ export const generateCleanBookingPDF = async (bookingData: BookingData): Promise
     doc.text(statusLabel, pillX + pillW / 2, pr, { align: 'center' });
 
     pr += 7;
-    field('Balance:', 'Remaining 50% due on delivery', col1X, pr, 30);
+    field('Balance:', budgetUnsure ? 'Confirmed once deposit is agreed' : 'Remaining 50% due on delivery', col1X, pr, 30);
     pr += 7;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(7.5);
     doc.setTextColor(...MUTED);
-    const payNote = isPaid
+    const payNote = budgetUnsure
+      ? 'You let us know you were not sure of your budget yet — your deposit will be agreed directly with the MuleSoo team after a short discussion about your project. No amount has been assumed or charged.'
+      : isPaid
       ? 'Deposit received — thank you. It is credited in full toward your total project fee.'
       : 'Pay the 50% deposit to secure your booking. It is credited in full toward your total project fee.';
     doc.text(doc.splitTextToSize(payNote, contentWidth - 6), col1X, pr);

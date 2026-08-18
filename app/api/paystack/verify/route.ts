@@ -160,6 +160,7 @@ export async function POST(req: NextRequest) {
             service: updatedRow.service || '',
             bookingId: updatedRow.id || bookingId || null,
             verificationCode: updatedRow.verification_code || bookingReference || '',
+            budget: updatedRow.budget || undefined,
           });
           if (!result.sent) console.error('paystack/verify: deposit email not sent:', result.reason);
         } catch (emailErr: any) {

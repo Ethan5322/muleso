@@ -46,6 +46,7 @@ client codebases that were moved out.
 | [[Two-Stage Booking Payment]] | R100 booking fee gates the owner alert, deposit email and PDF — none fire until Paystack confirms it |
 | [[Portfolio Copy And Cover Corrections]] | Wrong QR stamp, a toy-looking Telga terminal, and spec-sheet copy where warm copy belonged — all corrected |
 | [[Generic Steps Shown For Every Project]] | Every project's modal claimed the same QR-chatbot booking flow, even projects with no chat, no QR, or no booking at all |
+| [[Booking Fixes — WhatsApp Backup, Unsure Budget, Cancel Resume]] | Owner alerts get an email backup since CallMeBot can silently fail; unsure-budget clients no longer get a firm 50% figure; a Cancel button and resume-or-restart prompt free clients from an unfinished form |
 
 ---
 

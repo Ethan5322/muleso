@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, ArrowUp, ArrowLeft, ArrowRight, Download, CheckCircle, Clock, Save, Lock } from 'lucide-react';
+import { MessageCircle, X, ArrowUp, ArrowLeft, ArrowRight, Download, CheckCircle, Clock, Save, Lock, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useChatbot } from '@/context/ChatbotContext';
@@ -205,9 +205,17 @@ export default function ChatbotWidget() {
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   const [history, setHistory] = useState<StageType[]>([]);
   const [future, setFuture] = useState<StageType[]>([]);
+  // Shown instead of the in-progress form when the client reopens the chat
+  // mid-booking, so resuming a half-finished form is a choice, not something
+  // forced on them. Cleared by either choice below.
+  const [showResumeChoice, setShowResumeChoice] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const isNavigating = useRef(false);
   const prevStage = useRef<StageType>('greeting');
+  // Tracks the previous isOpen value so the resume-prompt effect can tell a
+  // genuine close→reopen apart from every other render.
+  const wasOpenRef = useRef(false);
   // How many chat bubbles existed the moment each stage was first entered
   // (right after its bot question was asked, before the client answered).
   // goBack() rewinds the transcript to this count so an old answer doesn't
@@ -348,6 +356,19 @@ export default function ChatbotWidget() {
   // payment window instantly instead of waiting for the script to download.
   useEffect(() => {
     if (isOpen) loadPaystack().catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
+  // The widget never unmounts while closed (isOpen just hides its panel), so
+  // stage/bookingData/messages all survive a close — reopening used to just
+  // silently drop the client back exactly where they left off, with no way
+  // to bail out short of finishing the form. Detect a genuine close→reopen
+  // while a form is mid-flow and ask first, instead of deciding for them.
+  useEffect(() => {
+    if (isOpen && !wasOpenRef.current && stage !== 'greeting' && stage !== 'summary' && messages.length > 0) {
+      setShowResumeChoice(true);
+    }
+    wasOpenRef.current = isOpen;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -605,6 +626,72 @@ export default function ChatbotWidget() {
     // Clear the conversation, close the widget, and return to the home scene
     resetChat();
     router.push('/');
+  };
+
+  // Best-effort: mark whatever booking row exists (if any — submitBooking()
+  // only inserts one after 'terms' is accepted, so mid-form there's usually
+  // nothing to cancel yet) as Cancelled. Never blocks the local reset below.
+  const cancelBookingRow = async (id?: string) => {
+    if (!id) return;
+    try {
+      await fetch('/api/chatbot-booking/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bookingId: id }),
+      });
+    } catch (e) {
+      console.error('Cancel booking failed (continuing):', e);
+    }
+  };
+
+  // Same reset as resetChat(), minus closing the widget — used by the Cancel
+  // button and "Start Over" so the client lands back on the service picker
+  // in the same open panel, not booted out of the chat entirely.
+  const startFresh = () => {
+    setMessages([]);
+    setStage('greeting');
+    setHistory([]);
+    setFuture([]);
+    setShowConfetti(false);
+    setPaymentStatus('idle');
+    setInputValue('');
+    setValidationError('');
+    setBookingData({
+      fullName: '',
+      email: '',
+      phoneNumber: '',
+      company: '',
+      nationality: '',
+      clientIDType: '',
+      clientID: '',
+      service: '',
+      usageType: '',
+      budget: '',
+      contactMethod: '',
+      timeline: '',
+      projectDetails: '',
+      improvedProjectDetails: '',
+      termsAccepted: false,
+      bookingReference: '',
+      verificationCode: undefined,
+      bookingId: undefined,
+    });
+  };
+
+  const handleCancelBooking = async () => {
+    setShowCancelConfirm(false);
+    await cancelBookingRow(bookingData.bookingId);
+    startFresh();
+    toast.success('Booking cancelled — start again whenever you\'re ready.');
+  };
+
+  const handleResumeContinue = () => setShowResumeChoice(false);
+
+  const handleResumeRestart = async () => {
+    setShowResumeChoice(false);
+    await cancelBookingRow(bookingData.bookingId);
+    startFresh();
+    toast.success('Starting a new booking.');
   };
 
   const saveAndResume = () => {
@@ -871,6 +958,89 @@ export default function ChatbotWidget() {
             {/* Animated brand background (scoped to widget) */}
             <ChatWidgetBackground />
 
+            {/* Resume-or-restart prompt — shown once, on reopening mid-booking */}
+            <AnimatePresence>
+              {showResumeChoice && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-30 flex items-center justify-center bg-[var(--bg-secondary)]/95 backdrop-blur-sm p-6"
+                >
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="glass-card p-6 space-y-4 max-w-sm text-center"
+                  >
+                    <h3 className="font-bold text-lg text-[var(--text-primary)]">Welcome back 👋</h3>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      You still have a booking in progress. Continue where you left off, or start a fresh one?
+                    </p>
+                    <div className="space-y-2 pt-2">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleResumeContinue}
+                        className="w-full px-4 py-3 bg-[var(--color-action-primary)] hover:bg-[var(--color-action-hover)] text-[var(--color-action-ink)] font-bold rounded-xl transition-all text-sm"
+                      >
+                        Continue Booking
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleResumeRestart}
+                        className="w-full px-4 py-2.5 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)] transition-all font-medium text-sm"
+                      >
+                        Start Over
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Cancel confirmation */}
+            <AnimatePresence>
+              {showCancelConfirm && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-30 flex items-center justify-center bg-[var(--bg-secondary)]/95 backdrop-blur-sm p-6"
+                >
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="glass-card p-6 space-y-4 max-w-sm text-center"
+                  >
+                    <h3 className="font-bold text-lg text-[var(--text-primary)]">Cancel this booking?</h3>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      Everything you've entered so far will be cleared and this booking will be cancelled.
+                      You can start a new one right away.
+                    </p>
+                    <div className="space-y-2 pt-2">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleCancelBooking}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500/90 hover:bg-red-500 text-white font-bold rounded-xl transition-all text-sm"
+                      >
+                        <Trash2 size={16} /> Yes, Cancel Booking
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => setShowCancelConfirm(false)}
+                        className="w-full px-4 py-2.5 bg-[var(--bg-primary)] border border-[var(--border)] text-[var(--text-secondary)] rounded-lg hover:border-[var(--color-action-on-dark)] hover:text-[var(--color-action-on-dark)] transition-all font-medium text-sm"
+                      >
+                        Keep Going
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Content layer (above background) */}
             <div className="relative z-10 flex flex-col h-full min-h-0">
             {/* Progress Bar */}
@@ -932,11 +1102,21 @@ export default function ChatbotWidget() {
               </div>
             </div>
 
-            {/* Estimated Time */}
+            {/* Estimated Time + Cancel */}
             {stage !== 'greeting' && stage !== 'summary' && (
-              <div className="bg-[var(--glow-action)] border-b border-[var(--color-action-on-dark)] px-4 py-2 flex items-center gap-2">
-                <Clock size={14} className="text-[var(--color-action-on-dark)]" />
-                <span className="text-xs text-[var(--color-action-on-dark)] font-semibold">~5 min to complete</span>
+              <div className="bg-[var(--glow-action)] border-b border-[var(--color-action-on-dark)] px-4 py-2 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Clock size={14} className="text-[var(--color-action-on-dark)]" />
+                  <span className="text-xs text-[var(--color-action-on-dark)] font-semibold">~5 min to complete</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCancelConfirm(true)}
+                  className="flex items-center gap-1 text-xs font-semibold text-[var(--color-action-on-dark)] opacity-80 hover:opacity-100 transition-opacity"
+                  title="Cancel this booking and start over"
+                >
+                  <Trash2 size={13} /> Cancel
+                </button>
               </div>
             )}
 
@@ -1128,8 +1308,14 @@ export default function ChatbotWidget() {
                   <h3 className="font-bold text-lg text-[var(--text-primary)]">📋 Terms & Conditions</h3>
                   <div className="bg-[var(--bg-primary)] p-4 rounded-lg border border-[var(--border)] text-xs text-[var(--text-secondary)] space-y-2 max-h-32 overflow-y-auto">
                     <p>✓ R{BOOKING_FEE_ZAR} booking fee to hold your slot — flat, non-refundable</p>
-                    <p>✓ 50% project deposit follows by email once the booking fee clears</p>
-                    <p>✓ Remaining 50% due before final delivery</p>
+                    {bookingData.budget === 'Not sure yet' ? (
+                      <p>✓ Project deposit agreed with our team once the booking fee clears — no amount assumed</p>
+                    ) : (
+                      <>
+                        <p>✓ 50% project deposit follows by email once the booking fee clears</p>
+                        <p>✓ Remaining 50% due before final delivery</p>
+                      </>
+                    )}
                     <p>✓ 30 days free support included</p>
                     <p>✓ You own all work after full payment</p>
                     <p>✓ Project timeline is estimate, subject to feedback</p>
@@ -1199,8 +1385,10 @@ export default function ChatbotWidget() {
                           </p>
                         </div>
                         <p className="text-xs text-[var(--text-secondary)] mb-3">
-                          A flat, non-refundable fee to hold your slot. Your project deposit
-                          (50% of {getServicePrice(bookingData.service)}) follows by email once this clears.
+                          A flat, non-refundable fee to hold your slot.{' '}
+                          {bookingData.budget === 'Not sure yet'
+                            ? "Since you're not sure of your budget yet, our team will reach out to agree your project deposit with you once this clears."
+                            : `Your project deposit (50% of ${getServicePrice(bookingData.service)}) follows by email once this clears.`}
                         </p>
                         <motion.button
                           whileHover={{ scale: paymentStatus === 'processing' ? 1 : 1.02 }}
