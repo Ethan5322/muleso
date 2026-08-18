@@ -163,7 +163,7 @@ export default function StoreClient() {
             >
               <div className="absolute top-0 left-0 right-0 h-[3px] z-20 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 bg-gradient-to-r from-[var(--color-premium-deep)] via-[var(--color-premium)] to-[var(--color-premium-bright)]" />
 
-              <div className="relative w-full h-40 sm:h-52 overflow-hidden">
+              <div className="relative w-full aspect-[1200/480] overflow-hidden">
                 <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                   <EmojiCover emoji={product.emoji} title={product.name} label="DIGITAL GUIDE" category={`${product.pages} pages`} accent={product.accent} />
                 </div>
@@ -247,7 +247,7 @@ export default function StoreClient() {
                 whileHover={{ translateY: -6 }}
                 className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-on-dark)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
               >
-                <div className="relative w-full h-40 sm:h-52 overflow-hidden">
+                <div className="relative w-full aspect-[1200/480] overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                     <EmojiCover emoji={s.emoji} title={systemDisplayName(s)} label="AUTO PILOT SYSTEM" category={s.category} accent={s.accent} />
                   </div>
@@ -318,7 +318,7 @@ export default function StoreClient() {
                 whileHover={{ translateY: -6 }}
                 className="group relative glass-card overflow-hidden rounded-2xl border border-[var(--border)] flex flex-col transition-all duration-300 hover:border-[var(--color-action-on-dark)] hover:shadow-[0_24px_60px_-15px_var(--glow-action)]"
               >
-                <div className="relative w-full h-36 sm:h-40 overflow-hidden">
+                <div className="relative w-full aspect-[1200/480] overflow-hidden">
                   <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
                     <EmojiCover emoji={a.emoji} title={a.name} label="AI AUTOMATION" category={a.category} accent={a.accent} />
                   </div>

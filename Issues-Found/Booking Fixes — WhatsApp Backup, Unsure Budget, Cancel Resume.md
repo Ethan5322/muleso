@@ -1,7 +1,7 @@
 ---
 title: Booking Fixes — WhatsApp Backup, Unsure Budget, Cancel Resume
 type: change
-status: in-progress
+status: fixed
 found: 2026-08-18
 updated: 2026-08-18
 tags: [change, booking, whatsapp, pdf, email, chatbot-widget]
@@ -46,6 +46,51 @@ the owner now has a channel that has never failed on this project.
 accountable channel (Twilio WhatsApp Business API, Meta's own WhatsApp Cloud
 API) is the only way to get real delivery guarantees. Out of scope here —
 needs new credentials and a cost decision, not a code fix.
+
+### The actual smoking gun, found on a second pass
+
+The user reported the WhatsApp alert *still* wasn't arriving after the email
+backup shipped. Rather than repeat the same "maybe it's silently failing"
+guess, called CallMeBot's live API directly with the exact production
+fallback credentials and read the **response body**, not just the status
+code:
+
+```
+$ curl "https://api.callmebot.com/whatsapp.php?phone=27688529333&text=...&apikey=7268108"
+<b>Service is down (410)</b>: Sorry for the inconvenience. There is a
+technical problem and I am working on it. The service will be back in
+24-48hs (on August 18th or sooner)
+HTTP_STATUS: 207
+```
+
+**That is the real, confirmed root cause**, reproduced three times: CallMeBot
+is in a declared outage, and returns **HTTP 207** — inside the 200-299 range
+`response.ok` treats as success — for its own outage notice. Every WhatsApp
+send during this window was silently "succeeding" by our own check while
+literally nothing was sent. Not vague flakiness; a specific, provable false
+positive.
+
+**Fixed properly this time:** `sendWhatsAppMessage()` in
+`lib/sendWhatsAppMessage.ts` no longer trusts `response.ok`. It reads the
+response body and requires CallMeBot's own documented success phrase
+("Message queued") before calling it delivered — anything else (this outage
+notice, a future rate-limit or registration error CallMeBot reports the same
+way) is now correctly treated as a failure, retried, and if still failing,
+returned as an honest `success: false` with the real reason text instead of
+a false positive.
+
+**Verified the email backup is genuinely carrying the load in the
+meantime** — checked Resend's own delivery log directly (not the app's
+optimistic response), found two real post-deploy bookings ("Uomato",
+"Tiop sigat") both landed `delivered` "🔔 New Booking" emails at
+`hello@mulesoo.com` within the same second their deposit emails went out.
+The owner has not actually missed a booking since the backup shipped, even
+though WhatsApp itself has been down the whole time.
+
+CallMeBot's own message estimates a return "on August 18th or sooner" —
+today's date — so this may already have resolved by the time this is read.
+Nothing on our side can hurry that along; the code fix above just stops it
+from lying about it next time.
 
 ## 2. "Not sure yet" budget clients were handed a firm 50% figure and a live pay button
 

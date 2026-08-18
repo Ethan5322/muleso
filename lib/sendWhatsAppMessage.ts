@@ -110,27 +110,31 @@ export async function sendWhatsAppMessage({ phone, message }: SendWhatsAppParams
         });
 
         clearTimeout(timeoutId);
+        const bodyText = await response.text();
 
-        // 200-299 = success, 429 = rate limited (retry), 5xx = server error (retry)
-        if (response.ok) {
+        // response.ok is NOT trustworthy here — confirmed live: CallMeBot
+        // returns HTTP 207 (inside the 200-299 "ok" range) for its own
+        // "Service is down (410): ... back in 24-48hs" outage notice, which
+        // response.ok alone reports as success. CallMeBot's own documented
+        // success body is "Message queued..." — require that exact phrase,
+        // not just a 2xx status, before calling this a delivery.
+        if (response.ok && /message queued/i.test(bodyText)) {
           console.log(`[${timestamp}] WhatsApp sent to ${phone} (attempt ${attempt})`);
           return { success: true, timestamp };
         }
 
-        // If it's a rate limit or server error, wait and retry
-        if (response.status === 429 || response.status >= 500) {
-          lastError = new Error(`API error ${response.status}: ${response.statusText}`);
-          if (attempt < 3) {
-            const delayMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
-            console.warn(`[${timestamp}] Retry attempt ${attempt + 1} after ${delayMs}ms...`);
-            await new Promise(r => setTimeout(r, delayMs));
-            continue;
-          }
-          throw lastError;
+        // A 2xx status with a body that isn't the documented success phrase
+        // (outage notice, quota/registration errors CallMeBot reports this
+        // way) — retry the same as a hard error, since the underlying cause
+        // (an outage, a rate limit) can clear between attempts.
+        lastError = new Error(`CallMeBot did not confirm delivery (HTTP ${response.status}): ${bodyText.replace(/<[^>]+>/g, ' ').trim().slice(0, 200)}`);
+        if (attempt < 3) {
+          const delayMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+          console.warn(`[${timestamp}] Retry attempt ${attempt + 1} after ${delayMs}ms...`);
+          await new Promise(r => setTimeout(r, delayMs));
+          continue;
         }
-
-        // Other errors (4xx except 429) = don't retry
-        throw new Error(`API error ${response.status}: ${response.statusText}`);
+        throw lastError;
       } catch (attemptError: any) {
         lastError = attemptError;
         if (attempt < 3 && (attemptError.name === 'AbortError' || attemptError.message.includes('429') || attemptError.message.includes('500'))) {

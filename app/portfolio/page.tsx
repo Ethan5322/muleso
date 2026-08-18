@@ -531,7 +531,7 @@ export default function PortfolioPage() {
                   </span>
                 )}
 
-                <div className="relative w-full h-60 overflow-hidden bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
+                <div className="relative w-full aspect-[16/9] overflow-hidden bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
                   {src ? (
                     <>
                       <Image src={src} alt={project.name} width={1200} height={675} className={`w-full h-full transition-transform duration-700 group-hover:scale-110 ${project.fit === 'contain' ? 'object-contain p-8' : 'object-cover'}`} priority={index < 2} quality={90} />
@@ -593,7 +593,7 @@ export default function PortfolioPage() {
               className="glass-card border border-[var(--border)] rounded-2xl w-full max-w-2xl my-8 overflow-hidden"
             >
               {/* Header image */}
-              <div className="relative w-full h-56 bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
+              <div className="relative w-full aspect-[16/9] bg-gradient-to-br from-[var(--bg-secondary)] to-[var(--bg-card)]">
                 {imgSrc(selected.image) ? (
                   <Image src={imgSrc(selected.image) as string} alt={selected.name} width={1200} height={675} className={`w-full h-full ${selected.fit === 'contain' ? 'object-contain p-8' : 'object-cover'}`} />
                 ) : (
